@@ -1,272 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - SumoPod</title>
+    <title>SH BEST CREATIVE DESIGN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background-color: #f8f9fa;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
-        .header {
-            background: white;
-            padding: 1rem 2rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #333;
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: #4285f4;
-            border-radius: 8px;
-            margin-right: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
+        @keyframes float {
+            0% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
         }
 
-        .nav-links a {
-            text-decoration: none;
-            color: #666;
-            font-weight: 500;
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite alternate;
         }
 
-        .nav-links a:hover {
-            color: #333;
-        }
+        @keyframes pulse-glow {
+            from {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.4);
+            }
 
-        .auth-buttons {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-
-        .btn-login {
-            background: none;
-            border: none;
-            color: #666;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 0.5rem 1rem;
-        }
-
-        .btn-get-started {
-            background: #4285f4;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-
-        .login-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 3rem;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .login-title {
-            font-size: 2rem;
-            font-weight: 600;
-            color: #333;
-            text-align: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .login-subtitle {
-            color: #666;
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 2px solid #e1e5e9;
-            border-radius: 6px;
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #4285f4;
-        }
-
-        .form-input.error {
-            border-color: #dc3545;
-        }
-
-        .error-message {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-
-        .login-button {
-            width: 100%;
-            background: #4285f4;
-            color: white;
-            border: none;
-            padding: 0.875rem;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .login-button:hover {
-            background: #3367d6;
-        }
-
-        .divider {
-            text-align: center;
-            margin: 1.5rem 0;
-            color: #666;
-            position: relative;
-        }
-
-        .divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: #e1e5e9;
-            z-index: 1;
-        }
-
-        .divider span {
-            background: white;
-            padding: 0 1rem;
-            position: relative;
-            z-index: 2;
+            to {
+                box-shadow: 0 0 30px rgba(102, 126, 234, 0.8);
+            }
         }
     </style>
 </head>
-<body>
-    <header class="header">
-        <div class="logo">
-            <div class="logo-icon">S</div>
-            SumoPod
+
+<body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+    <!-- Background Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+        <div
+            class="floating-animation absolute top-20 left-20 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70">
         </div>
-        <nav class="nav-links">
-            <a href="#">Home</a>
-            <a href="#">Templates</a>
-            <a href="#">Pricing</a>
-            <a href="#">Features</a>
-        </nav>
-        <div class="auth-buttons">
-            <button class="btn-login">🔓 Login</button>
-            <button class="btn-get-started">Get Started</button>
-        </div>
-    </header>
+        <div class="floating-animation absolute top-40 right-20 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+            style="animation-delay: 2s;"></div>
+        <div class="floating-animation absolute bottom-20 left-40 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70"
+            style="animation-delay: 4s;"></div>
+    </div>
 
-    <main class="main-content">
-        <div class="login-container">
-            <h1 class="login-title">Welcome back</h1>
-            <p class="login-subtitle">Sign in to your account to continue</p>
+    <!-- Main Container -->
+    <div class="relative z-10 w-full max-w-md">
+        <!-- Logo -->
 
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
-                
-                <div class="form-group">
-                    <label for="username" class="form-label">Username</label>
-                    <input 
-                        type="text" 
-                        id="username" 
-                        name="username" 
-                        class="form-input @error('username') error @enderror"
-                        value="{{ old('username') }}"
-                        placeholder="Enter your username"
-                        required
-                    >
-                    @error('username')
-                        <div class="error-message">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        class="form-input @error('password') error @enderror"
-                        placeholder="Enter your password"
-                        required
-                    >
-                    @error('password')
-                        <div class="error-message">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <button type="submit" class="login-button">Sign In</button>
-            </form>
-
-            <div class="divider">
-                <span>Or continue with email</span>
+        <!-- Login Form Container -->
+        <div class="glass-effect rounded-2xl p-8 shadow-2xl pulse-glow">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-bold text-white mb-2">Sign In</h2>
+                <p class="text-white/70">Enter your credentials to continue</p>
             </div>
 
-            <p style="text-align: center; color: #666; margin-top: 1.5rem;">
-                Don't have an account? <a href="#" style="color: #4285f4; text-decoration: none;">Sign up</a>
+            <form method="POST" action="{{ route('login') }}" class="space-y-6">
+                @csrf
+
+                <!-- Username Field -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-white/90 mb-2">
+                        <i class="fas fa-user mr-2"></i>Username
+                    </label>
+                    <div class="relative">
+                        <input type="text" id="username" name="username" value="{{ old('username') }}"
+                            class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter your username" required>
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                            <i class="fas fa-user text-white/50"></i>
+                        </div>
+                    </div>
+                    @error('username')
+                        <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-white/90 mb-2">
+                        <i class="fas fa-lock mr-2"></i>Password
+                    </label>
+                    <div class="relative">
+                        <input type="password" id="password" name="password"
+                            class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent transition-all duration-200"
+                            placeholder="Enter your password" required>
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+                            <i class="fas fa-eye text-white/50 cursor-pointer hover:text-white" id="togglePassword"></i>
+                        </div>
+                    </div>
+                    @error('password')
+                        <p class="mt-2 text-sm text-red-300">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Remember Me & Forgot Password -->
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="remember"
+                            class="w-4 h-4 bg-white/20 border-white/30 rounded text-purple-400 focus:ring-purple-400">
+                        <span class="ml-2 text-sm text-white/80">Remember me</span>
+                    </label>
+                    <a href="#" class="text-sm text-white/80 hover:text-white transition-colors">Forgot
+                        password?</a>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit"
+                    class="w-full bg-white/20 hover:bg-white/30 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+                </button>
+            </form>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-6">
+            <p class="text-white/60 text-sm">
+                <i class="fas fa-shield-alt mr-1"></i>Secure login with SSL encryption
             </p>
         </div>
-    </main>
+    </div>
+
+    <!-- JavaScript for password toggle -->
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function(e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    </script>
 </body>
+
 </html>
