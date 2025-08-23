@@ -34,7 +34,7 @@ return new class extends Migration
 
         Schema::create('prospek_alamat', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('prospek_id')->constrained()->onDelete('cascade');
+            $table->foreignId('prospek_id')->constrained('prospek')->onDelete('cascade');
             $table->string('nama_penerima');
             $table->string('alamat');
             $table->integer('poskod');
@@ -45,7 +45,7 @@ return new class extends Migration
 
         Schema::create('prospek_buy', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('prospek_alamat_id')->constrained()->onDelete('cascade');
+            $table->foreignId('prospek_alamat_id')->constrained('prospek_alamat')->onDelete('cascade');
             $table->integer('kuantiti');
             $table->decimal('harga', 10, 2);
             $table->timestamps();
