@@ -23,17 +23,34 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Protected routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+    Route::get('/dashboard', function () {
+        return view('dashboard-livewire');
+    })->name('dashboard');
 
     // Business Management Routes
-    Route::resource('bisnes', BisnesController::class);
-    Route::resource('produk', 'App\Http\Controllers\ProdukController');
+    Route::get('/bisnes', function () {
+        return view('bisnes-livewire');
+    })->name('bisnes.index');
+    Route::resource('bisnes', BisnesController::class)->except(['index']);
+    Route::get('/produk', function () {
+        return view('produk-livewire');
+    })->name('produk.index');
+    Route::resource('produk', 'App\Http\Controllers\ProdukController')->except(['index']);
+
     Route::resource('gambar', 'App\Http\Controllers\GambarController');
 
     // Customer Management Routes
-    Route::resource('prospek', 'App\Http\Controllers\ProspekController');
+    Route::get('/prospek', function () {
+        return view('prospek-livewire');
+    })->name('prospek.index');
+    Route::resource('prospek', 'App\Http\Controllers\ProspekController')->except(['index']);
+
     Route::resource('prospek-alamat', 'App\Http\Controllers\ProspekAlamatController');
-    Route::resource('prospek-buy', 'App\Http\Controllers\ProspekBuyController');
+
+    Route::get('/prospek-buy', function () {
+        return view('prospek-buy-livewire');
+    })->name('prospek-buy.index');
+    Route::resource('prospek-buy', 'App\Http\Controllers\ProspekBuyController')->except(['index']);
 });
 
 // API routes

@@ -8,6 +8,7 @@
     <title>@yield('title', 'Business Management System')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    @livewireStyles
     <style>
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -130,6 +131,7 @@
     </div>
 
     @yield('scripts')
+    @livewireScripts
 </body>
 
 </html>
