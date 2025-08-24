@@ -46,7 +46,7 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if ($item->gambar)
-                                    <img src="{{ asset('images/bisnes/' . $item->gambar) }}" alt="{{ $item->nama_bines }}"
+                                    <img src="{{ asset('storage/bisnes/' . $item->gambar) }}" alt="{{ $item->nama_bines }}"
                                         class="w-12 h-12 rounded-lg object-cover">
                                 @else
                                     <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
@@ -65,7 +65,11 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ \Carbon\Carbon::parse($item->exp_date)->format('d/m/Y') }}
+                                @if ($item->exp_date)
+                                    {{ \Carbon\Carbon::parse($item->exp_date)->format('d/m/Y') }}
+                                @else
+                                    -
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->no_tel }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">

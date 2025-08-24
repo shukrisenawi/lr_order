@@ -14,6 +14,23 @@
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
     </style>
+
+    <script>
+        function toggleBisnesDropdown() {
+            const dropdown = document.getElementById('bisnes-dropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('bisnes-dropdown');
+            const button = document.getElementById('bisnes-menu-button');
+
+            if (dropdown && button && !button.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
 </head>
 
 <body class="bg-gray-50">
@@ -25,6 +42,65 @@
                     <h1 class="text-xl font-semibold text-gray-900">Business Management System</h1>
                 </div>
                 <div class="flex items-center space-x-4">
+                    <!-- Business Selector -->
+                    <div class="relative">
+                        @php
+                            $userBisnes = \App\Models\Bisnes::where('user_id', Auth::id())->get();
+                            $selectedBisnes = session('selected_bisnes_id')
+                                ? \App\Models\Bisnes::find(session('selected_bisnes_id'))
+                                : $userBisnes->first();
+                        @endphp
+
+                        @if ($userBisnes->count() > 0)
+                            <div class="relative inline-block text-left">
+                                <button type="button"
+                                    class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    id="bisnes-menu-button" aria-expanded="true" aria-haspopup="true"
+                                    onclick="toggleBisnesDropdown()">
+                                    <i class="fas fa-building mr-2"></i>
+                                    {{ $selectedBisnes ? $selectedBisnes->nama_bines : 'Pilih Bisnes' }}
+                                    <i class="fas fa-chevron-down ml-2"></i>
+                                </button>
+
+                                <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
+                                    id="bisnes-dropdown" role="menu" aria-orientation="vertical"
+                                    aria-labelledby="bisnes-menu-button">
+                                    <div class="py-1" role="none">
+                                        @foreach ($userBisnes as $bisnes)
+                                            <a href="{{ route('switch-bisnes', $bisnes->id) }}"
+                                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ $selectedBisnes && $selectedBisnes->id == $bisnes->id ? 'bg-gray-50 font-medium' : '' }}"
+                                                role="menuitem">
+                                                <i class="fas fa-building mr-3 text-gray-400"></i>
+                                                <div>
+                                                    <div class="font-medium">{{ $bisnes->nama_bines }}</div>
+                                                    <div class="text-xs text-gray-500">{{ $bisnes->nama_syarikat }}
+                                                    </div>
+                                                </div>
+                                                @if ($selectedBisnes && $selectedBisnes->id == $bisnes->id)
+                                                    <i class="fas fa-check ml-auto text-green-500"></i>
+                                                @endif
+                                            </a>
+                                        @endforeach
+
+                                        <div class="border-t border-gray-100"></div>
+                                        <a href="{{ route('bisnes.index') }}"
+                                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            role="menuitem">
+                                            <i class="fas fa-cog mr-3 text-gray-400"></i>
+                                            Urus Bisnes
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <a href="{{ route('bisnes.create') }}"
+                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <i class="fas fa-plus mr-2"></i>
+                                Tambah Bisnes
+                            </a>
+                        @endif
+                    </div>
+
                     <span class="text-sm text-gray-700">Welcome, {{ Auth::user()->name }}</span>
                     <form method="POST" action="{{ route('logout') }}" class="inline">
                         @csrf
@@ -99,10 +175,10 @@
                     <div class="pt-4">
                         <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</h3>
                         <div class="mt-2 space-y-1">
-                            <a href="#"
-                                class="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                            <a href="{{ route('settings.index') }}"
+                                class="flex items-center space-x-3 px-4 py-3 {{ request()->routeIs('settings.*') ? 'bg-purple-100 text-purple-700' : 'text-gray-700 hover:bg-gray-100' }} rounded-lg transition-colors">
                                 <i class="fas fa-cog"></i>
-                                <span>Settings</span>
+                                <span>Tetapan</span>
                             </a>
                         </div>
                     </div>

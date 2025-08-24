@@ -1,87 +1,80 @@
 @extends('layouts.app')
 
-@section('title', 'Create Prospect')
+@section('title', 'Tambah Prospek Baru')
 
 @section('content')
-    <div class="mb-6">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Create New Prospect</h1>
-                <p class="text-gray-600">Add a new prospect to your customer list</p>
-            </div>
-            <a href="{{ route('prospek.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center">
-                <i class="fas fa-arrow-left mr-2"></i>
-                Back to List
-            </a>
+    <div class="max-w-2xl mx-auto">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-2xl font-light text-gray-800 mb-2">Tambah Prospek Baru</h1>
+            <p class="text-gray-500">Cipta prospek baru</p>
         </div>
-    </div>
 
-    <!-- Create Form -->
-    <div class="bg-white rounded-lg shadow">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900">Prospect Information</h3>
+        <!-- Form -->
+        <div class="bg-white border border-gray-200">
+            <div class="p-8">
+                <form method="POST" action="{{ route('prospek.store') }}">
+                    @csrf
+
+                    <div class="space-y-6">
+                        <!-- No Telefon -->
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">No. Telefon *</label>
+                            <input type="text" name="no_tel" value="{{ old('no_tel') }}" required
+                                class="w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-400 focus:outline-none @error('no_tel') border-red-300 bg-red-50 @enderror">
+                            @error('no_tel')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Gelaran -->
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">Nama/Gelaran *</label>
+                            <input type="text" name="gelaran" value="{{ old('gelaran') }}" required
+                                class="w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-400 focus:outline-none @error('gelaran') border-red-300 bg-red-50 @enderror">
+                            @error('gelaran')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">Emel (Pilihan)</label>
+                            <input type="email" name="email" value="{{ old('email') }}"
+                                class="w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-400 focus:outline-none @error('email') border-red-300 bg-red-50 @enderror">
+                            @error('email')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Bisnes -->
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">Bisnes *</label>
+                            <select name="bisnes_id" required
+                                class="w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-400 focus:outline-none @error('bisnes_id') border-red-300 bg-red-50 @enderror">
+                                <option value="">Pilih Bisnes</option>
+                                @foreach ($bisnes as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ old('bisnes_id', $selectedBisnes->id ?? '') == $item->id ? 'selected' : '' }}>
+                                        {{ $item->nama_bines }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('bisnes_id')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex justify-between mt-8 pt-6 border-t border-gray-200">
+                        <a href="{{ route('prospek.index') }}"
+                            class="px-6 py-2 text-gray-600 hover:text-gray-800">Batal</a>
+                        <button type="submit" class="px-6 py-2 bg-gray-800 text-white hover:bg-gray-900">Simpan
+                            Prospek</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        
-        <form method="POST" action="{{ route('prospek.store') }}" class="p-6">
-            @csrf
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Phone Number -->
-                <div>
-                    <label for="no_tel" class="block text-sm font-medium text-gray-700 mb-2">No Telefon</label>
-                    <input type="text" name="no_tel" id="no_tel" value="{{ old('no_tel') }}" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('no_tel') border-red-500 @enderror">
-                    @error('no_tel')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Title/Greeting -->
-                <div>
-                    <label for="gelaran" class="block text-sm font-medium text-gray-700 mb-2">Gelaran</label>
-                    <select name="gelaran" id="gelaran" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('gelaran') border-red-500 @enderror">
-                        <option value="">Select Gelaran</option>
-                        <option value="Encik" {{ old('gelaran') == 'Encik' ? 'selected' : '' }}>Encik</option>
-                        <option value="Puan" {{ old('gelaran') == 'Puan' ? 'selected' : '' }}>Puan</option>
-                        <option value="Cik" {{ old('gelaran') == 'Cik' ? 'selected' : '' }}>Cik</option>
-                        <option value="Dato" {{ old('gelaran') == 'Dato' ? 'selected' : '' }}>Dato</option>
-                        <option value="Datuk" {{ old('gelaran') == 'Datuk' ? 'selected' : '' }}>Datuk</option>
-                        <option value="Tan Sri" {{ old('gelaran') == 'Tan Sri' ? 'selected' : '' }}>Tan Sri</option>
-                        <option value="Dr" {{ old('gelaran') == 'Dr' ? 'selected' : '' }}>Dr</option>
-                    </select>
-                    @error('gelaran')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Business -->
-                <div class="md:col-span-2">
-                    <label for="bisnes_id" class="block text-sm font-medium text-gray-700 mb-2">Business</label>
-                    <select name="bisnes_id" id="bisnes_id" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('bisnes_id') border-red-500 @enderror">
-                        <option value="">Select Business</option>
-                        @foreach($bisnes as $business)
-                            <option value="{{ $business->id }}" {{ old('bisnes_id') == $business->id ? 'selected' : '' }}>
-                                {{ $business->nama_bines }} - {{ $business->nama_syarikat }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('bisnes_id')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-
-            <!-- Submit Buttons -->
-            <div class="mt-6 flex justify-end space-x-3">
-                <a href="{{ route('prospek.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-lg">
-                    Cancel
-                </a>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-                    Create Prospect
-                </button>
-            </div>
-        </form>
     </div>
 @endsection

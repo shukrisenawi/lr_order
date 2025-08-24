@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Helpers\BisnesHelper;
 
 class AuthController extends Controller
 {
@@ -68,17 +69,30 @@ class AuthController extends Controller
 
     public function dashboard()
     {
-        // Get statistics for dashboard
-        $totalBisnes = \App\Models\Bisnes::count();
-        $totalProduk = \App\Models\Produk::count();
-        $totalProspek = \App\Models\Prospek::count();
-        $totalPembelian = \App\Models\ProspekBuy::count();
+        $selectedBisnes = BisnesHelper::getSelectedBisnes();
+
+        if (!$selectedBisnes) {
+            // If no business selected, show overall stats for user
+            $totalBisnes = \App\Models\Bisnes::where('user_id', auth()->id())->count();
+            $totalProduk = 0;
+            $totalProspek = 0;
+            $totalPembelian = 0;
+        } else {
+            // Show stats for selected business
+            $totalBisnes = \App\Models\Bisnes::where('user_id', auth()->id())->count();
+            $totalProduk = \App\Models\Produk::where('bisnes_id', $selectedBisnes->id)->count();
+            $totalProspek = \App\Models\Prospek::where('bisnes_id', $selectedBisnes->id)->count();
+            $totalPembelian = \App\Models\ProspekBuy::whereHas('prospek', function ($query) use ($selectedBisnes) {
+                $query->where('bisnes_id', $selectedBisnes->id);
+            })->count();
+        }
 
         return view('dashboard-new', compact(
             'totalBisnes',
             'totalProduk',
             'totalProspek',
-            'totalPembelian'
+            'totalPembelian',
+            'selectedBisnes'
         ));
     }
 }

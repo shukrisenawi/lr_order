@@ -45,4 +45,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     * Get the businesses for the user.
+     */
+    public function bisnes()
+    {
+        return $this->hasMany(\App\Models\Bisnes::class);
+    }
+
+    /**
+     * Get the API tokens for the user.
+     */
+    public function apiTokens()
+    {
+        return $this->hasMany(\App\Models\ApiToken::class);
+    }
 }

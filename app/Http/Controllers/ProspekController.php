@@ -4,15 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\Prospek;
 use App\Models\Bisnes;
+use App\Helpers\BisnesHelper;
 use Illuminate\Http\Request;
 
 class ProspekController extends Controller
 {
     public function index()
     {
-        $prospek = Prospek::with('bisnes')->whereHas('bisnes', function ($query) {
-            $query->where('user_id', auth()->id());
-        })->paginate(10);
+        $selectedBisnesId = BisnesHelper::getSelectedBisnesId();
+
+        if (!$selectedBisnesId) {
+            return redirect()->route('bisnes.create')->with('info', 'Sila cipta bisnes terlebih dahulu.');
+        }
+
+        $prospek = Prospek::with('bisnes')
+            ->where('bisnes_id', $selectedBisnesId)
+            ->paginate(10);
 
         return view('prospek.index', compact('prospek'));
     }
@@ -25,8 +32,14 @@ class ProspekController extends Controller
 
     public function create()
     {
-        $bisnes = Bisnes::where('user_id', auth()->id())->get();
-        return view('prospek.create', compact('bisnes'));
+        $selectedBisnes = BisnesHelper::getSelectedBisnes();
+
+        if (!$selectedBisnes) {
+            return redirect()->route('bisnes.create')->with('info', 'Sila cipta bisnes terlebih dahulu.');
+        }
+
+        $bisnes = BisnesHelper::getUserBisnes();
+        return view('prospek.create', compact('bisnes', 'selectedBisnes'));
     }
 
     public function store(Request $request)

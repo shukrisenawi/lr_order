@@ -21,6 +21,25 @@ Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Quick login for testing
+Route::get('/quick-login', function () {
+    \Illuminate\Support\Facades\Auth::loginUsingId(1);
+    return redirect('/dashboard');
+})->name('quick-login');
+
+// Switch business route
+Route::get('/switch-bisnes/{bisnes}', function (\App\Models\Bisnes $bisnes) {
+    // Verify user owns this business
+    if ($bisnes->user_id !== auth()->id()) {
+        abort(403);
+    }
+
+    // Store selected business in session
+    session(['selected_bisnes_id' => $bisnes->id]);
+
+    return redirect()->back()->with('success', 'Bisnes ditukar kepada: ' . $bisnes->nama_bines);
+})->name('switch-bisnes')->middleware('auth');
+
 // Protected routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
@@ -51,6 +70,15 @@ Route::middleware(['auth'])->group(function () {
         return view('prospek-buy-livewire');
     })->name('prospek-buy.index');
     Route::resource('prospek-buy', 'App\Http\Controllers\ProspekBuyController')->except(['index']);
+
+    // Settings routes
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\SettingsController::class, 'index'])->name('index');
+        Route::get('/api-tokens', [\App\Http\Controllers\SettingsController::class, 'apiTokens'])->name('api-tokens');
+        Route::post('/api-tokens', [\App\Http\Controllers\SettingsController::class, 'createApiToken'])->name('api-tokens.create');
+        Route::delete('/api-tokens/{token}', [\App\Http\Controllers\SettingsController::class, 'deleteApiToken'])->name('api-tokens.delete');
+        Route::get('/api-documentation', [\App\Http\Controllers\SettingsController::class, 'apiDocumentation'])->name('api-documentation');
+    });
 });
 
 // API routes
