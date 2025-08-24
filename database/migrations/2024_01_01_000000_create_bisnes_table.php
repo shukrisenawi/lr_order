@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('nama_bines');
-            $table->date('exp_date');
+            $table->date('exp_date')->nullable();
             $table->string('nama_syarikat');
             $table->text('alamat');
             $table->string('poskod', 10);

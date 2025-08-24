@@ -16,15 +16,15 @@ class BisnesSeeder extends Seeder
         // Dapatkan user yang sudah ada dari UserSeeder
         $user = User::where('email', 'shukrisenawi@gmail.com')->first();
         
-        if ($user) {
+        // if ($user) {
             // Buat 5 bisnis untuk user shukrisenawi
-            Bisnes::factory()->count(5)->create([
-                'user_id' => $user->id,
-            ]);
-        }
+            // Bisnes::factory()->count(5)->create([
+            //     'user_id' => $user->id,
+            // ]);
+        // }
 
         // Buat 10 bisnis tambahan untuk user random
-        Bisnes::factory()->count(10)->create();
+        // Bisnes::factory()->count(10)->create();
         
         // Buat beberapa bisnis dengan data spesifik
         Bisnes::create([
@@ -43,7 +43,7 @@ class BisnesSeeder extends Seeder
         Bisnes::create([
             'user_id' => $user ? $user->id : User::factory()->create()->id,
             'nama_bines' => 'Jamu Asli',
-            'exp_date' => '',
+            'exp_date' => null,
             'nama_syarikat' => 'Jamu Asli',
             'no_pendaftaran' => '',
             'jenis_bisnes' => 'Ubatan Tradisional',
