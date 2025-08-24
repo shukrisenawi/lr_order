@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BisnesController;
 
@@ -21,6 +22,35 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [AuthController::class, 'register']);
 });
+
+// Email verification routes
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (Request $request) {
+    $user = \App\Models\User::findOrFail($request->id);
+    
+    if (!hash_equals((string) $request->hash, sha1($user->getEmailForVerification()))) {
+        throw new \Illuminate\Auth\Access\AuthorizationException;
+    }
+    
+    if ($user->hasVerifiedEmail()) {
+        return redirect()->intended('/dashboard');
+    }
+    
+    if ($user->markEmailAsVerified()) {
+        event(new \Illuminate\Auth\Events\Verified($user));
+    }
+    
+    return redirect()->intended('/dashboard')->with('success', 'Emel berjaya disahkan!');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Pautan pengesahan telah dihantar ke emel anda!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Quick login for testing

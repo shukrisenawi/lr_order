@@ -20,7 +20,7 @@ class AuthenticationTest extends TestCase
         User::create([
             'name' => 'shukrisenawi',
             'email' => 'shukrisenawi@gmail.com',
-            'password' => Hash::make('123'),
+            'password' => Hash::make('password123'),
         ]);
     }
 
@@ -29,7 +29,7 @@ class AuthenticationTest extends TestCase
     {
         $response = $this->post('/login', [
             'username' => 'shukrisenawi',
-            'password' => '123',
+            'password' => 'password123',
         ]);
 
         $response->assertRedirect('/dashboard');
@@ -41,7 +41,7 @@ class AuthenticationTest extends TestCase
     {
         $response = $this->post('/login', [
             'username' => 'shukrisenawi@gmail.com',
-            'password' => '123',
+            'password' => 'password123',
         ]);
 
         $response->assertRedirect('/dashboard');
@@ -114,7 +114,7 @@ class AuthenticationTest extends TestCase
         // 6th attempt should be blocked
         $response = $this->post('/login', [
             'username' => 'shukrisenawi',
-            'password' => '123', // Even with correct password
+            'password' => 'password123', // Even with correct password
         ]);
 
         $response->assertSessionHasErrors('username');
@@ -126,7 +126,7 @@ class AuthenticationTest extends TestCase
     {
         $response = $this->post('/login', [
             'username' => 'shukrisenawi',
-            'password' => '123',
+            'password' => 'password123',
             'remember' => true,
         ]);
 
@@ -147,7 +147,7 @@ class AuthenticationTest extends TestCase
         // Login and check if redirected to intended page
         $response = $this->post('/login', [
             'username' => 'shukrisenawi',
-            'password' => '123',
+            'password' => 'password123',
         ]);
 
         $response->assertRedirect('/dashboard');

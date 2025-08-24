@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Helpers\BisnesHelper;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
@@ -17,21 +19,15 @@ class AuthController extends Controller
         return view('auth.login-new');
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string',
-            'remember' => 'boolean',
-        ]);
-
         // Rate limiting - max 5 attempts per minute
         $key = 'login-attempts-' . $request->ip();
         
         if (RateLimiter::tooManyAttempts($key, 5)) {
             $seconds = RateLimiter::availableIn($key);
             return back()->withErrors([
-                'username' => 'Too many login attempts. Please try again in ' . $seconds . ' seconds.',
+                'username' => 'Terlalu banyak percubaan log masuk. Sila cuba lagi dalam ' . $seconds . ' saat.',
             ])->withInput($request->only('username'));
         }
 
@@ -41,6 +37,13 @@ class AuthController extends Controller
                    ->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
+            // Check if email is verified
+            if (!$user->hasVerifiedEmail()) {
+                return back()->withErrors([
+                    'username' => 'Sila sahkan emel anda sebelum log masuk.',
+                ])->withInput($request->only('username'));
+            }
+
             // Clear rate limiter on successful login
             RateLimiter::clear($key);
             
@@ -57,7 +60,7 @@ class AuthController extends Controller
         RateLimiter::hit($key, 60);
 
         return back()->withErrors([
-            'username' => 'The provided credentials do not match our records.',
+            'username' => 'Maklumat log masuk tidak sepadan dengan rekod kami.',
         ])->withInput($request->only('username'));
     }
 
@@ -66,23 +69,25 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
+        $validated = $request->validated();
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'email_verified_at' => null, // Will be set after verification
         ]);
 
+        // Send email verification
+        $user->sendEmailVerificationNotification();
+
+        // Auto login after registration (but restrict access until email verified)
         Auth::login($user);
 
-        return redirect('/dashboard');
+        return redirect()->route('verification.notice')
+                        ->with('success', 'Pendaftaran berjaya! Sila semak emel anda untuk pengesahan.');
     }
 
     public function logout(Request $request)
