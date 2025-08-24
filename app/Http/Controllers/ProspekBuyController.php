@@ -6,17 +6,23 @@ use App\Models\ProspekBuy;
 use App\Models\ProspekAlamat;
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProspekBuyController extends Controller
 {
     public function index()
     {
-        $prospekBuy = ProspekBuy::with(['prospekAlamat.prospek.bisnes', 'produk'])
+        $prospekBuys = ProspekBuy::with(['prospekAlamat.prospek', 'produk'])
             ->whereHas('prospekAlamat.prospek.bisnes', function ($query) {
                 $query->where('user_id', auth()->id());
             })->paginate(10);
 
-        return view('prospek-buy.index', compact('prospekBuy'));
+        $totalAmount = ProspekBuy::with(['prospekAlamat.prospek'])
+            ->whereHas('prospekAlamat.prospek.bisnes', function ($query) {
+                $query->where('user_id', auth()->id());
+            })->sum(DB::raw('kuantiti * harga'));
+
+        return view('prospek-buy.index', compact('prospekBuys', 'totalAmount'));
     }
 
     public function create()
@@ -42,12 +48,22 @@ class ProspekBuyController extends Controller
             'produk_id' => 'required|exists:produk,id',
             'kuantiti' => 'required|integer|min:1',
             'harga' => 'required|numeric|min:0',
-            'status' => 'required|string|max:50',
+            'purchase_date' => 'required|date',
+            'notes' => 'nullable|string|max:500',
         ]);
 
-        ProspekBuy::create($request->all());
+        $total = $request->kuantiti * $request->harga;
 
-        return redirect()->route('prospek-buy.index')->with('success', 'Order created successfully.');
+        ProspekBuy::create([
+            'prospek_alamat_id' => $request->prospek_alamat_id,
+            'produk_id' => $request->produk_id,
+            'kuantiti' => $request->kuantiti,
+            'harga' => $request->harga,
+            'status' => 'pending',
+            'created_at' => $request->purchase_date,
+        ]);
+
+        return redirect()->route('prospek-buy.index')->with('success', 'Pembelian berjaya direkodkan.');
     }
 
     public function edit(ProspekBuy $prospekBuy)

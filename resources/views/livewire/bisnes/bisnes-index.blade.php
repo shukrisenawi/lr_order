@@ -64,7 +64,7 @@
                         <td class="px-6 py-4">
                             <div class="flex items-center">
                                 @if ($item->gambar)
-                                    <img src="{{ asset('storage/bisnes/' . $item->gambar) }}"
+                                    <img src="{{ \App\Helpers\ImageHelper::businessImageUrl($item->gambar) }}"
                                         alt="{{ $item->nama_bines }}"
                                         class="w-8 h-8 object-cover border border-gray-200 mr-3">
                                 @else

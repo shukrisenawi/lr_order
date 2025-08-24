@@ -81,6 +81,13 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+// Image routes for web interface (no authentication required)
+Route::prefix('images')->name('web.image.')->group(function () {
+    Route::get('/business/{filename}', [\App\Http\Controllers\ImageController::class, 'businessImage'])->name('business');
+    Route::get('/gallery/{filename}', [\App\Http\Controllers\ImageController::class, 'galleryImage'])->name('gallery');
+    Route::get('/serve/{path}', [\App\Http\Controllers\ImageController::class, 'serveImage'])->name('serve');
+});
+
 // API routes
 Route::prefix('api')->middleware('auth')->group(function () {
     Route::get('/user', function () {

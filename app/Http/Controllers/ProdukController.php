@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Produk;
 use App\Models\Gambar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProdukController extends Controller
@@ -28,16 +29,27 @@ class ProdukController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nama' => 'required|string|max:255',
-            'harga' => 'required|numeric|min:0',
-            'stok' => 'required|integer|min:0',
-            'gambar_id' => 'nullable|exists:gambar,id',
-        ]);
+        try {
+            Log::info('Produk store method called', ['request_data' => $request->all()]);
 
-        Produk::create($request->all());
+            $request->validate([
+                'nama' => 'required|string|max:255',
+                'harga' => 'required|numeric|min:0',
+                'stok' => 'required|integer|min:0',
+                'gambar_id' => 'nullable|exists:gambar,id',
+            ]);
 
-        return redirect()->route('produk.index')->with('success', 'Produk created successfully.');
+            Log::info('Validation passed');
+
+            $produk = Produk::create($request->all());
+
+            Log::info('Produk created', ['produk_id' => $produk->id]);
+
+            return redirect()->route('produk.index')->with('success', 'Produk created successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error in produk store', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
+            return back()->withErrors(['error' => 'Error creating product: ' . $e->getMessage()])->withInput();
+        }
     }
 
     public function edit(Produk $produk)

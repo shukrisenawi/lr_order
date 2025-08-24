@@ -180,18 +180,67 @@
                 </div>
             </div>
 
-            <!-- Get User Purchases -->
+            <!-- Get Prospect Purchases -->
             <div class="bg-white border border-gray-200 p-6">
                 <div class="flex items-center mb-4">
                     <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded mr-3">GET</span>
-                    <h3 class="text-lg font-medium text-gray-900">/api/users/{id}/purchases</h3>
+                    <h3 class="text-lg font-medium text-gray-900">/api/prospects/{no_tel}/purchases</h3>
                 </div>
-                <p class="text-gray-600 mb-4">Dapatkan semua pembelian yang berkaitan dengan pengguna.</p>
+                <p class="text-gray-600 mb-4">Dapatkan semua pembelian yang berkaitan dengan prospek.</p>
 
                 <h4 class="font-medium text-gray-900 mb-2">Contoh Permintaan:</h4>
                 <div class="bg-gray-50 border border-gray-200 p-4 rounded">
-                    <pre class="text-sm"><code>curl -X GET "{{ url('/api/users/1/purchases') }}" \
+                    <pre class="text-sm"><code>curl -X GET "{{ url('/api/prospects/019-1234567/purchases') }}" \
   -H "X-API-Key: your_api_token_here"</code></pre>
+                </div>
+            </div>
+
+            <!-- Image Management -->
+            <div class="bg-white border border-gray-200 p-6">
+                <div class="flex items-center mb-4">
+                    <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded mr-3">IMAGES</span>
+                    <h3 class="text-lg font-medium text-gray-900">Image API Endpoints</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Semua gambar dalam sistem dilindungi dan memerlukan API token untuk akses.</p>
+
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-medium text-gray-900 mb-2">GET /api/images</h4>
+                        <p class="text-sm text-gray-600 mb-2">Senarai semua gambar dengan URL yang selamat</p>
+                        <div class="bg-gray-50 border border-gray-200 p-3 rounded">
+                            <pre class="text-sm"><code>curl -X GET "{{ url('/api/images') }}" \
+  -H "X-API-Key: your_api_token_here"</code></pre>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-medium text-gray-900 mb-2">GET /api/images/serve/{path}</h4>
+                        <p class="text-sm text-gray-600 mb-2">Akses gambar dengan path yang di-encode</p>
+                        <div class="bg-gray-50 border border-gray-200 p-3 rounded">
+                            <pre class="text-sm"><code>curl -X GET "{{ url('/api/images/serve/base64_encoded_path') }}" \
+  -H "X-API-Key: your_api_token_here"</code></pre>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-medium text-gray-900 mb-2">GET /api/images/business/{filename}</h4>
+                        <p class="text-sm text-gray-600 mb-2">Akses gambar bisnes secara langsung</p>
+                        <div class="bg-gray-50 border border-gray-200 p-3 rounded">
+                            <pre class="text-sm"><code>curl -X GET "{{ url('/api/images/business/logo.jpg') }}" \
+  -H "X-API-Key: your_api_token_here"</code></pre>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-medium text-gray-900 mb-2">POST /api/images/upload</h4>
+                        <p class="text-sm text-gray-600 mb-2">Muat naik gambar baru</p>
+                        <div class="bg-gray-50 border border-gray-200 p-3 rounded">
+                            <pre class="text-sm"><code>curl -X POST "{{ url('/api/images/upload') }}" \
+  -H "X-API-Key: your_api_token_here" \
+  -F "image=@/path/to/image.jpg" \
+  -F "nama=My Image"</code></pre>
+                        </div>
+                    </div>
                 </div>
             </div>
 

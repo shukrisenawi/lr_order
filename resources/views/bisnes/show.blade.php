@@ -36,7 +36,8 @@
                 <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Business Image</label>
                     @if ($bisnes->gambar)
-                        <img src="{{ asset('storage/bisnes/' . $bisnes->gambar) }}" alt="{{ $bisnes->nama_bines }}"
+                        <img src="{{ \App\Helpers\ImageHelper::businessImageUrl($bisnes->gambar) }}"
+                            alt="{{ $bisnes->nama_bines }}"
                             class="w-32 h-32 rounded-lg object-cover border border-gray-300">
                     @else
                         <div

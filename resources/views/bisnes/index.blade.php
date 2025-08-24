@@ -46,8 +46,8 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if ($item->gambar)
-                                    <img src="{{ asset('storage/bisnes/' . $item->gambar) }}" alt="{{ $item->nama_bines }}"
-                                        class="w-12 h-12 rounded-lg object-cover">
+                                    <img src="{{ \App\Helpers\ImageHelper::businessImageUrl($item->gambar) }}"
+                                        alt="{{ $item->nama_bines }}" class="w-12 h-12 rounded-lg object-cover">
                                 @else
                                     <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
                                         <i class="fas fa-building text-gray-400"></i>

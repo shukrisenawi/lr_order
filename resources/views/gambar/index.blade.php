@@ -24,8 +24,8 @@
                     <!-- Image -->
                     <div class="aspect-w-16 aspect-h-9">
                         @if ($item->path)
-                            <img src="{{ asset('storage/' . $item->path) }}" alt="{{ $item->title ?? 'Image' }}"
-                                class="w-full h-48 object-cover">
+                            <img src="{{ \App\Helpers\ImageHelper::galleryImageUrl($item->path) }}"
+                                alt="{{ $item->nama ?? 'Gambar' }}" class="w-full h-48 object-cover">
                         @else
                             <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
                                 <i class="fas fa-image text-gray-400 text-4xl"></i>

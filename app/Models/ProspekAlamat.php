@@ -15,6 +15,8 @@ class ProspekAlamat extends Model
         'prospek_id',
         'nama_penerima',
         'alamat',
+        'bandar',
+        'negeri',
         'poskod',
         'no_tel',
         'active',

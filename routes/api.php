@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ProspekApiController;
 use App\Http\Controllers\Api\ApiTokenController;
+use App\Http\Controllers\Api\ImageApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +27,17 @@ Route::middleware(['api.auth'])->group(function () {
         Route::get('/{no_tel}', [ProspekApiController::class, 'show']);
         Route::get('/{no_tel}/addresses', [ProspekApiController::class, 'addresses']);
         Route::get('/{no_tel}/purchases', [ProspekApiController::class, 'purchases']);
+    });
+
+    // Image API endpoints (protected)
+    Route::prefix('images')->group(function () {
+        Route::get('/', [ImageApiController::class, 'index']);
+        Route::post('/upload', [ImageApiController::class, 'upload']);
+        Route::get('/info/{id}', [ImageApiController::class, 'imageInfo']);
+        Route::delete('/{id}', [ImageApiController::class, 'delete']);
+        Route::get('/serve/{path}', [ImageApiController::class, 'serveImage'])->name('api.image.serve');
+        Route::get('/business/{filename}', [ImageApiController::class, 'businessImage'])->name('api.image.business');
+        Route::get('/gallery/{filename}', [ImageApiController::class, 'galleryImage'])->name('api.image.gallery');
     });
 
     // API Info endpoint

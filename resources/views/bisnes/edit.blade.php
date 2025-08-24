@@ -124,7 +124,7 @@
                             <label class="block text-sm text-gray-600 mb-2">Business Logo (Optional)</label>
                             @if ($bisnes->gambar)
                                 <div class="mb-3">
-                                    <img src="{{ asset('storage/bisnes/' . $bisnes->gambar) }}"
+                                    <img src="{{ \App\Helpers\ImageHelper::businessImageUrl($bisnes->gambar) }}"
                                         alt="{{ $bisnes->nama_bines }}"
                                         class="w-16 h-16 object-cover border border-gray-200">
                                     <p class="text-xs text-gray-500 mt-1">Current image</p>

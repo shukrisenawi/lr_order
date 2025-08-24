@@ -1,149 +1,161 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Purchase')
+@section('title', 'Kemaskini Rekod Pembelian')
 
 @section('content')
-    <div class="mb-6">
-        <div class="flex justify-between items-center">
+    <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Edit Purchase</h1>
-                <p class="text-gray-600">Update purchase information</p>
+                <h1 style="font-size: 24px; font-weight: bold; color: #333; margin: 0;">Kemaskini Rekod Pembelian</h1>
+                <p style="color: #666; margin: 5px 0 0 0;">Sunting maklumat pembelian</p>
             </div>
-            <a href="{{ route('prospek-buy.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center">
-                <i class="fas fa-arrow-left mr-2"></i>
-                Back to List
+            <a href="{{ route('prospek-buy.index') }}"
+                style="background-color: #6c757d; color: white; padding: 8px 16px; text-decoration: none; display: inline-block;">
+                ← Kembali ke Senarai
             </a>
         </div>
     </div>
 
-    <!-- Edit Form -->
-    <div class="bg-white rounded-lg shadow">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900">Purchase Information</h3>
+    <!-- Borang Kemaskini -->
+    <div style="background-color: white; border: 1px solid #ddd;">
+        <div style="padding: 16px; border-bottom: 1px solid #ddd;">
+            <h3 style="margin: 0; font-size: 18px; font-weight: bold;">Maklumat Pembelian</h3>
         </div>
-        
-        <form method="POST" action="{{ route('prospek-buy.update', $prospekBuy) }}" class="p-6">
+
+        <form method="POST" action="{{ route('prospek-buy.update', $prospekBuy->id) }}" style="padding: 20px;">
             @csrf
             @method('PUT')
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Prospect -->
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <!-- Alamat Prospek -->
                 <div>
-                    <label for="prospek_id" class="block text-sm font-medium text-gray-700 mb-2">Prospect</label>
-                    <select name="prospek_id" id="prospek_id" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('prospek_id') border-red-500 @enderror">
-                        <option value="">Select Prospect</option>
-                        @foreach($prospek as $prospect)
-                            <option value="{{ $prospect->id }}" {{ old('prospek_id', $prospekBuy->prospek_id) == $prospect->id ? 'selected' : '' }}>
-                                {{ $prospect->gelaran }} - {{ $prospect->no_tel }}
+                    <label for="prospek_alamat_id" style="display: block; margin-bottom: 5px; font-weight: bold;">Alamat
+                        Prospek</label>
+                    <select name="prospek_alamat_id" id="prospek_alamat_id" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; font-size: 14px;">
+                        <option value="">Pilih Alamat Prospek</option>
+                        @foreach ($prospekAlamat as $alamat)
+                            <option value="{{ $alamat->id }}"
+                                {{ old('prospek_alamat_id', $prospekBuy->prospek_alamat_id) == $alamat->id ? 'selected' : '' }}>
+                                {{ $alamat->prospek->gelaran ?? '' }} - {{ $alamat->prospek->no_tel ?? '' }}
+                                ({{ $alamat->bandar ?? 'Tiada Bandar' }})
                             </option>
                         @endforeach
                     </select>
-                    @error('prospek_id')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @error('prospek_alamat_id')
+                        <p style="color: red; font-size: 12px; margin-top: 5px;">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Product -->
+                <!-- Produk -->
                 <div>
-                    <label for="produk_id" class="block text-sm font-medium text-gray-700 mb-2">Product</label>
-                    <select name="produk_id" id="produk_id" 
-                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('produk_id') border-red-500 @enderror">
-                        <option value="">Select Product</option>
-                        @foreach($produk as $product)
-                            <option value="{{ $product->id }}" data-price="{{ $product->price }}" {{ old('produk_id', $prospekBuy->produk_id) == $product->id ? 'selected' : '' }}>
+                    <label for="produk_id" style="display: block; margin-bottom: 5px; font-weight: bold;">Produk</label>
+                    <select name="produk_id" id="produk_id" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; font-size: 14px;">
+                        <option value="">Pilih Produk</option>
+                        @foreach ($produk as $product)
+                            <option value="{{ $product->id }}" data-price="{{ $product->price }}"
+                                {{ old('produk_id', $prospekBuy->produk_id) == $product->id ? 'selected' : '' }}>
                                 {{ $product->name }} - RM {{ number_format($product->price, 2) }}
                             </option>
                         @endforeach
                     </select>
                     @error('produk_id')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p style="color: red; font-size: 12px; margin-top: 5px;">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Quantity -->
+                <!-- Kuantiti -->
                 <div>
-                    <label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
-                    <input type="number" name="quantity" id="quantity" value="{{ old('quantity', $prospekBuy->quantity) }}" min="1"
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('quantity') border-red-500 @enderror">
-                    @error('quantity')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <label for="kuantiti" style="display: block; margin-bottom: 5px; font-weight: bold;">Kuantiti</label>
+                    <input type="number" name="kuantiti" id="kuantiti"
+                        value="{{ old('kuantiti', $prospekBuy->kuantiti) }}" min="1" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; font-size: 14px;">
+                    @error('kuantiti')
+                        <p style="color: red; font-size: 12px; margin-top: 5px;">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Price -->
+                <!-- Harga -->
                 <div>
-                    <label for="price" class="block text-sm font-medium text-gray-700 mb-2">Unit Price (RM)</label>
-                    <input type="number" step="0.01" name="price" id="price" value="{{ old('price', $prospekBuy->price) }}" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('price') border-red-500 @enderror">
-                    @error('price')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    <label for="harga" style="display: block; margin-bottom: 5px; font-weight: bold;">Harga Seunit
+                        (RM)</label>
+                    <input type="number" step="0.01" name="harga" id="harga"
+                        value="{{ old('harga', $prospekBuy->harga) }}" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; font-size: 14px;">
+                    @error('harga')
+                        <p style="color: red; font-size: 12px; margin-top: 5px;">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Purchase Date -->
+                <!-- Tarikh Pembelian -->
                 <div>
-                    <label for="purchase_date" class="block text-sm font-medium text-gray-700 mb-2">Purchase Date</label>
-                    <input type="date" name="purchase_date" id="purchase_date" value="{{ old('purchase_date', $prospekBuy->purchase_date ? $prospekBuy->purchase_date->format('Y-m-d') : '') }}" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('purchase_date') border-red-500 @enderror">
+                    <label for="purchase_date" style="display: block; margin-bottom: 5px; font-weight: bold;">Tarikh
+                        Pembelian</label>
+                    <input type="date" name="purchase_date" id="purchase_date"
+                        value="{{ old('purchase_date', $prospekBuy->purchase_date->format('Y-m-d')) }}" required
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; font-size: 14px;">
                     @error('purchase_date')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p style="color: red; font-size: 12px; margin-top: 5px;">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Total (Calculated) -->
+                <!-- Jumlah (Dikira) -->
                 <div>
-                    <label for="total" class="block text-sm font-medium text-gray-700 mb-2">Total Amount (RM)</label>
-                    <input type="text" id="total" readonly 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600">
+                    <label for="total" style="display: block; margin-bottom: 5px; font-weight: bold;">Jumlah (RM)</label>
+                    <input type="text" id="total" readonly
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; background-color: #f8f9fa; font-size: 14px;">
                 </div>
 
-                <!-- Notes -->
-                <div class="md:col-span-2">
-                    <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
-                    <textarea name="notes" id="notes" rows="3" 
-                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('notes') border-red-500 @enderror">{{ old('notes', $prospekBuy->notes) }}</textarea>
+                <!-- Nota -->
+                <div style="grid-column: 1 / -1;">
+                    <label for="notes" style="display: block; margin-bottom: 5px; font-weight: bold;">Nota
+                        (Pilihan)</label>
+                    <textarea name="notes" id="notes" rows="3"
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; font-size: 14px; resize: vertical;">{{ old('notes', $prospekBuy->notes) }}</textarea>
                     @error('notes')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p style="color: red; font-size: 12px; margin-top: 5px;">{{ $message }}</p>
                     @enderror
                 </div>
             </div>
 
-            <!-- Submit Buttons -->
-            <div class="mt-6 flex justify-end space-x-3">
-                <a href="{{ route('prospek-buy.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-lg">
-                    Cancel
+            <!-- Butang Hantar -->
+            <div style="margin-top: 20px; text-align: right;">
+                <a href="{{ route('prospek-buy.index') }}"
+                    style="background-color: #6c757d; color: white; padding: 8px 16px; text-decoration: none; margin-right: 10px;">
+                    Batal
                 </a>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-                    Update Purchase
+                <button type="submit"
+                    style="background-color: #007bff; color: white; padding: 8px 16px; border: none; cursor: pointer;">
+                    Kemaskini Pembelian
                 </button>
             </div>
         </form>
     </div>
 
     <script>
-        // Auto-fill price when product is selected and calculate total
+        // Isi harga semasa produk dipilih dan kira jumlah
         document.getElementById('produk_id').addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const price = selectedOption.getAttribute('data-price');
             if (price) {
-                document.getElementById('price').value = price;
+                document.getElementById('harga').value = price;
                 calculateTotal();
             }
         });
 
-        // Calculate total when quantity or price changes
-        document.getElementById('quantity').addEventListener('input', calculateTotal);
-        document.getElementById('price').addEventListener('input', calculateTotal);
+        // Kira jumlah apabila kuantiti atau harga berubah
+        document.getElementById('kuantiti').addEventListener('input', calculateTotal);
+        document.getElementById('harga').addEventListener('input', calculateTotal);
 
         function calculateTotal() {
-            const quantity = parseFloat(document.getElementById('quantity').value) || 0;
-            const price = parseFloat(document.getElementById('price').value) || 0;
+            const quantity = parseFloat(document.getElementById('kuantiti').value) || 0;
+            const price = parseFloat(document.getElementById('harga').value) || 0;
             const total = quantity * price;
             document.getElementById('total').value = 'RM ' + total.toFixed(2);
         }
 
-        // Initial calculation
+        // Pengiraan awal
         calculateTotal();
     </script>
 @endsection
