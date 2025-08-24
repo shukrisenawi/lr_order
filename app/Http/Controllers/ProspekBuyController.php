@@ -70,7 +70,7 @@ class ProspekBuyController extends Controller
     {
         $this->authorize('update', $prospekBuy);
 
-        $alamat = ProspekAlamat::whereHas('prospek', function ($query) {
+        $prospekAlamat = ProspekAlamat::whereHas('prospek', function ($query) {
             $query->whereHas('bisnes', function ($q) {
                 $q->where('user_id', auth()->id());
             });
@@ -78,7 +78,7 @@ class ProspekBuyController extends Controller
 
         $produk = Produk::all();
 
-        return view('prospek-buy.edit', compact('prospekBuy', 'alamat', 'produk'));
+        return view('prospek-buy.edit', compact('prospekBuy', 'prospekAlamat', 'produk'));
     }
 
     public function update(Request $request, ProspekBuy $prospekBuy)

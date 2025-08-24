@@ -87,7 +87,7 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Purchase Date</label>
                     <p class="text-gray-900 bg-gray-50 px-3 py-2 rounded-lg">
-                        {{ $prospekBuy->purchase_date ? $prospekBuy->purchase_date->format('d/m/Y') : $prospekBuy->created_at->format('d/m/Y') }}
+                        {{ optional($prospekBuy->purchase_date)->format('d/m/Y') ?? 'N/A' }}
                     </p>
                 </div>
 
@@ -131,17 +131,17 @@
                 </div>
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-blue-900">Quantity:</span>
-                    <span class="font-medium text-blue-900">{{ $prospekBuy->quantity ?? 1 }}</span>
+                    <span class="font-medium text-blue-900">{{ $prospekBuy->kuantiti ?? 1 }}</span>
                 </div>
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-blue-900">Unit Price:</span>
-                    <span class="font-medium text-blue-900">RM {{ number_format($prospekBuy->price ?? 0, 2) }}</span>
+                    <span class="font-medium text-blue-900">RM {{ number_format($prospekBuy->harga ?? 0, 2) }}</span>
                 </div>
                 <hr class="border-blue-300 my-2">
                 <div class="flex justify-between items-center">
                     <span class="text-blue-900 font-bold">Total:</span>
                     <span class="font-bold text-blue-900 text-xl">RM
-                        {{ number_format(($prospekBuy->quantity ?? 1) * ($prospekBuy->price ?? 0), 2) }}</span>
+                        {{ number_format(($prospekBuy->kuantiti ?? 1) * ($prospekBuy->harga ?? 0), 2) }}</span>
                 </div>
             </div>
         </div>

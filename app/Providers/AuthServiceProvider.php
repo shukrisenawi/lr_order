@@ -5,9 +5,11 @@ namespace App\Providers;
 use App\Models\Bisnes;
 use App\Models\Prospek;
 use App\Models\ProspekAlamat;
+use App\Models\ProspekBuy;
 use App\Policies\BisnesPolicy;
 use App\Policies\ProspekPolicy;
 use App\Policies\ProspekAlamatPolicy;
+use App\Policies\ProspekBuyPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -21,6 +23,7 @@ class AuthServiceProvider extends ServiceProvider
         Bisnes::class => BisnesPolicy::class,
         Prospek::class => ProspekPolicy::class,
         ProspekAlamat::class => ProspekAlamatPolicy::class,
+        ProspekBuy::class => ProspekBuyPolicy::class,
     ];
 
     /**

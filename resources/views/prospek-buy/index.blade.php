@@ -3,66 +3,97 @@
 @section('title', 'Senarai Pembelian Prospek')
 
 @section('content')
-    <div style="margin-bottom: 20px;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+    <div class="mb-6">
+        <div class="flex justify-between items-center">
             <div>
-                <h1 style="font-size: 24px; font-weight: bold; color: #333; margin: 0;">Senarai Pembelian Prospek</h1>
-                <p style="color: #666; margin: 5px 0 0 0;">Rekod semua pembelian prospek</p>
+                <h1 class="text-2xl font-bold text-gray-900">Senarai Pembelian Prospek</h1>
+                <p class="text-gray-600">Rekod semua pembelian prospek</p>
             </div>
             <a href="{{ route('prospek-buy.create') }}"
-                style="background-color: #007bff; color: white; padding: 8px 16px; text-decoration: none; display: inline-block;">
-                + Tambah Pembelian Baru
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
+                <i class="fas fa-plus mr-2"></i>
+                Tambah Pembelian Baru
             </a>
         </div>
     </div>
 
     <!-- Jadual Senarai -->
-    <div style="background-color: white; border: 1px solid #ddd;">
-        <div style="padding: 16px; border-bottom: 1px solid #ddd;">
-            <h3 style="margin: 0; font-size: 18px; font-weight: bold;">Rekod Pembelian</h3>
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-900">Rekod Pembelian</h3>
         </div>
 
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse;">
-                <thead>
-                    <tr style="background-color: #f8f9fa; border-bottom: 1px solid #ddd;">
-                        <th style="padding: 12px; text-align: left; font-weight: bold;">Tarikh</th>
-                        <th style="padding: 12px; text-align: left; font-weight: bold;">Prospek</th>
-                        <th style="padding: 12px; text-align: left; font-weight: bold;">Produk</th>
-                        <th style="padding: 12px; text-align: center; font-weight: bold;">Kuantiti</th>
-                        <th style="padding: 12px; text-align: right; font-weight: bold;">Harga</th>
-                        <th style="padding: 12px; text-align: right; font-weight: bold;">Jumlah</th>
-                        <th style="padding: 12px; text-align: center; font-weight: bold;">Tindakan</th>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Tarikh
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Prospek
+                        </th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Produk
+                        </th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Kuantiti
+                        </th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Harga
+                        </th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Jumlah
+                        </th>
+                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Tindakan
+                        </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="bg-white divide-y divide-gray-200">
                     @forelse ($prospekBuys as $buy)
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 12px;">{{ $buy->purchase_date->format('d/m/Y') }}</td>
-                            <td style="padding: 12px;">
-                                {{ $buy->prospekAlamat->prospek->gelaran ?? '' }}<br>
-                                <small style="color: #666;">{{ $buy->prospekAlamat->prospek->no_tel ?? '' }}</small>
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ optional($buy->purchase_date)->format('d/m/Y') ?? 'N/A' }}
                             </td>
-                            <td style="padding: 12px;">{{ $buy->produk->name ?? '' }}</td>
-                            <td style="padding: 12px; text-align: center;">{{ $buy->kuantiti }}</td>
-                            <td style="padding: 12px; text-align: right;">RM {{ number_format($buy->harga, 2) }}</td>
-                            <td style="padding: 12px; text-align: right; font-weight: bold;">
-                                RM {{ number_format($buy->kuantiti * $buy->harga, 2) }}
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">
+                                    {{ $buy->prospekAlamat->prospek->gelaran ?? '' }}
+                                </div>
+                                <div class="text-sm text-gray-500">
+                                    {{ $buy->prospekAlamat->prospek->no_tel ?? '' }}
+                                </div>
                             </td>
-                            <td style="padding: 12px; text-align: center;">
-                                <div style="display: flex; gap: 5px; justify-content: center;">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ $buy->produk->name ?? '' }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                                {{ $buy->kuantiti ?? 0 }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                                RM {{ number_format($buy->harga ?? 0, 2) }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
+                                RM {{ number_format(($buy->kuantiti ?? 0) * ($buy->harga ?? 0), 2) }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                <div class="flex space-x-2 justify-center">
+                                    <a href="{{ route('prospek-buy.show', $buy->id) }}"
+                                        class="text-blue-600 hover:text-blue-900">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
                                     <a href="{{ route('prospek-buy.edit', $buy->id) }}"
-                                        style="background-color: #ffc107; color: #212529; padding: 4px 8px; text-decoration: none; font-size: 12px;">
-                                        Edit
+                                        class="text-yellow-600 hover:text-yellow-900">
+                                        <i class="fas fa-edit"></i>
                                     </a>
                                     <form action="{{ route('prospek-buy.destroy', $buy->id) }}" method="POST"
-                                        style="display: inline;">
+                                        class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit"
-                                            style="background-color: #dc3545; color: white; padding: 4px 8px; border: none; font-size: 12px; cursor: pointer;"
+                                            class="text-red-600 hover:text-red-900"
                                             onclick="return confirm('Adakah anda pasti ingin padam rekod ini?')">
-                                            Padam
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -70,8 +101,11 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" style="padding: 20px; text-align: center; color: #666;">
-                                Tiada rekod pembelian ditemui.
+                            <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                                <div class="flex flex-col items-center">
+                                    <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
+                                    <p>Tiada rekod pembelian ditemui.</p>
+                                </div>
                             </td>
                         </tr>
                     @endforelse
@@ -81,21 +115,23 @@
 
         <!-- Pagination -->
         @if ($prospekBuys->hasPages())
-            <div style="padding: 16px; border-top: 1px solid #ddd; text-align: center;">
+            <div class="bg-gray-50 px-6 py-3 border-t border-gray-200">
                 {{ $prospekBuys->links() }}
             </div>
         @endif
     </div>
 
     <!-- Ringkasan Jumlah -->
-    <div style="margin-top: 20px; background-color: white; border: 1px solid #ddd; padding: 16px;">
-        <h4 style="margin: 0 0 10px 0; font-size: 16px; font-weight: bold;">Ringkasan</h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-            <div>
-                <strong>Jumlah Rekod:</strong> {{ $prospekBuys->total() }}
+    <div class="mt-6 bg-white rounded-lg shadow p-6">
+        <h4 class="text-lg font-semibold text-gray-900 mb-4">Ringkasan</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-blue-50 p-4 rounded-lg">
+                <div class="text-sm font-medium text-blue-600">Jumlah Rekod</div>
+                <div class="text-2xl font-bold text-blue-900">{{ $prospekBuys->total() }}</div>
             </div>
-            <div>
-                <strong>Jumlah Keseluruhan:</strong> RM {{ number_format($totalAmount, 2) }}
+            <div class="bg-green-50 p-4 rounded-lg">
+                <div class="text-sm font-medium text-green-600">Jumlah Keseluruhan</div>
+                <div class="text-2xl font-bold text-green-900">RM {{ number_format($totalAmount ?? 0, 2) }}</div>
             </div>
         </div>
     </div>

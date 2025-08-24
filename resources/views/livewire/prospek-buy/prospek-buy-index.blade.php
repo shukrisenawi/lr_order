@@ -76,9 +76,9 @@
                     </th>
                     <th class="px-6 py-4 text-left text-sm text-gray-600">Total</th>
                     <th class="px-6 py-4 text-left text-sm text-gray-600 cursor-pointer"
-                        wire:click="sortBy('created_at')">
-                        Date
-                        @if ($sortField === 'created_at')
+                        wire:click="sortBy('purchase_date')">
+                        Purchase Date
+                        @if ($sortField === 'purchase_date')
                             @if ($sortDirection === 'asc')
                                 ↑
                             @else
@@ -104,7 +104,7 @@
                             RM {{ number_format(($item->kuantiti ?? 1) * ($item->harga ?? 0), 2) }}
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-600">
-                            {{ $item->created_at->format('d/m/Y') }}
+                            {{ optional($item->purchase_date)->format('d/m/Y') ?? 'N/A' }}
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex space-x-2">

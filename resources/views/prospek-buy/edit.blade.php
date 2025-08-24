@@ -93,7 +93,7 @@
                     <label for="purchase_date" style="display: block; margin-bottom: 5px; font-weight: bold;">Tarikh
                         Pembelian</label>
                     <input type="date" name="purchase_date" id="purchase_date"
-                        value="{{ old('purchase_date', $prospekBuy->purchase_date->format('Y-m-d')) }}" required
+                        value="{{ old('purchase_date', optional($prospekBuy->purchase_date)->format('Y-m-d') ?? date('Y-m-d')) }}" required
                         style="width: 100%; padding: 8px; border: 1px solid #ccc; font-size: 14px;">
                     @error('purchase_date')
                         <p style="color: red; font-size: 12px; margin-top: 5px;">{{ $message }}</p>
@@ -112,7 +112,7 @@
                     <label for="notes" style="display: block; margin-bottom: 5px; font-weight: bold;">Nota
                         (Pilihan)</label>
                     <textarea name="notes" id="notes" rows="3"
-                        style="width: 100%; padding: 8px; border: 1px solid #ccc; font-size: 14px; resize: vertical;">{{ old('notes', $prospekBuy->notes) }}</textarea>
+                        style="width: 100%; padding: 8px; border: 1px solid #ccc; font-size: 14px; resize: vertical;">{{ old('notes', $prospekBuy->notes ?? '') }}</textarea>
                     @error('notes')
                         <p style="color: red; font-size: 12px; margin-top: 5px;">{{ $message }}</p>
                     @enderror
