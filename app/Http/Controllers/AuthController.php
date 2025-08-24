@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Helpers\BisnesHelper;
 
@@ -12,7 +14,7 @@ class AuthController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('auth.login-new');
     }
 
     public function login(Request $request)
@@ -20,15 +22,39 @@ class AuthController extends Controller
         $request->validate([
             'username' => 'required|string',
             'password' => 'required|string',
+            'remember' => 'boolean',
         ]);
 
-        // Check if user exists with the username
-        $user = User::where('name', $request->username)->first();
+        // Rate limiting - max 5 attempts per minute
+        $key = 'login-attempts-' . $request->ip();
+        
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
+            return back()->withErrors([
+                'username' => 'Too many login attempts. Please try again in ' . $seconds . ' seconds.',
+            ])->withInput($request->only('username'));
+        }
+
+        // Allow login with username or email
+        $user = User::where('name', $request->username)
+                   ->orWhere('email', $request->username)
+                   ->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
-            Auth::login($user);
+            // Clear rate limiter on successful login
+            RateLimiter::clear($key);
+            
+            // Regenerate session for security
+            $request->session()->regenerate();
+            
+            // Login with remember me functionality
+            Auth::login($user, $request->boolean('remember'));
+            
             return redirect()->intended('/dashboard');
         }
+
+        // Increment failed attempts
+        RateLimiter::hit($key, 60);
 
         return back()->withErrors([
             'username' => 'The provided credentials do not match our records.',

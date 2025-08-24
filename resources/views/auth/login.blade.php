@@ -85,12 +85,12 @@
                 <!-- Username Field -->
                 <div>
                     <label for="username" class="block text-sm font-medium text-white/90 mb-2">
-                        <i class="fas fa-user mr-2"></i>Username
+                        <i class="fas fa-user mr-2"></i>Username or Email Address
                     </label>
                     <div class="relative">
                         <input type="text" id="username" name="username" value="{{ old('username') }}"
                             class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-transparent transition-all duration-200"
-                            placeholder="Enter your username" required>
+                            placeholder="Enter your username or email address" required>
                         <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
                             <i class="fas fa-user text-white/50"></i>
                         </div>
