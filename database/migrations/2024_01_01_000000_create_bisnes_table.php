@@ -10,13 +10,16 @@ return new class extends Migration
     {
         Schema::create('bisnes', function (Blueprint $table) {
             $table->id();
+            $table->string('gambar')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('nama_bines');
             $table->date('exp_date')->nullable();
             $table->string('nama_syarikat');
+            $table->string('no_pendaftaran')->nullable();
             $table->text('alamat');
             $table->string('poskod', 10);
             $table->string('no_tel');
+            $table->longText('system_message');
             $table->timestamps();
         });
     }
