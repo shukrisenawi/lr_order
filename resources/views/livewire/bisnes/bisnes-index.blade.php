@@ -6,8 +6,8 @@
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Pengurusan Bisnes</h1>
                 <p class="text-gray-600">Urus entiti bisnes anda</p>
             </div>
-            <a href="{{ route('bisnes.create') }}" 
-               class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-xl shadow-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            <a href="{{ route('bisnes.create') }}"
+                class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-xl shadow-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 <i class="fas fa-plus mr-2"></i>
                 Tambah Bisnes Baru
             </a>
@@ -16,7 +16,8 @@
 
     <!-- Flash Messages -->
     @if (session()->has('message'))
-        <div class="mb-8 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-700 rounded-xl shadow-sm">
+        <div
+            class="mb-8 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-700 rounded-xl shadow-sm">
             <div class="flex items-center">
                 <i class="fas fa-check-circle text-green-500 mr-3"></i>
                 <span>{{ session('message') }}</span>
@@ -30,8 +31,7 @@
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="fas fa-search text-gray-400"></i>
             </div>
-            <input type="text" wire:model.live.debounce.300ms="search" 
-                placeholder="Cari bisnes..." 
+            <input type="text" wire:model.live.debounce.300ms="search" placeholder="Cari bisnes..."
                 class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
         </div>
     </div>
@@ -73,14 +73,15 @@
                             </div>
                         </th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No. Pendaftaran</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Jenis</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Telefon</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">On</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tindakan</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @forelse($bisnes as $item)
-                        <tr class="hover:bg-blue-50 transition-colors duration-200" wire:key="bisnes-{{ $item->id }}">
+                        <tr class="hover:bg-blue-50 transition-colors duration-200"
+                            wire:key="bisnes-{{ $item->id }}">
                             <td class="px-6 py-4">
                                 <div class="flex items-center">
                                     @if ($item->gambar)
@@ -88,7 +89,8 @@
                                             alt="{{ $item->nama_bines }}"
                                             class="w-10 h-10 object-cover border border-gray-200 rounded-lg mr-3">
                                     @else
-                                        <div class="w-10 h-10 bg-gradient-to-br from-blue-100 to-indigo-100 border border-gray-200 rounded-lg mr-3 flex items-center justify-center">
+                                        <div
+                                            class="w-10 h-10 bg-gradient-to-br from-blue-100 to-indigo-100 border border-gray-200 rounded-lg mr-3 flex items-center justify-center">
                                             <i class="fas fa-building text-blue-500"></i>
                                         </div>
                                     @endif
@@ -97,12 +99,9 @@
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->nama_syarikat }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_pendaftaran }}</td>
-                            <td class="px-6 py-4">
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    {{ $item->jenis_bisnes }}
-                                </span>
-                            </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_tel }}</td>
+                            <td class="px-6 py-4">
+                            </td>
                             <td class="px-6 py-4">
                                 <div class="flex space-x-2">
                                     <a href="{{ route('bisnes.show', $item) }}"
@@ -151,7 +150,9 @@
             <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-700">
-                        Menunjukkan <span class="font-medium">{{ $bisnes->firstItem() }}</span> ke <span class="font-medium">{{ $bisnes->lastItem() }}</span> daripada <span class="font-medium">{{ $bisnes->total() }}</span> rekod
+                        Menunjukkan <span class="font-medium">{{ $bisnes->firstItem() }}</span> ke <span
+                            class="font-medium">{{ $bisnes->lastItem() }}</span> daripada <span
+                            class="font-medium">{{ $bisnes->total() }}</span> rekod
                     </div>
                     <div>
                         {{ $bisnes->links('vendor.pagination.tailwind') }}

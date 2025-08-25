@@ -25,6 +25,7 @@ class BisnesController extends Controller
 
     public function show(Bisnes $bisnes)
     {
+
         return view('bisnes.show', ['bisnes' => $bisnes]);
     }
 
@@ -35,11 +36,12 @@ class BisnesController extends Controller
             'exp_date' => 'required|date',
             'nama_syarikat' => 'required|string|max:255',
             'no_pendaftaran' => 'required|string|max:255',
-            'jenis_bisnes' => 'required|string|max:255',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'alamat' => 'required|string',
             'poskod' => 'required|string|max:10',
             'no_tel' => 'required|string|max:20',
+            'on' => 'required',
+            'system_message' => 'required|string',
         ]);
 
         $data = [
@@ -48,10 +50,11 @@ class BisnesController extends Controller
             'exp_date' => $request->exp_date,
             'nama_syarikat' => $request->nama_syarikat,
             'no_pendaftaran' => $request->no_pendaftaran,
-            'jenis_bisnes' => $request->jenis_bisnes,
             'alamat' => $request->alamat,
             'poskod' => $request->poskod,
             'no_tel' => $request->no_tel,
+            'on' => $request->on,
+            'system_message' => $request->system_message,
         ];
 
         if ($request->hasFile('gambar')) {
@@ -76,11 +79,12 @@ class BisnesController extends Controller
             'exp_date' => 'required|date',
             'nama_syarikat' => 'required|string|max:255',
             'no_pendaftaran' => 'required|string|max:255',
-            'jenis_bisnes' => 'required|string|max:255',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'alamat' => 'required|string',
             'poskod' => 'required|string|max:10',
             'no_tel' => 'required|string|max:20',
+            'on' => 'required',
+            'system_message' => 'required|string',
         ]);
 
         $data = $request->all();

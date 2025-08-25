@@ -5,6 +5,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BisnesController;
 use App\Models\Bisnes;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\ImageController;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
 
 // Home route
@@ -31,10 +36,10 @@ Route::get('/email/verify', function () {
 })->middleware('auth')->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (Request $request) {
-    $user = \App\Models\User::findOrFail($request->id);
+    $user = User::findOrFail($request->id);
 
     if (!hash_equals((string) $request->hash, sha1($user->getEmailForVerification()))) {
-        throw new \Illuminate\Auth\Access\AuthorizationException;
+        throw new AuthorizationException;
     }
 
     if ($user->hasVerifiedEmail()) {
@@ -57,7 +62,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Quick login for testing
 Route::get('/quick-login', function () {
-    \Illuminate\Support\Facades\Auth::loginUsingId(1);
+    Auth::loginUsingId(1);
     return redirect('/dashboard');
 })->name('quick-login');
 
@@ -117,19 +122,19 @@ Route::middleware(['auth'])->group(function () {
 
     // Settings routes
     Route::prefix('settings')->name('settings.')->group(function () {
-        Route::get('/', [\App\Http\Controllers\SettingsController::class, 'index'])->name('index');
-        Route::get('/api-tokens', [\App\Http\Controllers\SettingsController::class, 'apiTokens'])->name('api-tokens');
-        Route::post('/api-tokens', [\App\Http\Controllers\SettingsController::class, 'createApiToken'])->name('api-tokens.create');
-        Route::delete('/api-tokens/{token}', [\App\Http\Controllers\SettingsController::class, 'deleteApiToken'])->name('api-tokens.delete');
-        Route::get('/api-documentation', [\App\Http\Controllers\SettingsController::class, 'apiDocumentation'])->name('api-documentation');
+        Route::get('/', [SettingsController::class, 'index'])->name('index');
+        Route::get('/api-tokens', [SettingsController::class, 'apiTokens'])->name('api-tokens');
+        Route::post('/api-tokens', [SettingsController::class, 'createApiToken'])->name('api-tokens.create');
+        Route::delete('/api-tokens/{token}', [SettingsController::class, 'deleteApiToken'])->name('api-tokens.delete');
+        Route::get('/api-documentation', [SettingsController::class, 'apiDocumentation'])->name('api-documentation');
     });
 });
 
 // Image routes for web interface (no authentication required)
 Route::prefix('images')->name('web.image.')->group(function () {
-    Route::get('/business/{filename}', [\App\Http\Controllers\ImageController::class, 'businessImage'])->name('business');
-    Route::get('/gallery/{filename}', [\App\Http\Controllers\ImageController::class, 'galleryImage'])->name('gallery');
-    Route::get('/serve/{path}', [\App\Http\Controllers\ImageController::class, 'serveImage'])->name('serve');
+    Route::get('/business/{filename}', [ImageController::class, 'businessImage'])->name('business');
+    Route::get('/gallery/{filename}', [ImageController::class, 'galleryImage'])->name('gallery');
+    Route::get('/serve/{path}', [ImageController::class, 'serveImage'])->name('serve');
 });
 
 // API routes

@@ -7,7 +7,7 @@
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-10" wire:poll.30s="loadStats">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 mb-10" wire:poll.30s="loadStats">
         <!-- Total Bisnes Card -->
         <div
             class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105">
@@ -27,6 +27,31 @@
                         <span class="flex items-center">
                             <i class="fas fa-arrow-up text-green-300 mr-1"></i>
                             <span>{{ $growthMetrics['bisnes_growth'] ?? 0 }}% dari bulan lepas</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Value2 Card -->
+        <div
+            class="bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105">
+            <div class="p-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 bg-white bg-opacity-20 p-3 rounded-lg">
+                        <i class="fas fa-chart-line text-white text-2xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-white text-sm font-medium">Value2</p>
+                        <div class="text-2xl font-bold text-white" wire:loading.class="animate-pulse">
+                            {{ $value2 }}</div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <div class="flex items-center text-white text-sm">
+                        <span class="flex items-center">
+                            <i class="fas fa-info-circle text-blue-300 mr-1"></i>
+                            <span>Business Status</span>
                         </span>
                     </div>
                 </div>
@@ -135,26 +160,16 @@
     </div>
 
     <!-- Analytics Dashboard -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-        <!-- Revenue Chart -->
+    <div class="grid grid-cols-1 gap-8 mb-10">
+        <!-- Combined Chart -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div class="px-6 py-5 border-b border-gray-100">
-                <h2 class="text-xl font-bold text-gray-900">Hasil Bulanan</h2>
-                <p class="text-gray-600 mt-1">Trend hasil sepanjang tahun</p>
+                <h2 class="text-xl font-bold text-gray-900">Hasil Bulanan & Kadar Penukaran</h2>
+                <p class="text-gray-600 mt-1">Trend hasil sepanjang tahun dan Kadar Penukaran Prospek kepada pelanggan
+                </p>
             </div>
             <div class="p-6">
-                <canvas id="revenueChart" width="400" height="200"></canvas>
-            </div>
-        </div>
-
-        <!-- Conversion Rate Chart -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="px-6 py-5 border-b border-gray-100">
-                <h2 class="text-xl font-bold text-gray-900">Kadar Penukaran</h2>
-                <p class="text-gray-600 mt-1">Prospek kepada pelanggan</p>
-            </div>
-            <div class="p-6">
-                <canvas id="conversionChart" width="400" height="200"></canvas>
+                <canvas id="combinedChart" width="400" height="200"></canvas>
             </div>
         </div>
     </div>
@@ -279,6 +294,158 @@
                             <p class="text-sm text-gray-600">Daftar prospek baru</p>
                         </div>
                     </div>
+
+                    @script
+                        <script>
+                            document.addEventListener('livewire:init', function() {
+                                // Function to initialize or update the combined chart
+                                function initCombinedChart() {
+                                    const ctx = document.getElementById('combinedChart').getContext('2d');
+
+                                    // Destroy existing chart if it exists
+                                    if (window.combinedChart) {
+                                        window.combinedChart.destroy();
+                                    }
+
+                                    // Prepare data for the chart
+                                    const revenueData = @json($revenueByMonth);
+                                    const conversionData = @json($conversionRate);
+
+                                    // Extract months and values
+                                    const months = revenueData.map(item => item.month);
+                                    const revenueValues = revenueData.map(item => item.revenue);
+                                    const conversionValues = conversionData.rate || 0;
+
+                                    // Create the combined chart
+                                    window.combinedChart = new Chart(ctx, {
+                                        type: 'line',
+                                        data: {
+                                            labels: months,
+                                            datasets: [{
+                                                    label: 'Hasil Bulanan (RM)',
+                                                    data: revenueValues,
+                                                    borderColor: 'rgb(147, 51, 234)', // Purple color
+                                                    backgroundColor: 'rgba(147, 51, 234, 0.1)',
+                                                    borderWidth: 3,
+                                                    pointRadius: 4,
+                                                    pointBackgroundColor: 'rgb(147, 51, 234)',
+                                                    pointBorderColor: '#fff',
+                                                    pointBorderWidth: 2,
+                                                    tension: 0.3,
+                                                    fill: true,
+                                                    yAxisID: 'y'
+                                                },
+                                                {
+                                                    label: 'Kadar Penukaran (%)',
+                                                    data: Array(months.length).fill(conversionValues),
+                                                    borderColor: 'rgb(234, 179, 8)', // Yellow color
+                                                    backgroundColor: 'rgba(234, 179, 8, 0.1)',
+                                                    borderWidth: 3,
+                                                    pointRadius: 4,
+                                                    pointBackgroundColor: 'rgb(234, 179, 8)',
+                                                    pointBorderColor: '#fff',
+                                                    pointBorderWidth: 2,
+                                                    tension: 0.3,
+                                                    fill: true,
+                                                    yAxisID: 'y1'
+                                                }
+                                            ]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            maintainAspectRatio: false,
+                                            interaction: {
+                                                mode: 'index',
+                                                intersect: false
+                                            },
+                                            scales: {
+                                                x: {
+                                                    grid: {
+                                                        display: false
+                                                    },
+                                                    ticks: {
+                                                        color: '#6b7280'
+                                                    }
+                                                },
+                                                y: {
+                                                    type: 'linear',
+                                                    display: true,
+                                                    position: 'left',
+                                                    grid: {
+                                                        color: 'rgba(0, 0, 0, 0.05)'
+                                                    },
+                                                    ticks: {
+                                                        color: '#6b7280',
+                                                        callback: function(value) {
+                                                            return 'RM' + value.toLocaleString();
+                                                        }
+                                                    }
+                                                },
+                                                y1: {
+                                                    type: 'linear',
+                                                    display: true,
+                                                    position: 'right',
+                                                    grid: {
+                                                        drawOnChartArea: false
+                                                    },
+                                                    ticks: {
+                                                        color: '#6b7280',
+                                                        callback: function(value) {
+                                                            return value + '%';
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            plugins: {
+                                                legend: {
+                                                    position: 'top',
+                                                    labels: {
+                                                        color: '#374151',
+                                                        font: {
+                                                            size: 12
+                                                        },
+                                                        padding: 20
+                                                    }
+                                                },
+                                                tooltip: {
+                                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                                    titleColor: '#fff',
+                                                    bodyColor: '#fff',
+                                                    borderColor: 'rgba(0, 0, 0, 0.1)',
+                                                    borderWidth: 1,
+                                                    padding: 12,
+                                                    callbacks: {
+                                                        label: function(context) {
+                                                            let label = context.dataset.label || '';
+                                                            if (label) {
+                                                                label += ': ';
+                                                            }
+                                                            if (context.datasetIndex === 0) {
+                                                                label += 'RM' + context.parsed.y.toLocaleString();
+                                                            } else {
+                                                                label += context.parsed.y + '%';
+                                                            }
+                                                            return label;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+
+                                // Initialize the chart when the page loads
+                                initCombinedChart();
+
+                                // Re-initialize the chart when Livewire updates
+                                Livewire.on('stats-updated', () => {
+                                    setTimeout(() => {
+                                        initCombinedChart();
+                                    }, 100);
+                                });
+                            });
+                        </script>
+                    @endscript
                 </a>
 
                 <!-- Tambah Pembelian -->

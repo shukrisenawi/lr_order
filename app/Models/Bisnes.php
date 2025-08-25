@@ -17,7 +17,6 @@ class Bisnes extends Model
         'exp_date',
         'nama_syarikat',
         'no_pendaftaran',
-        'jenis_bisnes',
         'gambar',
         'alamat',
         'poskod',
