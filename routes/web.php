@@ -30,19 +30,19 @@ Route::get('/email/verify', function () {
 
 Route::get('/email/verify/{id}/{hash}', function (Request $request) {
     $user = \App\Models\User::findOrFail($request->id);
-    
+
     if (!hash_equals((string) $request->hash, sha1($user->getEmailForVerification()))) {
         throw new \Illuminate\Auth\Access\AuthorizationException;
     }
-    
+
     if ($user->hasVerifiedEmail()) {
         return redirect()->intended('/dashboard');
     }
-    
+
     if ($user->markEmailAsVerified()) {
         event(new \Illuminate\Auth\Events\Verified($user));
     }
-    
+
     return redirect()->intended('/dashboard')->with('success', 'Emel berjaya disahkan!');
 })->middleware(['auth', 'signed'])->name('verification.verify');
 
