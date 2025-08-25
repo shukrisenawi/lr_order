@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('prospek', function (Blueprint $table) {
             $table->id();
             $table->string('no_tel');
-            $table->string('gelaran');
-            $table->string('status')->default('active');
+            $table->string('gelaran')->nullable();
+            $table->string('status')->default('prospek');
             $table->foreignId('bisnes_id')->constrained('bisnes')->onDelete('cascade');
             $table->timestamps();
         });

@@ -11,8 +11,100 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     @livewireStyles
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --accent-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --sidebar-gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+        }
+
+        .gradient-header {
+            background: var(--primary-gradient);
+        }
+
+        .sidebar-gradient {
+            background: var(--sidebar-gradient);
+        }
+
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            from {
+                box-shadow: 0 0 10px rgba(102, 126, 234, 0.4);
+            }
+
+            to {
+                box-shadow: 0 0 20px rgba(102, 126, 234, 0.8);
+            }
+        }
+
+        .sidebar-link:hover {
+            transform: translateX(5px);
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-left: 4px solid #ffffff;
+        }
+
+        .dropdown-enter {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-menu-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .nav-section-title {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-left: 3px solid white;
         }
     </style>
 
@@ -20,6 +112,15 @@
         function toggleBisnesDropdown() {
             const dropdown = document.getElementById('bisnes-dropdown');
             dropdown.classList.toggle('hidden');
+            dropdown.classList.toggle('dropdown-enter');
+            dropdown.classList.toggle('dropdown-enter-active');
+        }
+
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-overlay');
+            mobileMenu.classList.toggle('hidden');
+            overlay.classList.toggle('hidden');
         }
 
         // Close dropdown when clicking outside
@@ -29,22 +130,47 @@
 
             if (dropdown && button && !button.contains(event.target) && !dropdown.contains(event.target)) {
                 dropdown.classList.add('hidden');
+                dropdown.classList.remove('dropdown-enter-active');
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const menuButton = document.getElementById('mobile-menu-button');
+            const overlay = document.getElementById('mobile-overlay');
+
+            if (mobileMenu && menuButton &&
+                !menuButton.contains(event.target) &&
+                !mobileMenu.contains(event.target) &&
+                !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                overlay.classList.add('hidden');
             }
         });
     </script>
 </head>
 
 <body class="bg-gray-50">
+    <!-- Mobile menu overlay -->
+    <div id="mobile-overlay" class="mobile-menu-overlay fixed inset-0 z-40 hidden" onclick="toggleMobileMenu()"></div>
+
     <!-- Header -->
-    <header class="bg-white shadow-sm border-b border-gray-200">
+    <header class="gradient-header shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <h1 class="text-xl font-semibold text-gray-900">Business Management System</h1>
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-button" type="button"
+                        class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-white/10 focus:outline-none"
+                        onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h1 class="ml-2 md:ml-0 text-xl font-bold text-white">Business Management System</h1>
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Business Selector -->
-                    <div class="relative">
+                    <div class="relative hidden md:block">
                         @php
                             $userBisnes = \App\Models\Bisnes::where('user_id', Auth::id())->get();
                             $selectedBisnes = session('selected_bisnes_id')
@@ -55,7 +181,7 @@
                         @if ($userBisnes->count() > 0)
                             <div class="relative inline-block text-left">
                                 <button type="button"
-                                    class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                    class="inline-flex items-center px-4 py-2 border border-white/20 shadow-sm text-sm leading-4 font-medium rounded-lg text-white bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200"
                                     id="bisnes-menu-button" aria-expanded="true" aria-haspopup="true"
                                     onclick="toggleBisnesDropdown()">
                                     <i class="fas fa-building mr-2"></i>
@@ -63,13 +189,13 @@
                                     <i class="fas fa-chevron-down ml-2"></i>
                                 </button>
 
-                                <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden"
+                                <div class="origin-top-right absolute right-0 mt-2 w-64 rounded-xl shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-50"
                                     id="bisnes-dropdown" role="menu" aria-orientation="vertical"
                                     aria-labelledby="bisnes-menu-button">
-                                    <div class="py-1" role="none">
+                                    <div class="py-2" role="none">
                                         @foreach ($userBisnes as $bisnes)
                                             <a href="{{ route('switch-bisnes', $bisnes->id) }}"
-                                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ $selectedBisnes && $selectedBisnes->id == $bisnes->id ? 'bg-gray-50 font-medium' : '' }}"
+                                                class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 {{ $selectedBisnes && $selectedBisnes->id == $bisnes->id ? 'bg-gray-50 font-medium' : '' }} transition-colors"
                                                 role="menuitem">
                                                 <i class="fas fa-building mr-3 text-gray-400"></i>
                                                 <div>
@@ -83,9 +209,9 @@
                                             </a>
                                         @endforeach
 
-                                        <div class="border-t border-gray-100"></div>
+                                        <div class="border-t border-gray-100 my-1"></div>
                                         <a href="{{ route('bisnes.index') }}"
-                                            class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                                             role="menuitem">
                                             <i class="fas fa-cog mr-3 text-gray-400"></i>
                                             Urus Bisnes
@@ -95,54 +221,62 @@
                             </div>
                         @else
                             <a href="{{ route('bisnes.create') }}"
-                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                class="hidden md:inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-white/20 hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 pulse-glow">
                                 <i class="fas fa-plus mr-2"></i>
                                 Tambah Bisnes
                             </a>
                         @endif
                     </div>
 
-                    <span class="text-sm text-gray-700">Welcome, {{ Auth::user()->name }}</span>
-                    <form method="POST" action="{{ route('logout') }}" class="inline">
-                        @csrf
-                        <button type="submit" class="text-sm text-gray-500 hover:text-gray-700">
-                            <i class="fas fa-sign-out-alt mr-1"></i>Logout
-                        </button>
-                    </form>
+                    <div class="flex items-center space-x-3">
+                        <span class="hidden md:inline text-white font-medium">{{ Auth::user()->name }}</span>
+                        <form method="POST" action="{{ route('logout') }}" class="inline">
+                            @csrf
+                            <button type="submit" class="text-white hover:text-white/80 transition-colors">
+                                <i class="fas fa-sign-out-alt text-xl"></i>
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="flex">
-        <!-- Sidebar -->
-        <aside class="w-64 bg-white shadow-lg h-screen sticky top-0">
-            <div class="p-4">
-                <nav class="space-y-2">
+        <!-- Mobile Sidebar -->
+        <div id="mobile-menu" class="md:hidden fixed inset-0 z-50 hidden">
+            <div class="sidebar-gradient h-full w-64 p-4 overflow-y-auto">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-white text-lg font-bold">Menu</h2>
+                    <button onclick="toggleMobileMenu()" class="text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <nav class="space-y-1">
                     <!-- Dashboard -->
                     <a href="{{ route('dashboard') }}"
-                        class="flex items-center space-x-3 px-4 py-3 {{ request()->routeIs('dashboard') ? 'bg-purple-100 text-purple-700' : 'text-gray-700 hover:bg-gray-100' }} rounded-lg transition-colors">
+                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('dashboard') ? 'nav-link active' : '' }}">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
 
                     <!-- Business Management Section -->
                     <div class="pt-4">
-                        <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Business
+                        <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Business
                             Management</h3>
                         <div class="mt-2 space-y-1">
                             <a href="{{ route('bisnes.index') }}"
-                                class="flex items-center space-x-3 px-4 py-3 {{ request()->routeIs('bisnes.*') ? 'bg-purple-100 text-purple-700' : 'text-gray-700 hover:bg-gray-100' }} rounded-lg transition-colors">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('bisnes.*') ? 'nav-link active' : '' }}">
                                 <i class="fas fa-building"></i>
                                 <span>Bisnes</span>
                             </a>
                             <a href="{{ route('produk.index') }}"
-                                class="flex items-center space-x-3 px-4 py-3 {{ request()->routeIs('produk.*') ? 'bg-purple-100 text-purple-700' : 'text-gray-700 hover:bg-gray-100' }} rounded-lg transition-colors">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
                                 <i class="fas fa-box"></i>
                                 <span>Produk</span>
                             </a>
                             <a href="{{ route('gambar.index') }}"
-                                class="flex items-center space-x-3 px-4 py-3 {{ request()->routeIs('gambar.*') ? 'bg-purple-100 text-purple-700' : 'text-gray-700 hover:bg-gray-100' }} rounded-lg transition-colors">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
                                 <i class="fas fa-images"></i>
                                 <span>Gambar</span>
                             </a>
@@ -151,21 +285,21 @@
 
                     <!-- Customer Management Section -->
                     <div class="pt-4">
-                        <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer
+                        <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Customer
                             Management</h3>
                         <div class="mt-2 space-y-1">
                             <a href="{{ route('prospek.index') }}"
-                                class="flex items-center space-x-3 px-4 py-3 {{ request()->routeIs('prospek.*') ? 'bg-purple-100 text-purple-700' : 'text-gray-700 hover:bg-gray-100' }} rounded-lg transition-colors">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek.*') ? 'nav-link active' : '' }}">
                                 <i class="fas fa-users"></i>
                                 <span>Prospek</span>
                             </a>
                             <a href="{{ route('prospek-alamat.index') }}"
-                                class="flex items-center space-x-3 px-4 py-3 {{ request()->routeIs('prospek-alamat.*') ? 'bg-purple-100 text-purple-700' : 'text-gray-700 hover:bg-gray-100' }} rounded-lg transition-colors">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-alamat.*') ? 'nav-link active' : '' }}">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span>Alamat Prospek</span>
                             </a>
                             <a href="{{ route('prospek-buy.index') }}"
-                                class="flex items-center space-x-3 px-4 py-3 {{ request()->routeIs('prospek-buy.*') ? 'bg-purple-100 text-purple-700' : 'text-gray-700 hover:bg-gray-100' }} rounded-lg transition-colors">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-buy.*') ? 'nav-link active' : '' }}">
                                 <i class="fas fa-shopping-cart"></i>
                                 <span>Pembelian</span>
                             </a>
@@ -174,10 +308,82 @@
 
                     <!-- Account Section -->
                     <div class="pt-4">
-                        <h3 class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Account</h3>
+                        <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Account</h3>
                         <div class="mt-2 space-y-1">
                             <a href="{{ route('settings.index') }}"
-                                class="flex items-center space-x-3 px-4 py-3 {{ request()->routeIs('settings.*') ? 'bg-purple-100 text-purple-700' : 'text-gray-700 hover:bg-gray-100' }} rounded-lg transition-colors">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('settings.*') ? 'nav-link active' : '' }}">
+                                <i class="fas fa-cog"></i>
+                                <span>Tetapan</span>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Desktop Sidebar -->
+        <aside class="hidden md:block w-64 sidebar-gradient h-screen sticky top-0">
+            <div class="p-4 overflow-y-auto h-full">
+                <nav class="space-y-1">
+                    <!-- Dashboard -->
+                    <a href="{{ route('dashboard') }}"
+                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('dashboard') ? 'nav-link active' : '' }}">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+
+                    <!-- Business Management Section -->
+                    <div class="pt-4">
+                        <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Business
+                            Management</h3>
+                        <div class="mt-2 space-y-1">
+                            <a href="{{ route('bisnes.index') }}"
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('bisnes.*') ? 'nav-link active' : '' }}">
+                                <i class="fas fa-building"></i>
+                                <span>Bisnes</span>
+                            </a>
+                            <a href="{{ route('produk.index') }}"
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
+                                <i class="fas fa-box"></i>
+                                <span>Produk</span>
+                            </a>
+                            <a href="{{ route('gambar.index') }}"
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
+                                <i class="fas fa-images"></i>
+                                <span>Gambar</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Customer Management Section -->
+                    <div class="pt-4">
+                        <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Customer
+                            Management</h3>
+                        <div class="mt-2 space-y-1">
+                            <a href="{{ route('prospek.index') }}"
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek.*') ? 'nav-link active' : '' }}">
+                                <i class="fas fa-users"></i>
+                                <span>Prospek</span>
+                            </a>
+                            <a href="{{ route('prospek-alamat.index') }}"
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-alamat.*') ? 'nav-link active' : '' }}">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Alamat Prospek</span>
+                            </a>
+                            <a href="{{ route('prospek-buy.index') }}"
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-buy.*') ? 'nav-link active' : '' }}">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span>Pembelian</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Account Section -->
+                    <div class="pt-4">
+                        <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Account</h3>
+                        <div class="mt-2 space-y-1">
+                            <a href="{{ route('settings.index') }}"
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('settings.*') ? 'nav-link active' : '' }}">
                                 <i class="fas fa-cog"></i>
                                 <span>Tetapan</span>
                             </a>
