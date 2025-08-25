@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Produk;
 use App\Models\Gambar;
+use App\Events\NewDataEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -44,6 +45,15 @@ class ProdukController extends Controller
             $produk = Produk::create($request->all());
 
             Log::info('Produk created', ['produk_id' => $produk->id]);
+
+            // Broadcast new data event
+            broadcast(new NewDataEvent('produk', [
+                'id' => $produk->id,
+                'message' => 'Produk baru telah ditambah',
+                'nama' => $produk->nama,
+                'harga' => $produk->harga,
+                'stok' => $produk->stok
+            ], auth()->id()));
 
             return redirect()->route('produk.index')->with('success', 'Produk created successfully.');
         } catch (\Exception $e) {

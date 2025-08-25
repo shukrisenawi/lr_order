@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProspekBuy;
 use App\Models\ProspekAlamat;
 use App\Models\Produk;
+use App\Events\NewDataEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -54,7 +55,7 @@ class ProspekBuyController extends Controller
 
         $total = $request->kuantiti * $request->harga;
 
-        ProspekBuy::create([
+        $prospekBuy = ProspekBuy::create([
             'prospek_alamat_id' => $request->prospek_alamat_id,
             'produk_id' => $request->produk_id,
             'kuantiti' => $request->kuantiti,
@@ -62,6 +63,18 @@ class ProspekBuyController extends Controller
             'status' => 'pending',
             'created_at' => $request->purchase_date,
         ]);
+
+        // Get business ID for broadcasting
+        $prospekAlamat = ProspekAlamat::with('prospek.bisnes')->find($request->prospek_alamat_id);
+        $bisnesId = $prospekAlamat->prospek->bisnes->id ?? null;
+
+        // Broadcast new data event
+        broadcast(new NewDataEvent('prospek-buy', [
+            'id' => $prospekBuy->id,
+            'message' => 'Pembelian baru telah direkodkan',
+            'total' => $total,
+            'produk' => $prospekBuy->produk->nama ?? 'Unknown'
+        ], auth()->id(), $bisnesId));
 
         return redirect()->route('prospek-buy.index')->with('success', 'Pembelian berjaya direkodkan.');
     }

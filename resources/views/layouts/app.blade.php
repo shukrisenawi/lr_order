@@ -271,9 +271,13 @@
                                 <span>Bisnes</span>
                             </a>
                             <a href="{{ route('produk.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
-                                <i class="fas fa-box"></i>
-                                <span>Produk</span>
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-box"></i>
+                                    <span>Produk</span>
+                                </div>
+                                <span id="produk-badge"
+                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
                             <a href="{{ route('gambar.index') }}"
                                 class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
@@ -289,9 +293,13 @@
                             Management</h3>
                         <div class="mt-2 space-y-1">
                             <a href="{{ route('prospek.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek.*') ? 'nav-link active' : '' }}">
-                                <i class="fas fa-users"></i>
-                                <span>Prospek</span>
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek.*') ? 'nav-link active' : '' }}">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-users"></i>
+                                    <span>Prospek</span>
+                                </div>
+                                <span id="prospek-badge"
+                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
                             <a href="{{ route('prospek-alamat.index') }}"
                                 class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-alamat.*') ? 'nav-link active' : '' }}">
@@ -299,9 +307,13 @@
                                 <span>Alamat Prospek</span>
                             </a>
                             <a href="{{ route('prospek-buy.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-buy.*') ? 'nav-link active' : '' }}">
-                                <i class="fas fa-shopping-cart"></i>
-                                <span>Pembelian</span>
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-buy.*') ? 'nav-link active' : '' }}">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span>Pembelian</span>
+                                </div>
+                                <span id="prospek-buy-badge"
+                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
                         </div>
                     </div>
@@ -343,9 +355,13 @@
                                 <span>Bisnes</span>
                             </a>
                             <a href="{{ route('produk.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
-                                <i class="fas fa-box"></i>
-                                <span>Produk</span>
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-box"></i>
+                                    <span>Produk</span>
+                                </div>
+                                <span id="produk-badge-desktop"
+                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
                             <a href="{{ route('gambar.index') }}"
                                 class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
@@ -361,9 +377,13 @@
                             Management</h3>
                         <div class="mt-2 space-y-1">
                             <a href="{{ route('prospek.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek.*') ? 'nav-link active' : '' }}">
-                                <i class="fas fa-users"></i>
-                                <span>Prospek</span>
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek.*') ? 'nav-link active' : '' }}">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-users"></i>
+                                    <span>Prospek</span>
+                                </div>
+                                <span id="prospek-badge-desktop"
+                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
                             <a href="{{ route('prospek-alamat.index') }}"
                                 class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-alamat.*') ? 'nav-link active' : '' }}">
@@ -371,9 +391,13 @@
                                 <span>Alamat Prospek</span>
                             </a>
                             <a href="{{ route('prospek-buy.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-buy.*') ? 'nav-link active' : '' }}">
-                                <i class="fas fa-shopping-cart"></i>
-                                <span>Pembelian</span>
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-buy.*') ? 'nav-link active' : '' }}">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span>Pembelian</span>
+                                </div>
+                                <span id="prospek-buy-badge-desktop"
+                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
                         </div>
                     </div>
@@ -415,6 +439,154 @@
 
     @yield('scripts')
     @livewireScripts
+
+    <!-- Laravel Echo and Pusher for realtime updates -->
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script>
+        // Initialize notification counters
+        let notificationCounts = {
+            'produk': 0,
+            'prospek': 0,
+            'prospek-buy': 0
+        };
+
+        // Function to update badge
+        function updateBadge(type, count) {
+            const badges = document.querySelectorAll(`#${type}-badge, #${type}-badge-desktop`);
+            badges.forEach(badge => {
+                if (count > 0) {
+                    badge.textContent = count;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            });
+        }
+
+        // Function to show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className =
+                `fixed top-4 right-4 z-50 bg-${type === 'success' ? 'green' : 'blue'}-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-${type === 'success' ? 'check' : 'info'}-circle"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Animate in
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+
+            // Remove after 5 seconds
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 5000);
+        }
+
+        // Initialize Pusher (using log driver for development)
+        // In production, you would configure Pusher properly
+        @if (config('broadcasting.default') === 'pusher')
+            const pusher = new Pusher('{{ config('broadcasting.connections.pusher.key') }}', {
+                cluster: '{{ config('broadcasting.connections.pusher.options.cluster') }}',
+                encrypted: true
+            });
+        @else
+            // For development with log driver, we'll simulate realtime updates
+            console.log('Broadcasting is set to log driver. In production, configure Pusher for realtime updates.');
+        @endif
+
+        // Listen for new data events
+        @auth
+        @if (config('broadcasting.default') === 'pusher')
+            const channel = pusher.subscribe('private-user.{{ auth()->id() }}');
+
+            channel.bind('new-data', function(data) {
+                console.log('New data received:', data);
+
+                // Update notification count
+                if (notificationCounts.hasOwnProperty(data.type)) {
+                    notificationCounts[data.type]++;
+                    updateBadge(data.type, notificationCounts[data.type]);
+                }
+
+                // Show notification
+                showNotification(data.data.message, 'success');
+
+                // Update dashboard stats if on dashboard page
+                if (window.location.pathname === '/dashboard') {
+                    // Trigger Livewire refresh
+                    if (window.Livewire) {
+                        window.Livewire.dispatch('refreshStats');
+                    }
+                }
+            });
+        @else
+            // Simulate realtime updates for development
+            function simulateRealtimeUpdate(type, message) {
+                notificationCounts[type]++;
+                updateBadge(type, notificationCounts[type]);
+                showNotification(message, 'success');
+            }
+
+            // For testing purposes - you can remove this in production
+            setTimeout(() => {
+                console.log('Simulating realtime update...');
+                simulateRealtimeUpdate('produk', 'Produk baru telah ditambah (simulasi)');
+            }, 5000);
+        @endif
+        @endauth
+
+        // Reset badge when visiting the respective page
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+
+            if (currentPath.includes('/produk')) {
+                notificationCounts['produk'] = 0;
+                updateBadge('produk', 0);
+            } else if (currentPath.includes('/prospek-buy')) {
+                notificationCounts['prospek-buy'] = 0;
+                updateBadge('prospek-buy', 0);
+            } else if (currentPath.includes('/prospek')) {
+                notificationCounts['prospek'] = 0;
+                updateBadge('prospek', 0);
+            }
+        });
+
+        // Store notification counts in localStorage to persist across page reloads
+        function saveNotificationCounts() {
+            localStorage.setItem('notificationCounts', JSON.stringify(notificationCounts));
+        }
+
+        function loadNotificationCounts() {
+            const saved = localStorage.getItem('notificationCounts');
+            if (saved) {
+                notificationCounts = JSON.parse(saved);
+                Object.keys(notificationCounts).forEach(type => {
+                    updateBadge(type, notificationCounts[type]);
+                });
+            }
+        }
+
+        // Load counts on page load
+        loadNotificationCounts();
+
+        // Save counts when they change
+        const originalUpdateBadge = updateBadge;
+        updateBadge = function(type, count) {
+            originalUpdateBadge(type, count);
+            notificationCounts[type] = count;
+            saveNotificationCounts();
+        };
+    </script>
 </body>
 
 </html>

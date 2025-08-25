@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Prospek;
 use App\Models\Bisnes;
 use App\Helpers\BisnesHelper;
+use App\Events\NewDataEvent;
 use Illuminate\Http\Request;
 
 class ProspekController extends Controller
@@ -50,7 +51,15 @@ class ProspekController extends Controller
             'bisnes_id' => 'required|exists:bisnes,id',
         ]);
 
-        Prospek::create($request->all());
+        $prospek = Prospek::create($request->all());
+
+        // Broadcast new data event
+        broadcast(new NewDataEvent('prospek', [
+            'id' => $prospek->id,
+            'message' => 'Prospek baru telah didaftarkan',
+            'gelaran' => $prospek->gelaran,
+            'no_tel' => $prospek->no_tel
+        ], auth()->id(), $request->bisnes_id));
 
         return redirect()->route('prospek.index')->with('success', 'Prospek created successfully.');
     }

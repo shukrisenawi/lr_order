@@ -39,6 +39,8 @@ class Dashboard extends Component
         $this->dispatch('stats-updated');
     }
 
+    protected $listeners = ['refreshStats'];
+
     public function render()
     {
         return view('livewire.dashboard');
