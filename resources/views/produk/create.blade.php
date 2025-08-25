@@ -3,88 +3,124 @@
 @section('title', 'Cipta Produk')
 
 @section('content')
-    <div class="mb-6">
-        <div class="flex justify-between items-center">
-            <div>
-                <h1 class="text-2xl font-bold text-gray-900">Cipta Produk Baru</h1>
-                <p class="text-gray-600">Tambah produk baru ke inventori</p>
-            </div>
-            <a href="{{ route('produk.index') }}"
-                class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center">
-                <i class="fas fa-arrow-left mr-2"></i>
-                Kembali ke Senarai
-            </a>
-        </div>
-    </div>
-
-    <!-- Create Form -->
-    <div class="bg-white rounded-lg shadow">
-        <div class="px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900">Maklumat Produk</h3>
-        </div>
-
-        <form method="POST" action="{{ route('produk.store') }}" class="p-6">
-            @csrf
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- Nama -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
-                    <label for="nama" class="block text-sm font-medium text-gray-700 mb-2">Nama Produk</label>
-                    <input type="text" name="nama" id="nama" value="{{ old('nama') }}" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('nama') border-red-500 @enderror">
-                    @error('nama')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Cipta Produk Baru</h1>
+                    <p class="text-gray-600">Tambah produk baru ke inventori</p>
                 </div>
-
-                <!-- Harga -->
-                <div>
-                    <label for="harga" class="block text-sm font-medium text-gray-700 mb-2">Harga</label>
-                    <input type="number" step="0.01" name="harga" id="harga" value="{{ old('harga') }}" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('harga') border-red-500 @enderror">
-                    @error('harga')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Stok -->
-                <div>
-                    <label for="stok" class="block text-sm font-medium text-gray-700 mb-2">Stok</label>
-                    <input type="number" name="stok" id="stok" value="{{ old('stok') }}" required min="0"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('stok') border-red-500 @enderror">
-                    @error('stok')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <!-- Gambar -->
-                <div>
-                    <label for="gambar_id" class="block text-sm font-medium text-gray-700 mb-2">Gambar (Pilihan)</label>
-                    <select name="gambar_id" id="gambar_id"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 @error('gambar_id') border-red-500 @enderror">
-                        <option value="">Pilih Gambar</option>
-                        @foreach ($gambar as $img)
-                            <option value="{{ $img->id }}" {{ old('gambar_id') == $img->id ? 'selected' : '' }}>
-                                {{ $img->nama }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('gambar_id')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
-                </div>
-            </div>
-
-            <!-- Submit Buttons -->
-            <div class="mt-6 flex justify-end space-x-3">
                 <a href="{{ route('produk.index') }}"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-700 px-6 py-2 rounded-lg">
-                    Batal
+                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Kembali ke Senarai
                 </a>
-                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
-                    Cipta Produk
-                </button>
             </div>
-        </form>
+        </div>
+
+        <!-- Form -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
+                <h3 class="text-xl font-semibold text-gray-900">Maklumat Produk</h3>
+                <p class="text-gray-600 text-sm mt-1">Sila isi semua maklumat yang diperlukan</p>
+            </div>
+
+            <form method="POST" action="{{ route('produk.store') }}" class="p-6">
+                @csrf
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Left Column -->
+                    <div class="space-y-6">
+                        <!-- Nama -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama Produk <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" name="nama" value="{{ old('nama') }}" required
+                                placeholder="Contoh: Produk ABC"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all duration-300 @error('nama') border-red-500 bg-red-50 @enderror">
+                            @error('nama')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+                        <!-- Harga -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Harga <span
+                                    class="text-red-500">*</span></label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <span class="text-gray-500">RM</span>
+                                </div>
+                                <input type="number" step="0.01" name="harga" value="{{ old('harga') }}" required
+                                    placeholder="0.00"
+                                    class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all duration-300 @error('harga') border-red-500 bg-red-50 @enderror">
+                            </div>
+                            @error('harga')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="space-y-6">
+                        <!-- Stok -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Stok <span
+                                    class="text-red-500">*</span></label>
+                            <input type="number" name="stok" value="{{ old('stok') }}" required min="0"
+                                placeholder="Contoh: 100"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all duration-300 @error('stok') border-red-500 bg-red-50 @enderror">
+                            @error('stok')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+                        <!-- Gambar -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Gambar (Pilihan)</label>
+                            <select name="gambar_id"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all duration-300 @error('gambar_id') border-red-500 bg-red-50 @enderror">
+                                <option value="">Pilih Gambar</option>
+                                @foreach ($gambar as $img)
+                                    <option value="{{ $img->id }}"
+                                        {{ old('gambar_id') == $img->id ? 'selected' : '' }}>
+                                        {{ $img->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('gambar_id')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="{{ route('produk.index') }}"
+                        class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors duration-300">
+                        Batal
+                    </a>
+                    <button type="submit"
+                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-medium rounded-xl shadow-lg hover:from-emerald-600 hover:to-teal-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
+                        <i class="fas fa-save mr-2"></i>
+                        Cipta Produk
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 @endsection

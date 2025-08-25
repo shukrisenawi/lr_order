@@ -3,76 +3,117 @@
 @section('title', 'Edit Prospek')
 
 @section('content')
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-2xl font-light text-gray-800 mb-2">Edit Prospek</h1>
-            <p class="text-gray-500">Kemaskini maklumat prospek untuk {{ $prospek->gelaran }}</p>
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Edit Prospek</h1>
+                    <p class="text-gray-600">Kemaskini maklumat prospek untuk {{ $prospek->gelaran }}</p>
+                </div>
+                <a href="{{ route('prospek.index') }}"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Kembali ke Senarai
+                </a>
+            </div>
         </div>
 
         <!-- Form -->
-        <div class="bg-white border border-gray-200">
-            <div class="p-8">
-                <form method="POST" action="{{ route('prospek.update', $prospek) }}">
-                    @csrf
-                    @method('PUT')
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
+                <h3 class="text-xl font-semibold text-gray-900">Maklumat Prospek</h3>
+                <p class="text-gray-600 text-sm mt-1">Kemaskini maklumat prospek di bawah</p>
+            </div>
 
+            <form method="POST" action="{{ route('prospek.update', $prospek) }}" class="p-6">
+                @csrf
+                @method('PUT')
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Left Column -->
                     <div class="space-y-6">
                         <!-- No Telefon -->
                         <div>
-                            <label class="block text-sm text-gray-600 mb-2">No. Telefon *</label>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">No. Telefon <span
+                                    class="text-red-500">*</span></label>
                             <input type="text" name="no_tel" value="{{ old('no_tel', $prospek->no_tel) }}" required
-                                class="w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-400 focus:outline-none @error('no_tel') border-red-300 bg-red-50 @enderror">
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('no_tel') border-red-500 bg-red-50 @enderror">
                             @error('no_tel')
-                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
                             @enderror
                         </div>
 
                         <!-- Gelaran -->
                         <div>
-                            <label class="block text-sm text-gray-600 mb-2">Nama/Gelaran *</label>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama/Gelaran <span
+                                    class="text-red-500">*</span></label>
                             <input type="text" name="gelaran" value="{{ old('gelaran', $prospek->gelaran) }}" required
-                                class="w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-400 focus:outline-none @error('gelaran') border-red-300 bg-red-50 @enderror">
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('gelaran') border-red-500 bg-red-50 @enderror">
                             @error('gelaran')
-                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
                             @enderror
                         </div>
+                    </div>
 
+                    <!-- Right Column -->
+                    <div class="space-y-6">
                         <!-- Email -->
                         <div>
-                            <label class="block text-sm text-gray-600 mb-2">Emel (Pilihan)</label>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Emel (Pilihan)</label>
                             <input type="email" name="email" value="{{ old('email', $prospek->email) }}"
-                                class="w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-400 focus:outline-none @error('email') border-red-300 bg-red-50 @enderror">
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('email') border-red-500 bg-red-50 @enderror">
                             @error('email')
-                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
                             @enderror
                         </div>
 
                         <!-- Bisnes -->
                         <div>
-                            <label class="block text-sm text-gray-600 mb-2">Bisnes *</label>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Bisnes <span
+                                    class="text-red-500">*</span></label>
                             <select name="bisnes_id" required
-                                class="w-full px-4 py-3 border border-gray-200 bg-gray-50 focus:bg-white focus:border-gray-400 focus:outline-none @error('bisnes_id') border-red-300 bg-red-50 @enderror">
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('bisnes_id') border-red-500 bg-red-50 @enderror">
                                 <option value="">Pilih Bisnes</option>
-                                @foreach($bisnes as $item)
-                                    <option value="{{ $item->id }}" {{ old('bisnes_id', $prospek->bisnes_id) == $item->id ? 'selected' : '' }}>
+                                @foreach ($bisnes as $item)
+                                    <option value="{{ $item->id }}"
+                                        {{ old('bisnes_id', $prospek->bisnes_id) == $item->id ? 'selected' : '' }}>
                                         {{ $item->nama_bines }}
                                     </option>
                                 @endforeach
                             </select>
                             @error('bisnes_id')
-                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
                             @enderror
                         </div>
                     </div>
+                </div>
 
-                    <!-- Actions -->
-                    <div class="flex justify-between mt-8 pt-6 border-t border-gray-200">
-                        <a href="{{ route('prospek.index') }}" class="px-6 py-2 text-gray-600 hover:text-gray-800">Batal</a>
-                        <button type="submit" class="px-6 py-2 bg-gray-800 text-white hover:bg-gray-900">Kemaskini Prospek</button>
-                    </div>
-                </form>
-            </div>
+                <!-- Actions -->
+                <div class="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="{{ route('prospek.index') }}"
+                        class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors duration-300">
+                        Batal
+                    </a>
+                    <button type="submit"
+                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-xl shadow-lg hover:from-amber-600 hover:to-orange-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
+                        <i class="fas fa-save mr-2"></i>
+                        Kemaskini Prospek
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 @endsection
