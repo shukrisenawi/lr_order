@@ -16,11 +16,12 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
 
+
         // You can add additional data here for the dashboard
         $stats = [
-            'totalProjects' => 12,
-            'completedProjects' => 8,
-            'inProgressProjects' => 3,
+            'totalProduk' => 12,
+            'totalProspek' => 8,
+            'total' => 3,
             'teamMembers' => 24,
         ];
 

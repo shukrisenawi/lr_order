@@ -175,12 +175,14 @@
                                     <i class="fas fa-trophy text-sm"></i>
                                 </div>
                                 <div>
-                                    <p class="font-medium text-gray-900">{{ $product['name'] ?? 'Unknown Product' }}</p>
+                                    <p class="font-medium text-gray-900">{{ $product['name'] ?? 'Unknown Product' }}
+                                    </p>
                                     <p class="text-sm text-gray-600">{{ $product['sales'] ?? 0 }} jualan</p>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <p class="font-semibold text-gray-900">RM{{ number_format($product['revenue'] ?? 0, 2) }}
+                                <p class="font-semibold text-gray-900">
+                                    RM{{ number_format($product['revenue'] ?? 0, 2) }}
                                 </p>
                             </div>
                         </div>

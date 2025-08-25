@@ -4,10 +4,12 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BisnesController;
+use App\Models\Bisnes;
+use Illuminate\Support\Facades\DB;
 
 // Home route
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 // Test route
@@ -60,16 +62,21 @@ Route::get('/quick-login', function () {
 })->name('quick-login');
 
 // Switch business route
-Route::get('/switch-bisnes/{bisnes}', function (\App\Models\Bisnes $bisnes) {
+Route::get('/switch-bisnes/{bisnes}', function ($bisnes = 0) {
+
     // Verify user owns this business
-    if ($bisnes->user_id !== auth()->id()) {
+    $bisnesSelect = Bisnes::find($bisnes);
+
+    if ($bisnesSelect && $bisnesSelect->user_id !== auth()->id()) {
         abort(403);
     }
-
+    $idSelect = $bisnesSelect ? $bisnesSelect->id : 0;
     // Store selected business in session
-    session(['selected_bisnes_id' => $bisnes->id]);
-
-    return redirect()->back()->with('success', 'Bisnes ditukar kepada: ' . $bisnes->nama_bines);
+    session(['selected_bisnes_id' => $idSelect]);
+    if ($bisnes)
+        return redirect()->back()->with('success', 'Bisnes ditukar kepada: ' . $bisnesSelect->nama_bines);
+    else
+        return redirect()->back()->with('success', 'Semua bisnes dibuka.');
 })->name('switch-bisnes')->middleware('auth');
 
 // Protected routes

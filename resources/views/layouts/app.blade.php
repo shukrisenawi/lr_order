@@ -1,3 +1,6 @@
+@php
+    use App\Models\Bisnes;
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -172,10 +175,10 @@
                     <!-- Business Selector -->
                     <div class="relative hidden md:block">
                         @php
-                            $userBisnes = \App\Models\Bisnes::where('user_id', Auth::id())->get();
+                            $userBisnes = Bisnes::where('user_id', Auth::id())->get();
                             $selectedBisnes = session('selected_bisnes_id')
-                                ? \App\Models\Bisnes::find(session('selected_bisnes_id'))
-                                : $userBisnes->first();
+                                ? Bisnes::find(session('selected_bisnes_id'))
+                                : 0;
                         @endphp
 
                         @if ($userBisnes->count() > 0)
@@ -185,7 +188,7 @@
                                     id="bisnes-menu-button" aria-expanded="true" aria-haspopup="true"
                                     onclick="toggleBisnesDropdown()">
                                     <i class="fas fa-building mr-2"></i>
-                                    {{ $selectedBisnes ? $selectedBisnes->nama_bines : 'Pilih Bisnes' }}
+                                    {{ $selectedBisnes ? $selectedBisnes->nama_bines : 'Semua Bisnes' }}
                                     <i class="fas fa-chevron-down ml-2"></i>
                                 </button>
 
@@ -210,11 +213,14 @@
                                         @endforeach
 
                                         <div class="border-t border-gray-100 my-1"></div>
-                                        <a href="{{ route('bisnes.index') }}"
+                                        <a href="{{ route('switch-bisnes', 0) }}"
                                             class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                                             role="menuitem">
-                                            <i class="fas fa-cog mr-3 text-gray-400"></i>
-                                            Urus Bisnes
+                                            <i class="fas fa-building mr-3 text-gray-400"></i>
+                                            Semua Bisnes
+                                            @if (!$selectedBisnes)
+                                                <i class="fas fa-check ml-auto text-green-500"></i>
+                                            @endif
                                         </a>
                                     </div>
                                 </div>

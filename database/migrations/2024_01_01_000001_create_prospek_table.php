@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('gelaran')->nullable();
             $table->string('status')->default('prospek');
             $table->foreignId('bisnes_id')->constrained('bisnes')->onDelete('cascade');
+            $table->string('on')->bool(true);
             $table->timestamps();
         });
     }

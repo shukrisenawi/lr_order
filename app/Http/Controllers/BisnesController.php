@@ -23,9 +23,9 @@ class BisnesController extends Controller
         return view('bisnes.create');
     }
 
-    public function show(Bisnes $bisne)
+    public function show(Bisnes $bisnes)
     {
-        return view('bisnes.show', ['bisnes' => $bisne]);
+        return view('bisnes.show', ['bisnes' => $bisnes]);
     }
 
     public function store(Request $request)
