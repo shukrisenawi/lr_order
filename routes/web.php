@@ -78,6 +78,11 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard-livewire');
     })->name('dashboard');
 
+    // Data Table Route
+    Route::get('/data-table', function () {
+        return view('data-table-livewire');
+    })->name('data-table');
+
     // Business Management Routes
     Route::get('/bisnes', function () {
         return view('bisnes-livewire');

@@ -260,6 +260,13 @@
                         <span>Dashboard</span>
                     </a>
 
+                    <!-- Data Table -->
+                    <a href="{{ route('data-table') }}"
+                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('data-table') ? 'nav-link active' : '' }}">
+                        <i class="fas fa-table"></i>
+                        <span>Jadual Data</span>
+                    </a>
+
                     <!-- Business Management Section -->
                     <div class="pt-4">
                         <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Business
@@ -342,6 +349,13 @@
                         class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('dashboard') ? 'nav-link active' : '' }}">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
+                    </a>
+
+                    <!-- Data Table -->
+                    <a href="{{ route('data-table') }}"
+                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('data-table') ? 'nav-link active' : '' }}">
+                        <i class="fas fa-table"></i>
+                        <span>Jadual Data</span>
                     </a>
 
                     <!-- Business Management Section -->
@@ -537,11 +551,11 @@
                 showNotification(message, 'success');
             }
 
-            // For testing purposes - you can remove this in production
-            setTimeout(() => {
-                console.log('Simulating realtime update...');
-                simulateRealtimeUpdate('produk', 'Produk baru telah ditambah (simulasi)');
-            }, 5000);
+            // One-time simulation for testing - removed continuous alerts
+            // setTimeout(() => {
+            //     console.log('Simulating realtime update...');
+            //     simulateRealtimeUpdate('produk', 'Produk baru telah ditambah (simulasi)');
+            // }, 5000);
         @endif
         @endauth
 
