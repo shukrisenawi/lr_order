@@ -9,4 +9,9 @@ use Illuminate\Routing\Controller as BaseController;
 abstract class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
+    public $bisnesId;
+    public function __construct()
+    {
+        $this->bisnesId = session('bisnes_id');
+    }
 }

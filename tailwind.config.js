@@ -1,0 +1,17 @@
+module.exports = {
+  content: [
+    "./resources/**/*.blade.php",
+    "./resources/**/*.js",
+    "./resources/**/*.vue",
+    "./app/Livewire/**/*.php",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    require('daisyui'),
+  ],
+  daisyui: {
+    themes: ["light", "dark", "cupcake"],
+  },
+}

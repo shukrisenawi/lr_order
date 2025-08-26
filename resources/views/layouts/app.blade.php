@@ -10,7 +10,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Business Management System')</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo-01.png') }}">
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     @livewireStyles
     <style>
@@ -169,7 +169,7 @@
                         onclick="toggleMobileMenu()">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
-                    <h1 class="ml-2 md:ml-0 text-xl font-bold text-white">Business Management System</h1>
+                    <h1 class="ml-2 md:ml-0 text-xl font-bold text-white">Sistem SH BEST CREATIVE DESIGN</h1>
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Business Selector -->

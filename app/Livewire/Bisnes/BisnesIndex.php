@@ -22,6 +22,12 @@ class BisnesIndex extends Component
         $this->resetPage();
     }
 
+    public function updateOn(Bisnes $id)
+    {
+        $id->on = !$id->on;
+        $id->save();
+    }
+
     public function sortBy($field)
     {
         if ($this->sortField === $field) {

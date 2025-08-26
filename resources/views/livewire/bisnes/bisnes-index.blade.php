@@ -100,7 +100,8 @@
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->nama_syarikat }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_pendaftaran }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_tel }}</td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4"><input type="checkbox" wire:change="updateOn({{ $item->id }})"
+                                    class="toggle toggle-sm toggle-success" {{ $item->on ? 'checked' : '' }}></td>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex space-x-2">

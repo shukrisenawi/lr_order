@@ -1,13 +1,13 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header Section -->
     <div class="mb-10">
-        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Papan Pemuka</h1>
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Dashboard</h1>
         <p class="text-gray-600 text-lg">Selamat kembali, <span
                 class="font-semibold text-indigo-600">{{ Auth::user()->name }}</span></p>
     </div>
 
     <!-- Stats Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-6 mb-10" wire:poll.30s="loadStats">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-10" wire:poll.30s="loadStats">
         <!-- Total Bisnes Card -->
         <div
             class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105">
@@ -27,31 +27,6 @@
                         <span class="flex items-center">
                             <i class="fas fa-arrow-up text-green-300 mr-1"></i>
                             <span>{{ $growthMetrics['bisnes_growth'] ?? 0 }}% dari bulan lepas</span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Value2 Card -->
-        <div
-            class="bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105">
-            <div class="p-6">
-                <div class="flex items-center">
-                    <div class="flex-shrink-0 bg-white bg-opacity-20 p-3 rounded-lg">
-                        <i class="fas fa-chart-line text-white text-2xl"></i>
-                    </div>
-                    <div class="ml-4">
-                        <p class="text-white text-sm font-medium">Value2</p>
-                        <div class="text-2xl font-bold text-white" wire:loading.class="animate-pulse">
-                            {{ $value2 }}</div>
-                    </div>
-                </div>
-                <div class="mt-4">
-                    <div class="flex items-center text-white text-sm">
-                        <span class="flex items-center">
-                            <i class="fas fa-info-circle text-blue-300 mr-1"></i>
-                            <span>Business Status</span>
                         </span>
                     </div>
                 </div>

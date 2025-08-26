@@ -1,3 +1,10 @@
+@import 'tailwindcss';
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+@plugin "daisyui";
+
 :root {
     --primary-color: #4361ee;
     --secondary-color: #3f37c9;
