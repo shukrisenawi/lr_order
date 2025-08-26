@@ -72,7 +72,6 @@
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No. Pendaftaran</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Telefon</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">On</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tindakan</th>
@@ -98,7 +97,6 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->nama_syarikat }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_pendaftaran }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_tel }}</td>
                             <td class="px-6 py-4"><input type="checkbox" wire:change="updateOn({{ $item->id }})"
                                     class="toggle toggle-sm toggle-success" {{ $item->on ? 'checked' : '' }}></td>

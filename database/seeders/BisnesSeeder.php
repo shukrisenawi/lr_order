@@ -18,7 +18,7 @@ class BisnesSeeder extends Seeder
 
         Bisnes::create([
             'user_id' => $user ? $user->id : User::factory()->create()->id,
-            'nama_bines' => 'StickerTermurah',
+            'nama_bisnes' => 'StickerTermurah',
             'exp_date' => '2025-09-16',
             'nama_syarikat' => 'SH BEST CREATIVE DESIGN',
             'no_pendaftaran' => 'KC0035097-W',
@@ -74,7 +74,7 @@ AI Agent ini hanya bertanggungjawab membantu pelanggan berkaitan harga, design, 
 
         Bisnes::create([
             'user_id' => $user ? $user->id : User::factory()->create()->id,
-            'nama_bines' => 'Jamu Asli',
+            'nama_bisnes' => 'Jamu Asli',
             'exp_date' => null,
             'nama_syarikat' => 'Jamu Asli',
             'no_pendaftaran' => '',

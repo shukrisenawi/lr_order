@@ -32,21 +32,21 @@ class BisnesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_bines' => 'required|string|max:255',
+            'nama_bisnes' => 'required|string|max:255',
             'exp_date' => 'required|date',
             'nama_syarikat' => 'required|string|max:255',
-            'no_pendaftaran' => 'required|string|max:255',
+            'no_pendaftaran' => 'nullable|string|max:255',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'alamat' => 'required|string',
             'poskod' => 'required|string|max:10',
             'no_tel' => 'required|string|max:20',
-            'on' => 'required',
-            'system_message' => 'required|string',
+            'on' => 'boolean',
+            'system_message' => 'nullable|required|string',
         ]);
 
         $data = [
             'user_id' => Auth::id(),
-            'nama_bines' => $request->nama_bines,
+            'nama_bisnes' => $request->nama_bisnes,
             'exp_date' => $request->exp_date,
             'nama_syarikat' => $request->nama_syarikat,
             'no_pendaftaran' => $request->no_pendaftaran,
@@ -56,7 +56,6 @@ class BisnesController extends Controller
             'on' => $request->on,
             'system_message' => $request->system_message,
         ];
-
         if ($request->hasFile('gambar')) {
             $path = $request->file('gambar')->store('bisnes', 'public');
             $data['gambar'] = basename($path);
@@ -67,54 +66,55 @@ class BisnesController extends Controller
         return redirect()->route('bisnes.index')->with('success', 'Business created successfully.');
     }
 
-    public function edit(Bisnes $bisne)
+    public function edit(Bisnes $bisnes)
     {
-        return view('bisnes.edit', ['bisnes' => $bisne]);
+        return view('bisnes.edit', ['bisnes' => $bisnes]);
     }
 
-    public function update(Request $request, Bisnes $bisne)
+    public function update(Request $request, Bisnes $bisnes)
     {
+
         $request->validate([
-            'nama_bines' => 'required|string|max:255',
+            'nama_bisnes' => 'required|string|max:255',
             'exp_date' => 'required|date',
             'nama_syarikat' => 'required|string|max:255',
-            'no_pendaftaran' => 'required|string|max:255',
+            'no_pendaftaran' => 'nullable|string|max:255',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'alamat' => 'required|string',
             'poskod' => 'required|string|max:10',
             'no_tel' => 'required|string|max:20',
-            'on' => 'required',
-            'system_message' => 'required|string',
+            'on' => 'boolean',
+            'system_message' => 'nullable|required|string',
         ]);
 
         $data = $request->all();
 
         if ($request->hasFile('gambar')) {
             // Delete old image if exists
-            if ($bisne->gambar && Storage::disk('public')->exists('bisnes/' . $bisne->gambar)) {
-                Storage::disk('public')->delete('bisnes/' . $bisne->gambar);
+            if ($bisnes->gambar && Storage::disk('public')->exists('bisnes/' . $bisnes->gambar)) {
+                Storage::disk('public')->delete('bisnes/' . $bisnes->gambar);
             }
 
             $path = $request->file('gambar')->store('bisnes', 'public');
             $data['gambar'] = basename($path);
         }
 
-        $bisne->update($data);
+        $bisnes->update($data);
 
         return redirect()->route('bisnes.index')->with('success', 'Business updated successfully.');
     }
 
-    public function destroy(Bisnes $bisne)
+    public function destroy(Bisnes $bisnes)
     {
         // Temporarily disable authorization for testing
-        // $this->authorize('delete', $bisne);
+        // $this->authorize('delete', $bisnes);
 
         // Delete image if exists
-        if ($bisne->gambar && file_exists(public_path('images/bisnes/' . $bisne->gambar))) {
-            unlink(public_path('images/bisnes/' . $bisne->gambar));
+        if ($bisnes->gambar && file_exists(public_path('images/bisnes/' . $bisnes->gambar))) {
+            unlink(public_path('images/bisnes/' . $bisnes->gambar));
         }
 
-        $bisne->delete();
+        $bisnes->delete();
 
         return redirect()->route('bisnes.index')->with('success', 'Business deleted successfully.');
     }

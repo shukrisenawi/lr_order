@@ -12,15 +12,15 @@ return new class extends Migration
             $table->id();
             $table->string('gambar')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('nama_bines');
+            $table->string('nama_bisnes');
             $table->date('exp_date')->nullable();
             $table->string('nama_syarikat');
             $table->string('no_pendaftaran')->nullable();
             $table->text('alamat');
             $table->string('poskod', 10);
             $table->string('no_tel');
-            $table->longText('system_message');
-            $table->boolean('on')->default(true);
+            $table->longText('system_message')->nullable()->default(null);
+            $table->boolean('on')->default(false);
             $table->timestamps();
         });
     }

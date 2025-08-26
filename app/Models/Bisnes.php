@@ -13,14 +13,16 @@ class Bisnes extends Model
 
     protected $fillable = [
         'user_id',
-        'nama_bines',
+        'nama_bisnes',
         'exp_date',
         'nama_syarikat',
         'no_pendaftaran',
+        'on',
         'gambar',
         'alamat',
         'poskod',
         'no_tel',
+        'system_message',
     ];
 
     public function user()

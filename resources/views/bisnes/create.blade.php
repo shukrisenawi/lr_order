@@ -64,9 +64,8 @@
 
                         <!-- Registration Number -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">No. Pendaftaran <span
-                                    class="text-red-500">*</span></label>
-                            <input type="text" name="no_pendaftaran" value="{{ old('no_pendaftaran') }}" required
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">No. Pendaftaran </label>
+                            <input type="text" name="no_pendaftaran" value="{{ old('no_pendaftaran') }}"
                                 placeholder="Contoh: 1234567890"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('no_pendaftaran') border-red-500 bg-red-50 @enderror">
                             @error('no_pendaftaran')
@@ -77,26 +76,12 @@
                             @enderror
                         </div>
 
-                        <!-- Business Type -->
+                        <!-- Expiry Date -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Jenis Bisnes <span
-                                    class="text-red-500">*</span></label>
-                            <select name="jenis_bisnes" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('jenis_bisnes') border-red-500 bg-red-50 @enderror">
-                                <option value="">Pilih Jenis</option>
-                                <option value="Sdn Bhd" {{ old('jenis_bisnes') == 'Sdn Bhd' ? 'selected' : '' }}>Sdn Bhd
-                                </option>
-                                <option value="Enterprise" {{ old('jenis_bisnes') == 'Enterprise' ? 'selected' : '' }}>
-                                    Enterprise</option>
-                                <option value="Partnership" {{ old('jenis_bisnes') == 'Partnership' ? 'selected' : '' }}>
-                                    Partnership</option>
-                                <option value="Sole Proprietorship"
-                                    {{ old('jenis_bisnes') == 'Sole Proprietorship' ? 'selected' : '' }}>Sole
-                                    Proprietorship</option>
-                                <option value="Others" {{ old('jenis_bisnes') == 'Others' ? 'selected' : '' }}>Others
-                                </option>
-                            </select>
-                            @error('jenis_bisnes')
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Tarikh Tamat </label>
+                            <input type="date" name="exp_date" value="{{ old('exp_date') }}" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('exp_date') border-red-500 bg-red-50 @enderror">
+                            @error('exp_date')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
@@ -104,13 +89,11 @@
                             @enderror
                         </div>
 
-                        <!-- Expiry Date -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Tarikh Tamat <span
-                                    class="text-red-500">*</span></label>
-                            <input type="date" name="exp_date" value="{{ old('exp_date') }}" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('exp_date') border-red-500 bg-red-50 @enderror">
-                            @error('exp_date')
+                        <div class="mb-5">
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">On AI </label>
+                            <input type="checkbox" name="on" value="1" {{ old('on') ? 'checked' : '' }}
+                                class="toggle toggle-success @error('on') border-red-500 bg-red-50 @enderror">
+                            @error('on')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
@@ -136,6 +119,22 @@
                             @enderror
                         </div>
 
+                        <!-- Address -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat Bisnes <span
+                                    class="text-red-500">*</span></label>
+                            <textarea name="alamat" rows="2" required
+                                placeholder="Contoh: No. 12, Jalan Setia 3, Taman Setia, 50450 Kuala Lumpur"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('alamat') border-red-500 bg-red-50 @enderror">{{ old('alamat') }}</textarea>
+                            @error('alamat')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+
                         <!-- Postal Code -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-800 mb-2">Poskod <span
@@ -150,21 +149,6 @@
                                 </p>
                             @enderror
                         </div>
-
-                        <!-- Address -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat Bisnes <span
-                                    class="text-red-500">*</span></label>
-                            <textarea name="alamat" rows="3" required placeholder="Contoh: No. 12, Jalan Setia 3"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('alamat') border-red-500 bg-red-50 @enderror">{{ old('alamat') }}</textarea>
-                            @error('alamat')
-                                <p class="mt-2 text-sm text-red-600 flex items-center">
-                                    <i class="fas fa-exclamation-circle mr-1"></i>
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-
                         <!-- Image -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-800 mb-2">Logo Bisnes (Pilihan)</label>
@@ -191,7 +175,21 @@
                         </div>
                     </div>
                 </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-800 mb-2">Arahan AI<span
+                            class="text-red-500">*</span></label>
 
+                    <textarea type="text" name="system_message" required
+                        placeholder="Contoh: Anda adalah pembantu yang membantu pengguna dengan pertanyaan mereka."
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300"
+                        rows="4" cols="50">{{ old('system_message') }}</textarea>
+                    @error('system_message')
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
                 <!-- Actions -->
                 <div class="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
                     <a href="{{ route('bisnes.index') }}"
