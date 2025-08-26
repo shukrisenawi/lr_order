@@ -32,21 +32,21 @@ class BisnesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_bines' => 'required|string|max:255',
-            'exp_date' => 'required|date',
+            'nama_bisnes' => 'required|string|max:255',
+            'exp_date' => 'nullable|date',
             'nama_syarikat' => 'required|string|max:255',
-            'no_pendaftaran' => 'required|string|max:255',
+            'no_pendaftaran' => 'nullable|string|max:255',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'alamat' => 'required|string',
             'poskod' => 'required|string|max:10',
             'no_tel' => 'required|string|max:20',
-            'on' => 'required',
+            'on' => 'nullable|boolean',
             'system_message' => 'required|string',
         ]);
 
         $data = [
             'user_id' => Auth::id(),
-            'nama_bines' => $request->nama_bines,
+            'nama_bisnes' => $request->nama_bisnes,
             'exp_date' => $request->exp_date,
             'nama_syarikat' => $request->nama_syarikat,
             'no_pendaftaran' => $request->no_pendaftaran,
@@ -72,36 +72,43 @@ class BisnesController extends Controller
         return view('bisnes.edit', ['bisnes' => $bisne]);
     }
 
-    public function update(Request $request, Bisnes $bisne)
+    public function update(Request $request, Bisnes $bisnes)
     {
-        $request->validate([
-            'nama_bines' => 'required|string|max:255',
-            'exp_date' => 'required|date',
-            'nama_syarikat' => 'required|string|max:255',
-            'no_pendaftaran' => 'required|string|max:255',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'alamat' => 'required|string',
-            'poskod' => 'required|string|max:10',
-            'no_tel' => 'required|string|max:20',
-            'on' => 'required',
-            'system_message' => 'required|string',
-        ]);
+        // dd($request->all());
+        try {
+            $request->merge(['on' => $request->has('on') ? true : false]);
 
-        $data = $request->all();
+            $request->validate([
+                'nama_bisnes' => 'required|string|max:255',
+                'exp_date' => 'nullable|date',
+                'nama_syarikat' => 'required|string|max:255',
+                'no_pendaftaran' => 'nullable|string|max:255',
+                'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'alamat' => 'required|string',
+                'poskod' => 'required|string|max:10',
+                'no_tel' => 'required|string|max:20',
+                'on' => 'nullable|boolean',
+                'system_message' => 'required|string',
+            ]);
 
-        if ($request->hasFile('gambar')) {
-            // Delete old image if exists
-            if ($bisne->gambar && Storage::disk('public')->exists('bisnes/' . $bisne->gambar)) {
-                Storage::disk('public')->delete('bisnes/' . $bisne->gambar);
+            $data = $request->all();
+
+            if ($request->hasFile('gambar')) {
+                // Delete old image if exists*----------------------------
+                if ($bisnes->gambar && Storage::disk('public')->exists('bisnes/' . $bisnes->gambar)) {
+                    Storage::disk('public')->delete('bisnes/' . $bisnes->gambar);
+                }
+
+                $path = $request->file('gambar')->store('bisnes', 'public');
+                $data['gambar'] = basename($path);
             }
 
-            $path = $request->file('gambar')->store('bisnes', 'public');
-            $data['gambar'] = basename($path);
+            $bisnes->update($data);
+
+            return redirect()->route('bisnes.index')->with('success', 'Business updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal update task: ' . $e->getMessage());
         }
-
-        $bisne->update($data);
-
-        return redirect()->route('bisnes.index')->with('success', 'Business updated successfully.');
     }
 
     public function destroy(Bisnes $bisne)

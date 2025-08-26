@@ -9,7 +9,7 @@
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
                     <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Lihat Bisnes</h1>
-                    <p class="text-gray-600">Maklumat terperinci untuk {{ $bisnes->nama_bines }}</p>
+                    <p class="text-gray-600">Maklumat terperinci untuk {{ $bisnes->nama_bisnes }}</p>
                 </div>
                 <div class="flex flex-wrap gap-3">
                     <a href="{{ route('bisnes.edit', $bisnes) }}"
@@ -40,7 +40,7 @@
                         <div class="flex items-center">
                             @if ($bisnes->gambar)
                                 <img src="{{ \App\Helpers\ImageHelper::businessImageUrl($bisnes->gambar) }}"
-                                    alt="{{ $bisnes->nama_bines }}"
+                                    alt="{{ $bisnes->nama_bisnes }}"
                                     class="w-32 h-32 rounded-xl object-cover border border-gray-300 shadow-sm">
                             @else
                                 <div
@@ -55,7 +55,7 @@
                     <div>
                         <label class="block text-sm font-semibold text-gray-800 mb-2">Nama Bisnes</label>
                         <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
-                            <p class="text-gray-900">{{ $bisnes->nama_bines }}</p>
+                            <p class="text-gray-900">{{ $bisnes->nama_bisnes }}</p>
                         </div>
                     </div>
 

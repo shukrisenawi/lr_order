@@ -47,7 +47,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if ($item->gambar)
                                     <img src="{{ \App\Helpers\ImageHelper::businessImageUrl($item->gambar) }}"
-                                        alt="{{ $item->nama_bines }}" class="w-12 h-12 rounded-lg object-cover">
+                                        alt="{{ $item->nama_bisnes }}" class="w-12 h-12 rounded-lg object-cover">
                                 @else
                                     <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
                                         <i class="fas fa-building text-gray-400"></i>
@@ -55,7 +55,7 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900">{{ $item->nama_bines }}</div>
+                                <div class="text-sm font-medium text-gray-900">{{ $item->nama_bisnes }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->nama_syarikat }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->no_pendaftaran }}</td>

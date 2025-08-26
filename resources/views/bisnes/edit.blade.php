@@ -9,7 +9,7 @@
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
                     <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Edit Bisnes</h1>
-                    <p class="text-gray-600">Kemaskini maklumat bisnes untuk {{ $bisnes->nama_bines }}</p>
+                    <p class="text-gray-600">Kemaskini maklumat bisnes untuk {{ $bisnes->nama_bisnes }}</p>
                 </div>
                 <a href="{{ route('bisnes.index') }}"
                     class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
@@ -38,10 +38,10 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-800 mb-2">Nama Bisnes <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="nama_bines" value="{{ old('nama_bines', $bisnes->nama_bines) }}"
+                            <input type="text" name="nama_bisnes" value="{{ old('nama_bisnes', $bisnes->nama_bisnes) }}"
                                 required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('nama_bines') border-red-500 bg-red-50 @enderror">
-                            @error('nama_bines')
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('nama_bisnes') border-red-500 bg-red-50 @enderror">
+                            @error('nama_bisnes')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
@@ -66,10 +66,9 @@
 
                         <!-- Registration Number -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">No. Pendaftaran <span
-                                    class="text-red-500">*</span></label>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">No. Pendaftaran</label>
                             <input type="text" name="no_pendaftaran"
-                                value="{{ old('no_pendaftaran', $bisnes->no_pendaftaran) }}" required
+                                value="{{ old('no_pendaftaran', $bisnes->no_pendaftaran) }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('no_pendaftaran') border-red-500 bg-red-50 @enderror">
                             @error('no_pendaftaran')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -79,44 +78,25 @@
                             @enderror
                         </div>
 
-                        <!-- Business Type -->
+
+
+                        <!-- Expiry Date -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Jenis Bisnes <span
-                                    class="text-red-500">*</span></label>
-                            <select name="jenis_bisnes" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('jenis_bisnes') border-red-500 bg-red-50 @enderror">
-                                <option value="">Pilih Jenis</option>
-                                <option value="Sdn Bhd"
-                                    {{ old('jenis_bisnes', $bisnes->jenis_bisnes) == 'Sdn Bhd' ? 'selected' : '' }}>Sdn Bhd
-                                </option>
-                                <option value="Enterprise"
-                                    {{ old('jenis_bisnes', $bisnes->jenis_bisnes) == 'Enterprise' ? 'selected' : '' }}>
-                                    Enterprise</option>
-                                <option value="Partnership"
-                                    {{ old('jenis_bisnes', $bisnes->jenis_bisnes) == 'Partnership' ? 'selected' : '' }}>
-                                    Partnership</option>
-                                <option value="Sole Proprietorship"
-                                    {{ old('jenis_bisnes', $bisnes->jenis_bisnes) == 'Sole Proprietorship' ? 'selected' : '' }}>
-                                    Sole Proprietorship</option>
-                                <option value="Others"
-                                    {{ old('jenis_bisnes', $bisnes->jenis_bisnes) == 'Others' ? 'selected' : '' }}>Others
-                                </option>
-                            </select>
-                            @error('jenis_bisnes')
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Tarikh Tamat</label>
+                            <input type="date" name="exp_date" value="{{ old('exp_date', $bisnes->exp_date) }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('exp_date') border-red-500 bg-red-50 @enderror">
+                            @error('exp_date')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
-
-                        <!-- Expiry Date -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Tarikh Tamat <span
-                                    class="text-red-500">*</span></label>
-                            <input type="date" name="exp_date" value="{{ old('exp_date', $bisnes->exp_date) }}" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('exp_date') border-red-500 bg-red-50 @enderror">
-                            @error('exp_date')
+                        <div class="mb-5">
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">On AI</label>
+                            <input name="on" type="checkbox" value="1" class="toggle toggle-success"
+                                {{ old('on', $bisnes->on) ? 'checked' : '' }}>
+                            @error('on')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
@@ -177,7 +157,7 @@
                                 @if ($bisnes->gambar)
                                     <div class="flex-shrink-0">
                                         <img src="{{ \App\Helpers\ImageHelper::businessImageUrl($bisnes->gambar) }}"
-                                            alt="{{ $bisnes->nama_bines }}"
+                                            alt="{{ $bisnes->nama_bisnes }}"
                                             class="w-16 h-16 object-cover rounded-lg border border-gray-300">
                                     </div>
                                 @else
@@ -205,7 +185,19 @@
                         </div>
                     </div>
                 </div>
-
+                <div>
+                    <label class="block text-sm font-semibold text-gray-800 mb-2">Arahan AI <span
+                            class="text-red-500">*</span></label>
+                    <textarea type="text" name="system_message" rows="4" required
+                        placeholder=" Contoh: Anda adalah pembantu yang membantu pelanggan dengan pertanyaan mereka."
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('system_message') border-red-500 bg-red-50 @enderror">{{ old('system_message', $bisnes->system_message) }}</textarea>
+                    @error('system_message')
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
                 <!-- Actions -->
                 <div class="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
                     <a href="{{ route('bisnes.index') }}"

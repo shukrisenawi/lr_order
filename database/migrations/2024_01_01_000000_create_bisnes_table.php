@@ -11,16 +11,16 @@ return new class extends Migration
         Schema::create('bisnes', function (Blueprint $table) {
             $table->id();
             $table->string('gambar')->nullable();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('nama_bines');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('nama_bisnes')->nullable();
             $table->date('exp_date')->nullable();
-            $table->string('nama_syarikat');
+            $table->string('nama_syarikat')->nullable();
             $table->string('no_pendaftaran')->nullable();
-            $table->text('alamat');
-            $table->string('poskod', 10);
-            $table->string('no_tel');
-            $table->longText('system_message');
-            $table->boolean('on')->default(true);
+            $table->text('alamat')->nullable();
+            $table->string('poskod', 10)->nullable();
+            $table->string('no_tel')->nullable();
+            $table->longText('system_message')->nullable();
+            $table->boolean('on')->nullable()->default(false);
             $table->timestamps();
         });
     }
