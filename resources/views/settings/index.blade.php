@@ -12,7 +12,26 @@
 
         <!-- Settings Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            
+
+            <!-- J&T Express API -->
+            <div class="bg-white border border-gray-200 p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                        <i class="fas fa-truck text-blue-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900">J&T Express API</h3>
+                        <p class="text-sm text-gray-500">Integrasi penghantaran</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-4">Konfigurasi dan uji coba integrasi API J&T Express.</p>
+                <a href="{{ route('settings.jt-express') }}"
+                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
+                    <i class="fas fa-cog mr-2"></i>
+                    Konfigurasi J&T Express
+                </a>
+            </div>
+
             <!-- API Management -->
             <div class="bg-white border border-gray-200 p-6">
                 <div class="flex items-center mb-4">
@@ -25,8 +44,8 @@
                     </div>
                 </div>
                 <p class="text-gray-600 mb-4">Cipta dan urus token API untuk akses luar sistem.</p>
-                <a href="{{ route('settings.api-tokens') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
+                <a href="{{ route('settings.api-tokens') }}"
+                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
                     <i class="fas fa-cog mr-2"></i>
                     Urus Token API
                 </a>
@@ -44,8 +63,8 @@
                     </div>
                 </div>
                 <p class="text-gray-600 mb-4">Lihat dokumentasi lengkap untuk menggunakan API.</p>
-                <a href="{{ route('settings.api-documentation') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700">
+                <a href="{{ route('settings.api-documentation') }}"
+                    class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700">
                     <i class="fas fa-book-open mr-2"></i>
                     Lihat Dokumentasi
                 </a>
@@ -85,19 +104,25 @@
             <h3 class="text-lg font-medium text-gray-900 mb-4">Statistik Pantas</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="text-center">
-                    <div class="text-2xl font-bold text-blue-600">{{ \App\Models\Bisnes::where('user_id', auth()->id())->count() }}</div>
+                    <div class="text-2xl font-bold text-blue-600">
+                        {{ \App\Models\Bisnes::where('user_id', auth()->id())->count() }}</div>
                     <div class="text-sm text-gray-500">Bisnes</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-2xl font-bold text-green-600">{{ \App\Models\Prospek::whereHas('bisnes', function($q) { $q->where('user_id', auth()->id()); })->count() }}</div>
+                    <div class="text-2xl font-bold text-green-600">
+                        {{ \App\Models\Prospek::whereHas('bisnes', function ($q) {$q->where('user_id', auth()->id());})->count() }}
+                    </div>
                     <div class="text-sm text-gray-500">Prospek</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-2xl font-bold text-purple-600">{{ \App\Models\ProspekBuy::whereHas('prospek.bisnes', function($q) { $q->where('user_id', auth()->id()); })->count() }}</div>
+                    <div class="text-2xl font-bold text-purple-600">
+                        {{ \App\Models\ProspekBuy::whereHas('prospek.bisnes', function ($q) {$q->where('user_id', auth()->id());})->count() }}
+                    </div>
                     <div class="text-sm text-gray-500">Pembelian</div>
                 </div>
                 <div class="text-center">
-                    <div class="text-2xl font-bold text-orange-600">{{ \App\Models\ApiToken::where('user_id', auth()->id())->where('is_active', true)->count() }}</div>
+                    <div class="text-2xl font-bold text-orange-600">
+                        {{ \App\Models\ApiToken::where('user_id', auth()->id())->where('is_active', true)->count() }}</div>
                     <div class="text-sm text-gray-500">Token API Aktif</div>
                 </div>
             </div>

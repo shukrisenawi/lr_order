@@ -127,6 +127,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/api-tokens', [SettingsController::class, 'createApiToken'])->name('api-tokens.create');
         Route::delete('/api-tokens/{token}', [SettingsController::class, 'deleteApiToken'])->name('api-tokens.delete');
         Route::get('/api-documentation', [SettingsController::class, 'apiDocumentation'])->name('api-documentation');
+        Route::get('/jt-express', 'App\Http\Controllers\JTExpressController@index')->name('jt-express');
+        Route::post('/jt-express/send-order', 'App\Http\Controllers\JTExpressController@sendOrder')->name('jt-express.send-order');
     });
 });
 
