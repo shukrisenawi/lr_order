@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('poskod', 10);
             $table->string('no_tel');
             $table->longText('system_message');
-            $table->bool('on')->default(true);
+            $table->boolean('on')->default(true);
             $table->timestamps();
         });
     }
