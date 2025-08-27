@@ -52,9 +52,9 @@ class BisnesIndex extends Component
         $bisnes = Bisnes::where('user_id', Auth::id())
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('nama_bines', 'like', '%' . $this->search . '%')
+                    $q->where('nama_bisnes', 'like', '%' . $this->search . '%')
                         ->orWhere('nama_syarikat', 'like', '%' . $this->search . '%')
-                        ->orWhere('jenis_bisnes', 'like', '%' . $this->search . '%');
+                        ->orWhere('no_pendaftaran', 'like', '%' . $this->search . '%');
                 });
             })
             ->orderBy($this->sortField, $this->sortDirection)

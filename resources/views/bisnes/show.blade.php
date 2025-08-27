@@ -55,7 +55,7 @@
                     <div>
                         <label class="block text-sm font-semibold text-gray-800 mb-2">Nama Bisnes</label>
                         <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
-                            <p class="text-gray-900">{{ $bisnes->nama_bines }}</p>
+                            <p class="text-gray-900">{{ $bisnes->nama_bisnes }}</p>
                         </div>
                     </div>
 
@@ -71,18 +71,7 @@
                     <div>
                         <label class="block text-sm font-semibold text-gray-800 mb-2">No Pendaftaran</label>
                         <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
-                            <p class="text-gray-900">{{ $bisnes->no_pendaftaran }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Business Type -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-800 mb-2">Jenis Bisnes</label>
-                        <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                {{ $bisnes->jenis_bisnes }}
-                            </span>
+                            <p class="text-gray-900">{{ $bisnes->no_pendaftaran ?? '-' }}</p>
                         </div>
                     </div>
 
@@ -109,14 +98,6 @@
                         </div>
                     </div>
 
-                    <!-- Address -->
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat</label>
-                        <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
-                            <p class="text-gray-900">{{ $bisnes->alamat }}</p>
-                        </div>
-                    </div>
-
                     <!-- Postcode -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-800 mb-2">Poskod</label>
@@ -125,6 +106,19 @@
                         </div>
                     </div>
 
+                    <!-- Address -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat</label>
+                        <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
+                            <p class="text-gray-900">{{ $bisnes->alamat }}</p>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-800 mb-2">Arahan AI</label>
+                        <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
+                            <p class="text-gray-900">{!! nl2br($bisnes->system_message) !!}</p>
+                        </div>
+                    </div>
                     <!-- Created Date -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-800 mb-2">Tarikh Dicipta</label>
@@ -134,7 +128,7 @@
                                 @if ($bisnes->created_at)
                                     {{ $bisnes->created_at->format('d/m/Y H:i') }}
                                 @else
-                                    Tiada tarikh dicipta
+                                    Tiada tarikh daftar
                                 @endif
                             </p>
                         </div>

@@ -11,6 +11,11 @@ class Bisnes extends Model
 
     protected $table = 'bisnes';
 
+    public function getRouteKeyName()
+    {
+        return 'id';
+    }
+
     protected $fillable = [
         'user_id',
         'nama_bisnes',

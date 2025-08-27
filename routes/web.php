@@ -79,7 +79,7 @@ Route::get('/switch-bisnes/{bisnes}', function ($bisnes = 0) {
     // Store selected business in session
     session(['selected_bisnes_id' => $idSelect]);
     if ($bisnes)
-        return redirect()->back()->with('success', 'Bisnes ditukar kepada: ' . $bisnesSelect->nama_bines);
+        return redirect()->back()->with('success', 'Bisnes ditukar kepada: ' . $bisnesSelect->nama_bisnes);
     else
         return redirect()->back()->with('success', 'Semua bisnes dibuka.');
 })->name('switch-bisnes')->middleware('auth');

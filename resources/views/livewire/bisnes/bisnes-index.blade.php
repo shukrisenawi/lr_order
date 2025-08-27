@@ -43,10 +43,10 @@
                 <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                     <tr>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
-                            wire:click="sortBy('nama_bines')">
+                            wire:click="sortBy('nama_bisnes')">
                             <div class="flex items-center">
                                 Nama Bisnes
-                                @if ($sortField === 'nama_bines')
+                                @if ($sortField === 'nama_bisnes')
                                     @if ($sortDirection === 'asc')
                                         <i class="fas fa-arrow-up ml-2 text-blue-500"></i>
                                     @else
@@ -85,7 +85,7 @@
                                 <div class="flex items-center">
                                     @if ($item->gambar)
                                         <img src="{{ \App\Helpers\ImageHelper::businessImageUrl($item->gambar) }}"
-                                            alt="{{ $item->nama_bines }}"
+                                            alt="{{ $item->nama_bisnes }}"
                                             class="w-10 h-10 object-cover border border-gray-200 rounded-lg mr-3">
                                     @else
                                         <div
@@ -93,14 +93,13 @@
                                             <i class="fas fa-building text-blue-500"></i>
                                         </div>
                                     @endif
-                                    <div class="text-sm font-medium text-gray-900">{{ $item->nama_bines }}</div>
+                                    <div class="text-sm font-medium text-gray-900">{{ $item->nama_bisnes }}</div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->nama_syarikat }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_tel }}</td>
                             <td class="px-6 py-4"><input type="checkbox" wire:change="updateOn({{ $item->id }})"
                                     class="toggle toggle-sm toggle-success" {{ $item->on ? 'checked' : '' }}></td>
-                            </td>
                             <td class="px-6 py-4">
                                 <div class="flex space-x-2">
                                     <a href="{{ route('bisnes.show', $item) }}"
