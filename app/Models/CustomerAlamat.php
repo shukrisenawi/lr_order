@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProspekAlamat extends Model
+class CustomerAlamat extends Model
 {
     use HasFactory;
 
-    protected $table = 'prospek_alamat';
+    protected $table = 'customer_alamat';
 
     protected $fillable = [
-        'prospek_id',
+        'customer_id',
         'nama_penerima',
         'alamat',
         'bandar',
@@ -26,13 +26,13 @@ class ProspekAlamat extends Model
         'active' => 'boolean',
     ];
 
-    public function prospek()
+    public function customer()
     {
-        return $this->belongsTo(Prospek::class, 'prospek_id');
+        return $this->belongsTo(Customer::class, 'customer_id');
     }
 
     public function purchases()
     {
-        return $this->hasMany(ProspekBuy::class, 'prospek_alamat_id');
+        return $this->hasMany(CustomerBuy::class, 'customer_alamat_id');
     }
 }

@@ -4,9 +4,9 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Pengurusan Pembelian</h1>
-                <p class="text-gray-600">Urus pembelian prospek</p>
+                <p class="text-gray-600">Urus pembelian pelanggan</p>
             </div>
-            <a href="{{ route('prospek-buy.create') }}"
+            <a href="{{ route('customer-buy.create') }}"
                 class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-medium rounded-xl shadow-lg hover:from-rose-600 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-rose-500 focus:ring-offset-2">
                 <i class="fas fa-plus mr-2"></i>
                 Tambah Pembelian Baru
@@ -147,13 +147,13 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    @forelse($prospekBuy as $item)
+                    @forelse($customerBuy as $item)
                         <tr class="hover:bg-rose-50 transition-colors duration-200"
                             wire:key="purchase-{{ $item->id }}">
                             <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->id }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">
-                                {{ $item->prospekAlamat->prospek->gelaran ?? '' }} -
-                                {{ $item->prospekAlamat->prospek->no_tel ?? 'N/A' }}
+                                {{ $item->customerAlamat->customer->gelaran ?? '' }} -
+                                {{ $item->customerAlamat->customer->no_tel ?? 'N/A' }}
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->produk->name ?? 'N/A' }}</td>
                             <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->kuantiti ?? 1 }}</td>
@@ -167,12 +167,12 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex space-x-2">
-                                    <a href="{{ route('prospek-buy.show', $item) }}"
+                                    <a href="{{ route('customer-buy.show', $item) }}"
                                         class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-rose-700 bg-rose-50 rounded-lg hover:bg-rose-100 transition-colors duration-200">
                                         <i class="fas fa-eye mr-1"></i>
                                         View
                                     </a>
-                                    <a href="{{ route('prospek-buy.edit', $item) }}"
+                                    <a href="{{ route('customer-buy.edit', $item) }}"
                                         class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-pink-700 bg-pink-50 rounded-lg hover:bg-pink-100 transition-colors duration-200">
                                         <i class="fas fa-edit mr-1"></i>
                                         Edit
@@ -195,7 +195,7 @@
                                     </div>
                                     <h3 class="text-lg font-medium text-gray-900 mb-1">No purchases found</h3>
                                     <p class="text-gray-500 mb-4">Try changing your search or record a new purchase</p>
-                                    <a href="{{ route('prospek-buy.create') }}"
+                                    <a href="{{ route('customer-buy.create') }}"
                                         class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-rose-500 to-pink-600 text-white font-medium rounded-lg shadow hover:from-rose-600 hover:to-pink-700 transition-all duration-300">
                                         <i class="fas fa-plus mr-2"></i>
                                         Record your first purchase
@@ -209,16 +209,16 @@
         </div>
 
         <!-- Pagination -->
-        @if ($prospekBuy->hasPages())
+        @if ($customerBuy->hasPages())
             <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-700">
-                        Menunjukkan <span class="font-medium">{{ $prospekBuy->firstItem() }}</span> ke <span
-                            class="font-medium">{{ $prospekBuy->lastItem() }}</span> daripada <span
-                            class="font-medium">{{ $prospekBuy->total() }}</span> rekod
+                        Menunjukkan <span class="font-medium">{{ $customerBuy->firstItem() }}</span> ke <span
+                            class="font-medium">{{ $customerBuy->lastItem() }}</span> daripada <span
+                            class="font-medium">{{ $customerBuy->total() }}</span> rekod
                     </div>
                     <div>
-                        {{ $prospekBuy->links('vendor.pagination.tailwind') }}
+                        {{ $customerBuy->links('vendor.pagination.tailwind') }}
                     </div>
                 </div>
             </div>

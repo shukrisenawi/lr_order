@@ -22,14 +22,4 @@ class Prospek extends Model
     {
         return $this->belongsTo(Bisnes::class, 'bisnes_id');
     }
-
-    public function alamat()
-    {
-        return $this->hasMany(ProspekAlamat::class, 'prospek_id');
-    }
-
-    public function purchases()
-    {
-        return $this->hasManyThrough(ProspekBuy::class, ProspekAlamat::class, 'prospek_id', 'prospek_alamat_id');
-    }
 }

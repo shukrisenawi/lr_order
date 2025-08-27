@@ -20,7 +20,7 @@ class DashboardController extends Controller
         // You can add additional data here for the dashboard
         $stats = [
             'totalProduk' => 12,
-            'totalProspek' => 8,
+            'totalCustomer' => 8,
             'total' => 3,
             'teamMembers' => 24,
         ];

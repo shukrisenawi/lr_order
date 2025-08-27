@@ -58,7 +58,7 @@
             </div>
         </div>
 
-        <!-- Total Prospek Card -->
+        <!-- Total Customer Card -->
         <div
             class="bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105">
             <div class="p-6">
@@ -67,16 +67,16 @@
                         <i class="fas fa-users text-white text-2xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-white text-sm font-medium">Jumlah Prospek</p>
+                        <p class="text-white text-sm font-medium">Jumlah Customer</p>
                         <div class="text-2xl font-bold text-white" wire:loading.class="animate-pulse">
-                            {{ $totalProspek }}</div>
+                            {{ $totalCustomer }}</div>
                     </div>
                 </div>
                 <div class="mt-4">
                     <div class="flex items-center text-white text-sm">
                         <span class="flex items-center">
                             <i class="fas fa-arrow-up text-green-300 mr-1"></i>
-                            <span>{{ $growthMetrics['prospek_growth'] ?? 0 }}% dari bulan lepas</span>
+                            <span>{{ $growthMetrics['customer_growth'] ?? 0 }}% dari bulan lepas</span>
                         </span>
                     </div>
                 </div>
@@ -140,7 +140,7 @@
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div class="px-6 py-5 border-b border-gray-100">
                 <h2 class="text-xl font-bold text-gray-900">Hasil Bulanan & Kadar Penukaran</h2>
-                <p class="text-gray-600 mt-1">Trend hasil sepanjang tahun dan Kadar Penukaran Prospek kepada pelanggan
+                <p class="text-gray-600 mt-1">Trend hasil sepanjang tahun dan Kadar Penukaran Customer kepada pelanggan
                 </p>
             </div>
             <div class="p-6">
@@ -255,8 +255,8 @@
                     </div>
                 </a>
 
-                <!-- Tambah Prospek -->
-                <a href="{{ route('prospek.create') }}" class="group block">
+                <!-- Tambah Customer -->
+                <a href="{{ route('customer.create') }}" class="group block">
                     <div
                         class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl p-6 border border-amber-100 transition-all duration-300 group-hover:shadow-lg group-hover:border-amber-200 group-hover:from-amber-100 group-hover:to-orange-100">
                         <div class="flex flex-col items-center text-center">
@@ -264,9 +264,9 @@
                                 class="bg-amber-500 text-white p-3 rounded-full mb-4 group-hover:bg-amber-600 transition-colors">
                                 <i class="fas fa-plus text-xl"></i>
                             </div>
-                            <h3 class="font-semibold text-gray-900 mb-1">Tambah Prospek
+                            <h3 class="font-semibold text-gray-900 mb-1">Tambah Customer
                             </h3>
-                            <p class="text-sm text-gray-600">Daftar prospek baru</p>
+                            <p class="text-sm text-gray-600">Daftar customer baru</p>
                         </div>
                     </div>
 
@@ -424,7 +424,7 @@
                 </a>
 
                 <!-- Tambah Pembelian -->
-                <a href="{{ route('prospek-buy.create') }}" class="group block">
+                <a href="{{ route('customer-buy.create') }}" class="group block">
                     <div
                         class="bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl p-6 border border-rose-100 transition-all duration-300 group-hover:shadow-lg group-hover:border-rose-200 group-hover:from-rose-100 group-hover:to-pink-100">
                         <div class="flex flex-col items-center text-center">

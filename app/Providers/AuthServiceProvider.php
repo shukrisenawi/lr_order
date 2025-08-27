@@ -3,13 +3,13 @@
 namespace App\Providers;
 
 use App\Models\Bisnes;
-use App\Models\Prospek;
-use App\Models\ProspekAlamat;
-use App\Models\ProspekBuy;
+use App\Models\Customer;
+use App\Models\CustomerAlamat;
+use App\Models\CustomerBuy;
 use App\Policies\BisnesPolicy;
-use App\Policies\ProspekPolicy;
-use App\Policies\ProspekAlamatPolicy;
-use App\Policies\ProspekBuyPolicy;
+use App\Policies\CustomerPolicy;
+use App\Policies\CustomerAlamatPolicy;
+use App\Policies\CustomerBuyPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -21,9 +21,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         Bisnes::class => BisnesPolicy::class,
-        Prospek::class => ProspekPolicy::class,
-        ProspekAlamat::class => ProspekAlamatPolicy::class,
-        ProspekBuy::class => ProspekBuyPolicy::class,
+        Customer::class => CustomerPolicy::class,
+        CustomerAlamat::class => CustomerAlamatPolicy::class,
+        CustomerBuy::class => CustomerBuyPolicy::class,
     ];
 
     /**

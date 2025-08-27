@@ -4,8 +4,8 @@ namespace App\Services;
 
 use App\Models\Bisnes;
 use App\Models\Produk;
-use App\Models\Prospek;
-use App\Models\ProspekBuy;
+use App\Models\Customer;
+use App\Models\CustomerBuy;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -37,7 +37,7 @@ class DashboardService
             foreach ($months as $month) {
                 if ($selectedBisnesId == 0) {
                     // No filtering by business, show all data for user
-                    $revenue = ProspekBuy::whereHas('prospekAlamat.prospek.bisnes', function ($query) {
+                    $revenue = CustomerBuy::whereHas('customerAlamat.customer.bisnes', function ($query) {
                         $query->where('user_id', $this->userId);
                     })
                         ->whereYear('created_at', substr($month, 0, 4))
@@ -45,7 +45,7 @@ class DashboardService
                         ->sum('harga');
                 } else {
                     // Filter by selected business
-                    $revenue = ProspekBuy::whereHas('prospekAlamat.prospek', function ($query) use ($selectedBisnesId) {
+                    $revenue = CustomerBuy::whereHas('customerAlamat.customer', function ($query) use ($selectedBisnesId) {
                         $query->where('bisnes_id', $selectedBisnesId);
                     })
                         ->whereYear('created_at', substr($month, 0, 4))
@@ -75,16 +75,16 @@ class DashboardService
         return Cache::remember($cacheKey, 3600, function () use ($selectedBisnesId) {
             if ($selectedBisnesId == 0) {
                 // No filtering by business, show all data for user
-                $totalProspects = Prospek::whereHas('bisnes', function ($query) {
+                $totalProspects = Customer::whereHas('bisnes', function ($query) {
                     $query->where('user_id', $this->userId);
                 })->count();
-                $convertedProspects = Prospek::whereHas('bisnes', function ($query) {
+                $convertedProspects = Customer::whereHas('bisnes', function ($query) {
                     $query->where('user_id', $this->userId);
-                })->where('status', 'converted')->count();
+                })->count();
             } else {
                 // Filter by selected business
-                $totalProspects = Prospek::where('bisnes_id', $selectedBisnesId)->count();
-                $convertedProspects = Prospek::where('bisnes_id', $selectedBisnesId)->where('status', 'converted')->count();
+                $totalProspects = Customer::where('bisnes_id', $selectedBisnesId)->count();
+                $convertedProspects = Customer::where('bisnes_id', $selectedBisnesId)->count();
             }
 
             return [
@@ -151,7 +151,7 @@ class DashboardService
 
         if ($selectedBisnesId == 0) {
             // Recent prospects (all businesses)
-            $prospects = Prospek::whereHas('bisnes', function ($query) {
+            $prospects = Customer::whereHas('bisnes', function ($query) {
                 $query->where('user_id', $this->userId);
             })
                 ->latest()
@@ -168,7 +168,7 @@ class DashboardService
                 });
         } else {
             // Recent prospects (specific business)
-            $prospects = Prospek::where('bisnes_id', $selectedBisnesId)
+            $prospects = Customer::where('bisnes_id', $selectedBisnesId)
                 ->latest()
                 ->limit(3)
                 ->get()
@@ -185,17 +185,17 @@ class DashboardService
 
         if ($selectedBisnesId == 0) {
             // Recent purchases (all businesses)
-            $purchases = ProspekBuy::whereHas('prospekAlamat.prospek.bisnes', function ($query) {
+            $purchases = CustomerBuy::whereHas('customerAlamat.customer.bisnes', function ($query) {
                 $query->where('user_id', $this->userId);
             })
-                ->with(['prospekAlamat.prospek', 'produk'])
+                ->with(['customerAlamat.customer', 'produk'])
                 ->latest()
                 ->limit(4)
                 ->get()
                 ->map(function ($purchase) {
                     $productName = $purchase->produk ? $purchase->produk->nama : 'Unknown Product';
-                    $prospectName = $purchase->prospekAlamat && $purchase->prospekAlamat->prospek
-                        ? $purchase->prospekAlamat->prospek->gelaran
+                    $prospectName = $purchase->customerAlamat && $purchase->customerAlamat->customer
+                        ? $purchase->customerAlamat->customer->gelaran
                         : 'Unknown Prospect';
 
                     return [
@@ -208,17 +208,17 @@ class DashboardService
                 });
         } else {
             // Recent purchases (specific business)
-            $purchases = ProspekBuy::whereHas('prospekAlamat.prospek', function ($query) use ($selectedBisnesId) {
+            $purchases = CustomerBuy::whereHas('customerAlamat.customer', function ($query) use ($selectedBisnesId) {
                 $query->where('bisnes_id', $selectedBisnesId);
             })
-                ->with(['prospekAlamat.prospek', 'produk'])
+                ->with(['customerAlamat.customer', 'produk'])
                 ->latest()
                 ->limit(4)
                 ->get()
                 ->map(function ($purchase) {
                     $productName = $purchase->produk ? $purchase->produk->nama : 'Unknown Product';
-                    $prospectName = $purchase->prospekAlamat && $purchase->prospekAlamat->prospek
-                        ? $purchase->prospekAlamat->prospek->gelaran
+                    $prospectName = $purchase->customerAlamat && $purchase->customerAlamat->customer
+                        ? $purchase->customerAlamat->customer->gelaran
                         : 'Unknown Prospect';
 
                     return [
@@ -264,24 +264,24 @@ class DashboardService
                     ->count();
 
                 // Revenue growth (all businesses)
-                $currentRevenue = ProspekBuy::whereHas('prospekAlamat.prospek.bisnes', function ($query) {
+                $currentRevenue = CustomerBuy::whereHas('customerAlamat.customer.bisnes', function ($query) {
                     $query->where('user_id', $this->userId);
                 })
                     ->whereMonth('created_at', $currentMonth->month)
                     ->sum('harga');
-                $previousRevenue = ProspekBuy::whereHas('prospekAlamat.prospek.bisnes', function ($query) {
+                $previousRevenue = CustomerBuy::whereHas('customerAlamat.customer.bisnes', function ($query) {
                     $query->where('user_id', $this->userId);
                 })
                     ->whereMonth('created_at', $previousMonth->month)
                     ->sum('harga');
 
                 // Prospect growth (all businesses)
-                $currentProspects = Prospek::whereHas('bisnes', function ($query) {
+                $currentProspects = Customer::whereHas('bisnes', function ($query) {
                     $query->where('user_id', $this->userId);
                 })
                     ->whereMonth('created_at', $currentMonth->month)
                     ->count();
-                $previousProspects = Prospek::whereHas('bisnes', function ($query) {
+                $previousProspects = Customer::whereHas('bisnes', function ($query) {
                     $query->where('user_id', $this->userId);
                 })
                     ->whereMonth('created_at', $previousMonth->month)
@@ -292,22 +292,22 @@ class DashboardService
                 $previousBusinesses = 1;
 
                 // Revenue growth (specific business)
-                $currentRevenue = ProspekBuy::whereHas('prospekAlamat.prospek', function ($query) use ($selectedBisnesId) {
+                $currentRevenue = CustomerBuy::whereHas('customerAlamat.customer', function ($query) use ($selectedBisnesId) {
                     $query->where('bisnes_id', $selectedBisnesId);
                 })
                     ->whereMonth('created_at', $currentMonth->month)
                     ->sum('harga');
-                $previousRevenue = ProspekBuy::whereHas('prospekAlamat.prospek', function ($query) use ($selectedBisnesId) {
+                $previousRevenue = CustomerBuy::whereHas('customerAlamat.customer', function ($query) use ($selectedBisnesId) {
                     $query->where('bisnes_id', $selectedBisnesId);
                 })
                     ->whereMonth('created_at', $previousMonth->month)
                     ->sum('harga');
 
                 // Prospect growth (specific business)
-                $currentProspects = Prospek::where('bisnes_id', $selectedBisnesId)
+                $currentProspects = Customer::where('bisnes_id', $selectedBisnesId)
                     ->whereMonth('created_at', $currentMonth->month)
                     ->count();
-                $previousProspects = Prospek::where('bisnes_id', $selectedBisnesId)
+                $previousProspects = Customer::where('bisnes_id', $selectedBisnesId)
                     ->whereMonth('created_at', $previousMonth->month)
                     ->count();
             }

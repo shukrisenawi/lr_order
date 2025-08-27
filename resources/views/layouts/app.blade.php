@@ -405,25 +405,25 @@
                                 <span id="prospek-badge-desktop"
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
-                            <a href="{{ route('prospek-alamat.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-alamat.*') ? 'nav-link active' : '' }}">
+                            <a href="{{ route('customer.index') }}"
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer.*') ? 'nav-link active' : '' }}">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-user-secret"></i>
+                                    <span>Pelanggan</span>
+                                </div>
+                                <span id="prospek-buy-badge-desktop"
+                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                            </a>
+                            <a href="{{ route('customer-alamat.index') }}"
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-alamat.*') ? 'nav-link active' : '' }}">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <span>Alamat Prospek</span>
+                                <span>Alamat Pelanggan</span>
                             </a>
                             <a href="{{ route('prospek-buy.index') }}"
                                 class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-buy.*') ? 'nav-link active' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <i class="fas fa-shopping-cart"></i>
                                     <span>Pembelian</span>
-                                </div>
-                                <span id="prospek-buy-badge-desktop"
-                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
-                            </a>
-                            <a href="{{ route('waybill.index') }}"
-                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('waybil.*') ? 'nav-link active' : '' }}">
-                                <div class="flex items-center space-x-3">
-                                    <i class="fas fa-list"></i>
-                                    <span>Waybil</span>
                                 </div>
                                 <span id="prospek-buy-badge-desktop"
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>

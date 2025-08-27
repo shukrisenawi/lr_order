@@ -111,16 +111,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/prospek', function () {
         return view('prospek-livewire');
     })->name('prospek.index');
-    Route::resource('prospek', 'App\Http\Controllers\ProspekController')->except(['index']);
+    Route::resource('prospek', 'App\Http\Controllers\CustomerController')->except(['index']);
 
-    Route::resource('prospek-alamat', 'App\Http\Controllers\ProspekAlamatController');
+    Route::get('/customer', function () {
+        return view('customer-livewire');
+    })->name('customer.index');
+    Route::resource('customer', 'App\Http\Controllers\CustomerController')->except(['index']);
 
-    Route::get('/prospek-buy', function () {
-        return view('prospek-buy-livewire');
-    })->name('prospek-buy.index');
-    Route::resource('prospek-buy', 'App\Http\Controllers\ProspekBuyController')->except(['index']);
 
-    Route::resource('waybill', 'App\Http\Controllers\WaybillController');
+    Route::resource('customer-alamat', 'App\Http\Controllers\CustomerAlamatController');
+
+    Route::get('/customer-buy', function () {
+        return view('customer-buy-livewire');
+    })->name('customer-buy.index');
+    Route::resource('customer-buy', 'App\Http\Controllers\CustomerBuyController')->except(['index']);
 
     // Settings routes
     Route::prefix('settings')->name('settings.')->group(function () {

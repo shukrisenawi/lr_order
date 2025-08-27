@@ -2,44 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProspekAlamat;
-use App\Models\Prospek;
+use App\Models\CustomerAlamat;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-class ProspekAlamatController extends Controller
+class CustomerAlamatController extends Controller
 {
     use AuthorizesRequests;
     public function index()
     {
-        $prospekAlamat = ProspekAlamat::with('prospek')->whereHas('prospek', function ($query) {
+        $customerAlamat = CustomerAlamat::with('customer')->whereHas('customer', function ($query) {
             $query->whereHas('bisnes', function ($q) {
                 $q->where('user_id', auth()->id());
             });
         })->paginate(10);
 
-        return view('prospek-alamat.index', compact('prospekAlamat'));
+        return view('customer-alamat.index', compact('customerAlamat'));
     }
 
     public function create()
     {
-        $prospek = Prospek::whereHas('bisnes', function ($query) {
+        $customer = Customer::whereHas('bisnes', function ($query) {
             $query->where('user_id', auth()->id());
         })->get();
 
-        return view('prospek-alamat.create', compact('prospek'));
+        return view('customer-alamat.create', compact('customer'));
     }
 
-    public function show(ProspekAlamat $prospek_alamat)
+    public function show(CustomerAlamat $customer_alamat)
     {
-        return view('prospek-alamat.show', ['prospekAlamat' => $prospek_alamat]);
+        return view('customer-alamat.show', ['customerAlamat' => $customer_alamat]);
     }
 
     public function store(Request $request)
     {
         try {
             $validatedData = $request->validate([
-                'prospek_id' => 'required|exists:prospek,id',
+                'customer_id' => 'required|exists:customer,id',
                 'nama_penerima' => 'required|string|max:255',
                 'alamat' => 'required|string|max:1000',
                 'bandar' => 'required|string|max:100',
@@ -47,8 +47,8 @@ class ProspekAlamatController extends Controller
                 'poskod' => 'required|string|min:4|max:6|regex:/^[0-9]+$/',
                 'no_tel' => 'required|string|min:9|max:20|regex:/^[0-9\-\+\s\(\)]+$/',
             ], [
-                'prospek_id.required' => 'Sila pilih prospek.',
-                'prospek_id.exists' => 'Prospek yang dipilih tidak sah.',
+                'customer_id.required' => 'Sila pilih customer.',
+                'customer_id.exists' => 'Customer yang dipilih tidak sah.',
                 'nama_penerima.required' => 'Nama penerima diperlukan.',
                 'alamat.required' => 'Alamat diperlukan.',
                 'bandar.required' => 'Bandar diperlukan.',
@@ -66,9 +66,9 @@ class ProspekAlamatController extends Controller
             // Set active to true by default if not provided
             $validatedData['active'] = $request->has('active') ? (bool)$request->active : true;
 
-            ProspekAlamat::create($validatedData);
+            CustomerAlamat::create($validatedData);
 
-            return redirect()->route('prospek-alamat.index')->with('message', 'Alamat berjaya dicipta.');
+            return redirect()->route('customer-alamat.index')->with('message', 'Alamat berjaya dicipta.');
         } catch (\Illuminate\Validation\ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
@@ -76,23 +76,23 @@ class ProspekAlamatController extends Controller
         }
     }
 
-    public function edit(ProspekAlamat $prospek_alamat)
+    public function edit(CustomerAlamat $customer_alamat)
     {
-        $this->authorize('update', $prospek_alamat);
-        $prospek = Prospek::whereHas('bisnes', function ($query) {
+        $this->authorize('update', $customer_alamat);
+        $customer = Customer::whereHas('bisnes', function ($query) {
             $query->where('user_id', auth()->id());
         })->get();
 
-        return view('prospek-alamat.edit', ['prospekAlamat' => $prospek_alamat, 'prospek' => $prospek]);
+        return view('customer-alamat.edit', ['customerAlamat' => $customer_alamat, 'customer' => $customer]);
     }
 
-    public function update(Request $request, ProspekAlamat $prospek_alamat)
+    public function update(Request $request, CustomerAlamat $customer_alamat)
     {
         try {
-            $this->authorize('update', $prospek_alamat);
+            $this->authorize('update', $customer_alamat);
 
             $validatedData = $request->validate([
-                'prospek_id' => 'required|exists:prospek,id',
+                'customer_id' => 'required|exists:customer,id',
                 'nama_penerima' => 'required|string|max:255',
                 'alamat' => 'required|string|max:1000',
                 'bandar' => 'required|string|max:100',
@@ -100,8 +100,8 @@ class ProspekAlamatController extends Controller
                 'poskod' => 'required|string|min:4|max:6|regex:/^[0-9]+$/',
                 'no_tel' => 'required|string|min:9|max:20|regex:/^[0-9\-\+\s\(\)]+$/',
             ], [
-                'prospek_id.required' => 'Sila pilih prospek.',
-                'prospek_id.exists' => 'Prospek yang dipilih tidak sah.',
+                'customer_id.required' => 'Sila pilih customer.',
+                'customer_id.exists' => 'Customer yang dipilih tidak sah.',
                 'nama_penerima.required' => 'Nama penerima diperlukan.',
                 'alamat.required' => 'Alamat diperlukan.',
                 'bandar.required' => 'Bandar diperlukan.',
@@ -119,9 +119,9 @@ class ProspekAlamatController extends Controller
             // Set active to true by default if not provided
             $validatedData['active'] = $request->has('active') ? (bool)$request->active : true;
 
-            $prospek_alamat->update($validatedData);
+            $customer_alamat->update($validatedData);
 
-            return redirect()->route('prospek-alamat.index')->with('message', 'Alamat berjaya dikemaskini.');
+            return redirect()->route('customer-alamat.index')->with('message', 'Alamat berjaya dikemaskini.');
         } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
             return redirect()->back()->with('error', 'Anda tidak mempunyai kebenaran untuk mengemaskini alamat ini.');
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -131,11 +131,11 @@ class ProspekAlamatController extends Controller
         }
     }
 
-    public function destroy(ProspekAlamat $prospek_alamat)
+    public function destroy(CustomerAlamat $customer_alamat)
     {
-        $this->authorize('delete', $prospek_alamat);
-        $prospek_alamat->delete();
+        $this->authorize('delete', $customer_alamat);
+        $customer_alamat->delete();
 
-        return redirect()->route('prospek-alamat.index')->with('message', 'Alamat berjaya dipadamkan.');
+        return redirect()->route('customer-alamat.index')->with('message', 'Alamat berjaya dipadamkan.');
     }
 }
