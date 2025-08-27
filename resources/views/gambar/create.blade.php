@@ -28,8 +28,8 @@
             <form method="POST" action="{{ route('gambar.store') }}" enctype="multipart/form-data" class="p-6">
                 @csrf
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Left Column - Form Fields -->
+                <div class="grid grid-cols-1 gap-8">
+                    <!-- Form Fields -->
                     <div class="space-y-6">
                         <!-- Title -->
                         <div>
@@ -44,11 +44,12 @@
                             @enderror
                         </div>
 
-                        <!-- Image File -->
+                        <!-- Image Files -->
                         <div>
-                            <label for="gambar" class="block text-sm font-semibold text-gray-800 mb-2">Fail Gambar</label>
-                            <div
-                                class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-xl hover:border-purple-400 transition-colors duration-300">
+                            <label for="gambar" class="block text-sm font-semibold text-gray-800 mb-2">Fail Gambar (Boleh
+                                pilih lebih dari satu)</label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-xl hover:border-purple-400 transition-colors duration-300 cursor-pointer"
+                                onclick="document.getElementById('gambar').click()">
                                 <div class="space-y-1 text-center">
                                     <div
                                         class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-purple-100">
@@ -56,56 +57,40 @@
                                     </div>
                                     <div class="flex text-sm text-gray-600">
                                         <label for="gambar"
-                                            class="relative cursor-pointer bg-white rounded-md font-medium text-purple-600 hover:text-purple-500">
+                                            class="relative cursor-pointer bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus-within:outline-none">
                                             <span>Muat naik fail</span>
-                                            <input id="gambar" name="gambar" type="file" accept="image/*" required
-                                                class="sr-only">
                                         </label>
                                         <p class="pl-1">atau seret dan lepaskan</p>
                                     </div>
-                                    <p class="text-xs text-gray-500">PNG, JPG, GIF sehingga 2MB</p>
+                                    <p class="text-xs text-gray-500">PNG, JPG, GIF sehingga 2MB setiap fail</p>
+                                    <p class="text-xs text-purple-600 font-medium">Klik di mana-mana untuk pilih gambar</p>
                                 </div>
                             </div>
+
+                            <!-- Hidden file input -->
+                            <input id="gambar" name="gambar[]" type="file" accept="image/*" multiple class="hidden">
+
+                            <!-- Selected files preview -->
+                            <div id="selected-files" class="mt-4 hidden">
+                                <h4 class="text-sm font-medium text-gray-700 mb-3">Gambar yang dipilih:</h4>
+                                <div id="files-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+                            </div>
+
                             @error('gambar')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
                                 </p>
                             @enderror
-                        </div>
-                    </div>
-
-                    <!-- Right Column - Preview and Additional Info -->
-                    <div class="space-y-6">
-                        <!-- Description -->
-                        <div>
-                            <label for="description"
-                                class="block text-sm font-semibold text-gray-800 mb-2">Keterangan</label>
-                            <textarea name="description" id="description" rows="4"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 focus:border-purple-500 transition-all duration-300 @error('description') border-red-500 @enderror">{{ old('description') }}</textarea>
-                            @error('description')
+                            @error('gambar.*')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
-
-                        <!-- Alt Text -->
-                        <div>
-                            <label for="alt_text" class="block text-sm font-semibold text-gray-800 mb-2">Teks
-                                Alternatif</label>
-                            <input type="text" name="alt_text" id="alt_text" value="{{ old('alt_text') }}"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 focus:border-purple-500 transition-all duration-300 @error('alt_text') border-red-500 @enderror">
-                            @error('alt_text')
-                                <p class="mt-2 text-sm text-red-600 flex items-center">
-                                    <i class="fas fa-exclamation-circle mr-1"></i>
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                            <p class="mt-2 text-sm text-gray-500">Teks alternatif untuk kegunaan aksesibiliti</p>
-                        </div>
                     </div>
+
                 </div>
 
                 <!-- Submit Buttons -->
@@ -125,17 +110,133 @@
     </div>
 
     <script>
-        // Preview image before upload
-        document.getElementById('gambar').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    // You could add preview functionality here if needed
-                    console.log('File selected:', file.name);
+        // Handle multiple file selection and preview
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('gambar');
+            const selectedFilesDiv = document.getElementById('selected-files');
+            const filesListDiv = document.getElementById('files-list');
+            const form = document.querySelector('form');
+
+            // Handle file selection
+            fileInput.addEventListener('change', function(e) {
+                const files = Array.from(e.target.files);
+
+                if (files.length > 0) {
+                    selectedFilesDiv.classList.remove('hidden');
+                    filesListDiv.innerHTML = '';
+
+                    files.forEach((file, index) => {
+                        // Create thumbnail container
+                        const thumbnailContainer = document.createElement('div');
+                        thumbnailContainer.className =
+                            'relative bg-white rounded-lg border-2 border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow';
+
+                        // Create image element
+                        const img = document.createElement('img');
+                        img.className = 'w-full h-32 object-cover bg-gray-100';
+                        img.alt = file.name;
+
+                        // Create file reader to generate thumbnail
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            img.src = e.target.result;
+                        };
+                        reader.onerror = function() {
+                            // If image fails to load, show a placeholder
+                            img.src =
+                                'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDIwMCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMTI4IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik04NyA0OEw5MyA1NEw5OSA0OEwxMDUgNTRMMTEzIDQ2VjgySDg3VjQ4WiIgZmlsbD0iIzlDQTNBRiIvPgo8Y2lyY2xlIGN4PSI5NSIgY3k9IjU4IiByPSI0IiBmaWxsPSIjOUNBM0FGIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iNzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2QjcyODAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiI+SW1hZ2U8L3RleHQ+Cjwvc3ZnPgo=';
+                        };
+
+                        // Only read as data URL if it's an image file
+                        if (file.type.startsWith('image/')) {
+                            reader.readAsDataURL(file);
+                        } else {
+                            img.src =
+                                'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDIwMCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMTI4IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik04NyA0OEw5MyA1NEw5OSA0OEwxMDUgNTRMMTEzIDQ2VjgySDg3VjQ4WiIgZmlsbD0iIzlDQTNBRiIvPgo8Y2lyY2xlIGN4PSI5NSIgY3k9IjU4IiByPSI0IiBmaWxsPSIjOUNBM0FGIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iNzAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM2QjcyODAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiI+SW1hZ2U8L3RleHQ+Cjwvc3ZnPgo=';
+                        }
+
+                        // Remove button
+                        const removeBtn = document.createElement('button');
+                        removeBtn.type = 'button';
+                        removeBtn.className =
+                            'absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors';
+                        removeBtn.innerHTML = '×';
+                        removeBtn.onclick = function(e) {
+                            e.stopPropagation();
+                            removeFile(index);
+                        };
+
+                        // File info at bottom
+                        const fileInfo = document.createElement('div');
+                        fileInfo.className =
+                            'absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white p-2';
+                        fileInfo.innerHTML = `
+                            <p class="text-xs font-medium truncate">${file.name}</p>
+                            <p class="text-xs opacity-75">${(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                        `;
+
+                        thumbnailContainer.appendChild(img);
+                        thumbnailContainer.appendChild(removeBtn);
+                        thumbnailContainer.appendChild(fileInfo);
+                        filesListDiv.appendChild(thumbnailContainer);
+                    });
+                } else {
+                    selectedFilesDiv.classList.add('hidden');
                 }
-                reader.readAsDataURL(file);
+            });
+
+            // Function to remove file from selection
+            function removeFile(indexToRemove) {
+                const dt = new DataTransfer();
+                const files = Array.from(fileInput.files);
+
+                files.forEach((file, index) => {
+                    if (index !== indexToRemove) {
+                        dt.items.add(file);
+                    }
+                });
+
+                fileInput.files = dt.files;
+                fileInput.dispatchEvent(new Event('change'));
             }
+
+            // Handle drag and drop
+            const dropZone = document.querySelector('.border-dashed');
+
+            dropZone.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                dropZone.classList.add('border-purple-500', 'bg-purple-50');
+            });
+
+            dropZone.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                dropZone.classList.remove('border-purple-500', 'bg-purple-50');
+            });
+
+            dropZone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                dropZone.classList.remove('border-purple-500', 'bg-purple-50');
+
+                const files = Array.from(e.dataTransfer.files).filter(file =>
+                    file.type.startsWith('image/')
+                );
+
+                if (files.length > 0) {
+                    const dt = new DataTransfer();
+                    files.forEach(file => dt.items.add(file));
+                    fileInput.files = dt.files;
+                    fileInput.dispatchEvent(new Event('change'));
+                }
+            });
+
+            // Form validation before submission
+            form.addEventListener('submit', function(e) {
+                if (fileInput.files.length === 0) {
+                    e.preventDefault();
+                    alert('Sila pilih sekurang-kurangnya satu gambar untuk dimuat naik.');
+                    return false;
+                }
+            });
         });
     </script>
 @endsection

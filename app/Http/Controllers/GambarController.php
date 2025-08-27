@@ -28,29 +28,86 @@ class GambarController extends Controller
     public function store(Request $request)
     {
         try {
-            Log::info('Gambar store method called', ['request_data' => $request->all()]);
+            Log::info('Gambar store method called', [
+                'request_data' => $request->all(),
+                'has_files' => $request->hasFile('gambar'),
+                'files_count' => $request->hasFile('gambar') ? count($request->file('gambar')) : 0
+            ]);
+
+            // Check if files are uploaded
+            if (!$request->hasFile('gambar')) {
+                return back()->withErrors(['gambar' => 'Sila pilih sekurang-kurangnya satu gambar untuk dimuat naik.'])->withInput();
+            }
 
             $request->validate([
                 'nama' => 'required|string|max:255',
-                'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'gambar' => 'required|array|min:1',
+                'gambar.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ], [
+                'nama.required' => 'Nama gambar diperlukan.',
+                'gambar.required' => 'Sila pilih sekurang-kurangnya satu gambar.',
+                'gambar.array' => 'Format gambar tidak sah.',
+                'gambar.min' => 'Sila pilih sekurang-kurangnya satu gambar.',
+                'gambar.*.required' => 'Setiap fail gambar diperlukan.',
+                'gambar.*.image' => 'Fail yang dipilih mestilah gambar.',
+                'gambar.*.mimes' => 'Gambar mestilah dalam format: jpeg, png, jpg, gif.',
+                'gambar.*.max' => 'Saiz gambar tidak boleh melebihi 2MB.',
             ]);
 
             Log::info('Validation passed');
 
-            $path = $request->file('gambar')->store('gambar', 'public');
-            Log::info('File stored', ['path' => $path]);
+            $uploadedCount = 0;
+            $files = $request->file('gambar');
+            $errors = [];
 
-            $gambar = Gambar::create([
-                'nama' => $request->nama,
-                'path' => $path,
-            ]);
+            // Ensure storage directory exists
+            if (!Storage::disk('public')->exists('gambar')) {
+                Storage::disk('public')->makeDirectory('gambar');
+            }
 
-            Log::info('Gambar created', ['gambar_id' => $gambar->id]);
+            foreach ($files as $index => $file) {
+                try {
+                    if ($file && $file->isValid()) {
+                        $path = $file->store('gambar', 'public');
+                        Log::info('File stored', ['path' => $path, 'index' => $index]);
 
-            return redirect()->route('gambar.index')->with('success', 'Gambar uploaded successfully.');
+                        $nama = count($files) > 1 ? $request->nama . ' - ' . ($index + 1) : $request->nama;
+
+                        $gambar = Gambar::create([
+                            'nama' => $nama,
+                            'path' => $path,
+                        ]);
+
+                        Log::info('Gambar created', ['gambar_id' => $gambar->id]);
+                        $uploadedCount++;
+                    } else {
+                        $errors[] = "Fail " . ($index + 1) . " tidak sah atau rosak.";
+                    }
+                } catch (\Exception $fileError) {
+                    Log::error('Error processing individual file', [
+                        'index' => $index,
+                        'error' => $fileError->getMessage()
+                    ]);
+                    $errors[] = "Ralat memproses fail " . ($index + 1) . ": " . $fileError->getMessage();
+                }
+            }
+
+            if ($uploadedCount > 0) {
+                $message = $uploadedCount . ' gambar berjaya dimuat naik.';
+                if (!empty($errors)) {
+                    $message .= ' Namun, terdapat beberapa ralat: ' . implode(', ', $errors);
+                }
+                return redirect()->route('gambar.index')->with('success', $message);
+            } else {
+                return back()->withErrors(['error' => 'Tiada gambar berjaya dimuat naik. ' . implode(', ', $errors)])->withInput();
+            }
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation error in gambar store', ['errors' => $e->errors()]);
+            return back()->withErrors($e->errors())->withInput();
         } catch (\Exception $e) {
             Log::error('Error in gambar store', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            return back()->withErrors(['error' => 'Error uploading image: ' . $e->getMessage()])->withInput();
+            return back()->withErrors(['error' => 'Ralat memuat naik gambar: ' . $e->getMessage()])->withInput();
         }
     }
 
