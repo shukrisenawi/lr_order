@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('gambar')->nullable();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('nama_bines');
+            $table->string('nama_bisnes');
             $table->date('exp_date')->nullable();
             $table->string('nama_syarikat')->nullable();
             $table->string('no_pendaftaran')->nullable();
