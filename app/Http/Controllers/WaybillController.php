@@ -79,6 +79,6 @@ class WaybillController extends Controller
             ],
             'response' => $response->json()
         ]);
-        dd($data);
+        dd($response);
     }
 }
