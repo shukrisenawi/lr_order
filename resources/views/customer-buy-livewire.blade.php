@@ -3,5 +3,5 @@
 @section('title', 'Purchase Management')
 
 @section('content')
-    @livewire('prospek-buy.prospek-buy-index')
+    @livewire('customer-buy.customer-buy-index')
 @endsection

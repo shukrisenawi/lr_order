@@ -11,7 +11,7 @@
                     <h1 class="text-xl font-semibold text-gray-900">Rekod Pembelian Baru</h1>
                     <p class="text-sm text-gray-600 mt-1">Versi ringkas - isi maklumat asas sahaja</p>
                 </div>
-                <a href="{{ route('prospek-buy.index') }}"
+                <a href="{{ route('customer-buy.index') }}"
                     class="inline-flex items-center px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -26,29 +26,29 @@
 
         <!-- Simple Form -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
-            <form method="POST" action="{{ route('prospek-buy.store') }}" class="p-4" id="purchaseForm">
+            <form method="POST" action="{{ route('customer-buy.store') }}" class="p-4" id="purchaseForm">
                 @csrf
 
                 <!-- Basic Fields -->
                 <div class="space-y-4">
 
-                    <!-- Alamat Prospek -->
+                    <!-- Alamat Customer -->
                     <div>
-                        <label for="prospek_alamat_id" class="block text-sm font-medium text-gray-700 mb-1">
+                        <label for="customer_alamat_id" class="block text-sm font-medium text-gray-700 mb-1">
                             Pelanggan
                         </label>
-                        <select name="prospek_alamat_id" id="prospek_alamat_id"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 @error('prospek_alamat_id') border-red-500 @enderror"
+                        <select name="customer_alamat_id" id="customer_alamat_id"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500 @error('customer_alamat_id') border-red-500 @enderror"
                             required>
                             <option value="">Pilih pelanggan...</option>
-                            @foreach ($prospekAlamat as $alamat)
+                            @foreach ($customerAlamat as $alamat)
                                 <option value="{{ $alamat->id }}"
-                                    {{ old('prospek_alamat_id') == $alamat->id ? 'selected' : '' }}>
-                                    {{ $alamat->prospek->gelaran ?? '' }} - {{ $alamat->prospek->no_tel ?? '' }}
+                                    {{ old('customer_alamat_id') == $alamat->id ? 'selected' : '' }}>
+                                    {{ $alamat->customer->gelaran ?? '' }} - {{ $alamat->customer->no_tel ?? '' }}
                                 </option>
                             @endforeach
                         </select>
-                        @error('prospek_alamat_id')
+                        @error('customer_alamat_id')
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
@@ -118,7 +118,7 @@
 
                 <!-- Simple Actions -->
                 <div class="mt-6 flex items-center justify-end space-x-2">
-                    <a href="{{ route('prospek-buy.index') }}"
+                    <a href="{{ route('customer-buy.index') }}"
                         class="px-3 py-1.5 text-sm text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
                         Batal
                     </a>
@@ -165,7 +165,7 @@
             const formData = new FormData(form);
 
             // Validate required fields
-            const customerId = document.getElementById('prospek_alamat_id').value;
+            const customerId = document.getElementById('customer_alamat_id').value;
             const productId = document.getElementById('produk_id').value;
             const quantity = document.getElementById('kuantiti').value;
             const price = document.getElementById('harga').value;
@@ -210,7 +210,7 @@
                             confirmButtonColor: '#3085d6',
                             confirmButtonText: 'OK'
                         }).then(() => {
-                            window.location.href = "{{ route('prospek-buy.index') }}";
+                            window.location.href = "{{ route('customer-buy.index') }}";
                         });
                     } else {
                         Swal.fire({

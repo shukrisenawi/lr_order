@@ -11,7 +11,7 @@
                     <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Rekod Pembelian Baru</h1>
                     <p class="text-gray-600">Tambah rekod pembelian baharu</p>
                 </div>
-                <a href="{{ route('prospek-buy.index') }}"
+                <a href="{{ route('customer-buy.index') }}"
                     class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                     <i class="fas fa-arrow-left mr-2"></i>
                     Kembali ke Senarai
@@ -26,28 +26,28 @@
                 <p class="text-gray-600 text-sm mt-1">Sila isi semua maklumat yang diperlukan</p>
             </div>
 
-            <form method="POST" action="{{ route('prospek-buy.store') }}" class="p-6">
+            <form method="POST" action="{{ route('customer-buy.store') }}" class="p-6">
                 @csrf
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Left Column -->
                     <div class="space-y-6">
-                        <!-- Alamat Prospek -->
+                        <!-- Alamat Customer -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat Prospek <span
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat Customer <span
                                     class="text-red-500">*</span></label>
-                            <select name="prospek_alamat_id" id="prospek_alamat_id" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-500 transition-all duration-300 @error('prospek_alamat_id') border-red-500 bg-red-50 @enderror">
-                                <option value="">Pilih Alamat Prospek</option>
-                                @foreach ($prospekAlamat as $alamat)
+                            <select name="customer_alamat_id" id="customer_alamat_id" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-500 transition-all duration-300 @error('customer_alamat_id') border-red-500 bg-red-50 @enderror">
+                                <option value="">Pilih Alamat Customer</option>
+                                @foreach ($customerAlamat as $alamat)
                                     <option value="{{ $alamat->id }}"
-                                        {{ old('prospek_alamat_id') == $alamat->id ? 'selected' : '' }}>
-                                        {{ $alamat->prospek->gelaran ?? '' }} - {{ $alamat->prospek->no_tel ?? '' }}
+                                        {{ old('customer_alamat_id') == $alamat->id ? 'selected' : '' }}>
+                                        {{ $alamat->customer->gelaran ?? '' }} - {{ $alamat->customer->no_tel ?? '' }}
                                         ({{ $alamat->bandar ?? 'Tiada Bandar' }})
                                     </option>
                                 @endforeach
                             </select>
-                            @error('prospek_alamat_id')
+                            @error('customer_alamat_id')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
@@ -149,7 +149,7 @@
 
                 <!-- Actions -->
                 <div class="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="{{ route('prospek-buy.index') }}"
+                    <a href="{{ route('customer-buy.index') }}"
                         class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors duration-300">
                         Batal
                     </a>

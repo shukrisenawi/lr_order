@@ -11,7 +11,7 @@
                     <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Kemaskini Rekod Pembelian</h1>
                     <p class="text-gray-600">Sunting maklumat pembelian</p>
                 </div>
-                <a href="{{ route('prospek-buy.index') }}"
+                <a href="{{ route('customer-buy.index') }}"
                     class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                     <i class="fas fa-arrow-left mr-2"></i>
                     Kembali ke Senarai
@@ -26,29 +26,29 @@
                 <p class="text-gray-600 text-sm mt-1">Kemaskini maklumat pembelian di bawah</p>
             </div>
 
-            <form method="POST" action="{{ route('prospek-buy.update', $prospekBuy->id) }}" class="p-6">
+            <form method="POST" action="{{ route('customer-buy.update', $customerBuy->id) }}" class="p-6">
                 @csrf
                 @method('PUT')
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Left Column -->
                     <div class="space-y-6">
-                        <!-- Alamat Prospek -->
+                        <!-- Alamat Customer -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat Prospek <span
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat Customer <span
                                     class="text-red-500">*</span></label>
-                            <select name="prospek_alamat_id" id="prospek_alamat_id" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-500 transition-all duration-300 @error('prospek_alamat_id') border-red-500 bg-red-50 @enderror">
-                                <option value="">Pilih Alamat Prospek</option>
-                                @foreach ($prospekAlamat as $alamat)
+                            <select name="customer_alamat_id" id="customer_alamat_id" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-500 transition-all duration-300 @error('customer_alamat_id') border-red-500 bg-red-50 @enderror">
+                                <option value="">Pilih Alamat Customer</option>
+                                @foreach ($customerAlamat as $alamat)
                                     <option value="{{ $alamat->id }}"
-                                        {{ old('prospek_alamat_id', $prospekBuy->prospek_alamat_id) == $alamat->id ? 'selected' : '' }}>
-                                        {{ $alamat->prospek->gelaran ?? '' }} - {{ $alamat->prospek->no_tel ?? '' }}
+                                        {{ old('customer_alamat_id', $customerBuy->customer_alamat_id) == $alamat->id ? 'selected' : '' }}>
+                                        {{ $alamat->customer->gelaran ?? '' }} - {{ $alamat->customer->no_tel ?? '' }}
                                         ({{ $alamat->bandar ?? 'Tiada Bandar' }})
                                     </option>
                                 @endforeach
                             </select>
-                            @error('prospek_alamat_id')
+                            @error('customer_alamat_id')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
@@ -65,7 +65,7 @@
                                 <option value="">Pilih Produk</option>
                                 @foreach ($produk as $product)
                                     <option value="{{ $product->id }}" data-price="{{ $product->price }}"
-                                        {{ old('produk_id', $prospekBuy->produk_id) == $product->id ? 'selected' : '' }}>
+                                        {{ old('produk_id', $customerBuy->produk_id) == $product->id ? 'selected' : '' }}>
                                         {{ $product->name }} - RM {{ number_format($product->price, 2) }}
                                     </option>
                                 @endforeach
@@ -83,7 +83,7 @@
                             <label class="block text-sm font-semibold text-gray-800 mb-2">Kuantiti <span
                                     class="text-red-500">*</span></label>
                             <input type="number" name="kuantiti" id="kuantiti"
-                                value="{{ old('kuantiti', $prospekBuy->kuantiti) }}" min="1" required
+                                value="{{ old('kuantiti', $customerBuy->kuantiti) }}" min="1" required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-500 transition-all duration-300 @error('kuantiti') border-red-500 bg-red-50 @enderror">
                             @error('kuantiti')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -101,7 +101,7 @@
                             <label class="block text-sm font-semibold text-gray-800 mb-2">Harga Seunit (RM) <span
                                     class="text-red-500">*</span></label>
                             <input type="number" step="0.01" name="harga" id="harga"
-                                value="{{ old('harga', $prospekBuy->harga) }}" required
+                                value="{{ old('harga', $customerBuy->harga) }}" required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-500 transition-all duration-300 @error('harga') border-red-500 bg-red-50 @enderror">
                             @error('harga')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -116,7 +116,7 @@
                             <label class="block text-sm font-semibold text-gray-800 mb-2">Tarikh Pembelian <span
                                     class="text-red-500">*</span></label>
                             <input type="date" name="purchase_date" id="purchase_date"
-                                value="{{ old('purchase_date', optional($prospekBuy->purchase_date)->format('Y-m-d') ?? date('Y-m-d')) }}"
+                                value="{{ old('purchase_date', optional($customerBuy->purchase_date)->format('Y-m-d') ?? date('Y-m-d')) }}"
                                 required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-500 transition-all duration-300 @error('purchase_date') border-red-500 bg-red-50 @enderror">
                             @error('purchase_date')
@@ -139,7 +139,7 @@
                     <div class="md:col-span-2">
                         <label class="block text-sm font-semibold text-gray-800 mb-2">Nota (Pilihan)</label>
                         <textarea name="notes" id="notes" rows="4"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-500 transition-all duration-300 @error('notes') border-red-500 bg-red-50 @enderror">{{ old('notes', $prospekBuy->notes ?? '') }}</textarea>
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-rose-100 focus:border-rose-500 transition-all duration-300 @error('notes') border-red-500 bg-red-50 @enderror">{{ old('notes', $customerBuy->notes ?? '') }}</textarea>
                         @error('notes')
                             <p class="mt-2 text-sm text-red-600 flex items-center">
                                 <i class="fas fa-exclamation-circle mr-1"></i>
@@ -151,7 +151,7 @@
 
                 <!-- Actions -->
                 <div class="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="{{ route('prospek-buy.index') }}"
+                    <a href="{{ route('customer-buy.index') }}"
                         class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors duration-300">
                         Batal
                     </a>

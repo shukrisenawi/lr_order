@@ -3,13 +3,13 @@
     <div class="mb-10">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Pengurusan Prospek</h1>
-                <p class="text-gray-600">Urus prospek anda</p>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Pengurusan Customer</h1>
+                <p class="text-gray-600">Urus customer anda</p>
             </div>
-            <a href="{{ route('prospek.create') }}"
+            <a href="{{ route('customer.create') }}"
                 class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-xl shadow-lg hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
                 <i class="fas fa-plus mr-2"></i>
-                Tambah Prospek Baru
+                Tambah Customer Baru
             </a>
         </div>
     </div>
@@ -32,7 +32,7 @@
                 <i class="fas fa-search text-gray-400"></i>
             </div>
             <input type="text" wire:model.live.debounce.300ms="search"
-                placeholder="Cari prospek mengikut nama, telefon, atau emel..."
+                placeholder="Cari customer mengikut nama, telefon, atau emel..."
                 class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-100 focus:outline-none transition-all duration-300 shadow-sm">
         </div>
     </div>
@@ -79,9 +79,9 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    @forelse($prospek as $item)
+                    @forelse($customer as $item)
                         <tr class="hover:bg-amber-50 transition-colors duration-200"
-                            wire:key="prospek-{{ $item->id }}">
+                            wire:key="customer-{{ $item->id }}">
                             <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->gelaran }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_tel }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->email ?? 'N/A' }}</td>
@@ -93,12 +93,12 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex space-x-2">
-                                    <a href="{{ route('prospek.show', $item) }}"
+                                    <a href="{{ route('customer.show', $item) }}"
                                         class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-amber-700 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors duration-200">
                                         <i class="fas fa-eye mr-1"></i>
                                         View
                                     </a>
-                                    <a href="{{ route('prospek.edit', $item) }}"
+                                    <a href="{{ route('customer.edit', $item) }}"
                                         class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-700 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors duration-200">
                                         <i class="fas fa-edit mr-1"></i>
                                         Edit
@@ -121,7 +121,7 @@
                                     </div>
                                     <h3 class="text-lg font-medium text-gray-900 mb-1">No prospects found</h3>
                                     <p class="text-gray-500 mb-4">Try changing your search or add a new prospect</p>
-                                    <a href="{{ route('prospek.create') }}"
+                                    <a href="{{ route('customer.create') }}"
                                         class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-lg shadow hover:from-amber-600 hover:to-orange-700 transition-all duration-300">
                                         <i class="fas fa-plus mr-2"></i>
                                         Add your first prospect
@@ -135,16 +135,16 @@
         </div>
 
         <!-- Pagination -->
-        @if ($prospek->hasPages())
+        @if ($customer->hasPages())
             <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-700">
-                        Menunjukkan <span class="font-medium">{{ $prospek->firstItem() }}</span> ke <span
-                            class="font-medium">{{ $prospek->lastItem() }}</span> daripada <span
-                            class="font-medium">{{ $prospek->total() }}</span> rekod
+                        Menunjukkan <span class="font-medium">{{ $customer->firstItem() }}</span> ke <span
+                            class="font-medium">{{ $customer->lastItem() }}</span> daripada <span
+                            class="font-medium">{{ $customer->total() }}</span> rekod
                     </div>
                     <div>
-                        {{ $prospek->links('vendor.pagination.tailwind') }}
+                        {{ $customer->links('vendor.pagination.tailwind') }}
                     </div>
                 </div>
             </div>
