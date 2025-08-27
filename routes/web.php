@@ -120,6 +120,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('prospek-buy.index');
     Route::resource('prospek-buy', 'App\Http\Controllers\ProspekBuyController')->except(['index']);
 
+    Route::resource('waybill', 'App\Http\Controllers\WaybillController');
+
     // Settings routes
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/', [SettingsController::class, 'index'])->name('index');
