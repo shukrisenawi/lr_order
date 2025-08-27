@@ -12,6 +12,7 @@ class Gambar extends Model
     protected $table = 'gambar';
 
     protected $fillable = [
+        'bisnes_id',
         'nama',
         'path',
     ];

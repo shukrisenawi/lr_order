@@ -73,7 +73,20 @@ class GambarController extends Controller
 
                         $nama = count($files) > 1 ? $request->nama . ' - ' . ($index + 1) : $request->nama;
 
+                        // Get the selected business ID from session or use the first business
+                        $bisnesId = session('selected_bisnes_id');
+                        if (!$bisnesId) {
+                            $firstBisnes = auth()->user()->bisnes()->first();
+                            $bisnesId = $firstBisnes ? $firstBisnes->id : null;
+                        }
+
+                        // If still no business ID, create a default one or handle the error
+                        if (!$bisnesId) {
+                            throw new \Exception('Tiada bisnes dijumpai. Sila cipta bisnes terlebih dahulu.');
+                        }
+
                         $gambar = Gambar::create([
+                            'bisnes_id' => $bisnesId,
                             'nama' => $nama,
                             'path' => $path,
                         ]);
