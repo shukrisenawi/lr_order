@@ -4,13 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Prospek;
-use App\Models\ProspekAlamat;
-use App\Models\ProspekBuy;
+use App\Models\Customer;
+use App\Models\CustomerAlamat;
+use App\Models\CustomerBuy;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
-class ProspekApiController extends Controller
+class UserApiController extends Controller
 {
     /**
      * Get all prospects list
@@ -18,7 +18,7 @@ class ProspekApiController extends Controller
     public function index(): JsonResponse
     {
         try {
-            $prospects = Prospek::select('id', 'gelaran', 'no_tel', 'email', 'bisnes_id', 'created_at')
+            $prospects = Customer::select('id', 'gelaran', 'no_tel', 'email', 'bisnes_id', 'created_at')
                 ->with(['bisnes:id,nama_bines,nama_syarikat'])
                 ->paginate(15);
 
@@ -42,12 +42,12 @@ class ProspekApiController extends Controller
     public function show($no_tel): JsonResponse
     {
         try {
-            $prospect = Prospek::with([
+            $prospect = Customer::with([
                 'bisnes' => function ($query) {
                     $query->select('id', 'nama_bines', 'nama_syarikat', 'jenis_bisnes', 'alamat', 'poskod', 'no_tel');
                 },
                 'alamat' => function ($query) {
-                    $query->select('id', 'prospek_id', 'alamat', 'bandar', 'poskod', 'negeri');
+                    $query->select('id', 'customer_id', 'alamat', 'bandar', 'poskod', 'negeri');
                 }
             ])->where('no_tel', $no_tel)->first();
 
@@ -61,11 +61,11 @@ class ProspekApiController extends Controller
             // Get all prospects for this user's businesses
             $businessIds = $user->bisnes->pluck('id');
 
-            $prospects = Prospek::whereIn('bisnes_id', $businessIds)
+            $prospects = Customer::whereIn('bisnes_id', $businessIds)
                 ->with([
                     'bisnes:id,nama_bines',
                     'alamat' => function ($query) {
-                        $query->select('id', 'prospek_id', 'alamat', 'bandar', 'poskod', 'negeri');
+                        $query->select('id', 'customer_id', 'alamat', 'bandar', 'poskod', 'negeri');
                     }
                 ])
                 ->get();
@@ -73,10 +73,10 @@ class ProspekApiController extends Controller
             // Get all purchases for this user's prospects
             $prospectIds = $prospects->pluck('id');
 
-            $purchases = ProspekBuy::whereIn('prospek_id', $prospectIds)
+            $purchases = CustomerBuy::whereIn('customer_id', $prospectIds)
                 ->with([
-                    'prospek:id,gelaran,no_tel,bisnes_id',
-                    'prospek.bisnes:id,nama_bines'
+                    'customer:id,gelaran,no_tel,bisnes_id',
+                    'customer.bisnes:id,nama_bines'
                 ])
                 ->get();
 
@@ -123,9 +123,9 @@ class ProspekApiController extends Controller
                 'purchases' => $purchases->map(function ($purchase) {
                     return [
                         'id' => $purchase->id,
-                        'prospect_name' => $purchase->prospek->gelaran ?? null,
-                        'prospect_phone' => $purchase->prospek->no_tel ?? null,
-                        'business' => $purchase->prospek->bisnes->nama_bines ?? null,
+                        'prospect_name' => $purchase->customer->gelaran ?? null,
+                        'prospect_phone' => $purchase->customer->no_tel ?? null,
+                        'business' => $purchase->customer->bisnes->nama_bines ?? null,
                         'purchase_date' => $purchase->created_at,
                         'amount' => $purchase->amount ?? null,
                         'status' => $purchase->status ?? null
@@ -163,21 +163,21 @@ class ProspekApiController extends Controller
             }
 
             $businessIds = $user->bisnes->pluck('id');
-            $prospectIds = Prospek::whereIn('bisnes_id', $businessIds)->pluck('id');
+            $prospectIds = Customer::whereIn('bisnes_id', $businessIds)->pluck('id');
 
-            $addresses = ProspekAlamat::whereIn('prospek_id', $prospectIds)
+            $addresses = CustomerAlamat::whereIn('customer_id', $prospectIds)
                 ->with([
-                    'prospek:id,gelaran,no_tel,bisnes_id',
-                    'prospek.bisnes:id,nama_bines'
+                    'customer:id,gelaran,no_tel,bisnes_id',
+                    'customer.bisnes:id,nama_bines'
                 ])
                 ->get();
 
             $formattedAddresses = $addresses->map(function ($address) {
                 return [
                     'id' => $address->id,
-                    'prospect_name' => $address->prospek->gelaran ?? null,
-                    'prospect_phone' => $address->prospek->no_tel ?? null,
-                    'business' => $address->prospek->bisnes->nama_bines ?? null,
+                    'prospect_name' => $address->customer->gelaran ?? null,
+                    'prospect_phone' => $address->customer->no_tel ?? null,
+                    'business' => $address->customer->bisnes->nama_bines ?? null,
                     'alamat' => $address->alamat,
                     'bandar' => $address->bandar,
                     'poskod' => $address->poskod,
@@ -215,12 +215,12 @@ class ProspekApiController extends Controller
             }
 
             $businessIds = $user->bisnes->pluck('id');
-            $prospectIds = Prospek::whereIn('bisnes_id', $businessIds)->pluck('id');
+            $prospectIds = Customer::whereIn('bisnes_id', $businessIds)->pluck('id');
 
-            $purchases = ProspekBuy::whereIn('prospek_id', $prospectIds)
+            $purchases = CustomerBuy::whereIn('customer_id', $prospectIds)
                 ->with([
-                    'prospek:id,gelaran,no_tel,email,bisnes_id',
-                    'prospek.bisnes:id,nama_bines'
+                    'customer:id,gelaran,no_tel,email,bisnes_id',
+                    'customer.bisnes:id,nama_bines'
                 ])
                 ->orderBy('created_at', 'desc')
                 ->get();
@@ -229,11 +229,11 @@ class ProspekApiController extends Controller
                 return [
                     'id' => $purchase->id,
                     'prospect_info' => [
-                        'name' => $purchase->prospek->gelaran ?? null,
-                        'phone' => $purchase->prospek->no_tel ?? null,
-                        'email' => $purchase->prospek->email ?? null
+                        'name' => $purchase->customer->gelaran ?? null,
+                        'phone' => $purchase->customer->no_tel ?? null,
+                        'email' => $purchase->customer->email ?? null
                     ],
-                    'business' => $purchase->prospek->bisnes->nama_bines ?? null,
+                    'business' => $purchase->customer->bisnes->nama_bines ?? null,
                     'purchase_date' => $purchase->created_at,
                     'amount' => $purchase->amount ?? null,
                     'status' => $purchase->status ?? null,

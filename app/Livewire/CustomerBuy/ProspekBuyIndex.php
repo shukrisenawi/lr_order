@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\ProspekBuy;
+namespace App\Livewire\CustomerBuy;
 
 use Livewire\Component;
 use Livewire\WithPagination;

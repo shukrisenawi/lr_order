@@ -311,21 +311,21 @@
                                     <i class="fas fa-users"></i>
                                     <span>Prospek</span>
                                 </div>
-                                <span id="prospek-badge"
+                                <span id="customer-badge"
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
-                            <a href="{{ route('prospek-alamat.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-alamat.*') ? 'nav-link active' : '' }}">
+                            <a href="{{ route('customer-alamat.index') }}"
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-alamat.*') ? 'nav-link active' : '' }}">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span>Alamat Prospek</span>
                             </a>
-                            <a href="{{ route('prospek-buy.index') }}"
-                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-buy.*') ? 'nav-link active' : '' }}">
+                            <a href="{{ route('customer-buy.index') }}"
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-buy.*') ? 'nav-link active' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <i class="fas fa-shopping-cart"></i>
                                     <span>Pembelian</span>
                                 </div>
-                                <span id="prospek-buy-badge"
+                                <span id="customer-buy-badge"
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
                         </div>
@@ -402,7 +402,7 @@
                                     <i class="fas fa-users"></i>
                                     <span>Prospek</span>
                                 </div>
-                                <span id="prospek-badge-desktop"
+                                <span id="customer-badge-desktop"
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
                             <a href="{{ route('customer.index') }}"
@@ -411,7 +411,7 @@
                                     <i class="fas fa-user-secret"></i>
                                     <span>Pelanggan</span>
                                 </div>
-                                <span id="prospek-buy-badge-desktop"
+                                <span id="customer-buy-badge-desktop"
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
                             <a href="{{ route('customer-alamat.index') }}"
@@ -419,13 +419,13 @@
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span>Alamat Pelanggan</span>
                             </a>
-                            <a href="{{ route('prospek-buy.index') }}"
-                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek-buy.*') ? 'nav-link active' : '' }}">
+                            <a href="{{ route('customer-buy.index') }}"
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-buy.*') ? 'nav-link active' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <i class="fas fa-shopping-cart"></i>
                                     <span>Pembelian</span>
                                 </div>
-                                <span id="prospek-buy-badge-desktop"
+                                <span id="customer-buy-badge-desktop"
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
                         </div>
@@ -476,7 +476,7 @@
         let notificationCounts = {
             'produk': 0,
             'prospek': 0,
-            'prospek-buy': 0
+            'customer-buy': 0
         };
 
         // Function to update badge
@@ -581,9 +581,9 @@
             if (currentPath.includes('/produk')) {
                 notificationCounts['produk'] = 0;
                 updateBadge('produk', 0);
-            } else if (currentPath.includes('/prospek-buy')) {
-                notificationCounts['prospek-buy'] = 0;
-                updateBadge('prospek-buy', 0);
+            } else if (currentPath.includes('/customer-buy')) {
+                notificationCounts['customer-buy'] = 0;
+                updateBadge('customer-buy', 0);
             } else if (currentPath.includes('/prospek')) {
                 notificationCounts['prospek'] = 0;
                 updateBadge('prospek', 0);
