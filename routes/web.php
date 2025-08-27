@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 // Home route
 Route::get('/', function () {
@@ -142,4 +143,13 @@ Route::prefix('api')->middleware('auth')->group(function () {
     Route::get('/user', function () {
         return auth()->user();
     });
+});
+
+Route::get('/contact', function () {
+    $response = Http::post('https://n8n-mt8umikivytz.n8x.biz.id/webhook-test/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9', [
+        'mesej' => 'shukri, no 17222 kg kuala teloi batu 5, 08200 sik kedah, 019-5168839'
+    ]);
+
+    // Dapatkan response dari n8n
+    return $response->json();
 });

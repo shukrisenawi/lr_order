@@ -12,6 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('prospek_alamat_id')->constrained('prospek_alamat')->onDelete('cascade');
             $table->foreignId('produk_id')->constrained('produk')->onDelete('cascade');
+            $table->string('item_custom')->nullable();
             $table->integer('kuantiti')->default(1);
             $table->decimal('harga', 10, 2);
             $table->string('status')->default('pending');
