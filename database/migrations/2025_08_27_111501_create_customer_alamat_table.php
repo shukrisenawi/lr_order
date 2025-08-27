@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('customer_alamat', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained('customer')->onDelete('cascade');
+            $table->foreignId('customer_id')->nullable()->constrained('customer')->onDelete('cascade');
             $table->string('nama_penerima');
             $table->text('alamat');
             $table->string('poskod', 10);

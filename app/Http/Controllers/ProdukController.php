@@ -30,36 +30,29 @@ class ProdukController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            Log::info('Produk store method called', ['request_data' => $request->all()]);
+        $request->bisnes_id = session('selected_bisnes_id');
+        // $request->merge(['bisnes_id' => session('selected_bisnes_id')]);
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'harga' => 'required|numeric|min:0',
+            'stok' => 'required|integer|min:0',
+            'gambar_id' => 'nullable|exists:gambar,id',
+            'info' => 'required|string',
+        ]);
 
-            $request->validate([
-                'nama' => 'required|string|max:255',
-                'harga' => 'required|numeric|min:0',
-                'stok' => 'required|integer|min:0',
-                'gambar_id' => 'nullable|exists:gambar,id',
-            ]);
+        $produk = Produk::create($request->all());
 
-            Log::info('Validation passed');
 
-            $produk = Produk::create($request->all());
+        // Broadcast new data event
+        broadcast(new NewDataEvent('produk', [
+            'id' => $produk->id,
+            'message' => 'Produk baru telah ditambah',
+            'nama' => $produk->nama,
+            'harga' => $produk->harga,
+            'stok' => $produk->stok
+        ], auth()->id()));
 
-            Log::info('Produk created', ['produk_id' => $produk->id]);
-
-            // Broadcast new data event
-            broadcast(new NewDataEvent('produk', [
-                'id' => $produk->id,
-                'message' => 'Produk baru telah ditambah',
-                'nama' => $produk->nama,
-                'harga' => $produk->harga,
-                'stok' => $produk->stok
-            ], auth()->id()));
-
-            return redirect()->route('produk.index')->with('success', 'Produk created successfully.');
-        } catch (\Exception $e) {
-            Log::error('Error in produk store', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-            return back()->withErrors(['error' => 'Error creating product: ' . $e->getMessage()])->withInput();
-        }
+        return redirect()->route('produk.index')->with('success', 'Produk created successfully.');
     }
 
     public function edit(Produk $produk)
@@ -75,6 +68,7 @@ class ProdukController extends Controller
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'gambar_id' => 'nullable|exists:gambar,id',
+            'info' => 'required|string',
         ]);
 
         $produk->update($request->all());

@@ -107,7 +107,254 @@
                         </div>
                     </div>
                 </div>
+                <div class="mt-6">
+                    <label class="block text-sm font-semibold text-gray-800 mb-2">Info Produk<span
+                            class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <textarea name="info" id="info_textarea_create" required
+                            placeholder="Contoh: Anda adalah pembantu yang membantu pengguna dengan pertanyaan mereka."
+                            class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 resize-both min-h-[100px] max-h-[400px]"
+                            rows="100">{{ old('info') }}</textarea>
 
+                        <!-- Emoji Picker Button -->
+                        <button type="button" onclick="toggleEmojiPickerCreate()"
+                            class="absolute top-3 right-3 p-2 text-gray-400 hover:text-gray-600 transition-colors duration-200 focus:outline-none">
+                            <i class="fas fa-smile text-lg"></i>
+                        </button>
+
+                        <!-- Emoji Picker Dropdown -->
+                        <div id="emojiPickerCreate"
+                            class="absolute top-12 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-3 hidden w-64 max-h-48 overflow-y-auto">
+                            <div class="grid grid-cols-8 gap-1">
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😀')">😀</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😃')">😃</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😄')">😄</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😁')">😁</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😆')">😆</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😅')">😅</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤣')">🤣</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😂')">😂</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🙂')">🙂</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🙃')">🙃</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😉')">😉</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😊')">😊</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😇')">😇</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🥰')">🥰</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😍')">😍</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤩')">🤩</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😘')">😘</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😗')">😗</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😚')">😚</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😙')">😙</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🥲')">🥲</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😋')">😋</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😛')">😛</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😜')">😜</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤪')">🤪</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😝')">😝</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤑')">🤑</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤗')">🤗</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤭')">🤭</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤫')">🤫</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤔')">🤔</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤐')">🤐</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤨')">🤨</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😐')">😐</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😑')">😑</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😶')">😶</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😏')">😏</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😒')">😒</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🙄')">🙄</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😬')">😬</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤥')">🤥</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😔')">😔</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😕')">😕</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🙁')">🙁</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('☹️')">☹️</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😣')">😣</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😖')">😖</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😫')">😫</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😩')">😩</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🥺')">🥺</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😢')">😢</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😭')">😭</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😤')">😤</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😠')">😠</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😡')">😡</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤬')">🤬</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤯')">🤯</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😳')">😳</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🥵')">🥵</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🥶')">🥶</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😱')">😱</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😨')">😨</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😰')">😰</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😥')">😥</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('😓')">😓</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤝')">🤝</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👍')">👍</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👎')">👎</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👌')">👌</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('✌️')">✌️</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤞')">🤞</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤟')">🤟</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤘')">🤘</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤙')">🤙</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👈')">👈</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👉')">👉</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👆')">👆</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👇')">👇</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('☝️')">☝️</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👏')">👏</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🙌')">🙌</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👐')">👐</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤲')">🤲</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤜')">🤜</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤛')">🤛</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('✊')">✊</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👊')">👊</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤚')">🤚</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👋')">👋</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤏')">🤏</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('✍️')">✍️</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('💪')">💪</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('👍')">👍</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('❤️')">❤️</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('💕')">💕</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('💖')">💖</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('💗')">💗</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('💙')">💙</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('💚')">💚</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('💛')">💛</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🧡')">🧡</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('💜')">💜</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🖤')">🖤</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤍')">🤍</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('🤎')">🤎</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('💔')">💔</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('❣️')">❣️</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('💟')">💟</button>
+                                <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
+                                    onclick="insertEmojiCreate('♥️')">♥️</button>
+                            </div>
+                        </div>
+                    </div>
+                    @error('info')
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ $message }}
+                        </p>
+                    @enderror
+                    <p class="mt-2 text-sm text-gray-500">Klik ikon emoji untuk menambah emoji.</p>
+                </div>
                 <!-- Actions -->
                 <div class="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
                     <a href="{{ route('produk.index') }}"

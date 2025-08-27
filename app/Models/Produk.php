@@ -16,6 +16,7 @@ class Produk extends Model
         'harga',
         'stok',
         'gambar_id',
+        'info',
     ];
 
     protected $casts = [

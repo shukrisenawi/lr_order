@@ -10,8 +10,8 @@ return new class extends Migration
     {
         Schema::create('customer_buy', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_alamat_id')->constrained('customer_alamat')->onDelete('cascade');
-            $table->foreignId('produk_id')->constrained('produk')->onDelete('cascade');
+            $table->foreignId('customer_alamat_id')->nullable()->constrained('customer_alamat')->onDelete('cascade');
+            $table->foreignId('produk_id')->nullable()->constrained('produk')->onDelete('cascade');
             $table->string('produk_custom')->nullable();
             $table->integer('kuantiti')->default(1);
             $table->decimal('harga', 10, 2);

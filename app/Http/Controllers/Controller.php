@@ -9,9 +9,10 @@ use Illuminate\Routing\Controller as BaseController;
 abstract class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
-    public $bisnesId;
+    public $bisnes_id;
+
     public function __construct()
     {
-        $this->bisnesId = session('bisnes_id');
+        $this->bisnes_id = session('selected_bisnes_id');
     }
 }

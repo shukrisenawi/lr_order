@@ -13,7 +13,7 @@ return new class extends Migration
             $table->string('no_tel');
             $table->string('gelaran')->nullable();
             $table->string('status')->default('prospek');
-            $table->foreignId('bisnes_id')->constrained('bisnes')->onDelete('cascade');
+            $table->foreignId('bisnes_id')->nullable()->constrained('bisnes')->onDelete('cascade');
             $table->boolean('on')->bool(true);
             $table->timestamps();
         });

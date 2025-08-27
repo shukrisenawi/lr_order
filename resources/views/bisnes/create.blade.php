@@ -421,8 +421,7 @@
                             {{ $message }}
                         </p>
                     @enderror
-                    <p class="mt-2 text-sm text-gray-500">Textarea boleh dibesarkan/dikecilkan dengan menarik sudut kanan
-                        bawah. Klik ikon emoji untuk menambah emoji.</p>
+                    <p class="mt-2 text-sm text-gray-500">Klik ikon emoji untuk menambah emoji.</p>
                 </div>
                 <!-- Actions -->
                 <div class="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">

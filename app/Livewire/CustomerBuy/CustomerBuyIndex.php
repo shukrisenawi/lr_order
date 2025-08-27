@@ -4,10 +4,10 @@ namespace App\Livewire\CustomerBuy;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\ProspekBuy;
+use App\Models\CustomerBuy;
 use Illuminate\Support\Facades\Auth;
 
-class ProspekBuyIndex extends Component
+class CustomerBuyIndex extends Component
 {
     use WithPagination;
 
@@ -42,11 +42,11 @@ class ProspekBuyIndex extends Component
 
     public function delete($id)
     {
-        $prospekBuy = ProspekBuy::whereHas('prospekAlamat.prospek.bisnes', function ($query) {
+        $customerBuy = CustomerBuy::whereHas('customerAlamat.customer.bisnes', function ($query) {
             $query->where('user_id', Auth::id());
         })->findOrFail($id);
 
-        $prospekBuy->delete();
+        $customerBuy->delete();
 
         session()->flash('message', 'Purchase deleted successfully.');
         $this->calculateStats();
@@ -55,7 +55,7 @@ class ProspekBuyIndex extends Component
 
     public function calculateStats()
     {
-        $purchases = ProspekBuy::whereHas('prospekAlamat.prospek.bisnes', function ($query) {
+        $purchases = CustomerBuy::whereHas('customerAlamat.customer.bisnes', function ($query) {
             $query->where('user_id', Auth::id());
         })->get();
 
@@ -74,14 +74,14 @@ class ProspekBuyIndex extends Component
 
     public function render()
     {
-        $prospekBuy = ProspekBuy::with(['prospekAlamat.prospek.bisnes', 'produk'])
-            ->whereHas('prospekAlamat.prospek.bisnes', function ($query) {
+        $customerBuy = CustomerBuy::with(['customerAlamat.customer.bisnes', 'produk'])
+            ->whereHas('customerAlamat.customer.bisnes', function ($query) {
                 $query->where('user_id', Auth::id());
             })
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->whereHas('prospekAlamat.prospek', function ($prospekQuery) {
-                        $prospekQuery->where('no_tel', 'like', '%' . $this->search . '%')
+                    $q->whereHas('customerAlamat.customer', function ($customerQuery) {
+                        $customerQuery->where('no_tel', 'like', '%' . $this->search . '%')
                             ->orWhere('gelaran', 'like', '%' . $this->search . '%');
                     })
                         ->orWhereHas('produk', function ($produkQuery) {
@@ -92,6 +92,6 @@ class ProspekBuyIndex extends Component
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate(10);
 
-        return view('livewire.prospek-buy.prospek-buy-index', compact('prospekBuy'));
+        return view('livewire.customer-buy.customer-buy-index', compact('customerBuy'));
     }
 }

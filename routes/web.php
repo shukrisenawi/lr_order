@@ -67,21 +67,18 @@ Route::get('/quick-login', function () {
 })->name('quick-login');
 
 // Switch business route
-Route::get('/switch-bisnes/{bisnes}', function ($bisnes = 0) {
+Route::get('/switch-bisnes/{bisnes}', function (Bisnes $bisnes) {
 
-    // Verify user owns this business
-    $bisnesSelect = Bisnes::find($bisnes);
 
-    if ($bisnesSelect && $bisnesSelect->user_id !== auth()->id()) {
+    if ($bisnes->user_id !== auth()->id()) {
         abort(403);
     }
-    $idSelect = $bisnesSelect ? $bisnesSelect->id : 0;
-    // Store selected business in session
-    session(['selected_bisnes_id' => $idSelect]);
-    if ($bisnes)
-        return redirect()->back()->with('success', 'Bisnes ditukar kepada: ' . $bisnesSelect->nama_bisnes);
-    else
-        return redirect()->back()->with('success', 'Semua bisnes dibuka.');
+    session(['selected_bisnes_id' => $bisnes->id]);
+    return redirect()->back();
+    // if ($bisnes)
+    //     return redirect()->back()->with('success', 'Bisnes ditukar kepada: ' . $bisnes->nama_bisnes);
+    // else
+    //     return redirect()->back()->with('success', 'Senarai Bisnes.');
 })->name('switch-bisnes')->middleware('auth');
 
 // Protected routes

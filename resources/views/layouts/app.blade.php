@@ -179,6 +179,7 @@
                             $selectedBisnes = session('selected_bisnes_id')
                                 ? Bisnes::find(session('selected_bisnes_id'))
                                 : 0;
+
                         @endphp
 
                         @if ($userBisnes->count() > 0)
@@ -188,7 +189,7 @@
                                     id="bisnes-menu-button" aria-expanded="true" aria-haspopup="true"
                                     onclick="toggleBisnesDropdown()">
                                     <i class="fas fa-building mr-2"></i>
-                                    {{ $selectedBisnes ? $selectedBisnes->nama_bines : 'Semua Bisnes' }}
+                                    {{ $selectedBisnes ? $selectedBisnes->nama_bisnes : 'Pilih Senarai' }}
                                     <i class="fas fa-chevron-down ml-2"></i>
                                 </button>
 
@@ -213,11 +214,11 @@
                                         @endforeach
 
                                         <div class="border-t border-gray-100 my-1"></div>
-                                        <a href="{{ route('switch-bisnes', 0) }}"
+                                        <a href="{{ route('bisnes.index') }}"
                                             class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                                             role="menuitem">
                                             <i class="fas fa-building mr-3 text-gray-400"></i>
-                                            Semua Bisnes
+                                            Senarai Bisnes
                                             @if (!$selectedBisnes)
                                                 <i class="fas fa-check ml-auto text-green-500"></i>
                                             @endif
@@ -283,6 +284,11 @@
                                 <i class="fas fa-building"></i>
                                 <span>Bisnes</span>
                             </a>
+                            <a href="{{ route('gambar.index') }}"
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
+                                <i class="fas fa-images"></i>
+                                <span>Gambar</span>
+                            </a>
                             <a href="{{ route('produk.index') }}"
                                 class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
                                 <div class="flex items-center space-x-3">
@@ -291,11 +297,6 @@
                                 </div>
                                 <span id="produk-badge"
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
-                            </a>
-                            <a href="{{ route('gambar.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
-                                <i class="fas fa-images"></i>
-                                <span>Gambar</span>
                             </a>
                         </div>
                     </div>
@@ -374,6 +375,11 @@
                                 <i class="fas fa-building"></i>
                                 <span>Bisnes</span>
                             </a>
+                            <a href="{{ route('gambar.index') }}"
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
+                                <i class="fas fa-images"></i>
+                                <span>Gambar</span>
+                            </a>
                             <a href="{{ route('produk.index') }}"
                                 class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
                                 <div class="flex items-center space-x-3">
@@ -382,11 +388,6 @@
                                 </div>
                                 <span id="produk-badge-desktop"
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
-                            </a>
-                            <a href="{{ route('gambar.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
-                                <i class="fas fa-images"></i>
-                                <span>Gambar</span>
                             </a>
                         </div>
                     </div>
