@@ -60,8 +60,13 @@ class WaybillController extends Controller
 
         // generate digest ikut formula (ikut doc / signature tool)
         $strToSign = $apiAccount . $bizContentJson . $timestamp . $privateKey;
-        $digest = strtoupper(md5($strToSign));
+        // $digest = strtoupper(md5($strToSign));
+        $bizContentJson = json_encode($bizContent, JSON_UNESCAPED_UNICODE);
 
+        // SHA256 HMAC + base64
+        $digest = base64_encode(
+            hash_hmac('sha256', $bizContentJson . $timestamp, $privateKey, true)
+        );
         // hantar request ke J&T
         $response = Http::asForm()->post($url, [
             'apiAccount' => $apiAccount,
