@@ -79,6 +79,8 @@ class WaybillController extends Controller
             ],
             'response' => $response->json()
         ]);
+        echo "trestj";
+        exit;
         dd($response);
     }
 }
