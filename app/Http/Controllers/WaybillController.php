@@ -13,72 +13,52 @@ class WaybillController extends Controller
         $privateKey = "8e88c8477d4e4939859c560192fcafbc";
         $url = "https://demoopenapi.jtexpress.my/webopenplatformapi/api/order/addOrder";
 
-        // timestamp (ms)
-        $timestamp = round(microtime(true) * 1000);
-
-        // BizContent JSON (example order)
-        $bizContent = [
-            "customerCode" => "ITTEST0001",
-            "actionType"   => "add",
-            "password"     => "AA7EDDC3B82704CA3717E88E67A3CAF1",
-            "txlogisticId" => "ORDER" . time(),
-            "expressType"  => "EZ",
-            "serviceType"  => "1",
-            "payType"      => "PP_PM",
-            "sender" => [
-                "name"        => "Ali",
-                "postCode"    => "56000",
-                "phone"       => "60123456789",
-                "address"     => "Jalan Ampang",
-                "countryCode" => "MYS"
-            ],
-            "receiver" => [
-                "name"        => "Abu",
-                "postCode"    => "43000",
-                "phone"       => "60198765432",
-                "address"     => "Bandar Baru Bangi",
-                "countryCode" => "MYS"
-            ],
-            "items" => [
-                [
-                    "itemName"     => "Sticker",
-                    "number"       => "2",
-                    "weight"       => "0.5",
-                    "itemValue"    => "10",
-                    "itemCurrency" => "MYR"
-                ]
-            ],
-            "packageInfo" => [
-                "packageQuantity" => "1",
-                "weight"          => "0.5",
-                "packageValue"    => "10",
-                "goodsType"       => "ITN8"
-            ]
-        ];
-
-        $bizContentJson = json_encode($bizContent, JSON_UNESCAPED_UNICODE);
-
-        // Digest = base64(md5(bizContent + privateKey))
-        $md5Bytes = md5($bizContentJson . $privateKey, true); // true → raw bytes
-        $digest   = base64_encode($md5Bytes);
+        $data = array(
+            'username' => 'username',
+            'api_key' => 'api_key',
+            'orderid' => 'ORDERID-0001',
+            'shipper_name' => 'PENGIRIM',
+            'shipper_contact' => 'PENGIRIM',
+            'shipper_phone' => '+628123456789',
+            'shipper_addr' => 'JL. Pengirim no.88, RT/RW:001/010, Pluit',
+            'origin_code' => 'JKT',
+            'receiver_name' => 'PENERIMA',
+            'receiver_phone' => '+62812348888',
+            'receiver_addr' => 'JL. Penerima no.1, RT/RW:04/07, Sidoarjo',
+            'receiver_zip' => '40123',
+            'destination_code' => 'JKT',
+            'receiver_area' => 'JKT001',
+            'qty' => '1',
+            'weight' => '1',
+            'goodsdesc' => 'TESTING!!',
+            'servicetype' => '1',
+            'insurance' => '122',
+            'orderdate' => '2021-08-01 22:02:00',
+            'item_name' => 'topi',
+            'cod' => '120000',
+            'sendstarttime' => '2021-08-01 08:00:00',
+            'sendendtime' => '2021-08-01 22:00:00',
+            'expresstype' => '1',
+            'goodsvalue' => '1000',
+        );
+        $data_json = json_encode(array('detail' => array($data)));
+        $data_request = array(
+            'data_param' => $data_json,
+            'data_sign' => base64_encode(md5($data_json . $privateKey))
+        );
 
         // Hantar ke J&T
-        $response = Http::asForm()->post($url, [
-            'apiAccount' => $apiAccount,
-            'digest'     => $digest,
-            'timestamp'  => $timestamp,
-            'bizContent' => $bizContentJson,
-        ]);
+        $response = Http::asForm()->post($url, $data_request);
 
-        $data = response()->json([
-            'request' => [
-                'apiAccount' => $apiAccount,
-                'digest'     => $digest,
-                'timestamp'  => $timestamp,
-                'bizContent' => $bizContent
-            ],
-            'response' => $response->json()
-        ]);
-        dd($data);
+        // $data = response()->json([
+        //     'request' => [
+        //         'apiAccount' => $apiAccount,
+        //         'digest'     => $digest,
+        //         'timestamp'  => $timestamp,
+        //         'bizContent' => $bizContent
+        //     ],
+        //     'response' => $response->json()
+        // ]);
+        dd($response);
     }
 }
