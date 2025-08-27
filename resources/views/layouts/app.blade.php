@@ -419,6 +419,15 @@
                                 <span id="prospek-buy-badge-desktop"
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
+                            <a href="{{ route('waybil.index') }}"
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('waybil.*') ? 'nav-link active' : '' }}">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-list"></i>
+                                    <span>Waybil</span>
+                                </div>
+                                <span id="prospek-buy-badge-desktop"
+                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                            </a>
                         </div>
                     </div>
 
