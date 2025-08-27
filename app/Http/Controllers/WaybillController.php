@@ -68,7 +68,9 @@ class WaybillController extends Controller
             hash_hmac('sha256', $bizContentJson . $timestamp, $privateKey, true)
         );
         // hantar request ke J&T
-        $response = Http::asForm()->post($url, [
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json'
+        ])->post($url, [
             'apiAccount' => $apiAccount,
             'digest'     => $digest,
             'timestamp'  => $timestamp,
@@ -85,6 +87,6 @@ class WaybillController extends Controller
             'response' => $response->json()
         ]);
 
-        dd($response);
+        dd($data);
     }
 }
