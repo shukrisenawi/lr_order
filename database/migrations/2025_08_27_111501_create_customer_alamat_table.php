@@ -15,7 +15,6 @@ return new class extends Migration
             $table->text('alamat');
             $table->string('poskod', 10);
             $table->string('no_tel');
-            $table->boolean('active')->default(true);
             $table->timestamps();
         });
     }

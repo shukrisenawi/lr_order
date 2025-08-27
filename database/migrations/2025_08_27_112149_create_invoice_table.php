@@ -11,15 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customer', function (Blueprint $table) {
+        Schema::create('invoice', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bisnes_id')->nullable()->constrained('bisnes')->onDelete('cascade');
-            $table->string('whatsapp_id');
-            $table->string('gelaran');
+            $table->string('invoice_id')->unique();
             $table->string('nama_penerima');
             $table->text('alamat');
-            $table->string('poskod', 10);
             $table->string('no_tel');
+            $table->string('jumlah');
+            $table->string('status')->default('pending');
+            $table->string('tracking_no');
+            $table->string('kurier');
+            $table->string('catatan');
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customer');
+        Schema::dropIfExists('invoice');
     }
 };

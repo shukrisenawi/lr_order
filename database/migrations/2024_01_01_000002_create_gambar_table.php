@@ -13,6 +13,7 @@ return new class extends Migration
             $table->foreignId('bisnes_id')->nullable()->constrained('bisnes')->onDelete('cascade');
             $table->string('nama');
             $table->string('path');
+            $table->boolean('ai_search')->default(true);
             $table->timestamps();
         });
     }
