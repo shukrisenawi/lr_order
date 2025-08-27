@@ -9,18 +9,18 @@ class WaybillController extends Controller
 {
     public function index()
     {
-        $apiAccount = "640826271705595946"; // testing
+        $apiAccount = "640826271705595946";
         $privateKey = "8e88c8477d4e4939859c560192fcafbc";
         $url = "https://demoopenapi.jtexpress.my/webopenplatformapi/api/order/addOrder";
 
-        // timestamp
+        // timestamp (ms)
         $timestamp = round(microtime(true) * 1000);
 
-        // bizContent (boleh isi ikut request / hardcode untuk test)
+        // BizContent JSON (example order)
         $bizContent = [
-            "customerCode" => "J0086474299",
+            "customerCode" => "ITTEST0001",
             "actionType"   => "add",
-            "password"     => "9C75439FB1FD01EB01861670DD1B949C",
+            "password"     => "AA7EDDC3B82704CA3717E88E67A3CAF1",
             "txlogisticId" => "ORDER" . time(),
             "expressType"  => "EZ",
             "serviceType"  => "1",
@@ -58,19 +58,12 @@ class WaybillController extends Controller
 
         $bizContentJson = json_encode($bizContent, JSON_UNESCAPED_UNICODE);
 
-        // generate digest ikut formula (ikut doc / signature tool)
-        $strToSign = $apiAccount . $bizContentJson . $timestamp . $privateKey;
-        // $digest = strtoupper(md5($strToSign));
-        $bizContentJson = json_encode($bizContent, JSON_UNESCAPED_UNICODE);
+        // Digest = base64(md5(bizContent + privateKey))
+        $md5Bytes = md5($bizContentJson . $privateKey, true); // true → raw bytes
+        $digest   = base64_encode($md5Bytes);
 
-        // SHA256 HMAC + base64
-        $digest = base64_encode(
-            hash_hmac('sha256', $bizContentJson . $timestamp, $privateKey, true)
-        );
-        // hantar request ke J&T
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json'
-        ])->post($url, [
+        // Hantar ke J&T
+        $response = Http::asForm()->post($url, [
             'apiAccount' => $apiAccount,
             'digest'     => $digest,
             'timestamp'  => $timestamp,
@@ -82,11 +75,10 @@ class WaybillController extends Controller
                 'apiAccount' => $apiAccount,
                 'digest'     => $digest,
                 'timestamp'  => $timestamp,
-                'bizContent' => $bizContent,
+                'bizContent' => $bizContent
             ],
             'response' => $response->json()
         ]);
-
         dd($data);
     }
 }
