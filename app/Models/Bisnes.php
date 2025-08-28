@@ -43,6 +43,6 @@ class Bisnes extends Model
 
     public function bisnesType()
     {
-        return $this->hasOne(BisnesType::class, 'type_id');
+        return $this->belongsTo(BisnesType::class, 'type_id');
     }
 }
