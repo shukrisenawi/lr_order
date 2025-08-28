@@ -19,6 +19,7 @@ class Bisnes extends Model
     protected $fillable = [
         'user_id',
         'nama_bisnes',
+        'type_id',
         'exp_date',
         'nama_syarikat',
         'no_pendaftaran',
@@ -38,5 +39,10 @@ class Bisnes extends Model
     public function prospeks()
     {
         return $this->hasMany(Prospek::class, 'bisnes_id');
+    }
+
+    public function bisnesType()
+    {
+        return $this->hasOne(BisnesType::class, 'type_id');
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('nama_bisnes');
             $table->date('exp_date')->nullable();
             $table->string('nama_syarikat');
-            $table->integer('type_id')->nullable()->default(1);
+            $table->integer('type_id')->nullable()->constrained()->onDelete(null)->default(1);
             $table->string('no_pendaftaran')->nullable();
             $table->text('alamat');
             $table->string('poskod', 10);

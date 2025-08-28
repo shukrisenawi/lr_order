@@ -12,7 +12,10 @@ class GambarController extends Controller
 
     public function index()
     {
-        // dd(session('selected_bisnes_id'));
+        // session(['selected_bisnes_id' => null]);
+        if (empty(session('selected_bisnes_id'))) {
+            return redirect()->route('bisnes.index')->with('error', 'Sila pilih bisnes terlebih dahulu.');
+        }
         $gambar = Gambar::where('bisnes_id', session('selected_bisnes_id'))->paginate(10);
         return view('gambar.index', compact('gambar'));
     }

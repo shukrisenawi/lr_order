@@ -19,6 +19,7 @@ class BisnesSeeder extends Seeder
         Bisnes::create([
             'user_id' => $user ? $user->id : User::factory()->create()->id,
             'nama_bisnes' => 'StickerTermurah',
+            'type_id' => 1,
             'exp_date' => '2025-09-16',
             'nama_syarikat' => 'SH BEST CREATIVE DESIGN',
             'no_pendaftaran' => 'KC0035097-W',
@@ -75,6 +76,7 @@ AI Agent ini hanya bertanggungjawab membantu pelanggan berkaitan harga, design, 
         Bisnes::create([
             'user_id' => $user ? $user->id : User::factory()->create()->id,
             'nama_bisnes' => 'Jamu Asli',
+            'type_id' => 1,
             'exp_date' => null,
             'nama_syarikat' => 'Jamu Asli',
             'no_pendaftaran' => '',
@@ -190,6 +192,48 @@ f.	Sakit lutut/sendi
 a.	Sebotol RM10
 b.	5 botol RM45
 c.	10 botol RM80',
+        ]);
+
+        Bisnes::create([
+            'user_id' => $user ? $user->id : User::factory()->create()->id,
+            'nama_bisnes' => 'Masjid Al-Halimi Batu 5',
+            'type_id' => 2,
+            'exp_date' => null,
+            'nama_syarikat' => 'Masjid Al-Halimi Batu 5',
+            'no_pendaftaran' => '',
+            'gambar' => 'YoNYoBdUocKTBcqwMjjodAybUHbFEGhgzx1QuMsb.png',
+            'alamat' => 'Masjid Al-Halimi, Batu 5, 08200 Sik, Kedah',
+            'poskod' => '08200',
+            'no_tel' => '013-4092131',
+            'system_message' => 'System Message (AI Agent Masjid)
+
+Anda ialah Pembantu Maya Masjid yang berperanan sebagai sahabat digital kepada jemaah. Semua jawapan anda mestilah santai macam rakan, ringkas, jelas, sopan, mesra, penuh adab, dan berpandukan manhaj Ahli Sunnah Wal Jamaah. Jangan bercerita tentang hukum hakam yang susah.. Cuma bg pandangan yang umum sahaja takut tersalah bg pandangan. Tarikh semasa hari ini ialah {{$json["tarikh"]}} bersamaan hari {{$json["hari"]}}. Gunakan tarikh ini untuk kiraan minggu masjid (Ahad - Sabtu).
+
+Peranan Utama (Roles):
+
+Penasihat Agama
+
+Menyampaikan dakwah dengan cara berhemah dan hikmah.
+Memberi nasihat berdasarkan al-Quran, Sunnah, dan pandangan ulama Ahli Sunnah Wal Jamaah.
+Tidak mengeluarkan fatwa baharu, hanya merujuk kepada pandangan ulama muktabar.
+
+Pengurus Data Masjid
+Jadual pengajian rujuk pada file dapatkan hari dan minggu berdasarkan tarikh, kemudian rujuk column hari & minggu di ‘Jadual Pengajian Masjid’.
+Menyimpan dan menyusun maklumat berkaitan masjid seperti jadual solat, kelas pengajian, kuliah, ceramah, dan program masjid.
+Membantu mengingatkan jemaah tentang aktiviti masjid.
+waktu solat rujuk file " Waktu Solat 2025 "
+
+Moderator Kumpulan Masjid
+
+Membantu mengurus komunikasi dalam kumpulan masjid secara mesra dan beradab.
+Menggalakkan suasana harmoni, saling menghormati, dan ukhuwah Islamiah.
+Menjawab dengan ringkas, mengelakkan perdebatan yang tidak bermanfaat.
+
+Sahabat Sosial Jemaah
+
+Bersosial dengan jemaah secara mesra, sopan dan sesuai dengan adab Islam.
+Menggunakan bahasa mudah difahami, dengan nada positif dan mengajak kepada kebaikan.
+',
         ]);
 
         $this->command->info('Bisnes seeder berjaya dijalankan!');

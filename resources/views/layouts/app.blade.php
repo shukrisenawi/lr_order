@@ -158,6 +158,11 @@
     <!-- Mobile menu overlay -->
     <div id="mobile-overlay" class="mobile-menu-overlay fixed inset-0 z-40 hidden" onclick="toggleMobileMenu()"></div>
 
+    @php
+        $userBisnes = Bisnes::where('user_id', Auth::id())->get();
+        $selectedBisnes = session('selected_bisnes_id') ? Bisnes::find(session('selected_bisnes_id')) : 0;
+
+    @endphp
     <!-- Header -->
     <header class="gradient-header shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -169,18 +174,12 @@
                         onclick="toggleMobileMenu()">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
-                    <h1 class="ml-2 md:ml-0 text-xl font-bold text-white">Sistem SH BEST CREATIVE DESIGN</h1>
+                    <h1 class="ml-2 md:ml-0 text-xl font-bold text-white">Sistem
+                        {{ strtolower($selectedBisnes->nama_syarikat) }}</h1>
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Business Selector -->
                     <div class="relative hidden md:block">
-                        @php
-                            $userBisnes = Bisnes::where('user_id', Auth::id())->get();
-                            $selectedBisnes = session('selected_bisnes_id')
-                                ? Bisnes::find(session('selected_bisnes_id'))
-                                : 0;
-
-                        @endphp
 
                         @if ($userBisnes->count() > 0)
                             <div class="relative inline-block text-left">
@@ -188,7 +187,9 @@
                                     class="inline-flex items-center px-4 py-2 border border-white/20 shadow-sm text-sm leading-4 font-medium rounded-lg text-white bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200"
                                     id="bisnes-menu-button" aria-expanded="true" aria-haspopup="true"
                                     onclick="toggleBisnesDropdown()">
-                                    <i class="fas fa-building mr-2"></i>
+                                    <img src="{{ $selectedBisnes && $selectedBisnes->gambar ? \App\Helpers\ImageHelper::businessImageUrl($selectedBisnes->gambar) : asset('img/logo-01.png') }}"
+                                        alt="Logo"
+                                        class="w-6 h-6 rounded-full object-cover mr-2 border-2 border-white/30">
                                     {{ $selectedBisnes ? $selectedBisnes->nama_bisnes : 'Pilih Senarai' }}
                                     <i class="fas fa-chevron-down ml-2"></i>
                                 </button>
@@ -201,7 +202,9 @@
                                             <a href="{{ route('switch-bisnes', $bisnes->id) }}"
                                                 class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gray-100 {{ $selectedBisnes && $selectedBisnes->id == $bisnes->id ? 'bg-gray-50 font-medium' : '' }} transition-colors"
                                                 role="menuitem">
-                                                <i class="fas fa-building mr-3 text-gray-400"></i>
+                                                <img src="{{ $bisnes && $bisnes->gambar ? \App\Helpers\ImageHelper::businessImageUrl($bisnes->gambar) : asset('img/logo-01.png') }}"
+                                                    alt="Logo"
+                                                    class="w-6 h-6 rounded-full object-cover mr-2 border-2 border-white/30">
                                                 <div>
                                                     <div class="font-medium">{{ $bisnes->nama_bines }}</div>
                                                     <div class="text-xs text-gray-500">{{ $bisnes->nama_syarikat }}
@@ -373,7 +376,7 @@
                             <a href="{{ route('bisnes.index') }}"
                                 class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('bisnes.*') ? 'nav-link active' : '' }}">
                                 <i class="fas fa-building"></i>
-                                <span>Bisnes</span>
+                                <span>Syarikat</span>
                             </a>
                             @if (session('selected_bisnes_id'))
                                 <a href="{{ route('gambar.index') }}"
@@ -381,15 +384,19 @@
                                     <i class="fas fa-images"></i>
                                     <span>Gambar</span>
                                 </a>
-                                <a href="{{ route('produk.index') }}"
-                                    class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
-                                    <div class="flex items-center space-x-3">
-                                        <i class="fas fa-box"></i>
-                                        <span>Produk</span>
-                                    </div>
-                                    <span id="produk-badge-desktop"
-                                        class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
-                                </a>
+
+
+                                @if ($selectedBisnes->type_id == 1)
+                                    <a href="{{ route('produk.index') }}"
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-box"></i>
+                                            <span>Produk</span>
+                                        </div>
+                                        <span id="produk-badge-desktop"
+                                            class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                    </a>
+                                @endif
                             @endif
                         </div>
                     </div>
@@ -408,29 +415,31 @@
                                     <span id="customer-badge-desktop"
                                         class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                                 </a>
-                                <a href="{{ route('customer.index') }}"
-                                    class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer.*') ? 'nav-link active' : '' }}">
-                                    <div class="flex items-center space-x-3">
-                                        <i class="fas fa-user-secret"></i>
-                                        <span>Pelanggan</span>
-                                    </div>
-                                    <span id="customer-buy-badge-desktop"
-                                        class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
-                                </a>
-                                <a href="{{ route('customer-alamat.index') }}"
-                                    class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-alamat.*') ? 'nav-link active' : '' }}">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>Alamat Pelanggan</span>
-                                </a>
-                                <a href="{{ route('customer-buy.index') }}"
-                                    class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-buy.*') ? 'nav-link active' : '' }}">
-                                    <div class="flex items-center space-x-3">
-                                        <i class="fas fa-shopping-cart"></i>
-                                        <span>Invoice</span>
-                                    </div>
-                                    <span id="customer-buy-badge-desktop"
-                                        class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
-                                </a>
+                                @if ($selectedBisnes->type_id == 1)
+                                    <a href="{{ route('customer.index') }}"
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer.*') ? 'nav-link active' : '' }}">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-user-secret"></i>
+                                            <span>Pelanggan</span>
+                                        </div>
+                                        <span id="customer-buy-badge-desktop"
+                                            class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                    </a>
+                                    <a href="{{ route('customer-alamat.index') }}"
+                                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-alamat.*') ? 'nav-link active' : '' }}">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        <span>Alamat Pelanggan</span>
+                                    </a>
+                                    <a href="{{ route('customer-buy.index') }}"
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-buy.*') ? 'nav-link active' : '' }}">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-shopping-cart"></i>
+                                            <span>Invoice</span>
+                                        </div>
+                                        <span id="customer-buy-badge-desktop"
+                                            class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     @endif

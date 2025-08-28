@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Models\BisnesType;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class BisnesController extends Controller
@@ -20,13 +21,16 @@ class BisnesController extends Controller
 
     public function create()
     {
-        return view('bisnes.create');
+
+        $types = BisnesType::all();
+        return view('bisnes.create', compact('types'));
     }
 
-    public function show(Bisnes $bisne)
+    public function show(Bisnes $bisnes)
     {
+        $types = BisnesType::all();
 
-        return view('bisnes.show', ['bisnes' => $bisne]);
+        return view('bisnes.show', ['bisnes' => $bisnes] + compact('types'));
     }
 
     public function store(Request $request)
@@ -36,6 +40,7 @@ class BisnesController extends Controller
             'nama_bisnes' => 'required|string|max:255',
             'exp_date' => 'nullable|date',
             'nama_syarikat' => 'required|string|max:255',
+            'type_id' => 'required|exists:bisnes_type,id',
             'no_pendaftaran' => 'nullable|string|max:255',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'alamat' => 'required|string',
@@ -48,6 +53,7 @@ class BisnesController extends Controller
         $data = [
             'user_id' => Auth::id(),
             'nama_bisnes' => $request->nama_bisnes,
+            'type_id' => $request->type_id,
             'exp_date' => $request->exp_date,
             'nama_syarikat' => $request->nama_syarikat,
             'no_pendaftaran' => $request->no_pendaftaran,
@@ -69,7 +75,8 @@ class BisnesController extends Controller
 
     public function edit(Bisnes $bisne)
     {
-        return view('bisnes.edit', ['bisnes' => $bisne]);
+        $types = BisnesType::all();
+        return view('bisnes.edit', ['bisnes' => $bisne] + compact('types'));
     }
 
     public function update(Request $request, Bisnes $bisne)
@@ -80,6 +87,7 @@ class BisnesController extends Controller
             'nama_bisnes' => 'required|string|max:255',
             'exp_date' => 'nullable|date',
             'nama_syarikat' => 'required|string|max:255',
+            'type_id' => 'required|exists:bisnes_type,id',
             'no_pendaftaran' => 'nullable|string|max:255',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'alamat' => 'required|string',

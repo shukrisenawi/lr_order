@@ -10,6 +10,7 @@ use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\DB;
 
 // Home route
@@ -112,14 +113,14 @@ Route::middleware(['auth'])->group(function () {
             return redirect()->route('bisnes.index');
         return view('prospek-livewire');
     })->name('prospek.index');
-    Route::resource('prospek', 'App\Http\Controllers\CustomerController')->except(['index']);
+    Route::resource('prospek', CustomerController::class)->except(['index']);
 
     Route::get('/customer', function () {
         if (empty(session('selected_bisnes_id')))
             return redirect()->route('bisnes.index');
         return view('customer-livewire');
     })->name('customer.index');
-    Route::resource('customer', 'App\Http\Controllers\CustomerController')->except(['index']);
+    Route::resource('customer', CustomerController::class)->except(['index']);
 
 
     Route::resource('customer-alamat', 'App\Http\Controllers\CustomerAlamatController');

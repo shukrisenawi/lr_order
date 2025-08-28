@@ -149,7 +149,27 @@
                                 </p>
                             @enderror
                         </div>
-                        <!-- Image -->
+                        <!-- Jenis -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Jenis Sistem <span
+                                    class="text-red-500">*</span></label>
+                            <select name="type_id" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all duration-300 @error('gambar_id') border-red-500 bg-red-50 @enderror">
+                                <option value="">Pilih Jenis Sistem</option>
+                                @foreach ($types as $type)
+                                    <option value="{{ $type->id }}"
+                                        {{ old('type_id') == $type->id ? 'selected' : '' }}>
+                                        {{ $type->type }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('type_id')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-800 mb-2">Logo Bisnes (Pilihan)</label>
                             <div class="mt-1 flex items-center">
