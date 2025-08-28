@@ -44,10 +44,10 @@
                     <tr>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Gambar</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-emerald-600 transition-colors"
-                            wire:click="sortBy('name')">
+                            wire:click="sortBy('nama')">
                             <div class="flex items-center">
                                 Nama
-                                @if ($sortField === 'name')
+                                @if ($sortField === 'nama')
                                     @if ($sortDirection === 'asc')
                                         <i class="fas fa-arrow-up ml-2 text-emerald-500"></i>
                                     @else
@@ -58,12 +58,26 @@
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Keterangan</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-emerald-600 transition-colors"
-                            wire:click="sortBy('price')">
+                            wire:click="sortBy('harga')">
                             <div class="flex items-center">
                                 Harga
-                                @if ($sortField === 'price')
+                                @if ($sortField === 'harga')
+                                    @if ($sortDirection === 'asc')
+                                        <i class="fas fa-arrow-up ml-2 text-emerald-500"></i>
+                                    @else
+                                        <i class="fas fa-arrow-down ml-2 text-emerald-500"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort ml-2 text-gray-400"></i>
+                                @endif
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-emerald-600 transition-colors"
+                            wire:click="sortBy('stok')">
+                            <div class="flex items-center">
+                                Stok
+                                @if ($sortField === 'stok')
                                     @if ($sortDirection === 'asc')
                                         <i class="fas fa-arrow-up ml-2 text-emerald-500"></i>
                                     @else
@@ -83,7 +97,7 @@
                             wire:key="produk-{{ $item->id }}">
                             <td class="px-6 py-4">
                                 @if ($item->gambar && $item->gambar->path)
-                                    <img src="{{ asset('storage/' . $item->gambar->path) }}" alt="{{ $item->name }}"
+                                    <img src="{{ $item->gambar->path }}" alt="{{ $item->nama }}"
                                         class="w-12 h-12 object-cover border border-gray-200 rounded-lg">
                                 @else
                                     <div
@@ -92,13 +106,12 @@
                                     </div>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->name }}</td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->nama }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">
-                                <div class="max-w-xs truncate">{{ $item->description ?? 'Tiada keterangan' }}</div>
+                                RM {{ number_format($item->harga ?? 0, 2) }}
                             </td>
                             <td class="px-6 py-4 text-sm font-medium text-gray-900">
-                                RM {{ number_format($item->price ?? 0, 2) }}
-                            </td>
+                                {{ $item->stok }}</ </td>
                             <td class="px-6 py-4">
                                 <div class="flex space-x-2">
                                     <a href="{{ route('produk.show', $item) }}"

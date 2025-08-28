@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GambarController;
+use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\DB;
 
 // Home route
@@ -100,12 +101,14 @@ Route::middleware(['auth'])->group(function () {
     })->name('bisnes.index');
 
     Route::resource('bisnes', BisnesController::class)->except(['index']);
+
     Route::get('/produk', function () {
         if (empty(session('selected_bisnes_id')))
             return redirect()->route('bisnes.index');
         return view('produk-livewire');
     })->name('produk.index');
-    Route::resource('produk', 'App\Http\Controllers\ProdukController')->except(['index']);
+    Route::resource('produk', ProdukController::class)->except(['index']);
+    Route::post('/produk/{produk}', [ProdukController::class, 'update'])->name('produk.update');
 
     Route::post('/gambar/{gambar}', [GambarController::class, 'update'])->name('gambar.update');
 

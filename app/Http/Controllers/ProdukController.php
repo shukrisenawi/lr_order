@@ -13,15 +13,6 @@ use Illuminate\Support\Facades\Storage;
 class ProdukController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware(function () {
-            if (empty(session('selected_bisnes_id')))
-                return redirect()->route('bisnes.index');
-        });
-        parent::__construct();
-    }
-
     public function index()
     {
         $produk = Produk::with('gambar')->paginate(10);
@@ -41,6 +32,7 @@ class ProdukController extends Controller
 
     public function store(Request $request)
     {
+
         $request->bisnes_id = session('selected_bisnes_id');
         // $request->merge(['bisnes_id' => session('selected_bisnes_id')]);
         $request->validate([
