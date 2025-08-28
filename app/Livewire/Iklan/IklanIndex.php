@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Livewire\Produk;
+namespace App\Livewire\Iklan;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Produk;
+use App\Models\Iklan;
 
-class ProdukIndex extends Component
+class IklanIndex extends Component
 {
 
     use WithPagination;
@@ -21,6 +21,11 @@ class ProdukIndex extends Component
     {
         $this->resetPage();
     }
+    public function updateOn(Iklan $id)
+    {
+        $id->on = !$id->on;
+        $id->save();
+    }
 
     public function sortBy($field)
     {
@@ -34,25 +39,25 @@ class ProdukIndex extends Component
 
     public function delete($id)
     {
-        $produk = Produk::findOrFail($id);
-        $produk->delete();
+        $iklan = Iklan::findOrFail($id);
+        $iklan->delete();
 
-        session()->flash('message', 'Product deleted successfully.');
-        $this->dispatch('product-deleted');
+        session()->flash('message', 'Iklan deleted successfully.');
+        $this->dispatch('iklan-deleted');
     }
 
     public function render()
     {
-        $produk = Produk::where('bisnes_id', session('selected_bisnes_id'))->with('gambar')
+        $iklan = Iklan::where('bisnes_id', session('selected_bisnes_id'))
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('name', 'like', '%' . $this->search . '%')
-                        ->orWhere('description', 'like', '%' . $this->search . '%');
+                    $q->where('nama_iklan', 'like', '%' . $this->search . '%')
+                        ->orWhere('keterangan', 'like', '%' . $this->search . '%');
                 });
             })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate(10);
 
-        return view('livewire.produk.produk-index', compact('produk'));
+        return view('livewire.iklan.iklan-index', compact('iklan'));
     }
 }

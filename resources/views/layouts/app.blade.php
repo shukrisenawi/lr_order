@@ -174,8 +174,7 @@
                         onclick="toggleMobileMenu()">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
-                    <h1 class="ml-2 md:ml-0 text-xl font-bold text-white">Sistem
-                        {{ strtolower($selectedBisnes->nama_syarikat) }}</h1>
+                    <h1 class="ml-2 md:ml-0 text-xl font-bold text-white">SISTEM TEMPAHAN PERNIAGAAN</h1>
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Business Selector -->
@@ -292,6 +291,14 @@
                                 <i class="fas fa-images"></i>
                                 <span>Gambar</span>
                             </a>
+
+                            <a href="{{ route('iklan.index') }}"
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('iklan.*') ? 'nav-link active' : '' }}">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-share-alt"></i>
+                                    <span>Iklan</span>
+                                </div>
+                            </a>
                             <a href="{{ route('produk.index') }}"
                                 class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
                                 <div class="flex items-center space-x-3">
@@ -384,9 +391,16 @@
                                     <i class="fas fa-images"></i>
                                     <span>Gambar</span>
                                 </a>
-
-
                                 @if ($selectedBisnes->type_id == 1)
+                                    <a href="{{ route('iklan.index') }}"
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('iklan.*') ? 'nav-link active' : '' }}">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-share-alt"></i>
+                                            <span>Iklan</span>
+                                        </div>
+                                    </a>
+
+
                                     <a href="{{ route('produk.index') }}"
                                         class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">

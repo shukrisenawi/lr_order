@@ -13,6 +13,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GambarController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\IklanController;
 use Illuminate\Support\Facades\DB;
 
 // Home route
@@ -109,6 +110,14 @@ Route::middleware(['auth'])->group(function () {
     })->name('produk.index');
     Route::resource('produk', ProdukController::class)->except(['index']);
     Route::post('/produk/{produk}', [ProdukController::class, 'update'])->name('produk.update');
+
+    Route::get('/iklan', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        return view('iklan-livewire');
+    })->name('iklan.index');
+    Route::resource('iklan', IklanController::class)->except(['index']);
+    Route::post('/iklan/{iklan}', [IklanController::class, 'update'])->name('iklan.update');
 
     Route::post('/gambar/{gambar}', [GambarController::class, 'update'])->name('gambar.update');
 

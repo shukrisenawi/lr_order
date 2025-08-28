@@ -13,6 +13,7 @@ class Produk extends Model
 
     protected $fillable = [
         'nama',
+        'bisnes_id',
         'harga',
         'stok',
         'gambar_id',
@@ -29,8 +30,9 @@ class Produk extends Model
         return $this->belongsTo(Gambar::class, 'gambar_id');
     }
 
-    public function purchases()
+
+    public function bisnes()
     {
-        return $this->hasMany(ProspekBuy::class, 'produk_id');
+        return $this->belongsTo(Bisnes::class, 'bisnes_id');
     }
 }

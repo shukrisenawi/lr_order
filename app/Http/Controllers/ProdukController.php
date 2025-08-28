@@ -15,13 +15,14 @@ class ProdukController extends Controller
 
     public function index()
     {
-        $produk = Produk::with('gambar')->paginate(10);
+
+        $produk = Produk::where('bisnes_id', session('selected_bisnes_id'))->with('gambar')->paginate(10);
         return view('produk.index', compact('produk'));
     }
 
     public function create()
     {
-        $gambar = Gambar::all();
+        $gambar = Gambar::where('bisnes_id', session('selected_bisnes_id'))->get();
         return view('produk.create', compact('gambar'));
     }
 
@@ -32,11 +33,11 @@ class ProdukController extends Controller
 
     public function store(Request $request)
     {
-
-        $request->bisnes_id = session('selected_bisnes_id');
-        // $request->merge(['bisnes_id' => session('selected_bisnes_id')]);
+        $request->merge(['bisnes_id' => session('selected_bisnes_id')]);
+        // dd(session('selected_bisnes_id'));
         $request->validate([
             'nama' => 'required|string|max:255',
+            'bisnes_id' => 'required|exists:bisnes,id',
             'harga' => 'required|numeric|min:0',
             'stok' => 'required|integer|min:0',
             'gambar_id' => 'nullable|exists:gambar,id',
@@ -46,21 +47,12 @@ class ProdukController extends Controller
         $produk = Produk::create($request->all());
 
 
-        // Broadcast new data event
-        broadcast(new NewDataEvent('produk', [
-            'id' => $produk->id,
-            'message' => 'Produk baru telah ditambah',
-            'nama' => $produk->nama,
-            'harga' => $produk->harga,
-            'stok' => $produk->stok
-        ], auth()->id()));
-
         return redirect()->route('produk.index')->with('success', 'Produk created successfully.');
     }
 
     public function edit(Produk $produk)
     {
-        $gambar = Gambar::all();
+        $gambar = Gambar::where('bisnes_id', session('selected_bisnes_id'))->get();
         return view('produk.edit', compact('produk', 'gambar'));
     }
 
