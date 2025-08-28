@@ -49,9 +49,8 @@
 
                         <!-- Gelaran -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama/Gelaran <span
-                                    class="text-red-500">*</span></label>
-                            <input type="text" name="gelaran" value="{{ old('gelaran') }}" required
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama/Gelaran</label>
+                            <input type="text" name="gelaran" value="{{ old('gelaran') }}"
                                 placeholder="Contoh: Encik Ahmad"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('gelaran') border-red-500 bg-red-50 @enderror">
                             @error('gelaran')
@@ -67,33 +66,21 @@
                     <div class="space-y-6">
                         <!-- Email -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Emel (Pilihan)</label>
-                            <input type="email" name="email" value="{{ old('email') }}"
-                                placeholder="Contoh: ahmad@example.com"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('email') border-red-500 bg-red-50 @enderror">
-                            @error('email')
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Session Id (Pilihan)</label>
+                            <input type="text" name="session_id" value="{{ old('session_id') }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('session_id') border-red-500 bg-red-50 @enderror">
+                            @error('session_id')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
-
-                        <!-- Bisnes -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Bisnes <span
-                                    class="text-red-500">*</span></label>
-                            <select name="bisnes_id" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('bisnes_id') border-red-500 bg-red-50 @enderror">
-                                <option value="">Pilih Bisnes</option>
-                                @foreach ($bisnes as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ old('bisnes_id', $selectedBisnes->id ?? '') == $item->id ? 'selected' : '' }}>
-                                        {{ $item->nama_bines }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('bisnes_id')
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">On AI </label>
+                            <input type="checkbox" name="on" value="1" {{ old('on') ? 'checked' : '' }}
+                                class="toggle toggle-success @error('on') border-red-500 bg-red-50 @enderror">
+                            @error('on')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}

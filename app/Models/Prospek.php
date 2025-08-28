@@ -13,8 +13,10 @@ class Prospek extends Model
 
     protected $fillable = [
         'no_tel',
+        'session_id',
         'gelaran',
         'status',
+        'on',
         'bisnes_id',
     ];
 

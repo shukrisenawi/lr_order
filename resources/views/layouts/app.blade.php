@@ -396,7 +396,7 @@
                                         class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('iklan.*') ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <i class="fas fa-share-alt"></i>
-                                            <span>Iklan</span>
+                                            <span>Iklan AI</span>
                                         </div>
                                     </a>
 

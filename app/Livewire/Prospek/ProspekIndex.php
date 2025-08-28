@@ -22,6 +22,11 @@ class ProspekIndex extends Component
         $this->resetPage();
     }
 
+    public function updateOn(Prospek $id)
+    {
+        $id->on = !$id->on;
+        $id->save();
+    }
     public function sortBy($field)
     {
         if ($this->sortField === $field) {
@@ -47,10 +52,7 @@ class ProspekIndex extends Component
     public function render()
     {
         $prospek = Prospek::with('bisnes')
-            ->whereHas('bisnes', function ($query) {
-                $query->where('user_id', Auth::id());
-            })
-            ->when($this->search, function ($query) {
+            ->where('bisnes_id', session('selected_bisnes_id'))->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('gelaran', 'like', '%' . $this->search . '%')
                         ->orWhere('no_tel', 'like', '%' . $this->search . '%')

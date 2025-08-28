@@ -12,9 +12,10 @@ return new class extends Migration
             $table->id();
             $table->string('no_tel');
             $table->string('gelaran')->nullable();
+            $table->string('session_id')->nullable();
             $table->string('status')->default('prospek');
             $table->foreignId('bisnes_id')->nullable()->constrained('bisnes')->onDelete('cascade');
-            $table->boolean('on')->bool(true);
+            $table->boolean('on')->default(true);
             $table->timestamps();
         });
     }

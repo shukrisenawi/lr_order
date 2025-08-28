@@ -14,6 +14,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\GambarController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\IklanController;
+use App\Http\Controllers\ProspekController;
 use Illuminate\Support\Facades\DB;
 
 // Home route
@@ -129,7 +130,8 @@ Route::middleware(['auth'])->group(function () {
             return redirect()->route('bisnes.index');
         return view('prospek-livewire');
     })->name('prospek.index');
-    Route::resource('prospek', CustomerController::class)->except(['index']);
+    Route::post('/prospek/{prospek}', [ProspekController::class, 'update'])->name('prospek.update');
+    Route::resource('prospek', ProspekController::class)->except(['index']);
 
     Route::get('/customer', function () {
         if (empty(session('selected_bisnes_id')))

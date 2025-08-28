@@ -32,7 +32,7 @@
                 <i class="fas fa-search text-gray-400"></i>
             </div>
             <input type="text" wire:model.live.debounce.300ms="search"
-                placeholder="Cari prospek mengikut nama, telefon, atau emel..."
+                placeholder="Cari prospek mengikut whatsapp ID atau nama..."
                 class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-100 focus:outline-none transition-all duration-300 shadow-sm">
         </div>
     </div>
@@ -44,24 +44,9 @@
                 <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                     <tr>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-amber-600 transition-colors"
-                            wire:click="sortBy('gelaran')">
-                            <div class="flex items-center">
-                                Name
-                                @if ($sortField === 'gelaran')
-                                    @if ($sortDirection === 'asc')
-                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
-                                    @else
-                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
-                                    @endif
-                                @else
-                                    <i class="fas fa-sort ml-2 text-gray-400"></i>
-                                @endif
-                            </div>
-                        </th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-amber-600 transition-colors"
                             wire:click="sortBy('no_tel')">
                             <div class="flex items-center">
-                                Phone
+                                ID Whatsapp
                                 @if ($sortField === 'no_tel')
                                     @if ($sortDirection === 'asc')
                                         <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
@@ -73,8 +58,37 @@
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Business</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700"
+                            wire:click="sortBy('gelaran')">
+                            <div class="flex items-center">
+                                Nama/gelaran
+                                @if ($sortField === 'gelaran')
+                                    @if ($sortDirection === 'asc')
+                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
+                                    @else
+                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort ml-2 text-gray-400"></i>
+                                @endif
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700"
+                            wire:click="sortBy('session_id')">
+                            <div class="flex items-center">
+                                Session
+                                @if ($sortField === 'session_id')
+                                    @if ($sortDirection === 'asc')
+                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
+                                    @else
+                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort ml-2 text-gray-400"></i>
+                                @endif
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">On Ai</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                     </tr>
                 </thead>
@@ -82,22 +96,16 @@
                     @forelse($prospek as $item)
                         <tr class="hover:bg-amber-50 transition-colors duration-200"
                             wire:key="prospek-{{ $item->id }}">
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->gelaran }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_tel }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->email ?? 'N/A' }}</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                                    {{ $item->bisnes->nama_bines ?? 'N/A' }}
-                                </span>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->no_tel }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->gelaran ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->session_id ?? '-' }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">
+                                <input type="checkbox" wire:change="updateOn({{ $item->id }})"
+                                    class="toggle toggle-sm toggle-success" {{ $item->on ? 'checked' : '' }}>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="flex space-x-2">
-                                    <a href="{{ route('prospek.show', $item) }}"
-                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-amber-700 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors duration-200">
-                                        <i class="fas fa-eye mr-1"></i>
-                                        View
-                                    </a>
+
                                     <a href="{{ route('prospek.edit', $item) }}"
                                         class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-700 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors duration-200">
                                         <i class="fas fa-edit mr-1"></i>
