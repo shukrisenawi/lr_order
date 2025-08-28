@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\GambarController;
 use Illuminate\Support\Facades\DB;
 
 // Home route
@@ -97,6 +98,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bisnes', function () {
         return view('bisnes-livewire');
     })->name('bisnes.index');
+
     Route::resource('bisnes', BisnesController::class)->except(['index']);
     Route::get('/produk', function () {
         if (empty(session('selected_bisnes_id')))
@@ -105,7 +107,9 @@ Route::middleware(['auth'])->group(function () {
     })->name('produk.index');
     Route::resource('produk', 'App\Http\Controllers\ProdukController')->except(['index']);
 
-    Route::resource('gambar', 'App\Http\Controllers\GambarController');
+    Route::post('/gambar/{gambar}', [GambarController::class, 'update'])->name('gambar.update');
+
+    Route::resource('gambar', GambarController::class);
 
     // Customer Management Routes
     Route::get('/prospek', function () {

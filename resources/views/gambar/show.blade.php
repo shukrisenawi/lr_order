@@ -33,10 +33,14 @@
                 </div>
                 <div class="p-6">
                     @if ($gambar->path)
-                        <div class="rounded-xl overflow-hidden border border-gray-200 shadow-sm">
-                            <img src="{{ asset('storage/' . $gambar->path) }}" alt="{{ $gambar->nama }}"
-                                class="w-full h-auto object-contain bg-gray-50">
+                        <div class="rounded-xl mb-5 overflow-hidden border border-gray-200 shadow-sm">
+                            <img src="{{ $gambar->path }}" alt="{{ $gambar->nama ?? 'Gambar' }}" class="max-w-full">
                         </div>
+                        @if ($gambar->ai_search)
+                            <span class="badge badge-success rounded-2xl px-3"><i
+                                    class="fas fa-check-circle text-green-600"></i>
+                                Carian AI</span>
+                        @endif
                     @else
                         <div
                             class="w-full h-96 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-xl flex items-center justify-center">
@@ -66,15 +70,7 @@
                         <div>
                             <label class="block text-sm font-semibold text-gray-800 mb-2">Keterangan</label>
                             <div class="text-gray-900 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200 min-h-16">
-                                {{ $gambar->description ?? 'Tiada keterangan' }}
-                            </div>
-                        </div>
-
-                        <!-- Alt Text -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Teks Alternatif</label>
-                            <div class="text-gray-900 bg-gray-50 px-4 py-3 rounded-xl border border-gray-200">
-                                {{ $gambar->alt_text ?? 'Tiada teks alternatif' }}
+                                {{ $gambar->keterangan ?? 'Tiada keterangan' }}
                             </div>
                         </div>
 

@@ -38,9 +38,12 @@ class GambarController extends Controller
             return back()->withErrors(['gambar' => 'Sila pilih sekurang-kurangnya satu gambar untuk dimuat naik.'])->withInput();
         }
 
+        $request->merge(['ai_search' => $request->has('ai_search') ? 1 : 0]);
         $request->validate([
             'nama' => 'required|string|max:255',
+            'keterangan' => 'nullable|string|max:255',
             'gambar' => 'required|array|min:1',
+            'ai_search' => 'nullable|boolean',
             'gambar.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'nama.required' => 'Nama gambar diperlukan.',
@@ -64,10 +67,13 @@ class GambarController extends Controller
 
         foreach ($files as $index => $file) {
             if ($file && $file->isValid()) {
-                $path = $file->store('gambar', 'public');
-                Log::info('File stored', ['path' => $path, 'index' => $index]);
+                $path = $file->store('gambar', 'upload');
+
+                // $path = $file->store('gambar', 'public');
+                // $url = Storage::disk('public')->url($path);
 
                 $nama = count($files) > 1 ? $request->nama . ' - ' . ($index + 1) : $request->nama;
+                // $keterangan = count($files) > 1 ? $request->keterangan . ' - ' . ($index + 1) : $request->keterangan;
 
                 // Get the selected business ID from session or use the first business
                 $bisnesId = session('selected_bisnes_id');
@@ -84,7 +90,9 @@ class GambarController extends Controller
                 $gambar = Gambar::create([
                     'bisnes_id' => $bisnesId,
                     'nama' => $nama,
-                    'path' => $path,
+                    'keterangan' => $request->keterangan,
+                    'ai_search' => $request->ai_search,
+                    'path' => Storage::disk('upload')->url($path),
                 ]);
 
                 $uploadedCount++;
@@ -111,20 +119,14 @@ class GambarController extends Controller
 
     public function update(Request $request, Gambar $gambar)
     {
+        $request->merge(['ai_search' => $request->has('ai_search') ? 1 : 0]);
         $request->validate([
             'nama' => 'required|string|max:255',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'keterangan' => 'nullable|string|max:255',
+            'ai_search' => 'nullable|boolean',
         ]);
 
-        $data = ['nama' => $request->nama];
-
-        if ($request->hasFile('gambar')) {
-            // Delete old image
-            if ($gambar->path) {
-                Storage::disk('public')->delete($gambar->path);
-            }
-            $data['path'] = $request->file('gambar')->store('gambar', 'public');
-        }
+        $data = ['nama' => $request->nama, 'keterangan' => $request->keterangan, 'ai_search' => $request->ai_search];
 
         $gambar->update($data);
 
@@ -134,7 +136,9 @@ class GambarController extends Controller
     public function destroy(Gambar $gambar)
     {
         if ($gambar->path) {
-            Storage::disk('public')->delete($gambar->path);
+            $relativePath = str_replace(url('upload') . '/', '', $gambar->path);
+
+            Storage::disk('upload')->delete($relativePath);
         }
         $gambar->delete();
 

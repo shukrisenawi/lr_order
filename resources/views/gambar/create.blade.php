@@ -33,7 +33,8 @@
                     <div class="space-y-6">
                         <!-- Title -->
                         <div>
-                            <label for="nama" class="block text-sm font-semibold text-gray-800 mb-2">Nama Gambar</label>
+                            <label for="nama" class="block text-sm font-semibold text-gray-800 mb-2">Nama Gambar <span
+                                    class="text-red-500">*</span></label>
                             <input type="text" name="nama" id="nama" value="{{ old('nama') }}" required
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 focus:border-purple-500 transition-all duration-300 @error('nama') border-red-500 @enderror">
                             @error('nama')
@@ -44,6 +45,29 @@
                             @enderror
                         </div>
 
+                        <div>
+                            <label for="keterangan" class="block text-sm font-semibold text-gray-800 mb-2">Keterangan
+                            </label>
+                            <input type="text" name="keterangan" id="keterangan" value="{{ old('keterangan') }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-purple-100 focus:border-purple-500 transition-all duration-300 @error('keterangan') border-red-500 @enderror">
+                            @error('keterangan')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                        <div class="mb-5">
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Carian AI </label>
+                            <input type="checkbox" name="ai_search" value="1" {{ old('ai_search') ? 'checked' : '' }}
+                                class="toggle toggle-success @error('ai_search') border-red-500 bg-red-50 @enderror">
+                            @error('ai_search')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
                         <!-- Image Files -->
                         <div>
                             <label for="gambar" class="block text-sm font-semibold text-gray-800 mb-2">Fail Gambar (Boleh

@@ -48,8 +48,8 @@
                     <!-- Image -->
                     <div class="aspect-w-16 aspect-h-9">
                         @if ($item->path)
-                            <img src="{{ \App\Helpers\ImageHelper::galleryImageUrl($item->path) }}"
-                                alt="{{ $item->nama ?? 'Gambar' }}" class="w-full h-48 object-cover">
+                            <img src="{{ $item->path }}" alt="{{ $item->nama ?? 'Gambar' }}"
+                                class="w-full h-48 object-cover">
                         @else
                             <div
                                 class="w-full h-48 bg-gradient-to-br from-purple-100 to-indigo-100 flex items-center justify-center">
@@ -63,12 +63,21 @@
                         <h3 class="text-lg font-semibold text-gray-900 mb-2 truncate">{{ $item->nama ?? 'Tanpa Tajuk' }}
                         </h3>
                         <p class="text-gray-600 text-sm mb-4 line-clamp-2">
-                            {{ Str::limit($item->description ?? 'Tiada keterangan', 100) }}</p>
+                            {{ Str::limit($item->keterangan ?? '', 100) }}</p>
 
                         <!-- Actions -->
                         <div class="flex justify-between items-center">
                             <span class="text-xs text-gray-500">{{ $item->created_at->format('d/m/Y') }}</span>
                             <div class="flex space-x-2">
+                                @if ($item->ai_search)
+                                    <a href="#"
+                                        class="inline-flex items-center justify-center w-8 h-8 text-green-700 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors duration-200"
+                                        title="Lihat">
+                                        <i class="fas fa-check-circle"></i>
+                                    </a>
+                                @else
+                                @endif
+
                                 <a href="{{ route('gambar.show', $item) }}"
                                     class="inline-flex items-center justify-center w-8 h-8 text-purple-700 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors duration-200"
                                     title="Lihat">

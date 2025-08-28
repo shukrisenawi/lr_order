@@ -15,6 +15,7 @@ class Gambar extends Model
         'bisnes_id',
         'nama',
         'keterangan',
+        'ai_search',
         'path',
     ];
 
