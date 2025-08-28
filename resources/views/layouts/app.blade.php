@@ -375,63 +375,65 @@
                                 <i class="fas fa-building"></i>
                                 <span>Bisnes</span>
                             </a>
-                            <a href="{{ route('gambar.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
-                                <i class="fas fa-images"></i>
-                                <span>Gambar</span>
-                            </a>
-                            <a href="{{ route('produk.index') }}"
-                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
-                                <div class="flex items-center space-x-3">
-                                    <i class="fas fa-box"></i>
-                                    <span>Produk</span>
-                                </div>
-                                <span id="produk-badge-desktop"
-                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
-                            </a>
+                            @if (session('selected_bisnes_id'))
+                                <a href="{{ route('gambar.index') }}"
+                                    class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
+                                    <i class="fas fa-images"></i>
+                                    <span>Gambar</span>
+                                </a>
+                                <a href="{{ route('produk.index') }}"
+                                    class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-box"></i>
+                                        <span>Produk</span>
+                                    </div>
+                                    <span id="produk-badge-desktop"
+                                        class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                </a>
+                            @endif
                         </div>
                     </div>
-
-                    <!-- Customer Management Section -->
-                    <div class="pt-4">
-                        <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Customer
-                            Management</h3>
-                        <div class="mt-2 space-y-1">
-                            <a href="{{ route('prospek.index') }}"
-                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek.*') ? 'nav-link active' : '' }}">
-                                <div class="flex items-center space-x-3">
-                                    <i class="fas fa-users"></i>
-                                    <span>Prospek</span>
-                                </div>
-                                <span id="customer-badge-desktop"
-                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
-                            </a>
-                            <a href="{{ route('customer.index') }}"
-                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer.*') ? 'nav-link active' : '' }}">
-                                <div class="flex items-center space-x-3">
-                                    <i class="fas fa-user-secret"></i>
-                                    <span>Pelanggan</span>
-                                </div>
-                                <span id="customer-buy-badge-desktop"
-                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
-                            </a>
-                            <a href="{{ route('customer-alamat.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-alamat.*') ? 'nav-link active' : '' }}">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Alamat Pelanggan</span>
-                            </a>
-                            <a href="{{ route('customer-buy.index') }}"
-                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-buy.*') ? 'nav-link active' : '' }}">
-                                <div class="flex items-center space-x-3">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    <span>Pembelian</span>
-                                </div>
-                                <span id="customer-buy-badge-desktop"
-                                    class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
-                            </a>
+                    @if (session('selected_bisnes_id'))
+                        <!-- Customer Management Section -->
+                        <div class="pt-4">
+                            <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Customer
+                                Management</h3>
+                            <div class="mt-2 space-y-1">
+                                <a href="{{ route('prospek.index') }}"
+                                    class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek.*') ? 'nav-link active' : '' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-users"></i>
+                                        <span>Prospek</span>
+                                    </div>
+                                    <span id="customer-badge-desktop"
+                                        class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                </a>
+                                <a href="{{ route('customer.index') }}"
+                                    class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer.*') ? 'nav-link active' : '' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-user-secret"></i>
+                                        <span>Pelanggan</span>
+                                    </div>
+                                    <span id="customer-buy-badge-desktop"
+                                        class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                </a>
+                                <a href="{{ route('customer-alamat.index') }}"
+                                    class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-alamat.*') ? 'nav-link active' : '' }}">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Alamat Pelanggan</span>
+                                </a>
+                                <a href="{{ route('customer-buy.index') }}"
+                                    class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-buy.*') ? 'nav-link active' : '' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        <span>Invoice</span>
+                                    </div>
+                                    <span id="customer-buy-badge-desktop"
+                                        class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-
+                    @endif
                     <!-- Account Section -->
                     <div class="pt-4">
                         <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Account</h3>

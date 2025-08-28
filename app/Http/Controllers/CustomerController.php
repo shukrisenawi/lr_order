@@ -10,6 +10,16 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(function () {
+            if (empty(session('selected_bisnes_id')))
+                return redirect()->route('bisnes.index');
+        });
+        parent::__construct();
+    }
+
     public function index()
     {
         $selectedBisnesId = BisnesHelper::getSelectedBisnesId();

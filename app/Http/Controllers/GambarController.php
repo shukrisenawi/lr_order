@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 
 class GambarController extends Controller
 {
+
     public function index()
     {
         // dd(session('selected_bisnes_id'));

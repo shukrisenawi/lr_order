@@ -8,6 +8,7 @@ use App\Models\Produk;
 
 class ProdukIndex extends Component
 {
+
     use WithPagination;
 
     public $search = '';

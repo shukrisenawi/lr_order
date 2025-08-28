@@ -11,6 +11,15 @@ use Illuminate\Support\Facades\DB;
 
 class CustomerBuyController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(function () {
+            if (empty(session('selected_bisnes_id')))
+                return redirect()->route('bisnes.index');
+        });
+        parent::__construct();
+    }
     public function index()
     {
         $customerBuys = CustomerBuy::with(['customerAlamat.customer', 'produk'])

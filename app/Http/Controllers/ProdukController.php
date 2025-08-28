@@ -9,8 +9,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
+
 class ProdukController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware(function () {
+            if (empty(session('selected_bisnes_id')))
+                return redirect()->route('bisnes.index');
+        });
+        parent::__construct();
+    }
+
     public function index()
     {
         $produk = Produk::with('gambar')->paginate(10);

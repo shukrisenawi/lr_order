@@ -98,6 +98,8 @@ Route::middleware(['auth'])->group(function () {
     })->name('bisnes.index');
     Route::resource('bisnes', BisnesController::class)->except(['index']);
     Route::get('/produk', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
         return view('produk-livewire');
     })->name('produk.index');
     Route::resource('produk', 'App\Http\Controllers\ProdukController')->except(['index']);
@@ -106,11 +108,15 @@ Route::middleware(['auth'])->group(function () {
 
     // Customer Management Routes
     Route::get('/prospek', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
         return view('prospek-livewire');
     })->name('prospek.index');
     Route::resource('prospek', 'App\Http\Controllers\CustomerController')->except(['index']);
 
     Route::get('/customer', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
         return view('customer-livewire');
     })->name('customer.index');
     Route::resource('customer', 'App\Http\Controllers\CustomerController')->except(['index']);
@@ -119,6 +125,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('customer-alamat', 'App\Http\Controllers\CustomerAlamatController');
 
     Route::get('/customer-buy', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
         return view('customer-buy-livewire');
     })->name('customer-buy.index');
     Route::resource('customer-buy', 'App\Http\Controllers\CustomerBuyController')->except(['index']);
