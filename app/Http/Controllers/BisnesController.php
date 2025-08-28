@@ -26,11 +26,12 @@ class BisnesController extends Controller
         return view('bisnes.create', compact('types'));
     }
 
-    public function show(Bisnes $bisnes)
+    public function show(Bisnes $bisne)
     {
+
         $types = BisnesType::all();
 
-        return view('bisnes.show', ['bisnes' => $bisnes] + compact('types'));
+        return view('bisnes.show', ['bisnes' => $bisne] + compact('types'));
     }
 
     public function store(Request $request)

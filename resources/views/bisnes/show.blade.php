@@ -117,6 +117,12 @@
                         </div>
                     </div>
                     <div class="md:col-span-2">
+                        <label class="block text-sm font-semibold text-gray-800 mb-2">Jenis Sistem</label>
+                        <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
+                            <p class="text-gray-900">{{ $bisnes->bisnesType->type }}</p>
+                        </div>
+                    </div>
+                    <div class="md:col-span-2">
                         <label class="block text-sm font-semibold text-gray-800 mb-2">Arahan AI</label>
                         <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
                             <p class="text-gray-900">{!! nl2br($bisnes->system_message) !!}</p>
