@@ -17,7 +17,15 @@ class Customer extends Model
     }
 
     protected $fillable = [
-        'nama',
+        'bisnes_id',
+        'whatsapp_id',
+        'gelaran',
+        'nama_penerima',
+        'alamat',
+        'poskod',
+        'no_tel',
+        'email',
+        'catatan'
     ];
 
     public function user()

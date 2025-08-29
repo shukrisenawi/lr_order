@@ -138,6 +138,7 @@ Route::middleware(['auth'])->group(function () {
             return redirect()->route('bisnes.index');
         return view('customer-livewire');
     })->name('customer.index');
+    Route::post('/customer/generate', [CustomerController::class, 'generate'])->name('customer.generate');
     Route::resource('customer', CustomerController::class)->except(['index']);
 
 

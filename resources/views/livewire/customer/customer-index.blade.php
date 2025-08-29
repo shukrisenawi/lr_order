@@ -44,10 +44,10 @@
                 <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                     <tr>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-amber-600 transition-colors"
-                            wire:click="sortBy('gelaran')">
+                            wire:click="sortBy('nama_penerima')">
                             <div class="flex items-center">
-                                Name
-                                @if ($sortField === 'gelaran')
+                                Nama
+                                @if ($sortField === 'nama_penerima')
                                     @if ($sortDirection === 'asc')
                                         <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
                                     @else
@@ -59,9 +59,25 @@
                             </div>
                         </th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-amber-600 transition-colors"
+                            wire:click="sortBy('alamat')">
+                            <div class="flex items-center">
+                                Alamat
+                                @if ($sortField === 'alamat')
+                                    @if ($sortDirection === 'asc')
+                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
+                                    @else
+                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort ml-2 text-gray-400"></i>
+                                @endif
+                            </div>
+                        </th>
+
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-amber-600 transition-colors"
                             wire:click="sortBy('no_tel')">
                             <div class="flex items-center">
-                                Phone
+                                No Tel
                                 @if ($sortField === 'no_tel')
                                     @if ($sortDirection === 'asc')
                                         <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
@@ -73,8 +89,22 @@
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Business</th>
+
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-amber-600 transition-colors"
+                            wire:click="sortBy('catatan')">
+                            <div class="flex items-center">
+                                Catatan
+                                @if ($sortField === 'catatan')
+                                    @if ($sortDirection === 'asc')
+                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
+                                    @else
+                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort ml-2 text-gray-400"></i>
+                                @endif
+                            </div>
+                        </th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                     </tr>
                 </thead>
@@ -83,14 +113,10 @@
                         <tr class="hover:bg-amber-50 transition-colors duration-200"
                             wire:key="customer-{{ $item->id }}">
                             <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->gelaran }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->nama_penerima }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->alamat }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_tel }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->email ?? 'N/A' }}</td>
-                            <td class="px-6 py-4">
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-                                    {{ $item->bisnes->nama_bines ?? 'N/A' }}
-                                </span>
-                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->catatan }}</td>
                             <td class="px-6 py-4">
                                 <div class="flex space-x-2">
                                     <a href="{{ route('customer.show', $item) }}"

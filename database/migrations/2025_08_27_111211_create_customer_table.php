@@ -20,6 +20,8 @@ return new class extends Migration
             $table->text('alamat');
             $table->string('poskod', 10);
             $table->string('no_tel');
+            $table->string('email');
+            $table->string('catatan');
             $table->timestamps();
         });
     }

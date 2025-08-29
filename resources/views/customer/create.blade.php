@@ -26,20 +26,32 @@
                 <p class="text-gray-600 text-sm mt-1">Sila isi semua maklumat yang diperlukan</p>
             </div>
 
-            <form method="POST" action="{{ route('prospek.store') }}" class="p-6">
+            <form method="POST" action="{{ route('customer.store') }}" class="p-6">
                 @csrf
-
+                <div class="mb-3">
+                    <label class="block text-sm font-semibold text-gray-800 mb-2">Nama, alamat dan nombor telefon</label>
+                    <textarea name="text_alamat" rows="4"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('text_alamat') border-red-500 bg-red-50 @enderror">{{ old('text_alamat') }}</textarea>
+                    @error('text_alamat')
+                        <p class="mt-2 text-sm text-red-600 flex items-center">
+                            <i class="fas fa-exclamation-circle mr-1"></i>
+                            {{ $message }}
+                        </p>
+                    @enderror
+                    <div class="text-center"><button class="btn btn-sm btn-neutral px-10">Generate Alamat</button></div>
+                </div>
+            </form>
+            <form method="POST" action="{{ route('customer.store') }}" class="p-6">
+                @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Left Column -->
                     <div class="space-y-6">
-                        <!-- No Telefon -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">No. Telefon <span
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Whatsapp ID <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="no_tel" value="{{ old('no_tel') }}" required
-                                placeholder="Contoh: 012-3456789"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('no_tel') border-red-500 bg-red-50 @enderror">
-                            @error('no_tel')
+                            <input type="text" name="whatsapp_id" value="{{ old('whatsapp_id') }}" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('whatsapp_id') border-red-500 bg-red-50 @enderror">
+                            @error('whatsapp_id')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
@@ -47,12 +59,24 @@
                             @enderror
                         </div>
 
-                        <!-- Gelaran -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama/Gelaran <span
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama Penerima <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" name="nama_penerima" value="{{ old('nama_penerima') }}" required
+                                placeholder="Contoh: Encik Ahmad"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('nama_penerima') border-red-500 bg-red-50 @enderror">
+                            @error('nama_penerima')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Poskod <span
                                     class="text-red-500">*</span></label>
                             <input type="text" name="gelaran" value="{{ old('gelaran') }}" required
-                                placeholder="Contoh: Encik Ahmad"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('gelaran') border-red-500 bg-red-50 @enderror">
                             @error('gelaran')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -61,15 +85,10 @@
                                 </p>
                             @enderror
                         </div>
-                    </div>
 
-                    <!-- Right Column -->
-                    <div class="space-y-6">
-                        <!-- Email -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Emel (Pilihan)</label>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Email</label>
                             <input type="email" name="email" value="{{ old('email') }}"
-                                placeholder="Contoh: ahmad@example.com"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('email') border-red-500 bg-red-50 @enderror">
                             @error('email')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -78,22 +97,48 @@
                                 </p>
                             @enderror
                         </div>
-
-                        <!-- Bisnes -->
+                    </div>
+                    <div class="space-y-6">
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Bisnes <span
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama/Gelaran <span
                                     class="text-red-500">*</span></label>
-                            <select name="bisnes_id" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('bisnes_id') border-red-500 bg-red-50 @enderror">
-                                <option value="">Pilih Bisnes</option>
-                                @foreach ($bisnes as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ old('bisnes_id', $selectedBisnes->id ?? '') == $item->id ? 'selected' : '' }}>
-                                        {{ $item->nama_bines }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('bisnes_id')
+                            <input type="text" name="gelaran" value="{{ old('gelaran') }}" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('gelaran') border-red-500 bg-red-50 @enderror">
+                            @error('gelaran')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                        <!-- Email -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat</label>
+                            <input type="text" name="alamat" value="{{ old('alamat') }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('alamat') border-red-500 bg-red-50 @enderror">
+                            @error('alamat')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">No Tel</label>
+                            <input type="text" name="no_tel" value="{{ old('no_tel') }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('no_tel') border-red-500 bg-red-50 @enderror">
+                            @error('no_tel')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Catatan</label>
+                            <input type="text" name="catatan" value="{{ old('catatan') }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('catatan') border-red-500 bg-red-50 @enderror">
+                            @error('catatan')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
