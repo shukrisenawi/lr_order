@@ -439,11 +439,6 @@
                                         <span id="customer-buy-badge-desktop"
                                             class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                                     </a>
-                                    <a href="{{ route('customer-alamat.index') }}"
-                                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-alamat.*') ? 'nav-link active' : '' }}">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        <span>Alamat Pelanggan</span>
-                                    </a>
                                     <a href="{{ route('customer-buy.index') }}"
                                         class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-buy.*') ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">
@@ -452,6 +447,14 @@
                                         </div>
                                         <span id="customer-buy-badge-desktop"
                                             class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                    </a>
+
+                                    <a href="{{ route('tracking.index') }}"
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('tracking.*') ? 'nav-link active' : '' }}">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-list"></i>
+                                            <span>Tracking</span>
+                                        </div>
                                     </a>
                                 @endif
                             </div>

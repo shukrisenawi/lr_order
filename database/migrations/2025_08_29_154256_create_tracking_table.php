@@ -11,17 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('invoice', function (Blueprint $table) {
+        Schema::create('tracking', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bisnes_id')->nullable()->constrained('bisnes')->onDelete('cascade');
-            $table->string('invoice_no')->unique();
+            $table->foreignId('invoice_id')->nullable()->constrained('invoice')->onDelete('set null');
+            $table->string('kurier')->nullable()->default('J&T');
             $table->string('nama_penerima');
             $table->text('alamat');
+            $table->string('poskod', 10);
             $table->string('no_tel');
-            $table->string('jumlah');
-            $table->string('status')->default('pending');
-            $table->string('kurier');
-            $table->string('catatan');
+            $table->string('kandungan_parcel')->nullable();
+            $table->string('jenis_parcel')->nullable();
+            $table->string('berat')->nullable();
+            $table->string('panjang')->nullable();
+            $table->string('lebar')->nullable();
+            $table->string('tinggi')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('invoice');
+        Schema::dropIfExists('tracking');
     }
 };

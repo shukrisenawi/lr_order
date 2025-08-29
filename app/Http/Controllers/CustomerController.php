@@ -6,7 +6,6 @@ use App\Models\Customer;
 use App\Models\Bisnes;
 use App\Helpers\BisnesHelper;
 use App\Events\NewDataEvent;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -35,28 +34,38 @@ class CustomerController extends Controller
 
     public function create()
     {
-        $selectedBisnes = BisnesHelper::getSelectedBisnes();
-
-        if (!$selectedBisnes) {
-            return redirect()->route('bisnes.create')->with('info', 'Sila cipta bisnes terlebih dahulu.');
-        }
-
-        $bisnes = BisnesHelper::getUserBisnes();
-        return view('customer.create', compact('bisnes', 'selectedBisnes'));
+        echo session('response');
+        exit;
+        // $response = json_decode(session('response'));
+        // $response;
+        return view('customer.create');
     }
 
-    public function sendToN8n()
+    public function generate()
     {
-        $response = Http::get(
-            'https://n8n-mt8umikivytz.n8x.biz.id/webhook/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9',
+        return view('customer.generate');
+    }
+
+    public function generateData(Request $request)
+    {
+        $request->validate(
             [
-                'sessionId' => uniqid(),
-                'action' => 'sendMessage',
-                'chatInput' => "No 123, Jalan ABC, Kedah\n012-3456789\nAli bin Abu",
+                'text_alamat' => 'required|string',
             ]
         );
+        $response = json_encode($this->sendToN8n($request->text_alamat));
+        return redirect()->route('customer.create', $response)->with('response', $response)->with('success', 'Customer generate successfully.');
+    }
 
-        return $response->json(); // ambil respon JSON dari n8n
+    public function sendToN8n($message)
+    {
+        $data = [
+            'action' => 'sendMessage',
+            'chatInput' => $message
+        ];
+        $response = $this->sentN8n('https://n8n-mt8umikivytz.n8x.biz.id/webhook-test/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9', 'https://n8n-mt8umikivytz.n8x.biz.id/webhook/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9', $data);
+
+        return $response; // ambil respon JSON dari n8n
     }
 
     public function store(Request $request)

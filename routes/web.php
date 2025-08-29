@@ -15,6 +15,7 @@ use App\Http\Controllers\GambarController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\IklanController;
 use App\Http\Controllers\ProspekController;
+use App\Http\Controllers\TrackingController;
 use Illuminate\Support\Facades\DB;
 
 // Home route
@@ -101,7 +102,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bisnes', function () {
         return view('bisnes-livewire');
     })->name('bisnes.index');
-
+    Route::get('/bisnes/summary/{bisnes}', [BisnesController::class, 'summary'])->name('bisnes.summary');
     Route::resource('bisnes', BisnesController::class)->except(['index']);
 
     Route::get('/produk', function () {
@@ -138,7 +139,8 @@ Route::middleware(['auth'])->group(function () {
             return redirect()->route('bisnes.index');
         return view('customer-livewire');
     })->name('customer.index');
-    Route::post('/customer/generate', [CustomerController::class, 'generate'])->name('customer.generate');
+    Route::get('/customer/generate', [CustomerController::class, 'generate'])->name('customer.generate');
+    Route::post('/customer/generate-data', [CustomerController::class, 'generateData'])->name('customer.generate-data');
     Route::resource('customer', CustomerController::class)->except(['index']);
 
 
@@ -150,6 +152,15 @@ Route::middleware(['auth'])->group(function () {
         return view('customer-buy-livewire');
     })->name('customer-buy.index');
     Route::resource('customer-buy', 'App\Http\Controllers\CustomerBuyController')->except(['index']);
+
+
+    Route::get('/tracking', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        return view('tracking-livewire');
+    })->name('tracking.index');
+    Route::resource('tracking', TrackingController::class)->except(['index']);
+    Route::post('/tracking/{tracking}', [TrackingController::class, 'update'])->name('tracking.update');
 
     // Settings routes
     Route::prefix('settings')->name('settings.')->group(function () {

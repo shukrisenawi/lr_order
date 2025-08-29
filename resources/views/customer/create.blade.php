@@ -28,21 +28,6 @@
 
             <form method="POST" action="{{ route('customer.store') }}" class="p-6">
                 @csrf
-                <div class="mb-3">
-                    <label class="block text-sm font-semibold text-gray-800 mb-2">Nama, alamat dan nombor telefon</label>
-                    <textarea name="text_alamat" rows="4"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('text_alamat') border-red-500 bg-red-50 @enderror">{{ old('text_alamat') }}</textarea>
-                    @error('text_alamat')
-                        <p class="mt-2 text-sm text-red-600 flex items-center">
-                            <i class="fas fa-exclamation-circle mr-1"></i>
-                            {{ $message }}
-                        </p>
-                    @enderror
-                    <div class="text-center"><button class="btn btn-sm btn-neutral px-10">Generate Alamat</button></div>
-                </div>
-            </form>
-            <form method="POST" action="{{ route('customer.store') }}" class="p-6">
-                @csrf
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Left Column -->
                     <div class="space-y-6">

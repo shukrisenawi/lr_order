@@ -129,4 +129,10 @@ class BisnesController extends Controller
 
         return redirect()->route('bisnes.index')->with('success', 'Business deleted successfully.');
     }
+
+    public function summary(Bisnes $bisnes)
+    {
+        $this->summary($bisnes);
+        return view('bisnes.summary', compact('bisnes'));
+    }
 }

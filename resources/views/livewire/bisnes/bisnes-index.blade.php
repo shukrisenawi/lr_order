@@ -118,6 +118,12 @@
                                         <i class="fas fa-trash mr-1"></i>
                                         Padam
                                     </button>
+
+                                    <a href="{{ route('bisnes.summary', $item) }}"
+                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors duration-200">
+                                        <i class="fas fa-list mr-1"></i>
+                                        Ringkasan
+                                    </a>
                                 </div>
                             </td>
                         </tr>

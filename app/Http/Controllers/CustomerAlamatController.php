@@ -10,15 +10,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class CustomerAlamatController extends Controller
 {
 
-    public function __construct()
-    {
-        $this->middleware(function () {
-            if (empty(session('selected_bisnes_id')))
-                return redirect()->route('bisnes.index');
-        });
-        parent::__construct();
-    }
-
     use AuthorizesRequests;
     public function index()
     {
