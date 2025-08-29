@@ -48,7 +48,7 @@ class CustomerController extends Controller
     public function sendToN8n()
     {
         $response = Http::get(
-            'https://n8n-mt8umikivytz.n8x.biz.id/webhook-test/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9',
+            'https://n8n-mt8umikivytz.n8x.biz.id/webhook/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9',
             [
                 'sessionId' => uniqid(),
                 'action' => 'sendMessage',
