@@ -40,6 +40,7 @@ class BisnesController extends Controller
         $request->validate([
             'nama_bisnes' => 'required|string|max:255',
             'exp_date' => 'nullable|date',
+            'prefix' => 'nullable|string|max:10',
             'nama_syarikat' => 'required|string|max:255',
             'type_id' => 'required|exists:bisnes_type,id',
             'no_pendaftaran' => 'nullable|string|max:255',
@@ -56,6 +57,7 @@ class BisnesController extends Controller
             'nama_bisnes' => $request->nama_bisnes,
             'type_id' => $request->type_id,
             'exp_date' => $request->exp_date,
+            'prefix' => $request->prefix,
             'nama_syarikat' => $request->nama_syarikat,
             'no_pendaftaran' => $request->no_pendaftaran,
             'alamat' => $request->alamat,
@@ -87,6 +89,7 @@ class BisnesController extends Controller
         $request->validate([
             'nama_bisnes' => 'required|string|max:255',
             'exp_date' => 'nullable|date',
+            'prefix' => 'nullable|string|max:10',
             'nama_syarikat' => 'required|string|max:255',
             'type_id' => 'required|exists:bisnes_type,id',
             'no_pendaftaran' => 'nullable|string|max:255',

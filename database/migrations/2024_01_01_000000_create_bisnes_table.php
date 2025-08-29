@@ -23,6 +23,7 @@ return new class extends Migration
             $table->longText('system_message')->nullable()->default(null);
             $table->boolean('on')->default(false);
             $table->longText('summary')->nullable()->default(null);
+            $table->string('prefix')->nullable();
             $table->timestamps();
         });
     }

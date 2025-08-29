@@ -115,7 +115,7 @@ class TrackingController extends Controller
             'data_sign' => base64_encode(md5($data_json . $key))
         );
 
-        $response = Http::asForm()->post(env("API_JNT_URL"),  $data_request);
+        $response = Http::asForm()->post(env("API_JNT_URL"),  $data_request); // link betul xejus lagi di web
         return $response;
     }
 }

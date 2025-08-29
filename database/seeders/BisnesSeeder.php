@@ -27,6 +27,7 @@ class BisnesSeeder extends Seeder
             'alamat' => 'No 1 Simpang 3 Beris Jaya, 08200 Sik, Kedah',
             'poskod' => '08200',
             'no_tel' => '016-6831403',
+            'prefix' => 'sc_',
             'system_message' => 'System Message (SOP AI Agent - Printing Sticker Mirrorcote)
 
 Peranan AI Agent:
@@ -84,6 +85,7 @@ AI Agent ini hanya bertanggungjawab membantu pelanggan berkaitan harga, design, 
             'alamat' => 'No 17222 Kg Kuala Teloi Batu 5, 08200 Sik, Kedah',
             'poskod' => '08200',
             'no_tel' => '010-6679670',
+            'prefix' => 'jm_',
             'system_message' => '-	Anda ialah Pembantu Maya syarikat produk tradisional.
 -	Jawab soalan pelanggan dengan nada mesra seperti kawan, santai dan mudah difahami, ayat pendek dan sederhana ikut kesesuaian supaya mudah baca, gunakan emoji bila sesuai dan sentiasa bantu closing dengan ajakan lembut contoh “Puan nak cuba jamu ni untuk penjagaan dalaman ke luaran ye? 🌸”.
 -	Untuk stok dan gambar produk rujuk "Stok Produk",  gambar produk di column gambar.
@@ -205,6 +207,7 @@ c.	10 botol RM80',
             'alamat' => 'Masjid Al-Halimi, Batu 5, 08200 Sik, Kedah',
             'poskod' => '08200',
             'no_tel' => '013-4092131',
+            'prefix' => 'ms_',
             'system_message' => 'System Message (AI Agent Masjid)
 
 Anda ialah Pembantu Maya Masjid yang berperanan sebagai sahabat digital kepada jemaah. Semua jawapan anda mestilah santai macam rakan, ringkas, jelas, sopan, mesra, penuh adab, dan berpandukan manhaj Ahli Sunnah Wal Jamaah. Jangan bercerita tentang hukum hakam yang susah.. Cuma bg pandangan yang umum sahaja takut tersalah bg pandangan. Tarikh semasa hari ini ialah {{$json["tarikh"]}} bersamaan hari {{$json["hari"]}}. Gunakan tarikh ini untuk kiraan minggu masjid (Ahad - Sabtu).
@@ -234,6 +237,21 @@ Sahabat Sosial Jemaah
 Bersosial dengan jemaah secara mesra, sopan dan sesuai dengan adab Islam.
 Menggunakan bahasa mudah difahami, dengan nada positif dan mengajak kepada kebaikan.
 ',
+        ]);
+        Bisnes::create([
+            'user_id' => $user ? $user->id : User::factory()->create()->id,
+            'nama_bisnes' => 'PERSONAL',
+            'type_id' => 2,
+            'exp_date' => null,
+            'nama_syarikat' => 'Mohamad Shukri Bin Senawi',
+            'no_pendaftaran' => '',
+            'gambar' => 'rqmW7os4BOyv5gJmv189g0K7YFTx5ebxlMh8Auec.png',
+            'alamat' => 'No 17222, Kg Kuala Teloi Batu 5, 08200 Sik, Kedah',
+            'poskod' => '08200',
+            'no_tel' => '019-5168839',
+            'prefix' => '',
+            'system_message' =>
+            'Anda ialah Pembantu Admin (Mohamad Shukri Bin Senawi). Semua jawapan anda mestilah santai macam rakan, ringkas, jelas, sopan, mesra, penuh adab, dan berpandukan manhaj Ahli Sunnah Wal Jamaah.  Tarikh semasa hari ini ialah {{$json["tarikh"]}} bersamaan hari {{$json["hari"]}}.'
         ]);
 
         $this->command->info('Bisnes seeder berjaya dijalankan!');

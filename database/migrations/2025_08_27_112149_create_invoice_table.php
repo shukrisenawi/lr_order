@@ -20,8 +20,9 @@ return new class extends Migration
             $table->string('no_tel');
             $table->string('jumlah');
             $table->string('status')->default('pending');
-            $table->string('kurier');
-            $table->string('catatan');
+            $table->string('kurier')->nullable()->default('J&T');
+            $table->string('catatan')->nullable();
+            $table->boolean('create_by_ai')->default(true);
             $table->timestamps();
         });
     }

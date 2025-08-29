@@ -92,6 +92,17 @@
                             @enderror
                         </div>
 
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Prefix </label>
+                            <input type="text" name="prefix" value="{{ old('prefix', $bisnes->prefix) }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('prefix') border-red-500 bg-red-50 @enderror">
+                            @error('prefix')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
 
                         <div class="mb-5">
                             <label class="block text-sm font-semibold text-gray-800 mb-2">On AI </label>

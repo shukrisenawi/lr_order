@@ -28,6 +28,8 @@ class Bisnes extends Model
         'alamat',
         'poskod',
         'no_tel',
+        'summary',
+        'prefix',
         'system_message',
     ];
 

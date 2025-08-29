@@ -101,6 +101,19 @@
                         </div>
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-800 mb-2">Jenis Sistem</label>
+                        <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
+                            <p class="text-gray-900">{{ $bisnes->bisnesType->type }}</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-800 mb-2">Prefix</label>
+                        <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
+                            <p class="text-gray-900">{{ $bisnes->prefix ?? '-' }}</p>
+                        </div>
+                    </div>
                     <!-- Postcode -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-800 mb-2">Poskod</label>
@@ -114,12 +127,6 @@
                         <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat</label>
                         <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
                             <p class="text-gray-900">{{ $bisnes->alamat }}</p>
-                        </div>
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-semibold text-gray-800 mb-2">Jenis Sistem</label>
-                        <div class="px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl">
-                            <p class="text-gray-900">{{ $bisnes->bisnesType->type }}</p>
                         </div>
                     </div>
                     <div class="md:col-span-2">
