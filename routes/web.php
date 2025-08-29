@@ -15,6 +15,7 @@ use App\Http\Controllers\GambarController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\IklanController;
 use App\Http\Controllers\ProspekController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TrackingController;
 use Illuminate\Support\Facades\DB;
 
@@ -142,6 +143,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/customer/generate', [CustomerController::class, 'generate'])->name('customer.generate');
     Route::post('/customer/generate-data', [CustomerController::class, 'generateData'])->name('customer.generate-data');
     Route::resource('customer', CustomerController::class)->except(['index']);
+
+    Route::get('/invoice', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        return view('invoice-livewire');
+    })->name('invoice.index');
+    Route::resource('invoice', InvoiceController::class)->except(['index']);
+    Route::post('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
 
     Route::get('/tracking', function () {
         if (empty(session('selected_bisnes_id')))

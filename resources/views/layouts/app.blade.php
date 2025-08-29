@@ -325,12 +325,7 @@
                                 <span id="customer-badge"
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
-                            <a href="{{ route('customer-alamat.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-alamat.*') ? 'nav-link active' : '' }}">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Alamat Prospek</span>
-                            </a>
-                            <a href="{{ route('customer-buy.index') }}"
+                            <a href="{{ route('customer.index') }}"
                                 class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-buy.*') ? 'nav-link active' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <i class="fas fa-shopping-cart"></i>
@@ -439,8 +434,8 @@
                                         <span id="customer-buy-badge-desktop"
                                             class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                                     </a>
-                                    <a href="{{ route('customer-buy.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-buy.*') ? 'nav-link active' : '' }}">
+                                    <a href="{{ route('invoice.index') }}"
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('invoice.*') ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <i class="fas fa-shopping-cart"></i>
                                             <span>Invoice</span>
