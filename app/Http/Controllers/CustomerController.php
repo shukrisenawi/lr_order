@@ -45,21 +45,23 @@ class CustomerController extends Controller
         return view('customer.create', compact('bisnes', 'selectedBisnes'));
     }
 
+    public function sendToN8n()
+    {
+        $response = Http::get(
+            'https://n8n-mt8umikivytz.n8x.biz.id/webhook-test/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9',
+            [
+                'sessionId' => uniqid(),
+                'action' => 'sendMessage',
+                'chatInput' => "No 123, Jalan ABC, Kedah\n012-3456789\nAli bin Abu",
+            ]
+        );
+
+        return $response->json(); // ambil respon JSON dari n8n
+    }
+
     public function store(Request $request)
     {
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-        ])->post('https://n8n-mt8umikivytz.n8x.biz.id/webhook-test/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9', [
-            'sessionId' => 'd8f86e9d3e0f403db4da6a5d98cfb1f7',
-            'chatInput' => 'No 337 taman amalina lestari 27600 raub pahang\n017-9348252\nAzrini zameri',
-            'action' => 'sendMessage',
-        ]);
-
-        if ($response->successful()) {
-            dd($response);
-        } else {
-            dd($response);
-        }
+        dd($this->sendToN8n());
         // $request->validate([
         //     'text_alamat' => 'required|string|max:20',
         //     'gelaran' => 'required|string|max:50',
