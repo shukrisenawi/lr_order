@@ -144,13 +144,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/customer/generate-data', [CustomerController::class, 'generateData'])->name('customer.generate-data');
     Route::resource('customer', CustomerController::class)->except(['index']);
 
-    Route::get('/invoice', function () {
-        if (empty(session('selected_bisnes_id')))
-            return redirect()->route('bisnes.index');
-        return view('invoice-livewire');
-    })->name('invoice.index');
-    Route::resource('invoice', InvoiceController::class)->except(['index']);
-    Route::post('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
+    Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');
+    Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('invoice.create');
+    Route::post('/invoice', [InvoiceController::class, 'store'])->name('invoice.store');
+    Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
+    Route::get('/invoice/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoice.edit');
+    Route::put('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
+    Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
+    Route::get('/invoice/{invoice}/pdf', [InvoiceController::class, 'generatePdf'])->name('invoice.pdf');
 
     Route::get('/tracking', function () {
         if (empty(session('selected_bisnes_id')))

@@ -1,23 +1,29 @@
 <?php
 
-namespace App\Livewire\Customer;
+namespace App\Livewire\Invoice;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Customer;
+use App\Models\Invoice;
 use Illuminate\Support\Facades\Auth;
 
-class CustomerIndex extends Component
+class InvoiceIndex extends Component
 {
     use WithPagination;
 
     public $search = '';
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
+    public $statusFilter = '';
 
-    protected $queryString = ['search'];
+    protected $queryString = ['search', 'statusFilter'];
 
     public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatingStatusFilter()
     {
         $this->resetPage();
     }
@@ -34,32 +40,46 @@ class CustomerIndex extends Component
 
     public function delete($id)
     {
-        $customer = Customer::whereHas('bisnes', function ($query) {
+        $invoice = Invoice::whereHas('bisnes', function ($query) {
             $query->where('user_id', Auth::id());
         })->findOrFail($id);
 
-        $customer->delete();
+        $invoice->delete();
 
-        session()->flash('message', 'Prospect deleted successfully.');
-        $this->dispatch('prospect-deleted');
+        session()->flash('message', 'Invoice deleted successfully.');
+        $this->dispatch('invoice-deleted');
+    }
+
+    public function updateStatus($id, $status)
+    {
+        $invoice = Invoice::whereHas('bisnes', function ($query) {
+            $query->where('user_id', Auth::id());
+        })->findOrFail($id);
+
+        $invoice->update(['status' => $status]);
+
+        session()->flash('message', 'Invoice status updated successfully.');
     }
 
     public function render()
     {
-        $customer = Customer::with('bisnes')
+        $invoices = Invoice::with(['bisnes', 'items'])
             ->whereHas('bisnes', function ($query) {
                 $query->where('user_id', Auth::id());
             })
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('gelaran', 'like', '%' . $this->search . '%')
-                        ->orWhere('no_tel', 'like', '%' . $this->search . '%')
-                        ->orWhere('email', 'like', '%' . $this->search . '%');
+                    $q->where('invoice_no', 'like', '%' . $this->search . '%')
+                        ->orWhere('nama_penerima', 'like', '%' . $this->search . '%')
+                        ->orWhere('no_tel', 'like', '%' . $this->search . '%');
                 });
+            })
+            ->when($this->statusFilter, function ($query) {
+                $query->where('status', $this->statusFilter);
             })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate(10);
 
-        return view('livewire.customer.customer-index', compact('customer'));
+        return view('livewire.invoice.invoice-index', compact('invoices'));
     }
 }

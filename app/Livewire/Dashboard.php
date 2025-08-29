@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\Bisnes;
 use App\Models\Produk;
 use App\Models\Customer;
-use App\Models\CustomerBuy;
+use App\Models\Invoice;
 use App\Services\DashboardService;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +15,7 @@ class Dashboard extends Component
     public $totalBisnes = 0;
     public $totalProduk = 0;
     public $totalCustomer = 0;
-    public $totalPembelian = 0;
+    public $totalInvoice = 0;
     public $totalRevenue = 0;
     public $value2 = 0; // New property for value2
 
@@ -46,27 +46,25 @@ class Dashboard extends Component
         if ($selectedBisnesId == 0) {
             // No filtering by business, show all data for user
             $this->totalBisnes = Bisnes::where('user_id', Auth::id())->count();
-            $this->totalProduk = Produk::count(); // Produk table doesn't have user_id
+            $this->totalProduk = Produk::whereHas('bisnes', function ($query) {
+                $query->where('user_id', Auth::id());
+            })->count();
             $this->totalCustomer = Customer::whereHas('bisnes', function ($query) {
                 $query->where('user_id', Auth::id());
             })->count();
-            $this->totalPembelian = CustomerBuy::whereHas('customerAlamat.customer.bisnes', function ($query) {
+            $this->totalInvoice = Invoice::whereHas('bisnes', function ($query) {
                 $query->where('user_id', Auth::id());
             })->count();
-            $this->totalRevenue = CustomerBuy::whereHas('customerAlamat.customer.bisnes', function ($query) {
+            $this->totalRevenue = Invoice::whereHas('bisnes', function ($query) {
                 $query->where('user_id', Auth::id());
-            })->sum('harga');
+            })->sum('jumlah');
         } else {
             // Filter by selected business
             $this->totalBisnes = 1; // Since we're filtering by a specific business
-            $this->totalProduk = Produk::count(); // Produk table doesn't have user_id or bisnes_id
+            $this->totalProduk = Produk::where('bisnes_id', $selectedBisnesId)->count();
             $this->totalCustomer = Customer::where('bisnes_id', $selectedBisnesId)->count();
-            $this->totalPembelian = CustomerBuy::whereHas('customerAlamat.customer', function ($query) use ($selectedBisnesId) {
-                $query->where('bisnes_id', $selectedBisnesId);
-            })->count();
-            $this->totalRevenue = CustomerBuy::whereHas('customerAlamat.customer', function ($query) use ($selectedBisnesId) {
-                $query->where('bisnes_id', $selectedBisnesId);
-            })->sum('harga');
+            $this->totalInvoice = Invoice::where('bisnes_id', $selectedBisnesId)->count();
+            $this->totalRevenue = Invoice::where('bisnes_id', $selectedBisnesId)->sum('jumlah');
         }
     }
 

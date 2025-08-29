@@ -3,13 +3,13 @@
     <div class="mb-10">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Pengurusan Prospek</h1>
-                <p class="text-gray-600">Urus prospek anda</p>
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Pengurusan Invoice</h1>
+                <p class="text-gray-600">Urus invoice anda</p>
             </div>
-            <a href="{{ route('prospek.create') }}"
-                class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-xl shadow-lg hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
+            <a href="{{ route('invoice.create') }}"
+                class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 <i class="fas fa-plus mr-2"></i>
-                Tambah Prospek Baru
+                Tambah Invoice Baru
             </a>
         </div>
     </div>
@@ -25,15 +25,24 @@
         </div>
     @endif
 
-    <!-- Search -->
-    <div class="mb-8">
-        <div class="relative max-w-md">
+    <!-- Search and Filter -->
+    <div class="mb-8 flex flex-col md:flex-row gap-4">
+        <div class="relative flex-1 max-w-md">
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <i class="fas fa-search text-gray-400"></i>
             </div>
             <input type="text" wire:model.live.debounce.300ms="search"
-                placeholder="Cari prospek mengikut whatsapp ID atau nama..."
-                class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-100 focus:outline-none transition-all duration-300 shadow-sm">
+                placeholder="Cari invoice mengikut no invoice, nama penerima..."
+                class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
+        </div>
+        <div class="relative">
+            <select wire:model.live="statusFilter"
+                class="px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
+                <option value="">Semua Status</option>
+                <option value="pending">Pending</option>
+                <option value="paid">Paid</option>
+                <option value="cancelled">Cancelled</option>
+            </select>
         </div>
     </div>
 
@@ -43,76 +52,123 @@
             <table class="w-full">
                 <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                     <tr>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-amber-600 transition-colors"
-                            wire:click="sortBy('no_tel')">
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
+                            wire:click="sortBy('invoice_no')">
                             <div class="flex items-center">
-                                ID Whatsapp
-                                @if ($sortField === 'no_tel')
+                                No Invoice
+                                @if ($sortField === 'invoice_no')
                                     @if ($sortDirection === 'asc')
-                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-up ml-2 text-blue-500"></i>
                                     @else
-                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-down ml-2 text-blue-500"></i>
                                     @endif
                                 @else
                                     <i class="fas fa-sort ml-2 text-gray-400"></i>
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700"
-                            wire:click="sortBy('gelaran')">
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
+                            wire:click="sortBy('nama_penerima')">
                             <div class="flex items-center">
-                                Nama/gelaran
-                                @if ($sortField === 'gelaran')
+                                Nama Penerima
+                                @if ($sortField === 'nama_penerima')
                                     @if ($sortDirection === 'asc')
-                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-up ml-2 text-blue-500"></i>
                                     @else
-                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-down ml-2 text-blue-500"></i>
                                     @endif
                                 @else
                                     <i class="fas fa-sort ml-2 text-gray-400"></i>
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700"
-                            wire:click="sortBy('session_id')">
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
+                            wire:click="sortBy('jumlah')">
                             <div class="flex items-center">
-                                Session
-                                @if ($sortField === 'session_id')
+                                Jumlah
+                                @if ($sortField === 'jumlah')
                                     @if ($sortDirection === 'asc')
-                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-up ml-2 text-blue-500"></i>
                                     @else
-                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-down ml-2 text-blue-500"></i>
                                     @endif
                                 @else
                                     <i class="fas fa-sort ml-2 text-gray-400"></i>
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">On Ai</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
+                            wire:click="sortBy('status')">
+                            <div class="flex items-center">
+                                Status
+                                @if ($sortField === 'status')
+                                    @if ($sortDirection === 'asc')
+                                        <i class="fas fa-arrow-up ml-2 text-blue-500"></i>
+                                    @else
+                                        <i class="fas fa-arrow-down ml-2 text-blue-500"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort ml-2 text-gray-400"></i>
+                                @endif
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
+                            wire:click="sortBy('created_at')">
+                            <div class="flex items-center">
+                                Tarikh
+                                @if ($sortField === 'created_at')
+                                    @if ($sortDirection === 'asc')
+                                        <i class="fas fa-arrow-up ml-2 text-blue-500"></i>
+                                    @else
+                                        <i class="fas fa-arrow-down ml-2 text-blue-500"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort ml-2 text-gray-400"></i>
+                                @endif
+                            </div>
+                        </th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
-                    @forelse($prospek as $item)
-                        <tr class="hover:bg-amber-50 transition-colors duration-200"
-                            wire:key="prospek-{{ $item->id }}">
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->no_tel }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->gelaran ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->session_id ?? '-' }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">
-                                <input type="checkbox" wire:change="updateOn({{ $item->id }})"
-                                    class="toggle toggle-sm toggle-success" {{ $item->on ? 'checked' : '' }}>
+                    @forelse($invoices as $invoice)
+                        <tr class="hover:bg-blue-50 transition-colors duration-200"
+                            wire:key="invoice-{{ $invoice->id }}">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">
+                                <a href="{{ route('invoice.show', $invoice) }}" class="text-blue-600 hover:text-blue-800">
+                                    {{ $invoice->invoice_no }}
+                                </a>
                             </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $invoice->nama_penerima }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">RM {{ number_format($invoice->jumlah, 2) }}</td>
+                            <td class="px-6 py-4 text-sm">
+                                <span class="px-2 py-1 text-xs font-semibold rounded-full
+                                    @if($invoice->status === 'paid') bg-green-100 text-green-800
+                                    @elseif($invoice->status === 'pending') bg-yellow-100 text-yellow-800
+                                    @else bg-red-100 text-red-800 @endif">
+                                    {{ ucfirst($invoice->status) }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $invoice->created_at->format('d/m/Y') }}</td>
                             <td class="px-6 py-4">
                                 <div class="flex space-x-2">
-
-                                    <a href="{{ route('prospek.edit', $item) }}"
+                                    <a href="{{ route('invoice.show', $invoice) }}"
+                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        View
+                                    </a>
+                                    <a href="{{ route('invoice.edit', $invoice) }}"
                                         class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-700 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors duration-200">
                                         <i class="fas fa-edit mr-1"></i>
                                         Edit
                                     </a>
-                                    <button wire:click="delete({{ $item->id }})"
-                                        wire:confirm="Are you sure you want to delete this prospect?"
+                                    <a href="{{ route('invoice.pdf', $invoice) }}"
+                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-green-700 bg-green-50 rounded-lg hover:bg-green-100 transition-colors duration-200">
+                                        <i class="fas fa-file-pdf mr-1"></i>
+                                        PDF
+                                    </a>
+                                    <button wire:click="delete({{ $invoice->id }})"
+                                        wire:confirm="Are you sure you want to delete this invoice?"
                                         class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors duration-200">
                                         <i class="fas fa-trash mr-1"></i>
                                         Delete
@@ -122,17 +178,17 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-16 text-center">
+                            <td colspan="6" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <div class="bg-gray-100 rounded-full p-4 mb-4">
-                                        <i class="fas fa-users text-gray-400 text-2xl"></i>
+                                        <i class="fas fa-file-invoice text-gray-400 text-2xl"></i>
                                     </div>
-                                    <h3 class="text-lg font-medium text-gray-900 mb-1">No prospects found</h3>
-                                    <p class="text-gray-500 mb-4">Try changing your search or add a new prospect</p>
-                                    <a href="{{ route('prospek.create') }}"
-                                        class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-lg shadow hover:from-amber-600 hover:to-orange-700 transition-all duration-300">
+                                    <h3 class="text-lg font-medium text-gray-900 mb-1">No invoices found</h3>
+                                    <p class="text-gray-500 mb-4">Try changing your search or add a new invoice</p>
+                                    <a href="{{ route('invoice.create') }}"
+                                        class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition-all duration-300">
                                         <i class="fas fa-plus mr-2"></i>
-                                        Add your first prospect
+                                        Add your first invoice
                                     </a>
                                 </div>
                             </td>
@@ -143,16 +199,16 @@
         </div>
 
         <!-- Pagination -->
-        @if ($prospek->hasPages())
+        @if ($invoices->hasPages())
             <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-700">
-                        Menunjukkan <span class="font-medium">{{ $prospek->firstItem() }}</span> ke <span
-                            class="font-medium">{{ $prospek->lastItem() }}</span> daripada <span
-                            class="font-medium">{{ $prospek->total() }}</span> rekod
+                        Menunjukkan <span class="font-medium">{{ $invoices->firstItem() }}</span> ke <span
+                            class="font-medium">{{ $invoices->lastItem() }}</span> daripada <span
+                            class="font-medium">{{ $invoices->total() }}</span> rekod
                     </div>
                     <div>
-                        {{ $prospek->links('vendor.pagination.tailwind') }}
+                        {{ $invoices->links('vendor.pagination.tailwind') }}
                     </div>
                 </div>
             </div>

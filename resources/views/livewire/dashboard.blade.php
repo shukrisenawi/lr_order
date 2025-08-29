@@ -83,25 +83,25 @@
             </div>
         </div>
 
-        <!-- Total Pembelian Card -->
+        <!-- Total Invoice Card -->
         <div
             class="bg-gradient-to-br from-rose-500 to-pink-600 rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105">
             <div class="p-6">
                 <div class="flex items-center">
                     <div class="flex-shrink-0 bg-white bg-opacity-20 p-3 rounded-lg">
-                        <i class="fas fa-shopping-cart text-white text-2xl"></i>
+                        <i class="fas fa-file-invoice text-white text-2xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-white text-sm font-medium">Jumlah Pembelian</p>
+                        <p class="text-white text-sm font-medium">Jumlah Invoice</p>
                         <div class="text-2xl font-bold text-white" wire:loading.class="animate-pulse">
-                            {{ $totalPembelian }}</div>
+                            {{ $totalInvoice }}</div>
                     </div>
                 </div>
                 <div class="mt-4">
                     <div class="flex items-center text-white text-sm">
                         <span class="flex items-center">
                             <i class="fas fa-arrow-up text-green-300 mr-1"></i>
-                            <span>{{ $growthMetrics['pembelian_growth'] ?? 0 }}% dari bulan lepas</span>
+                            <span>{{ $growthMetrics['invoice_growth'] ?? 0 }}% dari bulan lepas</span>
                         </span>
                     </div>
                 </div>
@@ -423,8 +423,8 @@
                     @endscript
                 </a>
 
-                <!-- Tambah Pembelian -->
-                <a href="{{ route('customer-buy.create') }}" class="group block">
+                <!-- Tambah Invoice -->
+                <a href="{{ route('invoice.create') }}" class="group block">
                     <div
                         class="bg-gradient-to-br from-rose-50 to-pink-50 rounded-xl p-6 border border-rose-100 transition-all duration-300 group-hover:shadow-lg group-hover:border-rose-200 group-hover:from-rose-100 group-hover:to-pink-100">
                         <div class="flex flex-col items-center text-center">
@@ -433,8 +433,8 @@
                                 <i class="fas fa-plus text-xl"></i>
                             </div>
                             <h3 class="font-semibold text-gray-900 mb-1">Tambah
-                                Pembelian</h3>
-                            <p class="text-sm text-gray-600">Daftar pembelian baru</p>
+                                Invoice</h3>
+                            <p class="text-sm text-gray-600">Daftar invoice baru</p>
                         </div>
                     </div>
                 </a>
