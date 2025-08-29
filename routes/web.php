@@ -143,17 +143,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/customer/generate-data', [CustomerController::class, 'generateData'])->name('customer.generate-data');
     Route::resource('customer', CustomerController::class)->except(['index']);
 
-
-    Route::resource('customer-alamat', 'App\Http\Controllers\CustomerAlamatController');
-
-    Route::get('/customer-buy', function () {
-        if (empty(session('selected_bisnes_id')))
-            return redirect()->route('bisnes.index');
-        return view('customer-buy-livewire');
-    })->name('customer-buy.index');
-    Route::resource('customer-buy', 'App\Http\Controllers\CustomerBuyController')->except(['index']);
-
-
     Route::get('/tracking', function () {
         if (empty(session('selected_bisnes_id')))
             return redirect()->route('bisnes.index');

@@ -70,7 +70,6 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        dd($this->sendToN8n());
         // $request->validate([
         //     'text_alamat' => 'required|string|max:20',
         //     'gelaran' => 'required|string|max:50',
