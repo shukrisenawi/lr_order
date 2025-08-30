@@ -18,7 +18,9 @@
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             --accent-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --sidebar-gradient: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            --sidebar-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --sidebar-gradient-mobile: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 70%, #f5576c 100%);
+            --sidebar-overlay: linear-gradient(45deg, rgba(102, 126, 234, 0.1) 0%, rgba(240, 147, 251, 0.1) 100%);
             --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
         }
 
@@ -33,6 +35,97 @@
 
         .sidebar-gradient {
             background: var(--sidebar-gradient);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--sidebar-overlay);
+            pointer-events: none;
+        }
+
+        .sidebar-gradient::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: sidebar-shine 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sidebar-shine {
+            0%, 100% {
+                transform: translate(-50%, -50%) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translate(-50%, -50%) rotate(180deg);
+                opacity: 0.6;
+            }
+        }
+
+        /* Mobile sidebar specific styles */
+        @media (max-width: 768px) {
+            .sidebar-gradient {
+                background: var(--sidebar-gradient-mobile);
+            }
+
+            .sidebar-gradient::after {
+                animation-duration: 6s;
+            }
+
+            /* Adjust sidebar width for very small screens */
+            #mobile-menu .sidebar-gradient {
+                width: 100vw;
+                max-width: 320px;
+            }
+
+            /* Better spacing for small screens */
+            .nav-link {
+                padding: 1rem;
+                margin: 0 0.5rem;
+            }
+
+            .nav-link .w-8 {
+                width: 2rem;
+                height: 2rem;
+            }
+        }
+
+        /* Large screen enhancements */
+        @media (min-width: 1024px) {
+            .sidebar-gradient::before {
+                background: linear-gradient(45deg, rgba(102, 126, 234, 0.15) 0%, rgba(240, 147, 251, 0.15) 50%, rgba(245, 87, 108, 0.15) 100%);
+            }
+
+            .sidebar-gradient::after {
+                animation-duration: 10s;
+            }
+        }
+
+        /* Hover effects for better interactivity */
+        .nav-link:hover {
+            transform: translateX(2px) scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-link.active {
+            transform: translateX(4px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Smooth transitions for all elements */
+        * {
+            transition: all 0.3s ease;
         }
 
         .floating-animation {
@@ -301,7 +394,10 @@
     <div class="flex">
         <!-- Mobile Sidebar -->
         <div id="mobile-menu" class="md:hidden fixed inset-0 z-50 hidden transform transition-transform duration-300 ease-in-out">
-            <div class="sidebar-gradient h-full w-72 p-6 overflow-y-auto shadow-2xl">
+            <div class="sidebar-gradient h-full w-72 sm:w-80 p-6 overflow-y-auto shadow-2xl relative">
+                <!-- Decorative elements -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/5 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-12 -translate-x-12"></div>
                 <!-- Header -->
                 <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/20">
                     <div class="flex items-center space-x-3">
@@ -453,61 +549,79 @@
         </div>
 
         <!-- Desktop Sidebar -->
-        <aside class="hidden md:block w-64 sidebar-gradient h-screen sticky top-0">
-            <div class="p-4 overflow-y-auto h-full">
-                <nav class="space-y-1">
+        <aside class="hidden md:block w-64 lg:w-72 sidebar-gradient h-screen sticky top-0">
+            <div class="p-4 lg:p-6 overflow-y-auto h-full relative">
+                <!-- Decorative elements for desktop -->
+                <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/5 to-transparent rounded-full -translate-y-10 translate-x-10"></div>
+                <div class="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-8 -translate-x-8"></div>
+                <nav class="space-y-2">
                     <!-- Dashboard -->
                     <a href="{{ route('dashboard') }}"
-                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('dashboard')) ? 'nav-link active' : '' }}">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <span>Dashboard</span>
+                        class="nav-link flex items-center space-x-4 px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('dashboard')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                        <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                            <i class="fas fa-tachometer-alt text-sm"></i>
+                        </div>
+                        <span class="font-medium">Dashboard</span>
                     </a>
                     @if ($selectedBisnes && $selectedBisnes->type_id == 1)
                         <!-- Create by AI -->
                         <a href="{{ route('ai') }}"
-                            class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('ai') || (request()->has('from') && request('from') === 'ai') ? 'nav-link active' : '' }}">
-                            <div class="flex items-center space-x-3">
-                                <i class="fab fa-cloudversify"></i>
-                                <span>Create By AI</span>
+                            class="nav-link flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('ai') || (request()->has('from') && request('from') === 'ai') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                    <i class="fab fa-cloudversify text-sm"></i>
+                                </div>
+                                <span class="font-medium">Create By AI</span>
                             </div>
                             <span id="ai-badge-desktop"
-                                class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-3 py-1 animate-pulse shadow-lg">0</span>
                         </a>
                     @endif
                     <!-- Business Management Section -->
-                    <div class="pt-4">
-                        <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Business
-                            Management</h3>
-                        <div class="mt-2 space-y-1">
+                    <div class="pt-6">
+                        <h3 class="px-4 text-xs font-bold nav-section-title uppercase tracking-wider mb-4 flex items-center">
+                            <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center mr-3">
+                                <i class="fas fa-briefcase text-xs"></i>
+                            </div>
+                            Business Management
+                        </h3>
+                        <div class="space-y-2">
                             <a href="{{ route('bisnes.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('bisnes.*')) ? 'nav-link active' : '' }}">
-                                <i class="fas fa-building"></i>
-                                <span>Syarikat</span>
+                                class="nav-link flex items-center space-x-4 px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('bisnes.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-building text-sm"></i>
+                                </div>
+                                <span class="font-medium">Syarikat</span>
                             </a>
                             @if (session('selected_bisnes_id'))
                                 <a href="{{ route('gambar.index') }}"
-                                    class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('gambar.*')) ? 'nav-link active' : '' }}">
-                                    <i class="fas fa-images"></i>
-                                    <span>Gambar</span>
+                                    class="nav-link flex items-center space-x-4 px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('gambar.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                    <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                        <i class="fas fa-images text-sm"></i>
+                                    </div>
+                                    <span class="font-medium">Gambar</span>
                                 </a>
                                 @if ($selectedBisnes && $selectedBisnes->type_id == 1)
                                     <a href="{{ route('iklan.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('iklan.*')) ? 'nav-link active' : '' }}">
-                                        <div class="flex items-center space-x-3">
-                                            <i class="fas fa-share-alt"></i>
-                                            <span>Iklan AI</span>
+                                        class="nav-link flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('iklan.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-share-alt text-sm"></i>
+                                            </div>
+                                            <span class="font-medium">Iklan AI</span>
                                         </div>
                                     </a>
 
-
                                     <a href="{{ route('produk.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('produk.*')) ? 'nav-link active' : '' }}">
-                                        <div class="flex items-center space-x-3">
-                                            <i class="fas fa-box"></i>
-                                            <span>Produk</span>
+                                        class="nav-link flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('produk.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-box text-sm"></i>
+                                            </div>
+                                            <span class="font-medium">Produk</span>
                                         </div>
                                         <span id="produk-badge-desktop"
-                                            class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                            class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-3 py-1 animate-pulse shadow-lg">0</span>
                                     </a>
                                 @endif
                             @endif
@@ -515,44 +629,56 @@
                     </div>
                     @if (session('selected_bisnes_id'))
                         <!-- Customer Management Section -->
-                        <div class="pt-4">
-                            <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Customer
-                                Management</h3>
-                            <div class="mt-2 space-y-1">
+                        <div class="pt-6">
+                            <h3 class="px-4 text-xs font-bold nav-section-title uppercase tracking-wider mb-4 flex items-center">
+                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center mr-3">
+                                    <i class="fas fa-users text-xs"></i>
+                                </div>
+                                Customer Management
+                            </h3>
+                            <div class="space-y-2">
                                 <a href="{{ route('prospek.index') }}"
-                                    class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('prospek.*')) ? 'nav-link active' : '' }}">
-                                    <div class="flex items-center space-x-3">
-                                        <i class="fas fa-users"></i>
-                                        <span>Prospek</span>
+                                    class="nav-link flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('prospek.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                            <i class="fas fa-users text-sm"></i>
+                                        </div>
+                                        <span class="font-medium">Prospek</span>
                                     </div>
                                     <span id="customer-badge-desktop"
-                                        class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                        class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-3 py-1 animate-pulse shadow-lg">0</span>
                                 </a>
                                 @if ($selectedBisnes && $selectedBisnes->type_id == 1)
                                     <a href="{{ route('customer.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('customer.*')) ? 'nav-link active' : '' }}">
-                                        <div class="flex items-center space-x-3">
-                                            <i class="fas fa-user-secret"></i>
-                                            <span>Pelanggan</span>
+                                        class="nav-link flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('customer.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-user-secret text-sm"></i>
+                                            </div>
+                                            <span class="font-medium">Pelanggan</span>
                                         </div>
                                         <span id="customer-buy-badge-desktop"
-                                            class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                            class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-3 py-1 animate-pulse shadow-lg">0</span>
                                     </a>
 
                                     <a href="{{ route('invoice.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('invoice.*')) ? 'nav-link active' : '' }}">
-                                        <div class="flex items-center space-x-3">
-                                            <i class="fas fa-shopping-cart"></i>
-                                            <span>Invoice</span>
+                                        class="nav-link flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('invoice.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-shopping-cart text-sm"></i>
+                                            </div>
+                                            <span class="font-medium">Invoice</span>
                                         </div>
                                         <span id="customer-buy-badge-desktop"
-                                            class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                            class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-3 py-1 animate-pulse shadow-lg">0</span>
                                     </a>
                                     <a href="{{ route('tracking.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('tracking.*')) ? 'nav-link active' : '' }}">
-                                        <div class="flex items-center space-x-3">
-                                            <i class="fas fa-list"></i>
-                                            <span>Tracking</span>
+                                        class="nav-link flex items-center justify-between px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('tracking.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-list text-sm"></i>
+                                            </div>
+                                            <span class="font-medium">Tracking</span>
                                         </div>
                                     </a>
                                 @endif
@@ -560,13 +686,20 @@
                         </div>
                     @endif
                     <!-- Account Section -->
-                    <div class="pt-4">
-                        <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Account</h3>
-                        <div class="mt-2 space-y-1">
+                    <div class="pt-6">
+                        <h3 class="px-4 text-xs font-bold nav-section-title uppercase tracking-wider mb-4 flex items-center">
+                            <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center mr-3">
+                                <i class="fas fa-user text-xs"></i>
+                            </div>
+                            Account
+                        </h3>
+                        <div class="space-y-2">
                             <a href="{{ route('settings.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('settings.*')) ? 'nav-link active' : '' }}">
-                                <i class="fas fa-cog"></i>
-                                <span>Tetapan</span>
+                                class="nav-link flex items-center space-x-4 px-4 py-4 rounded-xl transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('settings.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                <div class="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-cog text-sm"></i>
+                                </div>
+                                <span class="font-medium">Tetapan</span>
                             </a>
                         </div>
                     </div>
