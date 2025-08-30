@@ -435,13 +435,6 @@
                                             class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                                     </a>
 
-                                    <a href="{{ route('tracking.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('tracking.*') ? 'nav-link active' : '' }}">
-                                        <div class="flex items-center space-x-3">
-                                            <i class="fas fa-list"></i>
-                                            <span>Tracking</span>
-                                        </div>
-                                    </a>
                                     <a href="{{ route('invoice.index') }}"
                                         class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('invoice.*') ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">
@@ -450,6 +443,13 @@
                                         </div>
                                         <span id="customer-buy-badge-desktop"
                                             class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                                    </a>
+                                    <a href="{{ route('tracking.index') }}"
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('tracking.*') ? 'nav-link active' : '' }}">
+                                        <div class="flex items-center space-x-3">
+                                            <i class="fas fa-list"></i>
+                                            <span>Tracking</span>
+                                        </div>
                                     </a>
                                 @endif
                             </div>

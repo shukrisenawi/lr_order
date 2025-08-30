@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Prospek')
+@section('title', 'Tambah Pelanggan Baru')
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -8,20 +8,13 @@
         <div class="mb-8">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Edit Prospek</h1>
-                    <p class="text-gray-600">Kemaskini maklumat prospek untuk {{ $prospek->gelaran }}</p>
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Kemaskini Data Pelanggan</h1>
                 </div>
-
                 <div class="flex gap-4">
                     <a href="{{ route('customer.index') }}"
                         class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                         <i class="fas fa-arrow-left mr-2"></i>
                         Kembali ke Senarai
-                    </a>
-
-                    <a href="{{ route('customer.generate') }}"
-                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                        Generate Data
                     </a>
                 </div>
             </div>
@@ -30,36 +23,33 @@
         <!-- Form -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
-                <h3 class="text-xl font-semibold text-gray-900">Maklumat Prospek</h3>
-                <p class="text-gray-600 text-sm mt-1">Kemaskini maklumat prospek di bawah</p>
+                <h3 class="text-xl font-semibold text-gray-900">Maklumat Pelanggan</h3>
+                <p class="text-gray-600 text-sm mt-1">Sila isi semua maklumat yang diperlukan</p>
             </div>
 
-            <form method="POST" action="{{ route('prospek.update', $prospek) }}" class="p-6">
+            <form method="POST" action="{{ route('customer.store') }}" class="p-6">
                 @csrf
-                @method('PUT')
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Left Column -->
                     <div class="space-y-6">
-                        <!-- No Telefon -->
+
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">No. Telefon <span
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama Penerima <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="no_tel" value="{{ old('no_tel', $prospek->no_tel) }}" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('no_tel') border-red-500 bg-red-50 @enderror">
-                            @error('no_tel')
+                            <input type="text" name="nama_penerima"
+                                value="{{ old('nama_penerima', $customer->nama_penerima) }}" required
+                                placeholder="Contoh: Encik Ahmad"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('nama_penerima') border-red-500 bg-red-50 @enderror">
+                            @error('nama_penerima')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
-
-                        <!-- Gelaran -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama/Gelaran <span
-                                    class="text-red-500">*</span></label>
-                            <input type="text" name="gelaran" value="{{ old('gelaran', $prospek->gelaran) }}" required
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama/Gelaran</label>
+                            <input type="text" name="gelaran" value="{{ old('gelaran', $customer->gelaran) }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('gelaran') border-red-500 bg-red-50 @enderror">
                             @error('gelaran')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -68,14 +58,22 @@
                                 </p>
                             @enderror
                         </div>
-                    </div>
-
-                    <!-- Right Column -->
-                    <div class="space-y-6">
-                        <!-- Email -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Emel (Pilihan)</label>
-                            <input type="email" name="email" value="{{ old('email', $prospek->email) }}"
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Poskod <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" name="poskod" value="{{ old('poskod', $customer->poskod) }}" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('poskod') border-red-500 bg-red-50 @enderror">
+                            @error('poskod')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Email</label>
+                            <input type="email" name="email" value="{{ old('email', $customer->email) }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('email') border-red-500 bg-red-50 @enderror">
                             @error('email')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -84,22 +82,39 @@
                                 </p>
                             @enderror
                         </div>
+                    </div>
+                    <div class="space-y-6">
 
-                        <!-- Bisnes -->
+                        <!-- Email -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Bisnes <span
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat <span
                                     class="text-red-500">*</span></label>
-                            <select name="bisnes_id" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('bisnes_id') border-red-500 bg-red-50 @enderror">
-                                <option value="">Pilih Bisnes</option>
-                                @foreach ($bisnes as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ old('bisnes_id', $prospek->bisnes_id) == $item->id ? 'selected' : '' }}>
-                                        {{ $item->nama_bines }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('bisnes_id')
+                            <input type="text" name="alamat" requied value="{{ old('alamat', $customer->alamat) }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('alamat') border-red-500 bg-red-50 @enderror">
+                            @error('alamat')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">No Tel <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" name="no_tel" requied value="{{ old('no_tel', $customer->no_tel) }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('no_tel') border-red-500 bg-red-50 @enderror">
+                            @error('no_tel')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Catatan</label>
+                            <input type="text" name="catatan" value="{{ old('catatan', $customer->catatan) }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('catatan') border-red-500 bg-red-50 @enderror">
+                            @error('catatan')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
@@ -111,14 +126,14 @@
 
                 <!-- Actions -->
                 <div class="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="{{ route('prospek.index') }}"
+                    <a href="{{ route('customer.index') }}"
                         class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors duration-300">
                         Batal
                     </a>
                     <button type="submit"
                         class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-xl shadow-lg hover:from-amber-600 hover:to-orange-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
                         <i class="fas fa-save mr-2"></i>
-                        Kemaskini Prospek
+                        Simpan Pelanggan
                     </button>
                 </div>
             </form>

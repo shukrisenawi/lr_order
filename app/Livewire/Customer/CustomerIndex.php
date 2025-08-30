@@ -40,13 +40,13 @@ class CustomerIndex extends Component
 
         $customer->delete();
 
-        session()->flash('message', 'Prospect deleted successfully.');
+        session()->flash('message', 'Customer deleted successfully.');
         $this->dispatch('prospect-deleted');
     }
 
     public function render()
     {
-        $customer = Customer::with('bisnes')
+        $customer = Customer::where('bisnes_id', session('selected_bisnes_id'))->with('bisnes')
             ->whereHas('bisnes', function ($query) {
                 $query->where('user_id', Auth::id());
             })

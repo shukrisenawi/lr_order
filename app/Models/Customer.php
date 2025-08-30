@@ -25,8 +25,7 @@ class Customer extends Model
         'poskod',
         'no_tel',
         'email',
-        'catatan',
-        'create_by_ai'
+        'catatan'
     ];
 
     public function user()

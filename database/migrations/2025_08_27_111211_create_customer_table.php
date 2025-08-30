@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('no_tel');
             $table->string('email')->nullable();
             $table->string('catatan')->nullable();
-            $table->boolean('create_by_ai')->default(true);
             $table->timestamps();
         });
     }
