@@ -39,7 +39,7 @@ class InvoiceForm extends Component
         'items.*.harga' => 'required|numeric|min:0',
     ];
 
-    public function mount($invoice = null)
+    public function mount($invoice = null, $customer = null)
     {
         $this->bisnes_list = Bisnes::where('user_id', Auth::id())->get();
         $this->produk_list = Produk::where('bisnes_id', session('selected_bisnes_id'))->get();
@@ -64,6 +64,13 @@ class InvoiceForm extends Component
                 ];
             })->toArray();
         } else {
+            // Pre-fill customer data if provided
+            if ($customer) {
+                $this->nama_penerima = $customer->nama_penerima;
+                $this->alamat = $customer->alamat;
+                $this->no_tel = $customer->no_tel;
+            }
+
             $this->addItem();
         }
     }

@@ -22,7 +22,7 @@
     <form wire:submit.prevent="save" class="space-y-8">
         <!-- Basic Information -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h2 class="text-xl font-semibold text-gray-900 mb-6">Basic Information{{ $customer->nama_penerima }}</h2>
+            <h2 class="text-xl font-semibold text-gray-900 mb-6">Basic Information</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
