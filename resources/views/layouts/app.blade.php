@@ -167,7 +167,7 @@
     <!-- Header -->
     <header class="gradient-header shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+            <div class="flex justify-between items-center h-12">
                 <div class="flex items-center">
                     <!-- Mobile menu button -->
                     <button id="mobile-menu-button" type="button"
@@ -175,7 +175,7 @@
                         onclick="toggleMobileMenu()">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
-                    <h1 class="ml-2 md:ml-0 text-xl font-bold text-white">SISTEM TEMPAHAN PERNIAGAAN</h1>
+                    <h1 class="ml-2 md:ml-0 text-lg font-bold text-white">SISTEM TEMPAHAN PERNIAGAAN</h1>
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Business Selector -->
@@ -184,7 +184,7 @@
                         @if ($userBisnes->count() > 0)
                             <div class="relative inline-block text-left">
                                 <button type="button"
-                                    class="inline-flex items-center px-4 py-2 border border-white/20 shadow-sm text-sm leading-4 font-medium rounded-lg text-white bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200"
+                                    class="inline-flex items-center px-3 py-1 border border-white/20 shadow-sm text-sm leading-4 font-medium rounded-lg text-white bg-white/10 hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200"
                                     id="bisnes-menu-button" aria-expanded="true" aria-haspopup="true"
                                     onclick="toggleBisnesDropdown()">
                                     <img src="{{ $selectedBisnes && $selectedBisnes->gambar ? \App\Helpers\ImageHelper::businessImageUrl($selectedBisnes->gambar) : asset('img/logo-01.png') }}"
@@ -231,7 +231,7 @@
                             </div>
                         @else
                             <a href="{{ route('bisnes.create') }}"
-                                class="hidden md:inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-white/20 hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 pulse-glow">
+                                class="hidden md:inline-flex items-center px-3 py-1 border border-transparent text-sm leading-4 font-medium rounded-lg text-white bg-white/20 hover:bg-white/30 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 pulse-glow">
                                 <i class="fas fa-plus mr-2"></i>
                                 Tambah Bisnes
                             </a>
