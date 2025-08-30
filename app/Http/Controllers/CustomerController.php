@@ -88,51 +88,49 @@ class CustomerController extends Controller
                 'email' => 'nullable|string|max:100',
                 'catatan' => 'nullable|string|max:200'
             ]);
+
+            // Remove dd() to allow code execution
+            $data = $request->all();
+
+            if ($request->no_tel) {
+                // Normalize phone number to format: 60195168839@c.us
+                $no_tel = preg_replace('/[^0-9]/', '', $request->no_tel); // Remove non-digits
+                if (strpos($no_tel, '601') === 0) {
+                    // Already starts with 601
+                    $normalized = $no_tel;
+                } elseif (strpos($no_tel, '01') === 0) {
+                    // Malaysian mobile, replace leading 0 with 6
+                    $normalized = '60' . substr($no_tel, 1);
+                } else {
+                    // Fallback: just add 6 in front
+                    $normalized = '60' . $no_tel;
+                }
+                $data['whatsapp_id'] = $normalized . "@c.us";
+            }
+
+
+
+            if (Customer::create($data)) {
+                $dataContact = [
+                    'sessionId' => uniqid(),
+                    'bisnes_id' => session('selected_bisnes_id'),
+                    'nama' => $data['nama_penerima'],
+                    'no_tel' => $data['no_tel'],
+                    'alamat' => $data['alamat'],
+                ];
+                $response = $this->sentN8n($dataContact, true, 'https://n8n-mt8umikivytz.n8x.biz.id/webhook/cf1a7beb-3a83-4c6d-8302-748f5331a3d0', 'https://n8n-mt8umikivytz.n8x.biz.id/webhook-test/cf1a7beb-3a83-4c6d-8302-748f5331a3d0');
+            }
+
+            if (isset($response['code']) && $response['code'] == 404) {
+                return redirect()->route('customer.create')->with('error', $response['message']);
+            } else if (isset($response[0]['alamat'])) {
+                return redirect()->route('customer.index', $response[0])->with('success',  'Data ' . $response[0]['nama'] . ' telah berjaya disimpan.');
+            } else {
+                return redirect()->route('customer.create')->with('error', 'Data gagal diproses. Sila semak data yang di masukkan.');
+            }
         } catch (\Illuminate\Validation\ValidationException $e) {
             dd($e->validator->errors()->all());
         }
-
-        // Remove dd() to allow code execution
-        $data = $request->all();
-
-        if ($request->no_tel) {
-            // Normalize phone number to format: 60195168839@c.us
-            $no_tel = preg_replace('/[^0-9]/', '', $request->no_tel); // Remove non-digits
-            if (strpos($no_tel, '601') === 0) {
-                // Already starts with 601
-                $normalized = $no_tel;
-            } elseif (strpos($no_tel, '01') === 0) {
-                // Malaysian mobile, replace leading 0 with 6
-                $normalized = '6' . substr($no_tel, 1);
-            } else {
-                // Fallback: just add 6 in front
-                $normalized = '6' . $no_tel;
-            }
-            $data['whatsapp_id'] = $normalized . "@c.us";
-        }
-
-        $dataContact = [
-            'sessionId' => uniqid(),
-            'bisnes_id' => session('selected_bisnes_id'),
-            'nama' => $data['nama_penerima'],
-            'no_tel' => $data['no_tel'],
-            'alamat' => $data['alamat'],
-        ];
-        $response = $this->sentN8n($dataContact, true, 'https://n8n-mt8umikivytz.n8x.biz.id/webhook/cf1a7beb-3a83-4c6d-8302-748f5331a3d0', 'https://n8n-mt8umikivytz.n8x.biz.id/webhook-test/cf1a7beb-3a83-4c6d-8302-748f5331a3d0');
-        dd($response);
-        exit;
-        if (Customer::create($data)) {
-            $data = [
-                'sessionId' => uniqid(),
-                'bisnes_id' => session('selected_bisnes_id'),
-                'nama' => $data['nama_penerima'],
-                'no_tel' => $data['no_tel'],
-                'alamat' => $data['alamat'],
-            ];
-            $response = $this->sentN8n($data, true, 'https://n8n-mt8umikivytz.n8x.biz.id/webhook/cf1a7beb-3a83-4c6d-8302-748f5331a3d0', 'https://n8n-mt8umikivytz.n8x.biz.id/webhook-test/cf1a7beb-3a83-4c6d-8302-748f5331a3d0');
-        }
-
-        return redirect()->route('customer.index')->with('success', 'Customer created successfully.');
     }
 
     public function edit(Customer $customer)

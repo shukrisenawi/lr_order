@@ -126,7 +126,7 @@
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->catatan }}</td>
                             <td class="px-6 py-4">
                                 <div class="flex gap-5 justify-evenly">
-                                    <div class="flex gap-5">
+                                    <div class="flex gap-2">
                                         <a href="{{ route('customer.show', $item) }}"
                                             class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-amber-700 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors duration-200">
                                             <i class="fas fa-eye mr-1"></i>
@@ -137,13 +137,13 @@
                                             <i class="fas fa-edit mr-1"></i>
                                             Edit
                                         </a>
+                                        <a href="{{ route('invoice.customer', $item->id) }}"
+                                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-700 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors duration-200">
+                                            <i class="fas fa-shopping-cart mr-1"></i>
+                                        </a>
                                         <a href="{{ route('tracking.create', $item->id) }}"
                                             class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-700 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors duration-200">
                                             <i class="fas fa-list mr-1"></i>
-                                        </a>
-                                        <a href="{{ route('invoice.create', $item->id) }}"
-                                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-700 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors duration-200">
-                                            <i class="fas fa-shopping-cart mr-1"></i>
                                         </a>
                                     </div>
 

@@ -42,9 +42,7 @@ class InvoiceForm extends Component
     public function mount($invoice = null)
     {
         $this->bisnes_list = Bisnes::where('user_id', Auth::id())->get();
-        $this->produk_list = Produk::whereHas('bisnes', function ($query) {
-            $query->where('user_id', Auth::id());
-        })->get();
+        $this->produk_list = Produk::where('bisnes_id', session('selected_bisnes_id'))->get();
 
         if ($invoice) {
             $this->isEdit = true;

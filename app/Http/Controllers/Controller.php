@@ -20,19 +20,23 @@ abstract class Controller extends BaseController
 
     public function sentN8n($data, $test = true, $link_production, $link_test)
     {
-        // $data['sessionId'] = uniqid();
-        if (env('APP_DEV') && $test) {
-            $response = Http::withoutVerifying()->get(
-                $link_test,
-                $data
-            );
-        } else {
-            $response = Http::get(
-                $link_production,
-                $data
-            );
+        try {
+            // $data['sessionId'] = uniqid();
+            if (env('APP_DEV') && $test) {
+                $response = Http::withoutVerifying()->get(
+                    $link_test,
+                    $data
+                );
+            } else {
+                $response = Http::get(
+                    $link_production,
+                    $data
+                );
+            }
+            return $response->json();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            dd($e->validator->errors()->all());
         }
-        return $response->json();
     }
 
     public function generateSummary(Bisnes $bisnes)

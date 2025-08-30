@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Produk;
 use App\Models\Bisnes;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -24,18 +25,16 @@ class InvoiceController extends Controller
         return view('invoice.index', compact('invoices'));
     }
 
-    public function create()
+    public function create(Customer $customer)
     {
-        $bisnes = Bisnes::where('user_id', Auth::id())->get();
-        $produk = Produk::whereHas('bisnes', function ($query) {
-            $query->where('user_id', Auth::id());
-        })->get();
+        $produk = Produk::where('bisnes_id', session('selected_bisnes_id'))->get();
 
-        return view('invoice.create', compact('bisnes', 'produk'));
+        return view('invoice.create', compact('produk', 'customer'));
     }
 
     public function store(Request $request)
     {
+        $request->merge(['bisnes_id' => session('selected_bisnes_id')]);
         $request->validate([
             'bisnes_id' => 'required|exists:bisnes,id',
             'nama_penerima' => 'required|string|max:255',
@@ -49,11 +48,6 @@ class InvoiceController extends Controller
             'items.*.kuantiti' => 'required|integer|min:1',
             'items.*.harga' => 'required|numeric|min:0',
         ]);
-
-        // Verify bisnes belongs to authenticated user
-        $bisnes = Bisnes::where('id', $request->bisnes_id)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
 
         $invoice = Invoice::create([
             'bisnes_id' => $request->bisnes_id,
