@@ -11,11 +11,19 @@
                     <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Edit Prospek</h1>
                     <p class="text-gray-600">Kemaskini maklumat prospek untuk {{ $prospek->gelaran }}</p>
                 </div>
-                <a href="{{ route('prospek.index') }}"
-                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    Kembali ke Senarai
-                </a>
+
+                <div class="flex gap-4">
+                    <a href="{{ route('customer.index') }}"
+                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Kembali ke Senarai
+                    </a>
+
+                    <a href="{{ route('customer.generate') }}"
+                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                        Generate Data
+                    </a>
+                </div>
             </div>
         </div>
 

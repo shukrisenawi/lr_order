@@ -35,7 +35,6 @@ class CustomerController extends Controller
     public function create()
     {
         echo session('response');
-        exit;
         // $response = json_decode(session('response'));
         // $response;
         return view('customer.create');
@@ -54,6 +53,8 @@ class CustomerController extends Controller
             ]
         );
         $response = json_encode($this->sendToN8n($request->text_alamat));
+        dd($response);
+        exit;
         return redirect()->route('customer.create', $response)->with('response', $response)->with('success', 'Customer generate successfully.');
     }
 
