@@ -49,9 +49,10 @@ class TrackingIndex extends Component
         $tracking = Tracking::with('bisnes')
             ->where('bisnes_id', session('selected_bisnes_id'))->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('gelaran', 'like', '%' . $this->search . '%')
+                    $q->where('nama_penerima', 'like', '%' . $this->search . '%')
                         ->orWhere('no_tel', 'like', '%' . $this->search . '%')
-                        ->orWhere('email', 'like', '%' . $this->search . '%');
+                        ->orWhere('alamat', 'like', '%' . $this->search . '%')
+                        ->orWhere('kurier', 'like', '%' . $this->search . '%');
                 });
             })
             ->orderBy($this->sortField, $this->sortDirection)

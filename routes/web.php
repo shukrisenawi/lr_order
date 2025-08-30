@@ -154,13 +154,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
     Route::get('/invoice/{invoice}/pdf', [InvoiceController::class, 'generatePdf'])->name('invoice.pdf');
 
-    Route::get('/tracking', function () {
-        if (empty(session('selected_bisnes_id')))
-            return redirect()->route('bisnes.index');
-        return view('tracking-livewire');
-    })->name('tracking.index');
+    Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking.index');
     Route::resource('tracking', TrackingController::class)->except(['index']);
     Route::post('/tracking/{tracking}', [TrackingController::class, 'update'])->name('tracking.update');
+    Route::post('/tracking/{tracking}/create-shipment', [TrackingController::class, 'createShipment'])->name('tracking.create-shipment');
+    Route::get('/tracking/{tracking}/track-shipment', [TrackingController::class, 'trackShipment'])->name('tracking.track-shipment');
 
     // Settings routes
     Route::prefix('settings')->name('settings.')->group(function () {

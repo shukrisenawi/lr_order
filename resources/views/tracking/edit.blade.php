@@ -1,109 +1,150 @@
 @extends('layouts.app')
 
-@section('title', 'Kemaskini Prospek')
+@section('title', 'Edit Tracking')
 
 @section('content')
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Header -->
-        <div class="mb-8">
-            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+    <div class="mb-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-900">Edit Tracking</h1>
+                <p class="text-gray-600">Update shipment tracking information</p>
+            </div>
+            <a href="{{ route('tracking.index') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back to Tracking
+            </a>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-lg shadow p-6">
+        <form method="POST" action="{{ route('tracking.update', $tracking) }}">
+            @csrf
+            @method('PUT')
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Invoice Selection -->
                 <div>
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Tambah Prospek Baru</h1>
-                    <p class="text-gray-600">Cipta prospek baru</p>
+                    <label for="invoice_id" class="block text-sm font-medium text-gray-700">Invoice (Optional)</label>
+                    <select id="invoice_id" name="invoice_id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select Invoice</option>
+                        @foreach($invoices as $invoice)
+                            <option value="{{ $invoice->id }}" {{ $tracking->invoice_id == $invoice->id ? 'selected' : '' }}>
+                                Invoice #{{ $invoice->id }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
-                <a href="{{ route('prospek.index') }}"
-                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    Kembali ke Senarai
+
+                <!-- Courier -->
+                <div>
+                    <label for="kurier" class="block text-sm font-medium text-gray-700">Courier</label>
+                    <select id="kurier" name="kurier" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="J&T" {{ $tracking->kurier == 'J&T' ? 'selected' : '' }}>J&T Express</option>
+                        <option value="PosLaju" {{ $tracking->kurier == 'PosLaju' ? 'selected' : '' }}>Pos Laju</option>
+                        <option value="DHL" {{ $tracking->kurier == 'DHL' ? 'selected' : '' }}>DHL</option>
+                        <option value="FedEx" {{ $tracking->kurier == 'FedEx' ? 'selected' : '' }}>FedEx</option>
+                    </select>
+                </div>
+
+                <!-- Recipient Name -->
+                <div>
+                    <label for="nama_penerima" class="block text-sm font-medium text-gray-700">Recipient Name</label>
+                    <input type="text" id="nama_penerima" name="nama_penerima" value="{{ old('nama_penerima', $tracking->nama_penerima) }}" required
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    @error('nama_penerima')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Phone Number -->
+                <div>
+                    <label for="no_tel" class="block text-sm font-medium text-gray-700">Phone Number</label>
+                    <input type="text" id="no_tel" name="no_tel" value="{{ old('no_tel', $tracking->no_tel) }}" required
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    @error('no_tel')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Address -->
+                <div class="md:col-span-2">
+                    <label for="alamat" class="block text-sm font-medium text-gray-700">Address</label>
+                    <textarea id="alamat" name="alamat" rows="3" required
+                              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">{{ old('alamat', $tracking->alamat) }}</textarea>
+                    @error('alamat')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Postcode -->
+                <div>
+                    <label for="poskod" class="block text-sm font-medium text-gray-700">Postcode</label>
+                    <input type="text" id="poskod" name="poskod" value="{{ old('poskod', $tracking->poskod) }}" required
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    @error('poskod')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Parcel Content -->
+                <div>
+                    <label for="kandungan_parcel" class="block text-sm font-medium text-gray-700">Parcel Content</label>
+                    <input type="text" id="kandungan_parcel" name="kandungan_parcel" value="{{ old('kandungan_parcel', $tracking->kandungan_parcel) }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    @error('kandungan_parcel')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Parcel Type -->
+                <div>
+                    <label for="jenis_parcel" class="block text-sm font-medium text-gray-700">Parcel Type</label>
+                    <select id="jenis_parcel" name="jenis_parcel" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select Type</option>
+                        <option value="Document" {{ $tracking->jenis_parcel == 'Document' ? 'selected' : '' }}>Document</option>
+                        <option value="Package" {{ $tracking->jenis_parcel == 'Package' ? 'selected' : '' }}>Package</option>
+                        <option value="Fragile" {{ $tracking->jenis_parcel == 'Fragile' ? 'selected' : '' }}>Fragile</option>
+                    </select>
+                </div>
+
+                <!-- Weight -->
+                <div>
+                    <label for="berat" class="block text-sm font-medium text-gray-700">Weight (kg)</label>
+                    <input type="text" id="berat" name="berat" value="{{ old('berat', $tracking->berat) }}"
+                           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    @error('berat')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Dimensions -->
+                <div class="grid grid-cols-3 gap-4 md:col-span-2">
+                    <div>
+                        <label for="panjang" class="block text-sm font-medium text-gray-700">Length (cm)</label>
+                        <input type="text" id="panjang" name="panjang" value="{{ old('panjang', $tracking->panjang) }}"
+                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="lebar" class="block text-sm font-medium text-gray-700">Width (cm)</label>
+                        <input type="text" id="lebar" name="lebar" value="{{ old('lebar', $tracking->lebar) }}"
+                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="tinggi" class="block text-sm font-medium text-gray-700">Height (cm)</label>
+                        <input type="text" id="tinggi" name="tinggi" value="{{ old('tinggi', $tracking->tinggi) }}"
+                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <a href="{{ route('tracking.index') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg mr-3">
+                    Cancel
                 </a>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                    Update Tracking
+                </button>
             </div>
-        </div>
-
-        <!-- Form -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
-                <h3 class="text-xl font-semibold text-gray-900">Maklumat Prospek</h3>
-                <p class="text-gray-600 text-sm mt-1">Sila isi semua maklumat yang diperlukan</p>
-            </div>
-
-            <form method="POST" action="{{ route('prospek.update', $prospek) }}" class="p-6">
-                @csrf
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Left Column -->
-                    <div class="space-y-6">
-                        <!-- No Telefon -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">No. Telefon <span
-                                    class="text-red-500">*</span></label>
-                            <input type="text" name="no_tel" value="{{ old('no_tel', $prospek->no_tel) }}" required
-                                placeholder="Contoh: 012-3456789"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('no_tel') border-red-500 bg-red-50 @enderror">
-                            @error('no_tel')
-                                <p class="mt-2 text-sm text-red-600 flex items-center">
-                                    <i class="fas fa-exclamation-circle mr-1"></i>
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-
-                        <!-- Gelaran -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama/Gelaran</label>
-                            <input type="text" name="gelaran" value="{{ old('gelaran', $prospek->gelaran) }}"
-                                placeholder="Contoh: Encik Ahmad"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('gelaran') border-red-500 bg-red-50 @enderror">
-                            @error('gelaran')
-                                <p class="mt-2 text-sm text-red-600 flex items-center">
-                                    <i class="fas fa-exclamation-circle mr-1"></i>
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-                    </div>
-
-                    <!-- Right Column -->
-                    <div class="space-y-6">
-                        <!-- Email -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Session Id (Pilihan)</label>
-                            <input type="text" name="session_id" value="{{ old('session_id', $prospek->session_id) }}"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('session_id') border-red-500 bg-red-50 @enderror">
-                            @error('session_id')
-                                <p class="mt-2 text-sm text-red-600 flex items-center">
-                                    <i class="fas fa-exclamation-circle mr-1"></i>
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">On AI </label>
-                            <input type="checkbox" name="on" value="1"
-                                {{ old('on', $prospek->on) ? 'checked' : '' }}
-                                class="toggle toggle-success @error('on') border-red-500 bg-red-50 @enderror">
-                            @error('on')
-                                <p class="mt-2 text-sm text-red-600 flex items-center">
-                                    <i class="fas fa-exclamation-circle mr-1"></i>
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Actions -->
-                <div class="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="{{ route('prospek.index') }}"
-                        class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors duration-300">
-                        Batal
-                    </a>
-                    <button type="submit"
-                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-xl shadow-lg hover:from-amber-600 hover:to-orange-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
-                        <i class="fas fa-save mr-2"></i>
-                        Simpan Prospek
-                    </button>
-                </div>
-            </form>
-        </div>
+        </form>
     </div>
 @endsection
