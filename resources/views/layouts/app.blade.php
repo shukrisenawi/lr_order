@@ -160,7 +160,7 @@
 
     @php
         $userBisnes = Bisnes::where('user_id', Auth::id())->get();
-        $selectedBisnes = session('selected_bisnes_id') ? Bisnes::find(session('selected_bisnes_id')) : 0;
+        $selectedBisnes = session('selected_bisnes_id') ? Bisnes::find(session('selected_bisnes_id')) : null;
         $isFromAi = request()->has('from') && request('from') === 'ai';
 
     @endphp
@@ -374,7 +374,7 @@
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
-                    @if ($selectedBisnes->type_id == 1)
+                    @if ($selectedBisnes && $selectedBisnes->type_id == 1)
                         <!-- Create by AI -->
                         <a href="{{ route('ai') }}"
                             class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('ai') || (request()->has('from') && request('from') === 'ai') ? 'nav-link active' : '' }}">
@@ -402,7 +402,7 @@
                                     <i class="fas fa-images"></i>
                                     <span>Gambar</span>
                                 </a>
-                                @if ($selectedBisnes->type_id == 1)
+                                @if ($selectedBisnes && $selectedBisnes->type_id == 1)
                                     <a href="{{ route('iklan.index') }}"
                                         class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('iklan.*')) ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">
@@ -440,7 +440,7 @@
                                     <span id="customer-badge-desktop"
                                         class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                                 </a>
-                                @if ($selectedBisnes->type_id == 1)
+                                @if ($selectedBisnes && $selectedBisnes->type_id == 1)
                                     <a href="{{ route('customer.index') }}"
                                         class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('customer.*')) ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">
