@@ -18,6 +18,14 @@ class AiApproval extends Component
     public function mount()
     {
         $this->updateCounts();
+
+        // Check if tab is specified in URL parameter
+        if (request()->has('tab')) {
+            $tab = request()->get('tab');
+            if (in_array($tab, ['customers', 'invoices'])) {
+                $this->activeTab = $tab;
+            }
+        }
     }
 
     public function updateCounts()

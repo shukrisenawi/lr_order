@@ -277,6 +277,17 @@
                         <span>Jadual Data</span>
                     </a>
 
+                    <!-- Create by AI -->
+                    <a href="{{ route('ai') }}"
+                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('ai') || (request()->has('from') && request('from') === 'ai') ? 'nav-link active' : '' }}">
+                        <div class="flex items-center space-x-3">
+                            <i class="fab fa-cloudversify"></i>
+                            <span>Create By AI</span>
+                        </div>
+                        <span id="ai-badge"
+                            class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                    </a>
+
                     <!-- Business Management Section -->
                     <div class="pt-4">
                         <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Business
@@ -371,7 +382,7 @@
                                 <i class="fab fa-cloudversify"></i>
                                 <span>Create By AI</span>
                             </div>
-                            <span id="ai-badge-mobile"
+                            <span id="ai-badge-desktop"
                                 class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                         </a>
                     @endif

@@ -13,7 +13,7 @@
                 </div>
                 <div class="flex space-x-3">
                     @if(request('from') === 'ai')
-                        <a href="{{ route('ai') }}"
+                        <a href="{{ route('ai') }}?tab={{ request('tab', 'invoices') }}"
                             class="inline-flex items-center px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Back to AI Approval

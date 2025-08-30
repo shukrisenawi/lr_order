@@ -18,7 +18,7 @@
                         Edit
                     </a>
                     @if(request('from') === 'ai')
-                        <a href="{{ route('ai') }}"
+                        <a href="{{ route('ai') }}?tab={{ request('tab', 'customers') }}"
                             class="inline-flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium rounded-xl shadow-lg hover:from-purple-600 hover:to-purple-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Kembali ke AI Approval
@@ -196,7 +196,7 @@
         <!-- Actions -->
         <div class="mt-8 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
             @if(request('from') === 'ai')
-                <a href="{{ route('ai') }}"
+                <a href="{{ route('ai') }}?tab={{ request('tab', 'customers') }}"
                     class="inline-flex items-center justify-center px-6 py-3 border border-purple-300 text-purple-700 font-medium rounded-xl hover:bg-purple-50 transition-colors duration-300">
                     <i class="fas fa-arrow-left mr-2"></i>
                     Kembali ke AI Approval
