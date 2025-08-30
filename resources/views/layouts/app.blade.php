@@ -418,7 +418,7 @@
                     <a href="{{ route('dashboard') }}"
                         class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('dashboard')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                         <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                            <i class="fas fa-tachometer-alt text-sm"></i>
+                            <i class="fas fa-home text-sm"></i>
                         </div>
                         <span class="font-medium">Dashboard</span>
                     </a>
@@ -437,7 +437,7 @@
                         class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('ai') || (request()->has('from') && request('from') === 'ai') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                         <div class="flex items-center space-x-3">
                             <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                <i class="fab fa-cloudversify text-sm"></i>
+                                <i class="fas fa-robot text-sm"></i>
                             </div>
                             <span class="font-medium">Create By AI</span>
                         </div>
@@ -473,7 +473,7 @@
                                 class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('iklan.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                        <i class="fas fa-share-alt text-sm"></i>
+                                        <i class="fas fa-bullhorn text-sm"></i>
                                     </div>
                                     <span class="font-medium">Iklan</span>
                                 </div>
@@ -505,7 +505,7 @@
                                 class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('prospek.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                        <i class="fas fa-users text-sm"></i>
+                                        <i class="fas fa-search-plus text-sm"></i>
                                     </div>
                                     <span class="font-medium">Prospek</span>
                                 </div>
@@ -516,7 +516,7 @@
                                 class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('customer.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                        <i class="fas fa-shopping-cart text-sm"></i>
+                                        <i class="fas fa-handshake text-sm"></i>
                                     </div>
                                     <span class="font-medium">Pelanggan</span>
                                 </div>
@@ -559,7 +559,7 @@
                     <a href="{{ route('dashboard') }}"
                         class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('dashboard')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                         <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                            <i class="fas fa-tachometer-alt text-sm"></i>
+                            <i class="fas fa-home text-sm"></i>
                         </div>
                         <span class="font-medium">Dashboard</span>
                     </a>
@@ -569,7 +569,7 @@
                             class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('ai') || (request()->has('from') && request('from') === 'ai') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                             <div class="flex items-center space-x-3">
                                 <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                    <i class="fab fa-cloudversify text-sm"></i>
+                                    <i class="fas fa-robot text-sm"></i>
                                 </div>
                                 <span class="font-medium">Create By AI</span>
                             </div>
@@ -606,7 +606,7 @@
                                         class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('iklan.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                                <i class="fas fa-share-alt text-sm"></i>
+                                                <i class="fas fa-bullhorn text-sm"></i>
                                             </div>
                                             <span class="font-medium">Iklan AI</span>
                                         </div>
@@ -641,7 +641,7 @@
                                     class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('prospek.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                            <i class="fas fa-users text-sm"></i>
+                                            <i class="fas fa-search-plus text-sm"></i>
                                         </div>
                                         <span class="font-medium">Prospek</span>
                                     </div>
@@ -653,7 +653,7 @@
                                         class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('customer.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                                <i class="fas fa-user-secret text-sm"></i>
+                                                <i class="fas fa-handshake text-sm"></i>
                                             </div>
                                             <span class="font-medium">Pelanggan</span>
                                         </div>
@@ -665,7 +665,7 @@
                                         class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('invoice.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                                <i class="fas fa-shopping-cart text-sm"></i>
+                                                <i class="fas fa-file-invoice-dollar text-sm"></i>
                                             </div>
                                             <span class="font-medium">Invoice</span>
                                         </div>
@@ -676,7 +676,7 @@
                                         class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('tracking.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                                <i class="fas fa-list text-sm"></i>
+                                                <i class="fas fa-route text-sm"></i>
                                             </div>
                                             <span class="font-medium">Tracking</span>
                                         </div>
