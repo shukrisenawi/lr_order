@@ -363,6 +363,11 @@
                         <span>Dashboard</span>
                     </a>
 
+                    <a href="{{ route('ai') }}"
+                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('ai') ? 'nav-link active' : '' }}">
+                        <i class="fab fa-cloudversify"></i>
+                        <span>Create By AI</span>
+                    </a>
                     <!-- Data Table -->
                     <a href="{{ route('data-table') }}"
                         class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('data-table') ? 'nav-link active' : '' }}">
