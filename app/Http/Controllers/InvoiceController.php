@@ -25,10 +25,9 @@ class InvoiceController extends Controller
         return view('invoice.index', compact('invoices'));
     }
 
-    public function create(Customer $customer)
+    public function create(Customer $customer = null)
     {
         $produk = Produk::where('bisnes_id', session('selected_bisnes_id'))->get();
-
         return view('invoice.create', compact('produk', 'customer'));
     }
 
