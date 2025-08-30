@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tracking Management')
+@section('title', 'Pengurusan Tracking')
 
 @section('content')
     @livewire('tracking.tracking-index')

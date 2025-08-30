@@ -4,20 +4,21 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Pengurusan Tracking</h1>
-                <p class="text-gray-600">Urus tracking anda</p>
+                <p class="text-gray-600">Urus penghantaran dan maklumat tracking anda</p>
             </div>
-            <a href="{{ route('tracking.create') }}"
-                class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-xl shadow-lg hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
-                <i class="fas fa-plus mr-2"></i>
-                Tambah Tracking Baru
-            </a>
+            <div class="flex gap-4">
+                <a href="{{ route('tracking.create') }}"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <i class="fas fa-plus mr-2"></i>
+                    Tambah Tracking Baru
+                </a>
+            </div>
         </div>
     </div>
 
     <!-- Flash Messages -->
     @if (session()->has('message'))
-        <div
-            class="mb-8 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-700 rounded-xl shadow-sm">
+        <div class="mb-8 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-700 rounded-xl shadow-sm">
             <div class="flex items-center">
                 <i class="fas fa-check-circle text-green-500 mr-3"></i>
                 <span>{{ session('message') }}</span>
@@ -32,8 +33,8 @@
                 <i class="fas fa-search text-gray-400"></i>
             </div>
             <input type="text" wire:model.live.debounce.300ms="search"
-                placeholder="Cari tracking mengikut nama, telefon, atau emel..."
-                class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-amber-500 focus:ring-4 focus:ring-amber-100 focus:outline-none transition-all duration-300 shadow-sm">
+                placeholder="Cari tracking mengikut nama, telefon, atau alamat..."
+                class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
         </div>
     </div>
 
@@ -43,114 +44,145 @@
             <table class="w-full">
                 <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                     <tr>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-amber-600 transition-colors"
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
+                            wire:click="sortBy('id')">
+                            <div class="flex items-center">
+                                ID
+                                @if ($sortField === 'id')
+                                    @if ($sortDirection === 'asc')
+                                        <i class="fas fa-arrow-up ml-2 text-blue-500"></i>
+                                    @else
+                                        <i class="fas fa-arrow-down ml-2 text-blue-500"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort ml-2 text-gray-400"></i>
+                                @endif
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
+                            wire:click="sortBy('kurier')">
+                            <div class="flex items-center">
+                                Kurier
+                                @if ($sortField === 'kurier')
+                                    @if ($sortDirection === 'asc')
+                                        <i class="fas fa-arrow-up ml-2 text-blue-500"></i>
+                                    @else
+                                        <i class="fas fa-arrow-down ml-2 text-blue-500"></i>
+                                    @endif
+                                @else
+                                    <i class="fas fa-sort ml-2 text-gray-400"></i>
+                                @endif
+                            </div>
+                        </th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
                             wire:click="sortBy('nama_penerima')">
                             <div class="flex items-center">
-                                Nama
+                                Nama Penerima
                                 @if ($sortField === 'nama_penerima')
                                     @if ($sortDirection === 'asc')
-                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-up ml-2 text-blue-500"></i>
                                     @else
-                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-down ml-2 text-blue-500"></i>
                                     @endif
                                 @else
                                     <i class="fas fa-sort ml-2 text-gray-400"></i>
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-amber-600 transition-colors"
-                            wire:click="sortBy('alamat')">
-                            <div class="flex items-center">
-                                Alamat
-                                @if ($sortField === 'alamat')
-                                    @if ($sortDirection === 'asc')
-                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
-                                    @else
-                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
-                                    @endif
-                                @else
-                                    <i class="fas fa-sort ml-2 text-gray-400"></i>
-                                @endif
-                            </div>
-                        </th>
-
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-amber-600 transition-colors"
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
                             wire:click="sortBy('no_tel')">
                             <div class="flex items-center">
-                                No Tel
+                                No Telefon
                                 @if ($sortField === 'no_tel')
                                     @if ($sortDirection === 'asc')
-                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-up ml-2 text-blue-500"></i>
                                     @else
-                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-down ml-2 text-blue-500"></i>
                                     @endif
                                 @else
                                     <i class="fas fa-sort ml-2 text-gray-400"></i>
                                 @endif
                             </div>
                         </th>
-
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-amber-600 transition-colors"
-                            wire:click="sortBy('catatan')">
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Alamat</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Berat</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
+                            wire:click="sortBy('created_at')">
                             <div class="flex items-center">
-                                Catatan
-                                @if ($sortField === 'catatan')
+                                Dibuat
+                                @if ($sortField === 'created_at')
                                     @if ($sortDirection === 'asc')
-                                        <i class="fas fa-arrow-up ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-up ml-2 text-blue-500"></i>
                                     @else
-                                        <i class="fas fa-arrow-down ml-2 text-amber-500"></i>
+                                        <i class="fas fa-arrow-down ml-2 text-blue-500"></i>
                                     @endif
                                 @else
                                     <i class="fas fa-sort ml-2 text-gray-400"></i>
                                 @endif
                             </div>
                         </th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tindakan</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
                     @forelse($tracking as $item)
-                        <tr class="hover:bg-amber-50 transition-colors duration-200"
-                            wire:key="tracking-{{ $item->id }}">
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->gelaran }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->nama_penerima }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->alamat }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_tel }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->catatan }}</td>
+                        <tr class="hover:bg-blue-50 transition-colors duration-200" wire:key="tracking-{{ $item->id }}">
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">#{{ $item->id }}</td>
                             <td class="px-6 py-4">
-                                <div class="flex space-x-2">
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                    @if($item->kurier === 'J&T') bg-green-100 text-green-800
+                                    @elseif($item->kurier === 'PosLaju') bg-blue-100 text-blue-800
+                                    @elseif($item->kurier === 'DHL') bg-orange-100 text-orange-800
+                                    @else bg-gray-100 text-gray-800 @endif">
+                                    <i class="fas fa-truck mr-1"></i>
+                                    {{ $item->kurier ?? 'J&T' }}
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $item->nama_penerima }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_tel }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600 max-w-xs truncate" title="{{ $item->alamat }}">{{ $item->alamat }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">
+                                @if($item->berat)
+                                    {{ $item->berat }} kg
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-500">{{ $item->created_at->format('d M Y') }}</td>
+                            <td class="px-6 py-4">
+                                <div class="flex gap-2">
                                     <a href="{{ route('tracking.show', $item) }}"
-                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-amber-700 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors duration-200">
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200">
                                         <i class="fas fa-eye mr-1"></i>
-                                        View
+                                        Lihat
                                     </a>
                                     <a href="{{ route('tracking.edit', $item) }}"
-                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-700 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors duration-200">
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors duration-200">
                                         <i class="fas fa-edit mr-1"></i>
                                         Edit
                                     </a>
                                     <button wire:click="delete({{ $item->id }})"
-                                        wire:confirm="Are you sure you want to delete this prospect?"
-                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors duration-200">
+                                        wire:confirm="Adakah anda pasti mahu memadam rekod tracking ini?"
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors duration-200">
                                         <i class="fas fa-trash mr-1"></i>
-                                        Delete
+                                        Padam
                                     </button>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-16 text-center">
+                            <td colspan="8" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <div class="bg-gray-100 rounded-full p-4 mb-4">
-                                        <i class="fas fa-users text-gray-400 text-2xl"></i>
+                                        <i class="fas fa-shipping-fast text-gray-400 text-2xl"></i>
                                     </div>
-                                    <h3 class="text-lg font-medium text-gray-900 mb-1">No prospects found</h3>
-                                    <p class="text-gray-500 mb-4">Try changing your search or add a new prospect</p>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-1">Tiada rekod tracking</h3>
+                                    <p class="text-gray-500 mb-4">Mula tambah rekod tracking pertama anda</p>
                                     <a href="{{ route('tracking.create') }}"
-                                        class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-lg shadow hover:from-amber-600 hover:to-orange-700 transition-all duration-300">
+                                        class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition-all duration-300">
                                         <i class="fas fa-plus mr-2"></i>
-                                        Add your first prospect
+                                        Tambah Tracking Pertama
                                     </a>
                                 </div>
                             </td>
