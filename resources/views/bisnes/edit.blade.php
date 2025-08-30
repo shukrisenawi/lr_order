@@ -1,29 +1,56 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Bisnes')
+@section('title', 'Edit Business')
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <!-- Header -->
-        <div class="mb-8">
+        <div class="mb-10">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Edit Bisnes</h1>
-                    <p class="text-gray-600">Kemaskini maklumat bisnes untuk {{ $bisnes->nama_bisnes }}</p>
+                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                        <i class="fas fa-edit text-orange-500 mr-3"></i>
+                        Edit Business
+                    </h1>
+                    <p class="text-gray-600">Update business information for {{ $bisnes->nama_bisnes }}</p>
+                    <div class="flex items-center gap-4 mt-4">
+                        <div class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-orange-100 to-red-100 text-orange-800 border border-orange-200">
+                            <i class="fas fa-clock mr-2"></i>
+                            Last Updated: {{ $bisnes->updated_at->format('d M Y H:i') }}
+                        </div>
+                        <div class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-800 border border-blue-200">
+                            <i class="fas fa-building mr-2"></i>
+                            Business ID: {{ $bisnes->id }}
+                        </div>
+                    </div>
                 </div>
-                <a href="{{ route('bisnes.index') }}"
-                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
-                    <i class="fas fa-arrow-left mr-2"></i>
-                    Kembali ke Senarai
-                </a>
+                <div class="flex gap-4">
+                    <a href="{{ route('bisnes.show', $bisnes) }}"
+                        class="inline-flex items-center justify-center px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 font-medium rounded-lg transition-colors duration-200">
+                        <i class="fas fa-eye mr-1"></i>
+                        View Details
+                    </a>
+                    <a href="{{ route('bisnes.index') }}"
+                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-700 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-800 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Back to List
+                    </a>
+                </div>
             </div>
         </div>
 
         <!-- Form -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100">
-                <h3 class="text-xl font-semibold text-gray-900">Maklumat Bisnes</h3>
-                <p class="text-gray-600 text-sm mt-1">Kemaskini maklumat bisnes di bawah</p>
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+            <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-orange-50 to-red-50">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-edit text-white"></i>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-xl font-semibold text-gray-900">Update Business Information</h3>
+                        <p class="text-gray-600 text-sm mt-1">Modify business details and AI settings below</p>
+                    </div>
+                </div>
             </div>
 
             <form method="POST" action="{{ route('bisnes.update', $bisnes) }}" enctype="multipart/form-data"
@@ -466,17 +493,57 @@
                     <p class="mt-2 text-sm text-gray-500">Textarea boleh dibesarkan/dikecilkan dengan menarik sudut kanan
                         bawah. Klik ikon emoji untuk menambah emoji.</p>
                 </div>
-                <!-- Actions -->
-                <div class="mt-10 flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
-                    <a href="{{ route('bisnes.index') }}"
-                        class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors duration-300">
-                        Batal
-                    </a>
-                    <button type="submit"
-                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-xl shadow-lg hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        <i class="fas fa-save mr-2"></i>
-                        Kemaskini Bisnes
-                    </button>
+                <!-- Action Buttons -->
+                <div class="mt-10">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                        <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-slate-50">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-gray-500 to-slate-600 rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-save text-white"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-xl font-semibold text-gray-900">Ready to Update</h3>
+                                    <p class="text-gray-600 text-sm mt-1">Review your changes and update the business information</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-6">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
+                                <!-- Help Text -->
+                                <div class="flex items-start">
+                                    <div class="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
+                                        <i class="fas fa-info-circle text-blue-600 text-xs"></i>
+                                    </div>
+                                    <div class="ml-3">
+                                        <p class="text-sm text-gray-600">
+                                            <strong>Note:</strong> Changes will be saved immediately. Make sure all information is correct before updating.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Buttons -->
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <a href="{{ route('bisnes.show', $bisnes) }}"
+                                        class="inline-flex items-center justify-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors duration-200">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        View Current
+                                    </a>
+                                    <a href="{{ route('bisnes.index') }}"
+                                        class="inline-flex items-center justify-center px-6 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-300">
+                                        <i class="fas fa-times mr-2"></i>
+                                        Cancel
+                                    </a>
+                                    <button type="submit"
+                                        class="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-orange-500 to-red-600 text-white font-semibold rounded-xl shadow-lg hover:from-orange-600 hover:to-red-700 hover:shadow-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-orange-200 focus:ring-offset-2 transform hover:scale-105">
+                                        <i class="fas fa-save mr-2"></i>
+                                        Update Business
+                                        <i class="fas fa-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
