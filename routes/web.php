@@ -99,6 +99,11 @@ Route::middleware(['auth'])->group(function () {
         return view('data-table-livewire');
     })->name('data-table');
 
+    // AI Approval Route
+    Route::get('/ai', function () {
+        return view('ai-livewire');
+    })->name('ai');
+
     // Business Management Routes
     Route::get('/bisnes', function () {
         return view('bisnes-livewire');

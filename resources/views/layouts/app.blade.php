@@ -363,16 +363,15 @@
                         <span>Dashboard</span>
                     </a>
 
+                    <!-- Create by AI -->
                     <a href="{{ route('ai') }}"
-                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('ai') ? 'nav-link active' : '' }}">
-                        <i class="fab fa-cloudversify"></i>
-                        <span>Create By AI</span>
-                    </a>
-                    <!-- Data Table -->
-                    <a href="{{ route('data-table') }}"
-                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('data-table') ? 'nav-link active' : '' }}">
-                        <i class="fas fa-table"></i>
-                        <span>Jadual Data</span>
+                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('ai') ? 'nav-link active' : '' }}">
+                        <div class="flex items-center space-x-3">
+                            <i class="fab fa-cloudversify"></i>
+                            <span>Create By AI</span>
+                        </div>
+                        <span id="ai-badge-mobile"
+                            class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                     </a>
 
                     <!-- Business Management Section -->
@@ -505,7 +504,8 @@
         let notificationCounts = {
             'produk': 0,
             'prospek': 0,
-            'customer-buy': 0
+            'customer-buy': 0,
+            'ai': 0
         };
 
         // Function to update badge
@@ -519,6 +519,11 @@
                     badge.classList.add('hidden');
                 }
             });
+        }
+
+        // Function to update AI badge
+        function updateAiBadge(count) {
+            updateBadge('ai', count);
         }
 
         // Function to show notification
@@ -616,6 +621,9 @@
             } else if (currentPath.includes('/prospek')) {
                 notificationCounts['prospek'] = 0;
                 updateBadge('prospek', 0);
+            } else if (currentPath.includes('/ai')) {
+                notificationCounts['ai'] = 0;
+                updateBadge('ai', 0);
             }
         });
 

@@ -26,7 +26,8 @@ class Invoice extends Model
         'jumlah',
         'status',
         'kurier',
-        'catatan'
+        'catatan',
+        'create_by_ai'
     ];
 
     protected $casts = [
