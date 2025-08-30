@@ -104,7 +104,7 @@
                                 <td class="px-6 py-4 text-sm text-gray-500">{{ $customer->created_at->format('d M Y H:i') }}</td>
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
-                                        <a href="{{ route('customer.show', $customer) }}"
+                                        <a href="{{ route('customer.show', $customer) }}?from=ai"
                                             class="inline-flex items-center px-3 py-2 text-sm font-medium text-amber-700 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors duration-200">
                                             <i class="fas fa-eye mr-1"></i>
                                             View
@@ -170,7 +170,7 @@
                                 <td class="px-6 py-4 text-sm text-gray-500">{{ $invoice->created_at->format('d M Y H:i') }}</td>
                                 <td class="px-6 py-4">
                                     <div class="flex gap-2">
-                                        <a href="{{ route('invoice.show', $invoice) }}"
+                                        <a href="{{ route('invoice.show', $invoice) }}?from=ai"
                                             class="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200">
                                             <i class="fas fa-eye mr-1"></i>
                                             View

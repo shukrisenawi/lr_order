@@ -161,6 +161,7 @@
     @php
         $userBisnes = Bisnes::where('user_id', Auth::id())->get();
         $selectedBisnes = session('selected_bisnes_id') ? Bisnes::find(session('selected_bisnes_id')) : 0;
+        $isFromAi = request()->has('from') && request('from') === 'ai';
 
     @endphp
     <!-- Header -->
@@ -264,14 +265,14 @@
                 <nav class="space-y-1">
                     <!-- Dashboard -->
                     <a href="{{ route('dashboard') }}"
-                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('dashboard') ? 'nav-link active' : '' }}">
+                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('dashboard')) ? 'nav-link active' : '' }}">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
 
                     <!-- Data Table -->
                     <a href="{{ route('data-table') }}"
-                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('data-table') ? 'nav-link active' : '' }}">
+                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('data-table')) ? 'nav-link active' : '' }}">
                         <i class="fas fa-table"></i>
                         <span>Jadual Data</span>
                     </a>
@@ -282,25 +283,25 @@
                             Management</h3>
                         <div class="mt-2 space-y-1">
                             <a href="{{ route('bisnes.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('bisnes.*') ? 'nav-link active' : '' }}">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('bisnes.*')) ? 'nav-link active' : '' }}">
                                 <i class="fas fa-building"></i>
                                 <span>Bisnes</span>
                             </a>
                             <a href="{{ route('gambar.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('gambar.*')) ? 'nav-link active' : '' }}">
                                 <i class="fas fa-images"></i>
                                 <span>Gambar</span>
                             </a>
 
                             <a href="{{ route('iklan.index') }}"
-                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('iklan.*') ? 'nav-link active' : '' }}">
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('iklan.*')) ? 'nav-link active' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <i class="fas fa-share-alt"></i>
                                     <span>Iklan</span>
                                 </div>
                             </a>
                             <a href="{{ route('produk.index') }}"
-                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('produk.*')) ? 'nav-link active' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <i class="fas fa-box"></i>
                                     <span>Produk</span>
@@ -317,7 +318,7 @@
                             Management</h3>
                         <div class="mt-2 space-y-1">
                             <a href="{{ route('prospek.index') }}"
-                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek.*') ? 'nav-link active' : '' }}">
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('prospek.*')) ? 'nav-link active' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <i class="fas fa-users"></i>
                                     <span>Prospek</span>
@@ -326,7 +327,7 @@
                                     class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                             </a>
                             <a href="{{ route('customer.index') }}"
-                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer-buy.*') ? 'nav-link active' : '' }}">
+                                class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('customer-buy.*')) ? 'nav-link active' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <i class="fas fa-shopping-cart"></i>
                                     <span>Pembelian</span>
@@ -342,7 +343,7 @@
                         <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Account</h3>
                         <div class="mt-2 space-y-1">
                             <a href="{{ route('settings.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('settings.*') ? 'nav-link active' : '' }}">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('settings.*')) ? 'nav-link active' : '' }}">
                                 <i class="fas fa-cog"></i>
                                 <span>Tetapan</span>
                             </a>
@@ -358,41 +359,41 @@
                 <nav class="space-y-1">
                     <!-- Dashboard -->
                     <a href="{{ route('dashboard') }}"
-                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('dashboard') ? 'nav-link active' : '' }}">
+                        class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('dashboard')) ? 'nav-link active' : '' }}">
                         <i class="fas fa-tachometer-alt"></i>
                         <span>Dashboard</span>
                     </a>
-
-                    <!-- Create by AI -->
-                    <a href="{{ route('ai') }}"
-                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('ai') ? 'nav-link active' : '' }}">
-                        <div class="flex items-center space-x-3">
-                            <i class="fab fa-cloudversify"></i>
-                            <span>Create By AI</span>
-                        </div>
-                        <span id="ai-badge-mobile"
-                            class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
-                    </a>
-
+                    @if ($selectedBisnes->type_id == 1)
+                        <!-- Create by AI -->
+                        <a href="{{ route('ai') }}"
+                            class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('ai') || (request()->has('from') && request('from') === 'ai') ? 'nav-link active' : '' }}">
+                            <div class="flex items-center space-x-3">
+                                <i class="fab fa-cloudversify"></i>
+                                <span>Create By AI</span>
+                            </div>
+                            <span id="ai-badge-mobile"
+                                class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
+                        </a>
+                    @endif
                     <!-- Business Management Section -->
                     <div class="pt-4">
                         <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Business
                             Management</h3>
                         <div class="mt-2 space-y-1">
                             <a href="{{ route('bisnes.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('bisnes.*') ? 'nav-link active' : '' }}">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('bisnes.*')) ? 'nav-link active' : '' }}">
                                 <i class="fas fa-building"></i>
                                 <span>Syarikat</span>
                             </a>
                             @if (session('selected_bisnes_id'))
                                 <a href="{{ route('gambar.index') }}"
-                                    class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('gambar.*') ? 'nav-link active' : '' }}">
+                                    class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('gambar.*')) ? 'nav-link active' : '' }}">
                                     <i class="fas fa-images"></i>
                                     <span>Gambar</span>
                                 </a>
                                 @if ($selectedBisnes->type_id == 1)
                                     <a href="{{ route('iklan.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('iklan.*') ? 'nav-link active' : '' }}">
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('iklan.*')) ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <i class="fas fa-share-alt"></i>
                                             <span>Iklan AI</span>
@@ -401,7 +402,7 @@
 
 
                                     <a href="{{ route('produk.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('produk.*') ? 'nav-link active' : '' }}">
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('produk.*')) ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <i class="fas fa-box"></i>
                                             <span>Produk</span>
@@ -420,7 +421,7 @@
                                 Management</h3>
                             <div class="mt-2 space-y-1">
                                 <a href="{{ route('prospek.index') }}"
-                                    class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('prospek.*') ? 'nav-link active' : '' }}">
+                                    class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('prospek.*')) ? 'nav-link active' : '' }}">
                                     <div class="flex items-center space-x-3">
                                         <i class="fas fa-users"></i>
                                         <span>Prospek</span>
@@ -430,7 +431,7 @@
                                 </a>
                                 @if ($selectedBisnes->type_id == 1)
                                     <a href="{{ route('customer.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('customer.*') ? 'nav-link active' : '' }}">
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('customer.*')) ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <i class="fas fa-user-secret"></i>
                                             <span>Pelanggan</span>
@@ -440,7 +441,7 @@
                                     </a>
 
                                     <a href="{{ route('invoice.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('invoice.*') ? 'nav-link active' : '' }}">
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('invoice.*')) ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <i class="fas fa-shopping-cart"></i>
                                             <span>Invoice</span>
@@ -449,7 +450,7 @@
                                             class="hidden bg-red-500 text-white text-xs rounded-full px-2 py-1 animate-pulse">0</span>
                                     </a>
                                     <a href="{{ route('tracking.index') }}"
-                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ request()->routeIs('tracking.*') ? 'nav-link active' : '' }}">
+                                        class="nav-link flex items-center justify-between px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('tracking.*')) ? 'nav-link active' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <i class="fas fa-list"></i>
                                             <span>Tracking</span>
@@ -464,7 +465,7 @@
                         <h3 class="px-4 text-xs font-semibold nav-section-title uppercase tracking-wider">Account</h3>
                         <div class="mt-2 space-y-1">
                             <a href="{{ route('settings.index') }}"
-                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ request()->routeIs('settings.*') ? 'nav-link active' : '' }}">
+                                class="nav-link flex items-center space-x-3 px-4 py-3 rounded-lg transition-all {{ (!$isFromAi && request()->routeIs('settings.*')) ? 'nav-link active' : '' }}">
                                 <i class="fas fa-cog"></i>
                                 <span>Tetapan</span>
                             </a>

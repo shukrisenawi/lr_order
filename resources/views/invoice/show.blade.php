@@ -12,11 +12,19 @@
                     <p class="text-gray-600 mt-1">Created on {{ $invoice->created_at->format('d/m/Y') }}</p>
                 </div>
                 <div class="flex space-x-3">
-                    <a href="{{ route('invoice.index') }}"
-                        class="inline-flex items-center px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
-                        <i class="fas fa-arrow-left mr-2"></i>
-                        Back to Invoices
-                    </a>
+                    @if(request('from') === 'ai')
+                        <a href="{{ route('ai') }}"
+                            class="inline-flex items-center px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Back to AI Approval
+                        </a>
+                    @else
+                        <a href="{{ route('invoice.index') }}"
+                            class="inline-flex items-center px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Back to Invoices
+                        </a>
+                    @endif
                     <a href="{{ route('invoice.edit', $invoice) }}"
                         class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                         <i class="fas fa-edit mr-2"></i>
