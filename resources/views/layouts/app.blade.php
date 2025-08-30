@@ -195,11 +195,42 @@
         }
 
         .nav-section-title {
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-section-header {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 0.5rem 0.75rem;
+            margin: 0.5rem 0.25rem 0.25rem 0.25rem;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-section-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.6) 50%, transparent 100%);
+        }
+
+        .nav-section-header .section-icon {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(240, 147, 251, 0.8) 100%);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
 
         .nav-link {
             color: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 0.75rem;
         }
 
         .nav-link:hover {
@@ -399,12 +430,12 @@
                 <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/5 to-transparent rounded-full -translate-y-16 translate-x-16"></div>
                 <div class="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-12 -translate-x-12"></div>
                 <!-- Header -->
-                <div class="flex items-center justify-between mb-8 pb-4 border-b border-white/20">
+                <div class="flex items-center justify-between mb-6 pb-3 border-b border-white/20">
                     <div class="flex items-center space-x-3">
                         <img src="{{ asset('img/logo-01.png') }}" alt="Logo"
                             class="w-10 h-10 rounded-full object-cover border-2 border-white/30 shadow-lg">
                         <div>
-                            <h2 class="text-white text-lg font-bold">Menu</h2>
+                            <h2 class="text-white text-xl font-bold">Menu</h2>
                             <p class="text-white/70 text-sm">Navigation</p>
                         </div>
                     </div>
@@ -413,10 +444,10 @@
                         <i class="fas fa-times text-lg"></i>
                     </button>
                 </div>
-                <nav class="space-y-1">
+                <nav class="space-y-0.5">
                     <!-- Dashboard -->
                     <a href="{{ route('dashboard') }}"
-                        class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('dashboard')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                        class="nav-link flex items-center space-x-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('dashboard')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                         <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
                             <i class="fas fa-home text-sm"></i>
                         </div>
@@ -446,16 +477,19 @@
                     </a>
 
                     <!-- Business Management Section -->
-                    <div class="pt-4">
-                        <h3 class="px-4 text-xs font-bold nav-section-title uppercase tracking-wider mb-4 flex items-center">
-                            <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center mr-3">
-                                <i class="fas fa-briefcase text-xs"></i>
+                    <div class="pt-2">
+                        <h3 class="nav-section-header flex items-center">
+                            <div class="section-icon w-8 h-8 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-briefcase text-sm text-white"></i>
                             </div>
-                            Business Management
+                            <div class="flex-1">
+                                <span class="nav-section-title text-sm block">Business Management</span>
+                                <span class="text-xs text-white/60 block">Kelola perniagaan anda</span>
+                            </div>
                         </h3>
-                        <div class="space-y-1">
+                        <div class="space-y-0.5">
                             <a href="{{ route('bisnes.index') }}"
-                                class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('bisnes.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                class="nav-link flex items-center space-x-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('bisnes.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                 <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
                                     <i class="fas fa-building text-sm"></i>
                                 </div>
@@ -493,16 +527,19 @@
                     </div>
 
                     <!-- Customer Management Section -->
-                    <div class="pt-4">
-                        <h3 class="px-4 text-xs font-bold nav-section-title uppercase tracking-wider mb-4 flex items-center">
-                            <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center mr-3">
-                                <i class="fas fa-users text-xs"></i>
+                    <div class="pt-2">
+                        <h3 class="nav-section-header flex items-center">
+                            <div class="section-icon w-8 h-8 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-users text-sm text-white"></i>
                             </div>
-                            Customer Management
+                            <div class="flex-1">
+                                <span class="nav-section-title text-sm block">Customer Management</span>
+                                <span class="text-xs text-white/60 block">Urus pelanggan & prospek</span>
+                            </div>
                         </h3>
-                        <div class="space-y-1">
+                        <div class="space-y-0.5">
                             <a href="{{ route('prospek.index') }}"
-                                class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('prospek.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('prospek.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
                                         <i class="fas fa-search-plus text-sm"></i>
@@ -527,16 +564,19 @@
                     </div>
 
                     <!-- Account Section -->
-                    <div class="pt-4">
-                        <h3 class="px-4 text-xs font-bold nav-section-title uppercase tracking-wider mb-4 flex items-center">
-                            <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center mr-3">
-                                <i class="fas fa-user text-xs"></i>
+                    <div class="pt-2">
+                        <h3 class="nav-section-header flex items-center">
+                            <div class="section-icon w-8 h-8 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-user text-sm text-white"></i>
                             </div>
-                            Account
+                            <div class="flex-1">
+                                <span class="nav-section-title text-sm block">Account</span>
+                                <span class="text-xs text-white/60 block">Tetapan & profil</span>
+                            </div>
                         </h3>
-                        <div class="space-y-1">
+                        <div class="space-y-0.5">
                             <a href="{{ route('settings.index') }}"
-                                class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('settings.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                class="nav-link flex items-center space-x-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('settings.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                 <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
                                     <i class="fas fa-cog text-sm"></i>
                                 </div>
@@ -554,10 +594,20 @@
                 <!-- Decorative elements for desktop -->
                 <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/5 to-transparent rounded-full -translate-y-10 translate-x-10"></div>
                 <div class="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-8 -translate-x-8"></div>
-                <nav class="space-y-1">
+                <!-- Header -->
+                <div class="flex items-center mb-4 pb-2 border-b border-white/20">
+                    <div class="flex items-center space-x-3">
+                        <img src="{{ asset('img/logo-01.png') }}" alt="Logo"
+                            class="w-8 h-8 rounded-full object-cover border-2 border-white/30 shadow-lg">
+                        <div>
+                            <h2 class="text-white text-lg font-bold">Menu</h2>
+                        </div>
+                    </div>
+                </div>
+                <nav class="space-y-0.5">
                     <!-- Dashboard -->
                     <a href="{{ route('dashboard') }}"
-                        class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('dashboard')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                        class="nav-link flex items-center space-x-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('dashboard')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                         <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
                             <i class="fas fa-home text-sm"></i>
                         </div>
@@ -578,16 +628,19 @@
                         </a>
                     @endif
                     <!-- Business Management Section -->
-                    <div class="pt-4">
-                        <h3 class="px-4 text-xs font-bold nav-section-title uppercase tracking-wider mb-4 flex items-center">
-                            <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center mr-3">
-                                <i class="fas fa-briefcase text-xs"></i>
+                    <div class="pt-2">
+                        <h3 class="nav-section-header flex items-center">
+                            <div class="section-icon w-8 h-8 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-briefcase text-sm text-white"></i>
                             </div>
-                            Business Management
+                            <div class="flex-1">
+                                <span class="nav-section-title text-sm block">Business Management</span>
+                                <span class="text-xs text-white/60 block">Kelola perniagaan anda</span>
+                            </div>
                         </h3>
-                        <div class="space-y-1">
+                        <div class="space-y-0.5">
                             <a href="{{ route('bisnes.index') }}"
-                                class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('bisnes.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                class="nav-link flex items-center space-x-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('bisnes.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                 <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
                                     <i class="fas fa-building text-sm"></i>
                                 </div>
@@ -629,16 +682,19 @@
                     </div>
                     @if (session('selected_bisnes_id'))
                         <!-- Customer Management Section -->
-                        <div class="pt-4">
-                            <h3 class="px-4 text-xs font-bold nav-section-title uppercase tracking-wider mb-4 flex items-center">
-                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center mr-3">
-                                    <i class="fas fa-users text-xs"></i>
+                        <div class="pt-2">
+                            <h3 class="nav-section-header flex items-center">
+                                <div class="section-icon w-8 h-8 rounded-xl flex items-center justify-center mr-4">
+                                    <i class="fas fa-users text-sm text-white"></i>
                                 </div>
-                                Customer Management
+                                <div class="flex-1">
+                                    <span class="nav-section-title text-sm block">Customer Management</span>
+                                    <span class="text-xs text-white/60 block">Urus pelanggan & prospek</span>
+                                </div>
                             </h3>
-                            <div class="space-y-1">
+                            <div class="space-y-0.5">
                                 <a href="{{ route('prospek.index') }}"
-                                    class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('prospek.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                    class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('prospek.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
                                             <i class="fas fa-search-plus text-sm"></i>
@@ -686,16 +742,19 @@
                         </div>
                     @endif
                     <!-- Account Section -->
-                    <div class="pt-4">
-                        <h3 class="px-4 text-xs font-bold nav-section-title uppercase tracking-wider mb-4 flex items-center">
-                            <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center mr-3">
-                                <i class="fas fa-user text-xs"></i>
+                    <div class="pt-2">
+                        <h3 class="nav-section-header flex items-center">
+                            <div class="section-icon w-8 h-8 rounded-xl flex items-center justify-center mr-4">
+                                <i class="fas fa-user text-sm text-white"></i>
                             </div>
-                            Account
+                            <div class="flex-1">
+                                <span class="nav-section-title text-sm block">Account</span>
+                                <span class="text-xs text-white/60 block">Tetapan & profil</span>
+                            </div>
                         </h3>
-                        <div class="space-y-1">
+                        <div class="space-y-0.5">
                             <a href="{{ route('settings.index') }}"
-                                class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('settings.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                class="nav-link flex items-center space-x-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ (!$isFromAi && request()->routeIs('settings.*')) ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                 <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
                                     <i class="fas fa-cog text-sm"></i>
                                 </div>
