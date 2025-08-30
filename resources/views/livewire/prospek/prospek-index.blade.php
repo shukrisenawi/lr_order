@@ -4,13 +4,30 @@
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Pengurusan Prospek</h1>
-                <p class="text-gray-600">Urus prospek anda</p>
+                <p class="text-gray-600">Urus prospek dan pelanggan anda</p>
+                <div class="flex items-center gap-4 mt-3">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                        <i class="fas fa-users mr-1"></i>
+                        Jumlah: {{ $prospek->total() }}
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                        <i class="fas fa-robot mr-1"></i>
+                        AI Enabled: {{ $prospek->where('on', true)->count() }}
+                    </span>
+                </div>
             </div>
-            <a href="{{ route('prospek.create') }}"
-                class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-xl shadow-lg hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
-                <i class="fas fa-plus mr-2"></i>
-                Tambah Prospek Baru
-            </a>
+            <div class="flex gap-4">
+                <a href="{{ route('ai') }}"
+                    class="inline-flex items-center justify-center px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium rounded-lg transition-colors duration-200">
+                    <i class="fas fa-robot mr-1"></i>
+                    AI Approval
+                </a>
+                <a href="{{ route('prospek.create') }}"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-xl shadow-lg hover:from-amber-600 hover:to-orange-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2">
+                    <i class="fas fa-plus mr-2"></i>
+                    Tambah Prospek Baru
+                </a>
+            </div>
         </div>
     </div>
 
@@ -104,16 +121,20 @@
                                     class="toggle toggle-sm toggle-success" {{ $item->on ? 'checked' : '' }}>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="flex space-x-2">
-
+                                <div class="flex gap-2">
+                                    <a href="{{ route('prospek.show', $item) }}"
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors duration-200">
+                                        <i class="fas fa-eye mr-1"></i>
+                                        View
+                                    </a>
                                     <a href="{{ route('prospek.edit', $item) }}"
-                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-orange-700 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors duration-200">
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-indigo-700 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition-colors duration-200">
                                         <i class="fas fa-edit mr-1"></i>
                                         Edit
                                     </a>
                                     <button wire:click="delete({{ $item->id }})"
                                         wire:confirm="Are you sure you want to delete this prospect?"
-                                        class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors duration-200">
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium text-red-700 bg-red-50 rounded-lg hover:bg-red-100 transition-colors duration-200">
                                         <i class="fas fa-trash mr-1"></i>
                                         Delete
                                     </button>
@@ -127,12 +148,12 @@
                                     <div class="bg-gray-100 rounded-full p-4 mb-4">
                                         <i class="fas fa-users text-gray-400 text-2xl"></i>
                                     </div>
-                                    <h3 class="text-lg font-medium text-gray-900 mb-1">No prospects found</h3>
-                                    <p class="text-gray-500 mb-4">Try changing your search or add a new prospect</p>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-1">Tiada prospek dijumpai</h3>
+                                    <p class="text-gray-500 mb-4">Cuba tukar carian anda atau tambah prospek baru</p>
                                     <a href="{{ route('prospek.create') }}"
                                         class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-medium rounded-lg shadow hover:from-amber-600 hover:to-orange-700 transition-all duration-300">
                                         <i class="fas fa-plus mr-2"></i>
-                                        Add your first prospect
+                                        Tambah Prospek Pertama
                                     </a>
                                 </div>
                             </td>

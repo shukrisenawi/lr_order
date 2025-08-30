@@ -5,12 +5,29 @@
             <div>
                 <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Pengurusan Invoice</h1>
                 <p class="text-gray-600">Urus invoice anda</p>
+                <div class="flex items-center gap-4 mt-3">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                        <i class="fas fa-file-invoice mr-1"></i>
+                        Jumlah: {{ $invoices->total() }}
+                    </span>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                        <i class="fas fa-money-bill-wave mr-1"></i>
+                        Total: RM {{ number_format($invoices->sum('jumlah'), 2) }}
+                    </span>
+                </div>
             </div>
-            <a href="{{ route('invoice.create') }}"
-                class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                <i class="fas fa-plus mr-2"></i>
-                Tambah Invoice Baru
-            </a>
+            <div class="flex gap-4">
+                <a href="{{ route('ai') }}"
+                    class="inline-flex items-center justify-center px-4 py-2 bg-purple-100 hover:bg-purple-200 text-purple-700 font-medium rounded-lg transition-colors duration-200">
+                    <i class="fas fa-robot mr-1"></i>
+                    AI Approval
+                </a>
+                <a href="{{ route('invoice.create') }}"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-xl shadow-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <i class="fas fa-plus mr-2"></i>
+                    Tambah Invoice Baru
+                </a>
+            </div>
         </div>
     </div>
 

@@ -22,7 +22,6 @@ class ProspekController extends Controller
 
     public function show(Prospek $prospek)
     {
-        $this->authorize('view', $prospek);
         return view('prospek.show', compact('prospek'));
     }
 
