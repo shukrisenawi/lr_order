@@ -7,53 +7,100 @@
     <title>Invoice {{ $invoice->invoice_no }}</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            color: #333;
+            color: #2d3748;
             line-height: 1.6;
+            background: #f8fafc;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
 
         .header {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 30px;
-            margin: -20px -20px 30px -20px;
-            border-radius: 0 0 10px 10px;
+            padding: 40px 30px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
         }
 
         .header-content {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
-        .company-info h1 {
-            margin: 0 0 5px 0;
-            font-size: 28px;
+        .company-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
             font-weight: bold;
         }
 
-        .company-info p {
+        .company-details h1 {
+            margin: 0 0 5px 0;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .company-details p {
             margin: 0;
             opacity: 0.9;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 300;
         }
 
         .invoice-info {
             text-align: right;
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
         }
 
         .invoice-number {
-            font-size: 32px;
-            font-weight: bold;
+            font-size: 36px;
+            font-weight: 800;
             margin: 0;
+            letter-spacing: -1px;
         }
 
         .invoice-label {
-            font-size: 12px;
+            font-size: 14px;
             opacity: 0.9;
             margin: 5px 0 0 0;
+            font-weight: 300;
         }
 
         .info-section {
@@ -129,26 +176,37 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
         .items-table th {
-            background-color: #f9fafb;
-            padding: 12px;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 16px 12px;
             text-align: left;
-            font-weight: 600;
-            font-size: 12px;
-            color: #374151;
-            border: 1px solid #e5e7eb;
+            font-weight: 700;
+            font-size: 13px;
+            color: #475569;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .items-table td {
-            padding: 12px;
-            border: 1px solid #e5e7eb;
-            font-size: 13px;
+            padding: 16px 12px;
+            border: none;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+            color: #334155;
         }
 
         .items-table tr:nth-child(even) {
-            background-color: #f9fafb;
+            background-color: #fafbfc;
+        }
+
+        .items-table tr:hover {
+            background-color: #f8fafc;
         }
 
         .text-right {
@@ -164,13 +222,22 @@
         }
 
         .total-row {
-            background-color: #f3f4f6 !important;
-            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .total-row td {
+            border: none !important;
+            color: white !important;
         }
 
         .total-amount {
-            font-size: 16px;
-            color: #2563eb;
+            font-size: 18px;
+            font-weight: 800;
+            color: #fbbf24;
         }
 
         .notes-section {
@@ -205,18 +272,24 @@
 
 <body>
     <!-- Header -->
-    <div class="header">
-        <div class="header-content">
-            <div class="company-info">
-                <h1>{{ $invoice->bisnes->nama_bisnes }}</h1>
-                <p>Business Invoice</p>
-            </div>
-            <div class="invoice-info">
-                <div class="invoice-number">{{ $invoice->invoice_no }}</div>
-                <p class="invoice-label">Invoice Number</p>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <div class="company-info">
+                    <div class="logo">
+                        <img src="{{ public_path('img/logo-01.png') }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
+                    </div>
+                    <div class="company-details">
+                        <h1>{{ $invoice->bisnes->nama_bisnes }}</h1>
+                        <p>Professional Business Invoice</p>
+                    </div>
+                </div>
+                <div class="invoice-info">
+                    <div class="invoice-number">{{ $invoice->invoice_no }}</div>
+                    <p class="invoice-label">Invoice Number</p>
+                </div>
             </div>
         </div>
-    </div>
 
     <!-- Invoice and Customer Information -->
     <div class="info-section">
@@ -300,9 +373,27 @@
         </div>
     @endif
 
-    <!-- Footer -->
-    <div class="footer">
-        <p>Generated on {{ now()->format('d/m/Y H:i:s') }} | {{ $invoice->bisnes->nama_bisnes }}</p>
+        <!-- Footer -->
+        <div class="footer">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px 0;">
+                <div>
+                    <p style="margin: 0; font-size: 12px; color: #64748b;">
+                        Generated on {{ now()->format('d/m/Y H:i:s') }}
+                    </p>
+                    <p style="margin: 5px 0 0 0; font-size: 11px; color: #94a3b8;">
+                        Thank you for your business!
+                    </p>
+                </div>
+                <div style="text-align: right;">
+                    <p style="margin: 0; font-size: 12px; color: #64748b; font-weight: 600;">
+                        {{ $invoice->bisnes->nama_bisnes }}
+                    </p>
+                    <p style="margin: 5px 0 0 0; font-size: 11px; color: #94a3b8;">
+                        Professional Invoice Service
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

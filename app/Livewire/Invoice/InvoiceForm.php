@@ -43,6 +43,7 @@ class InvoiceForm extends Component
     {
         $this->bisnes_list = Bisnes::where('user_id', Auth::id())->get();
         $this->produk_list = Produk::where('bisnes_id', session('selected_bisnes_id'))->get();
+        $this->bisnes_id = session('selected_bisnes_id');
 
         if ($invoice) {
             $this->isEdit = true;
@@ -91,6 +92,14 @@ class InvoiceForm extends Component
             unset($this->items[$index]);
             $this->items = array_values($this->items);
         }
+    }
+
+    public function updatedBisnesId($value)
+    {
+        $this->produk_list = Produk::where('bisnes_id', $value)->get();
+        // Reset items if business changes
+        $this->items = [];
+        $this->addItem();
     }
 
     public function updatedItemsProdukId($value, $key)

@@ -26,6 +26,22 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
+                    <label for="bisnes_id" class="block text-sm font-medium text-gray-700 mb-2">
+                        Business <span class="text-red-500">*</span>
+                    </label>
+                    <select wire:model="bisnes_id" id="bisnes_id"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Select Business</option>
+                        @foreach ($bisnes_list as $bisnes)
+                            <option value="{{ $bisnes->id }}" {{ $bisnes->id == $bisnes_id ? 'selected' : '' }}>{{ $bisnes->nama_bisnes }}</option>
+                        @endforeach
+                    </select>
+                    @error('bisnes_id')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div>
                     <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
                         Status <span class="text-red-500">*</span>
                     </label>
