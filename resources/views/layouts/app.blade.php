@@ -312,46 +312,46 @@
     @endphp
     <!-- Header -->
     <header class="gradient-header shadow-xl backdrop-blur-sm border-b border-white/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 sm:h-20">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+            <div class="flex justify-between items-center h-12 sm:h-14">
                 <!-- Left Section: Logo and Title -->
-                <div class="flex items-center space-x-3">
+                <div class="flex items-center space-x-2">
                     <!-- Mobile menu button -->
                     <button id="mobile-menu-button" type="button"
-                        class="md:hidden inline-flex items-center justify-center p-2 rounded-xl text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200"
+                        class="md:hidden inline-flex items-center justify-center p-1.5 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200"
                         onclick="toggleMobileMenu()">
-                        <i class="fas fa-bars text-lg"></i>
+                        <i class="fas fa-bars text-base"></i>
                     </button>
 
                     <!-- Logo -->
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-2">
                         <img src="{{ asset('img/logo-01.png') }}" alt="Logo"
-                            class="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover border-2 border-white/30 shadow-lg">
+                            class="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover border-2 border-white/30 shadow-lg">
                         <div class="hidden sm:block">
-                            <h1 class="text-lg sm:text-xl font-bold text-white leading-tight">SISTEM TEMPAHAN</h1>
+                            <h1 class="text-sm sm:text-base font-bold text-white leading-tight">SISTEM TEMPAHAN</h1>
                             <p class="text-xs text-white/80 font-medium">PERNIAGAAN</p>
                         </div>
                         <div class="sm:hidden">
-                            <h1 class="text-base font-bold text-white">LR ORDER</h1>
+                            <h1 class="text-sm font-bold text-white">LR ORDER</h1>
                         </div>
                     </div>
                 </div>
 
                 <!-- Right Section: Business Selector and User Menu -->
-                <div class="flex items-center space-x-2 sm:space-x-4">
+                <div class="flex items-center space-x-1 sm:space-x-2">
                     <!-- Business Selector -->
                     <div class="relative hidden sm:block">
                         @if ($userBisnes->count() > 0)
                             <div class="relative inline-block text-left">
                                 <button type="button"
-                                    class="inline-flex items-center px-4 py-2 border border-white/20 shadow-lg text-sm leading-4 font-medium rounded-xl text-white bg-white/10 hover:bg-white/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 backdrop-blur-sm"
+                                    class="inline-flex items-center px-3 py-1.5 border border-white/20 shadow-lg text-xs leading-4 font-medium rounded-lg text-white bg-white/10 hover:bg-white/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 backdrop-blur-sm"
                                     id="bisnes-menu-button" aria-expanded="true" aria-haspopup="true"
                                     onclick="toggleBisnesDropdown()">
                                     <img src="{{ $selectedBisnes && $selectedBisnes->gambar ? \App\Helpers\ImageHelper::businessImageUrl($selectedBisnes->gambar) : asset('img/logo-01.png') }}"
                                         alt="Logo"
-                                        class="w-7 h-7 rounded-full object-cover mr-3 border-2 border-white/40 shadow-sm">
-                                    <span class="hidden lg:inline">{{ $selectedBisnes ? Str::limit($selectedBisnes->nama_bisnes, 20) : 'Pilih Senarai' }}</span>
-                                    <i class="fas fa-chevron-down ml-2 text-white/80"></i>
+                                        class="w-5 h-5 rounded-full object-cover mr-2 border-2 border-white/40 shadow-sm">
+                                    <span class="hidden lg:inline text-xs">{{ $selectedBisnes ? Str::limit($selectedBisnes->nama_bisnes, 15) : 'Pilih Senarai' }}</span>
+                                    <i class="fas fa-chevron-down ml-1 text-white/80 text-xs"></i>
                                 </button>
 
                                 <div class="origin-top-right absolute right-0 mt-3 w-72 rounded-2xl shadow-2xl bg-white/95 backdrop-blur-lg ring-1 ring-black/10 focus:outline-none hidden z-50 border border-white/20"
@@ -390,30 +390,30 @@
                             </div>
                         @else
                             <a href="{{ route('bisnes.create') }}"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm leading-4 font-medium rounded-xl text-white bg-gradient-to-r from-green-500/20 to-blue-500/20 hover:from-green-500/30 hover:to-blue-500/30 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 pulse-glow hover:scale-105 shadow-lg backdrop-blur-sm">
-                                <i class="fas fa-plus mr-2"></i>
+                                class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-green-500/20 to-blue-500/20 hover:from-green-500/30 hover:to-blue-500/30 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 pulse-glow hover:scale-105 shadow-lg backdrop-blur-sm">
+                                <i class="fas fa-plus mr-1"></i>
                                 <span class="hidden lg:inline">Tambah Bisnes</span>
                             </a>
                         @endif
                     </div>
 
                     <!-- User Menu -->
-                    <div class="flex items-center space-x-2 sm:space-x-3">
+                    <div class="flex items-center space-x-1 sm:space-x-2">
                         <!-- User Info -->
-                        <div class="hidden sm:flex items-center space-x-2 bg-white/10 rounded-xl px-3 py-2 backdrop-blur-sm">
-                            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-lg">
-                                <span class="text-white font-bold text-sm">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+                        <div class="hidden sm:flex items-center space-x-1 bg-white/10 rounded-lg px-2 py-1 backdrop-blur-sm">
+                            <div class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-lg">
+                                <span class="text-white font-bold text-xs">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
                             </div>
-                            <span class="text-white font-medium text-sm hidden lg:inline">{{ Auth::user()->name }}</span>
+                            <span class="text-white font-medium text-xs hidden lg:inline">{{ Auth::user()->name }}</span>
                         </div>
 
                         <!-- Logout Button -->
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
                             <button type="submit"
-                                class="inline-flex items-center justify-center w-10 h-10 rounded-xl text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 shadow-lg backdrop-blur-sm"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 shadow-lg backdrop-blur-sm"
                                 title="Logout">
-                                <i class="fas fa-sign-out-alt text-lg"></i>
+                                <i class="fas fa-sign-out-alt text-sm"></i>
                             </button>
                         </form>
                     </div>
