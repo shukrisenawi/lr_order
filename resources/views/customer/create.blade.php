@@ -38,23 +38,12 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Left Column -->
                     <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Whatsapp ID <span
-                                    class="text-red-500">*</span></label>
-                            <input type="text" name="whatsapp_id" value="{{ old('whatsapp_id') }}" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('whatsapp_id') border-red-500 bg-red-50 @enderror">
-                            @error('whatsapp_id')
-                                <p class="mt-2 text-sm text-red-600 flex items-center">
-                                    <i class="fas fa-exclamation-circle mr-1"></i>
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
 
                         <div>
                             <label class="block text-sm font-semibold text-gray-800 mb-2">Nama Penerima <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="nama_penerima" value="{{ old('nama_penerima') }}" required
+                            <input type="text" name="nama_penerima"
+                                value="{{ old('nama_penerima', isset($data['nama']) ? $data['nama'] : '') }}" required
                                 placeholder="Contoh: Encik Ahmad"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('nama_penerima') border-red-500 bg-red-50 @enderror">
                             @error('nama_penerima')
@@ -64,13 +53,24 @@
                                 </p>
                             @enderror
                         </div>
-
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama/Gelaran</label>
+                            <input type="text" name="gelaran" value="{{ old('gelaran') }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('gelaran') border-red-500 bg-red-50 @enderror">
+                            @error('gelaran')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                        </div>
                         <div>
                             <label class="block text-sm font-semibold text-gray-800 mb-2">Poskod <span
                                     class="text-red-500">*</span></label>
-                            <input type="text" name="gelaran" value="{{ old('gelaran') }}" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('gelaran') border-red-500 bg-red-50 @enderror">
-                            @error('gelaran')
+                            <input type="text" name="poskod"
+                                value="{{ old('poskod', isset($data['poskod']) ? $data['poskod'] : '') }}" required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('poskod') border-red-500 bg-red-50 @enderror">
+                            @error('poskod')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
                                     <i class="fas fa-exclamation-circle mr-1"></i>
                                     {{ $message }}
@@ -91,22 +91,13 @@
                         </div>
                     </div>
                     <div class="space-y-6">
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Nama/Gelaran <span
-                                    class="text-red-500">*</span></label>
-                            <input type="text" name="gelaran" value="{{ old('gelaran') }}" required
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('gelaran') border-red-500 bg-red-50 @enderror">
-                            @error('gelaran')
-                                <p class="mt-2 text-sm text-red-600 flex items-center">
-                                    <i class="fas fa-exclamation-circle mr-1"></i>
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
+
                         <!-- Email -->
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat</label>
-                            <input type="text" name="alamat" value="{{ old('alamat') }}"
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Alamat <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" name="alamat" requied
+                                value="{{ old('alamat', isset($data['alamat']) ? $data['alamat'] : '') }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('alamat') border-red-500 bg-red-50 @enderror">
                             @error('alamat')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -116,8 +107,10 @@
                             @enderror
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold text-gray-800 mb-2">No Tel</label>
-                            <input type="text" name="no_tel" value="{{ old('no_tel') }}"
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">No Tel <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text" name="no_tel" requied
+                                value="{{ old('no_tel', isset($data['no_tel']) ? $data['no_tel'] : '') }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-amber-100 focus:border-amber-500 transition-all duration-300 @error('no_tel') border-red-500 bg-red-50 @enderror">
                             @error('no_tel')
                                 <p class="mt-2 text-sm text-red-600 flex items-center">

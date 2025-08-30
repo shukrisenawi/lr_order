@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('status')->default('prospek');
             $table->foreignId('bisnes_id')->nullable()->constrained('bisnes')->onDelete('cascade');
             $table->boolean('on')->default(true);
-            $table->boolean('create_by_ai')->default(true);
             $table->timestamps();
         });
     }

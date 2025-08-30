@@ -18,9 +18,9 @@ abstract class Controller extends BaseController
         $this->bisnes_id = session('selected_bisnes_id');
     }
 
-    public function sentN8n($link_test, $link_production, $data, $test = true)
+    public function sentN8n($data, $test = true, $link_production, $link_test)
     {
-        $data['sessionId'] = uniqid();
+        // $data['sessionId'] = uniqid();
         if (env('APP_DEV') && $test) {
             $response = Http::withoutVerifying()->get(
                 $link_test,

@@ -14,14 +14,15 @@ return new class extends Migration
         Schema::create('customer', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bisnes_id')->nullable()->constrained('bisnes')->onDelete('cascade');
-            $table->string('whatsapp_id');
-            $table->string('gelaran');
+            $table->string('whatsapp_id')->nullable();
+            $table->string('gelaran')->nullable();
             $table->string('nama_penerima');
             $table->text('alamat');
             $table->string('poskod', 10);
             $table->string('no_tel');
-            $table->string('email');
-            $table->string('catatan');
+            $table->string('email')->nullable();
+            $table->string('catatan')->nullable();
+            $table->boolean('create_by_ai')->default(true);
             $table->timestamps();
         });
     }

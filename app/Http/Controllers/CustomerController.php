@@ -32,12 +32,12 @@ class CustomerController extends Controller
         return view('customer.show', compact('customer'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        echo session('response');
+        $data = $request->output ?? null;
         // $response = json_decode(session('response'));
         // $response;
-        return view('customer.create');
+        return view('customer.create', compact('data'));
     }
 
     public function generate()
@@ -52,40 +52,50 @@ class CustomerController extends Controller
                 'text_alamat' => 'required|string',
             ]
         );
-        $response = json_encode($this->sendToN8n($request->text_alamat));
-        dd($response);
-        exit;
-        return redirect()->route('customer.create', $response)->with('response', $response)->with('success', 'Customer generate successfully.');
+        $response = $this->sendToN8n($request->text_alamat);
+
+        if (isset($response['code']) && $response['code'] == 404) {
+            return redirect()->route('customer.generate')->with('error', $response['message']);
+        } else if (isset($response[0]['output']['alamat'])) {
+            // dd(json_encode($response[0]));
+            return redirect()->route('customer.create', $response[0])->with('success', 'Customer generate successfully.');
+        } else {
+            return redirect()->route('customer.generate')->with('error', 'Data gagal diproses. Sila semak data yang di masukkan.');
+        }
     }
 
     public function sendToN8n($message)
     {
         $data = [
+            'sessionId' => uniqid(),
             'action' => 'sendMessage',
             'chatInput' => $message
         ];
-        $response = $this->sentN8n('https://n8n-mt8umikivytz.n8x.biz.id/webhook-test/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9', 'https://n8n-mt8umikivytz.n8x.biz.id/webhook/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9', $data);
+        $response = $this->sentN8n($data, true, 'https://n8n-mt8umikivytz.n8x.biz.id/webhook/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9', 'https://n8n-mt8umikivytz.n8x.biz.id/webhook-test/6a5efb9d-d847-4dfc-8dbd-2cca3e8ebbf9');
 
         return $response; // ambil respon JSON dari n8n
     }
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'text_alamat' => 'required|string|max:20',
-        //     'gelaran' => 'required|string|max:50',
-        //     'bisnes_id' => 'required|exists:bisnes,id',
-        // ]);
+        $request->validate([
+            'bisnes_id' => 'required|exists:bisnes,id',
+            'whatsapp_id' => 'nullable|string|max:50',
+            'gelaran' => 'nullable|string|max:50',
+            'nama_penerima' => 'required|string|max:100',
+            'alamat' => 'required|string',
+            'poskod' => 'required|string|max:10',
+            'no_tel' => 'required|string|max:50',
+            'email' => 'nullable|string|max:100',
+            'catatan' => 'nullable|string|max:200'
+        ]);
 
-        // $customer = Customer::create($request->all());
+        dd($request->all());
 
-        // // Broadcast new data event
-        // broadcast(new NewDataEvent('customer', [
-        //     'id' => $customer->id,
-        //     'message' => 'Customer baru telah didaftarkan',
-        //     'gelaran' => $customer->gelaran,
-        //     'no_tel' => $customer->no_tel
-        // ], auth()->id(), $request->bisnes_id));
+        if ($request->no_tel)
+            $request->whatsapp_id = "6" . str_replace(" ", "", $request->no_tel) . "@c.us";
+        $request->create_by_ai = false;
+        $customer = Customer::create($request->all());
 
         return redirect()->route('customer.index')->with('success', 'Customer created successfully.');
     }
