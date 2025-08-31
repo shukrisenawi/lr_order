@@ -33,12 +33,15 @@
 
         /* Hide scrollbar */
         html {
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
         }
 
         html::-webkit-scrollbar {
-            display: none; /* Chrome, Safari, and Opera */
+            display: none;
+            /* Chrome, Safari, and Opera */
         }
 
         @media (max-width: 640px) {
@@ -353,7 +356,7 @@
                     <button id="mobile-menu-button" type="button"
                         class="md:hidden inline-flex items-center justify-center p-1 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200"
                         onclick="toggleMobileMenu()">
-                        <i class="fas fa-bars text-sm"></i>
+                        <i class="fas fa-bars text-xs"></i>
                     </button>
 
                     <!-- Logo -->
@@ -385,7 +388,7 @@
                                         class="w-5 h-5 rounded-full object-cover mr-2 border-2 border-white/40 shadow-sm">
                                     <span
                                         class="hidden lg:inline text-sm">{{ $selectedBisnes ? Str::limit($selectedBisnes->nama_bisnes, 15) : 'Pilih Senarai' }}</span>
-                                    <i class="fas fa-chevron-down ml-1 text-white/80 text-sm"></i>
+                                    <i class="fas fa-chevron-down ml-1 text-white/80 text-xs"></i>
                                 </button>
 
                                 <div class="origin-top-right absolute right-0 mt-3 w-72 rounded-2xl shadow-2xl bg-white/95 backdrop-blur-lg ring-1 ring-black/10 focus:outline-none hidden z-50 border border-white/20"
@@ -416,7 +419,7 @@
                                             class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-200 rounded-lg mx-2"
                                             role="menuitem">
                                             <i class="fas fa-building mr-3 text-gray-400"></i>
-                                            <span class="font-medium">Senarai Bisnes</span>
+                                            <span class="font-medium text-sm">Senarai Bisnes</span>
                                             @if (!$selectedBisnes)
                                                 <i class="fas fa-check ml-auto text-green-500"></i>
                                             @endif
@@ -464,7 +467,7 @@
                             <button type="submit"
                                 class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 shadow-lg backdrop-blur-sm"
                                 title="Logout">
-                                <i class="fas fa-sign-out-alt text-sm"></i>
+                                <i class="fas fa-sign-out-alt text-xs"></i>
                             </button>
                         </form>
                     </div>
@@ -540,7 +543,6 @@
                             </div>
                             <div class="flex-1">
                                 <span class="nav-section-title text-xs block">Business Management</span>
-                                <span class="text-xs text-white/60 block">Kelola perniagaan anda</span>
                             </div>
                         </h3>
                         <div class="space-y-0.5">
@@ -590,7 +592,6 @@
                             </div>
                             <div class="flex-1">
                                 <span class="nav-section-title text-xs block">Customer Management</span>
-                                <span class="text-xs text-white/60 block">Urus pelanggan & prospek</span>
                             </div>
                         </h3>
                         <div class="space-y-0.5">
@@ -621,13 +622,13 @@
 
                     <!-- Account Section -->
                     <div class="pt-1.5">
+
                         <h3 class="nav-section-header flex items-center">
                             <div class="section-icon w-6 h-6 rounded-lg flex items-center justify-center mr-3">
-                                <i class="fas fa-user text-xs text-white"></i>
+                                <i class="fas fa-user text-sm text-white"></i>
                             </div>
                             <div class="flex-1">
                                 <span class="nav-section-title text-xs block">Account</span>
-                                <span class="text-xs text-white/60 block">Tetapan & profil</span>
                             </div>
                         </h3>
                         <div class="space-y-0.5">
@@ -702,12 +703,11 @@
                             </div>
                             <div class="flex-1">
                                 <span class="nav-section-title text-xs block">Business Management</span>
-                                <span class="text-xs text-white/60 block">Kelola perniagaan anda</span>
                             </div>
                         </h3>
                         <div class="space-y-0.5">
                             <a href="{{ route('bisnes.index') }}"
-                                class="nav-link flex items-center space-x-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('bisnes.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105  {{ !$isFromAi && request()->routeIs('bisnes.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                 <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
                                     <i class="fas fa-building text-xs"></i>
                                 </div>
@@ -716,20 +716,20 @@
                             @if (session('selected_bisnes_id'))
                                 <a href="{{ route('gambar.index') }}"
                                     class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('gambar.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
-                                    <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                        <i class="fas fa-images text-sm"></i>
+                                    <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                        <i class="fas fa-images text-xs"></i>
                                     </div>
-                                    <span class="font-medium">Gambar</span>
+                                    <span class="font-medium text-sm">Gambar</span>
                                 </a>
                                 @if ($selectedBisnes && $selectedBisnes->type_id == 1)
                                     <a href="{{ route('iklan.index') }}"
                                         class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('iklan.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <div
-                                                class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                                <i class="fas fa-bullhorn text-sm"></i>
+                                                class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-bullhorn text-xs"></i>
                                             </div>
-                                            <span class="font-medium">Iklan AI</span>
+                                            <span class="font-medium text-sm">Iklan AI</span>
                                         </div>
                                     </a>
 
@@ -737,10 +737,10 @@
                                         class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('produk.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <div
-                                                class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                                <i class="fas fa-box text-sm"></i>
+                                                class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-box text-xs"></i>
                                             </div>
-                                            <span class="font-medium">Produk</span>
+                                            <span class="font-medium text-sm">Produk</span>
                                         </div>
                                         <span id="produk-badge-desktop"
                                             class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-2 py-1 animate-pulse shadow-lg">0</span>
@@ -752,23 +752,23 @@
                     @if (session('selected_bisnes_id'))
                         <!-- Customer Management Section -->
                         <div class="pt-2">
+
                             <h3 class="nav-section-header flex items-center">
-                                <div class="section-icon w-8 h-8 rounded-xl flex items-center justify-center mr-4">
-                                    <i class="fas fa-users text-sm text-white"></i>
+                                <div class="section-icon w-6 h-6 rounded-lg flex items-center justify-center mr-3">
+                                    <i class="fas fa-users text-xs text-white"></i>
                                 </div>
                                 <div class="flex-1">
-                                    <span class="nav-section-title text-sm block">Customer Management</span>
-                                    <span class="text-xs text-white/60 block">Urus pelanggan & prospek</span>
+                                    <span class="nav-section-title text-xs block">Customer Management</span>
                                 </div>
                             </h3>
                             <div class="space-y-0.5">
                                 <a href="{{ route('prospek.index') }}"
                                     class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('prospek.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                            <i class="fas fa-search-plus text-sm"></i>
+                                        <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                            <i class="fas fa-search-plus text-xs"></i>
                                         </div>
-                                        <span class="font-medium">Prospek</span>
+                                        <span class="font-medium text-sm">Prospek</span>
                                     </div>
                                     <span id="customer-badge-desktop"
                                         class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-2 py-1 animate-pulse shadow-lg">0</span>
@@ -778,10 +778,10 @@
                                         class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('customer.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <div
-                                                class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                                <i class="fas fa-handshake text-sm"></i>
+                                                class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-handshake text-xs"></i>
                                             </div>
-                                            <span class="font-medium">Pelanggan</span>
+                                            <span class="font-medium text-sm">Pelanggan</span>
                                         </div>
                                         <span id="customer-buy-badge-desktop"
                                             class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-2 py-1 animate-pulse shadow-lg">0</span>
@@ -791,10 +791,10 @@
                                         class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('invoice.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <div
-                                                class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                                <i class="fas fa-file-invoice-dollar text-sm"></i>
+                                                class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-file-invoice-dollar text-xs"></i>
                                             </div>
-                                            <span class="font-medium">Invoice</span>
+                                            <span class="font-medium text-sm">Invoice</span>
                                         </div>
                                         <span id="customer-buy-badge-desktop"
                                             class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-2 py-1 animate-pulse shadow-lg">0</span>
@@ -803,10 +803,10 @@
                                         class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('tracking.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                         <div class="flex items-center space-x-3">
                                             <div
-                                                class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                                <i class="fas fa-route text-sm"></i>
+                                                class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-route text-xs"></i>
                                             </div>
-                                            <span class="font-medium">Tracking</span>
+                                            <span class="font-medium text-sm">Tracking</span>
                                         </div>
                                     </a>
                                 @endif
@@ -815,29 +815,30 @@
                     @endif
                     <!-- Account Section -->
                     <div class="pt-2">
+
                         <h3 class="nav-section-header flex items-center">
-                            <div class="section-icon w-8 h-8 rounded-xl flex items-center justify-center mr-4">
+                            <div class="section-icon w-6 h-6 rounded-lg flex items-center justify-center mr-3">
                                 <i class="fas fa-user text-sm text-white"></i>
                             </div>
                             <div class="flex-1">
-                                <span class="nav-section-title text-sm block">Account</span>
-                                <span class="text-xs text-white/60 block">Tetapan & profil</span>
+                                <span class="nav-section-title text-xs block">Account</span>
                             </div>
                         </h3>
+
                         <div class="space-y-0.5">
                             <a href="{{ route('settings.index') }}"
                                 class="nav-link flex items-center space-x-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('settings.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
-                                <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                    <i class="fas fa-cog text-sm"></i>
+                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-cog text-xs"></i>
                                 </div>
-                                <span class="font-medium">Tetapan</span>
+                                <span class="font-medium text-sm">Tetapan</span>
                             </a>
                             <a href="{{ route('profile.edit') }}"
                                 class="nav-link flex items-center space-x-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('profile.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
-                                <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
-                                    <i class="fas fa-user text-sm"></i>
+                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-user text-xs"></i>
                                 </div>
-                                <span class="font-medium">Profil</span>
+                                <span class="font-medium text-sm">Profil</span>
                             </a>
                         </div>
                     </div>
