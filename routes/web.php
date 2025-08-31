@@ -30,6 +30,34 @@ Route::get('/test-login', function () {
     return view('test-login');
 });
 
+// Test invoice PDF route
+Route::get('/test-invoice-pdf', function () {
+    // Create a sample invoice data structure
+    $invoice = (object) [
+        'invoice_no' => 'INV001',
+        'created_at' => now(),
+        'nama_penerima' => 'John Doe',
+        'alamat' => '123 Main Street, Kuala Lumpur, 50000',
+        'no_tel' => '012-345-6789',
+        'kurier' => 'J&T Express',
+        'catatan' => 'Thank you for your business! Please make payment within 30 days.',
+        'jumlah' => 105.93,
+        'bisnes' => (object) [
+            'nama_bisnes' => 'Your Company Name'
+        ],
+        'items' => collect([
+            (object) [
+                'product_name' => 'Line Item',
+                'kuantiti' => 1,
+                'harga' => 99.00,
+                'total' => 99.00
+            ]
+        ])
+    ];
+
+    return view('invoice.pdf', compact('invoice'));
+})->name('test-invoice-pdf');
+
 // Authentication routes
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

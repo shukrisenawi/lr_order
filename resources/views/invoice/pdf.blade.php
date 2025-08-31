@@ -7,393 +7,427 @@
     <title>Invoice {{ $invoice->invoice_no }}</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            color: #2d3748;
-            line-height: 1.6;
-            background: #f8fafc;
+            color: #333;
+            background-color: #fff;
         }
 
-        .container {
+        .invoice-container {
+            max-width: 800px;
+            margin: 0 auto;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            overflow: hidden;
+            border: 1px solid #ddd;
         }
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 30px;
-            position: relative;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 0%, transparent 50%);
+        /* Header with blue bar */
+        .header-bar {
+            background-color: #2E5BBA;
+            height: 8px;
+            width: 100%;
         }
 
         .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 1;
+            padding: 30px 40px;
+            display: table;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        .company-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
+        .header-left {
+            display: table-cell;
+            vertical-align: top;
+            width: 50%;
         }
 
-        .logo {
+        .header-right {
+            display: table-cell;
+            vertical-align: top;
+            width: 50%;
+            text-align: right;
+        }
+
+        .invoice-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            margin: 0 0 20px 0;
+        }
+
+        .company-logo {
             width: 80px;
             height: 80px;
-            border-radius: 12px;
-            background: rgba(255,255,255,0.2);
+            margin-bottom: 15px;
+        }
+
+        .logo-placeholder {
+            width: 80px;
+            height: 80px;
+            background-color: #fff;
+            border: 3px solid #E53E3E;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
+            margin-bottom: 15px;
         }
 
-        .company-details h1 {
+        .logo-hexagon {
+            width: 60px;
+            height: 60px;
+            background-color: #E53E3E;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .logo-hexagon:before,
+        .logo-hexagon:after {
+            content: "";
+            position: absolute;
+            width: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+        }
+
+        .logo-hexagon:before {
+            bottom: 100%;
+            border-bottom: 15px solid #E53E3E;
+        }
+
+        .logo-hexagon:after {
+            top: 100%;
+            border-top: 15px solid #E53E3E;
+        }
+
+        .company-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
             margin: 0 0 5px 0;
-            font-size: 32px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
         }
 
-        .company-details p {
-            margin: 0;
-            opacity: 0.9;
-            font-size: 16px;
-            font-weight: 300;
-        }
-
-        .invoice-info {
-            text-align: right;
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 10px;
-            backdrop-filter: blur(10px);
-        }
-
-        .invoice-number {
-            font-size: 36px;
-            font-weight: 800;
-            margin: 0;
-            letter-spacing: -1px;
-        }
-
-        .invoice-label {
-            font-size: 14px;
-            opacity: 0.9;
-            margin: 5px 0 0 0;
-            font-weight: 300;
-        }
-
-        .info-section {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 30px;
-        }
-
-        .info-box {
-            width: 48%;
-        }
-
-        .info-box h3 {
-            color: #2563eb;
-            font-size: 16px;
-            margin: 0 0 15px 0;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #e5e7eb;
-        }
-
-        .info-item {
-            margin-bottom: 8px;
-        }
-
-        .info-label {
-            color: #6b7280;
+        .company-tagline {
             font-size: 12px;
-            display: block;
-        }
-
-        .info-value {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
+            color: #E53E3E;
+            margin: 0;
             text-transform: uppercase;
         }
 
-        .status.pending {
-            background-color: #fef3c7;
-            color: #92400e;
+        /* Invoice details section */
+        .invoice-details {
+            padding: 0 40px 30px 40px;
+            display: table;
+            width: 100%;
+            box-sizing: border-box;
         }
 
-        .status.paid {
-            background-color: #d1fae5;
-            color: #065f46;
+        .details-left {
+            display: table-cell;
+            vertical-align: top;
+            width: 50%;
         }
 
-        .status.cancelled {
-            background-color: #fee2e2;
-            color: #991b1b;
+        .details-right {
+            display: table-cell;
+            vertical-align: top;
+            width: 50%;
         }
 
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin: 0 0 10px 0;
+        }
+
+        .detail-row {
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .detail-label {
+            color: #666;
+            display: inline-block;
+            width: 80px;
+        }
+
+        .detail-value {
+            color: #333;
+        }
+
+        /* Invoice metadata */
+        .invoice-meta {
+            padding: 0 40px 20px 40px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .meta-row {
+            display: table;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .meta-label {
+            display: table-cell;
+            width: 100px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .meta-value {
+            display: table-cell;
+            font-size: 12px;
+            color: #333;
+        }
+
+        /* Items table */
         .items-section {
-            margin-bottom: 30px;
-        }
-
-        .items-section h3 {
-            color: #2563eb;
-            font-size: 16px;
-            margin: 0 0 15px 0;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #e5e7eb;
+            margin: 20px 0;
         }
 
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin: 0;
+        }
+
+        .items-table thead {
+            background-color: #2E5BBA;
+            color: white;
         }
 
         .items-table th {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            padding: 16px 12px;
+            padding: 12px 15px;
             text-align: left;
-            font-weight: 700;
-            font-size: 13px;
-            color: #475569;
-            border: none;
+            font-size: 12px;
+            font-weight: bold;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .items-table td {
-            padding: 16px 12px;
-            border: none;
-            border-bottom: 1px solid #f1f5f9;
-            font-size: 14px;
-            color: #334155;
+        .items-table th.text-center {
+            text-align: center;
         }
 
-        .items-table tr:nth-child(even) {
-            background-color: #fafbfc;
-        }
-
-        .items-table tr:hover {
-            background-color: #f8fafc;
-        }
-
-        .text-right {
+        .items-table th.text-right {
             text-align: right;
         }
 
-        .text-center {
+        .items-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .items-table td.text-center {
             text-align: center;
         }
 
-        .font-medium {
-            font-weight: 600;
+        .items-table td.text-right {
+            text-align: right;
+        }
+
+        /* Totals section */
+        .totals-section {
+            padding: 20px 40px;
+            text-align: right;
         }
 
         .total-row {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-            color: white !important;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-size: 12px;
         }
 
-        .total-row td {
-            border: none !important;
-            color: white !important;
+        .total-label {
+            display: inline-block;
+            width: 100px;
+            text-align: right;
+            margin-right: 20px;
+            color: #666;
         }
 
-        .total-amount {
-            font-size: 18px;
-            font-weight: 800;
-            color: #fbbf24;
+        .total-value {
+            display: inline-block;
+            width: 100px;
+            text-align: right;
+            color: #333;
         }
 
-        .notes-section {
-            margin-top: 30px;
-        }
-
-        .notes-section h3 {
-            color: #2563eb;
+        .balance-due {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 2px solid #333;
             font-size: 16px;
-            margin: 0 0 15px 0;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #e5e7eb;
+            font-weight: bold;
+        }
+
+        .balance-due .total-label {
+            color: #333;
+        }
+
+        /* Notes section */
+        .notes-section {
+            padding: 20px 40px;
+            border-top: 1px solid #eee;
+        }
+
+        .notes-title {
+            font-size: 12px;
+            color: #666;
+            margin: 0 0 10px 0;
         }
 
         .notes-content {
-            background-color: #f9fafb;
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid #2563eb;
-        }
-
-        .footer {
-            margin-top: 40px;
-            text-align: center;
             font-size: 11px;
-            color: #6b7280;
-            border-top: 1px solid #e5e7eb;
-            padding-top: 20px;
+            color: #666;
+            line-height: 1.4;
         }
     </style>
 </head>
 
 <body>
-    <!-- Header -->
-    <div class="container">
-        <div class="header">
-            <div class="header-content">
-                <div class="company-info">
-                    <div class="logo">
-                        <img src="{{ public_path('img/logo-01.png') }}" alt="Logo" style="width: 100%; height: 100%; object-fit: contain; border-radius: 8px;">
-                    </div>
-                    <div class="company-details">
-                        <h1>{{ $invoice->bisnes->nama_bisnes }}</h1>
-                        <p>Professional Business Invoice</p>
-                    </div>
+    <div class="invoice-container">
+        <!-- Blue header bar -->
+        <div class="header-bar"></div>
+
+        <!-- Header content -->
+        <div class="header-content">
+            <div class="header-left">
+                <h1 class="invoice-title">Invoice</h1>
+            </div>
+            <div class="header-right">
+                <!-- Company logo -->
+                <div class="logo-placeholder">
+                    @if (file_exists(public_path('img/logo-01.png')))
+                        <img src="{{ asset('img/logo-01.png') }}" alt="Logo" class="company-logo">
+                    @else
+                        <div class="logo-hexagon"></div>
+                    @endif
                 </div>
-                <div class="invoice-info">
-                    <div class="invoice-number">{{ $invoice->invoice_no }}</div>
-                    <p class="invoice-label">Invoice Number</p>
+                <div class="company-name">{{ strtoupper($invoice->bisnes->nama_bisnes) }}</div>
+                <div class="company-tagline">Company Tagline</div>
+            </div>
+        </div>
+
+        <!-- Invoice details -->
+        <div class="invoice-details">
+            <div class="details-left">
+                <div class="section-title">From</div>
+                <div class="detail-row">
+                    <span class="detail-value">{{ $invoice->bisnes->nama_bisnes }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">contact@{{ strtolower(str_replace(' ', '', $invoice - > bisnes - > nama_bisnes)) }}.com</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">Your address</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">P: (123) 456 7890</span>
+                </div>
+            </div>
+            <div class="details-right">
+                <div class="section-title">For</div>
+                <div class="detail-row">
+                    <span class="detail-value">{{ $invoice->nama_penerima }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">client@email.com</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">{{ $invoice->alamat }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-value">P: {{ $invoice->no_tel }}</span>
                 </div>
             </div>
         </div>
 
-    <!-- Invoice and Customer Information -->
-    <div class="info-section">
-        <!-- Invoice Information -->
-        <div class="info-box">
-            <h3>Invoice Information</h3>
-            <div class="info-item">
-                <span class="info-label">Invoice Date:</span>
-                <div class="info-value">{{ $invoice->created_at->format('d/m/Y') }}</div>
+        <!-- Invoice metadata -->
+        <div class="invoice-meta">
+            <div class="meta-row">
+                <div class="meta-label">Number</div>
+                <div class="meta-value">{{ $invoice->invoice_no }}</div>
             </div>
-            <div class="info-item">
-                <span class="info-label">Status:</span>
-                <div class="info-value">
-                    <span class="status {{ $invoice->status }}">{{ ucfirst($invoice->status) }}</span>
-                </div>
+            <div class="meta-row">
+                <div class="meta-label">Date</div>
+                <div class="meta-value">{{ $invoice->created_at->format('d M Y') }}</div>
             </div>
-            @if ($invoice->kurier)
-                <div class="info-item">
-                    <span class="info-label">Courier:</span>
-                    <div class="info-value">{{ $invoice->kurier }}</div>
-                </div>
-            @endif
-        </div>
-
-        <!-- Customer Information -->
-        <div class="info-box">
-            <h3>Customer Information</h3>
-            <div class="info-item">
-                <span class="info-label">Name:</span>
-                <div class="info-value">{{ $invoice->nama_penerima }}</div>
+            <div class="meta-row">
+                <div class="meta-label">Terms</div>
+                <div class="meta-value">Net Day</div>
             </div>
-            <div class="info-item">
-                <span class="info-label">Phone:</span>
-                <div class="info-value">{{ $invoice->no_tel }}</div>
-            </div>
-            <div class="info-item">
-                <span class="info-label">Address:</span>
-                <div class="info-value">{{ $invoice->alamat }}</div>
+            <div class="meta-row">
+                <div class="meta-label">Due</div>
+                <div class="meta-value">{{ $invoice->created_at->format('d M Y') }}</div>
             </div>
         </div>
-    </div>
 
-    <!-- Invoice Items -->
-    <div class="items-section">
-        <h3>Invoice Items</h3>
-        <table class="items-table">
-            <thead>
-                <tr>
-                    <th style="width: 50%;">Item</th>
-                    <th style="width: 15%;" class="text-center">Quantity</th>
-                    <th style="width: 17.5%;" class="text-right">Unit Price</th>
-                    <th style="width: 17.5%;" class="text-right">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($invoice->items as $item)
+        <!-- Items table -->
+        <div class="items-section">
+            <table class="items-table">
+                <thead>
                     <tr>
-                        <td class="font-medium">{{ $item->product_name }}</td>
-                        <td class="text-center">{{ $item->kuantiti }}</td>
-                        <td class="text-right">RM {{ number_format($item->harga, 2) }}</td>
-                        <td class="text-right font-medium">RM {{ number_format($item->total, 2) }}</td>
+                        <th>Description</th>
+                        <th class="text-right">Price</th>
+                        <th class="text-center">Qty</th>
+                        <th class="text-right">Amount</th>
                     </tr>
-                @endforeach
-            </tbody>
-            <tfoot>
-                <tr class="total-row">
-                    <td colspan="3" class="text-right font-medium">Total Amount:</td>
-                    <td class="text-right total-amount">RM {{ number_format($invoice->jumlah, 2) }}</td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+                </thead>
+                <tbody>
+                    @foreach ($invoice->items as $item)
+                        <tr>
+                            <td>
+                                <div>{{ $item->product_name }}</div>
+                                <div style="font-size: 10px; color: #999;">additional details</div>
+                            </td>
+                            <td class="text-right">RM{{ number_format($item->harga, 2) }}</td>
+                            <td class="text-center">{{ $item->kuantiti }}</td>
+                            <td class="text-right">RM{{ number_format($item->total, 2) }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-    <!-- Notes -->
-    @if ($invoice->catatan)
-        <div class="notes-section">
-            <h3>Notes</h3>
-            <div class="notes-content">
-                {{ $invoice->catatan }}
+        <!-- Totals section -->
+        <div class="totals-section">
+            @php
+                $subtotal = $invoice->items->sum('total');
+                $tax = $subtotal * 0.06; // 6% tax
+                $total = $subtotal + $tax;
+            @endphp
+
+            <div class="total-row">
+                <span class="total-label">Subtotal</span>
+                <span class="total-value">RM{{ number_format($subtotal, 2) }}</span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Tax (6%)</span>
+                <span class="total-value">RM{{ number_format($tax, 2) }}</span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Total</span>
+                <span class="total-value">RM{{ number_format($total, 2) }}</span>
+            </div>
+
+            <div class="balance-due">
+                <span class="total-label">Balance Due</span>
+                <span class="total-value">RM{{ number_format($invoice->jumlah, 2) }}</span>
             </div>
         </div>
-    @endif
 
-        <!-- Footer -->
-        <div class="footer">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px 0;">
-                <div>
-                    <p style="margin: 0; font-size: 12px; color: #64748b;">
-                        Generated on {{ now()->format('d/m/Y H:i:s') }}
-                    </p>
-                    <p style="margin: 5px 0 0 0; font-size: 11px; color: #94a3b8;">
-                        Thank you for your business!
-                    </p>
-                </div>
-                <div style="text-align: right;">
-                    <p style="margin: 0; font-size: 12px; color: #64748b; font-weight: 600;">
-                        {{ $invoice->bisnes->nama_bisnes }}
-                    </p>
-                    <p style="margin: 5px 0 0 0; font-size: 11px; color: #94a3b8;">
-                        Professional Invoice Service
-                    </p>
-                </div>
+        <!-- Notes section -->
+        @if ($invoice->catatan)
+            <div class="notes-section">
+                <div class="notes-title">Notes: any relevant info, terms, payment instructions, e.t.c</div>
+                <div class="notes-content">{{ $invoice->catatan }}</div>
             </div>
-        </div>
+        @else
+            <div class="notes-section">
+                <div class="notes-title">Notes: any relevant info, terms, payment instructions, e.t.c</div>
+            </div>
+        @endif
     </div>
 </body>
 
