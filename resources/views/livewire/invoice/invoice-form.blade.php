@@ -1,9 +1,9 @@
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-4xl mx-auto px-3 sm:px-4 lg:px-6 py-4 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 min-h-screen">
     <!-- Header -->
     <div class="mb-10">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div>
-                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
                     {{ $isEdit ? 'Kemaskini Invoice' : 'Tambah Invoice Baru' }}
                 </h1>
                 <p class="text-gray-600">
@@ -24,7 +24,7 @@
             </div>
             <div class="flex gap-4">
                 <a href="{{ route('invoice.index') }}"
-                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                    class="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-medium rounded-lg shadow-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
                     <i class="fas fa-arrow-left mr-2"></i>
                     Kembali ke Senarai
                 </a>
@@ -52,25 +52,25 @@
     @endif
 
     <!-- Form -->
-    <form wire:submit.prevent="save" class="space-y-8">
+    <form wire:submit.prevent="save" class="space-y-4">
         <!-- Basic Information -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+            <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-3">
                 <h2 class="text-xl font-semibold text-white flex items-center">
                     <i class="fas fa-info-circle mr-3"></i>
                     Maklumat Asas
                 </h2>
             </div>
 
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="p-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-2">
                         <label for="status" class="block text-sm font-semibold text-gray-800 flex items-center">
                             <i class="fas fa-circle mr-2 text-green-500"></i>
                             Status <span class="text-red-500">*</span>
                         </label>
                         <select wire:model="status" id="status"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
                             <option value="pending">Pending</option>
                             <option value="paid">Paid</option>
                             <option value="cancelled">Cancelled</option>
@@ -88,14 +88,14 @@
 
         <!-- Customer Search -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-4">
+            <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-4 py-3">
                 <h2 class="text-xl font-semibold text-white flex items-center">
                     <i class="fas fa-search mr-3"></i>
                     Cari Customer
                 </h2>
             </div>
 
-            <div class="p-6">
+            <div class="p-4">
                 <div class="space-y-4">
                     <div class="relative">
                         <label for="customer_search" class="block text-sm font-semibold text-gray-800 flex items-center mb-2">
@@ -103,7 +103,7 @@
                             Cari Customer
                         </label>
                         <input type="text" wire:model.live="customer_search" id="customer_search"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-100 focus:outline-none transition-all duration-300 shadow-sm"
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-100 focus:outline-none transition-all duration-300 shadow-sm"
                             placeholder="Cari berdasarkan nama, telefon atau email...">
                         @if($show_customer_dropdown && count($customer_results) > 0)
                             <div class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
@@ -147,14 +147,14 @@
 
         <!-- Customer Information -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4">
+            <div class="bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-3">
                 <h2 class="text-xl font-semibold text-white flex items-center">
                     <i class="fas fa-user mr-3"></i>
                     Maklumat Customer
                 </h2>
             </div>
 
-            <div class="p-6">
+            <div class="p-4">
                 @if(!$selected_customer_id)
                     <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
                         <div class="flex items-center">
@@ -177,7 +177,7 @@
                     </div>
                 @endif
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Recipient Name -->
                     <div class="space-y-2">
                         <label for="nama_penerima" class="block text-sm font-semibold text-gray-800 flex items-center">
@@ -185,7 +185,7 @@
                             Nama Penerima <span class="text-red-500">*</span>
                         </label>
                         <input type="text" wire:model="nama_penerima" id="nama_penerima"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl {{ $selected_customer_id ? 'bg-gray-50' : 'bg-white' }} focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg {{ $selected_customer_id ? 'bg-gray-50' : 'bg-white' }} focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
                             placeholder="Contoh: Encik Ahmad" {{ $selected_customer_id ? 'readonly' : '' }}>
                         @error('nama_penerima')
                             <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
@@ -202,7 +202,7 @@
                             No Telefon <span class="text-red-500">*</span>
                         </label>
                         <input type="text" wire:model="no_tel" id="no_tel"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl {{ $selected_customer_id ? 'bg-gray-50' : 'bg-white' }} focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg {{ $selected_customer_id ? 'bg-gray-50' : 'bg-white' }} focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
                             placeholder="Contoh: 0123456789" {{ $selected_customer_id ? 'readonly' : '' }}>
                         @error('no_tel')
                             <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
@@ -218,8 +218,8 @@
                             <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
                             Alamat <span class="text-red-500">*</span>
                         </label>
-                        <textarea wire:model="alamat" id="alamat" rows="3"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl {{ $selected_customer_id ? 'bg-gray-50' : 'bg-white' }} focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm resize-none"
+                        <textarea wire:model="alamat" id="alamat" rows="2"
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg {{ $selected_customer_id ? 'bg-gray-50' : 'bg-white' }} focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm resize-none"
                             placeholder="Masukkan alamat lengkap" {{ $selected_customer_id ? 'readonly' : '' }}></textarea>
                         @error('alamat')
                             <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
@@ -236,7 +236,7 @@
                             Kurier
                         </label>
                         <input type="text" wire:model="kurier" id="kurier"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
                             placeholder="Contoh: J&T, PosLaju, DHL">
                         @error('kurier')
                             <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
@@ -252,8 +252,8 @@
                             <i class="fas fa-sticky-note mr-2 text-orange-500"></i>
                             Catatan
                         </label>
-                        <textarea wire:model="catatan" id="catatan" rows="3"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm resize-none"
+                        <textarea wire:model="catatan" id="catatan" rows="2"
+                            class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm resize-none"
                             placeholder="Catatan tambahan (pilihan)"></textarea>
                         @error('catatan')
                             <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
@@ -268,21 +268,21 @@
 
         <!-- Invoice Items -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-4">
+            <div class="bg-gradient-to-r from-orange-500 to-orange-600 px-4 py-3">
                 <div class="flex items-center justify-between">
                     <h2 class="text-xl font-semibold text-white flex items-center">
                         <i class="fas fa-shopping-cart mr-3"></i>
                         Item Invoice
                     </h2>
                     <button type="button" wire:click="addItem"
-                        class="inline-flex items-center px-4 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50">
+                        class="inline-flex items-center px-3 py-1 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50">
                         <i class="fas fa-plus mr-2"></i>
                         Tambah Item
                     </button>
                 </div>
             </div>
 
-            <div class="p-6">
+            <div class="p-4">
                 <div class="space-y-6">
                     @foreach ($items as $index => $item)
                         <div class="bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl p-6 border border-gray-200" wire:key="item-{{ $index }}">
@@ -293,14 +293,14 @@
                                 </h3>
                                 @if (count($items) > 1)
                                     <button type="button" wire:click="removeItem({{ $index }})"
-                                        class="inline-flex items-center px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-all duration-300 transform hover:scale-105">
+                                        class="inline-flex items-center px-2 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-all duration-300 transform hover:scale-105">
                                         <i class="fas fa-trash mr-1"></i>
                                         Buang
                                     </button>
                                 @endif
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                                 <!-- Product Selection -->
                                 <div class="space-y-2">
                                     <label class="block text-sm font-semibold text-gray-800 flex items-center">
@@ -308,7 +308,7 @@
                                         Produk
                                     </label>
                                     <select wire:model="items.{{ $index }}.produk_id"
-                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
+                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
                                         <option value="">Pilih Produk</option>
                                         @foreach ($produk_list as $produk)
                                             <option value="{{ $produk->id }}">{{ $produk->nama }}</option>
@@ -329,7 +329,7 @@
                                         Produk Custom
                                     </label>
                                     <input type="text" wire:model="items.{{ $index }}.produk_custom"
-                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
+                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
                                         placeholder="Atau masukkan produk custom">
                                     @error('items.' . $index . '.produk_custom')
                                         <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
@@ -346,7 +346,7 @@
                                         Kuantiti <span class="text-red-500">*</span>
                                     </label>
                                     <input type="number" wire:model="items.{{ $index }}.kuantiti" min="1"
-                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
+                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
                                     @error('items.' . $index . '.kuantiti')
                                         <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
                                             <i class="fas fa-exclamation-circle mr-1"></i>
@@ -362,7 +362,7 @@
                                         Harga (RM) <span class="text-red-500">*</span>
                                     </label>
                                     <input type="number" wire:model="items.{{ $index }}.harga" step="0.01" min="0"
-                                        class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
+                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
                                     @error('items.' . $index . '.harga')
                                         <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
                                             <i class="fas fa-exclamation-circle mr-1"></i>
@@ -410,21 +410,21 @@
 
         <!-- Submit Buttons -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="bg-gradient-to-r from-gray-500 to-gray-600 px-6 py-4">
+            <div class="bg-gradient-to-r from-gray-500 to-gray-600 px-4 py-3">
                 <h2 class="text-xl font-semibold text-white flex items-center">
                     <i class="fas fa-paper-plane mr-3"></i>
                     Tindakan
                 </h2>
             </div>
-            <div class="p-6">
+            <div class="p-4">
                 <div class="flex flex-col sm:flex-row gap-4 justify-end">
                     <a href="{{ route('invoice.index') }}"
-                       class="inline-flex items-center justify-center px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-xl shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+                       class="inline-flex items-center justify-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
                         <i class="fas fa-times mr-2"></i>
                         Batal
                     </a>
                     <button type="submit"
-                            class="inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            class="inline-flex items-center justify-center px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                         <i class="fas fa-save mr-2"></i>
                         {{ $isEdit ? 'Kemaskini Invoice' : 'Cipta Invoice' }}
                     </button>
