@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Prospek;
 use App\Models\Bisnes;
 use App\Helpers\BisnesHelper;
 use App\Events\NewDataEvent;
@@ -121,9 +122,14 @@ class CustomerController extends Controller
                 $response = $this->sentN8n($dataContact, true, 'https://n8n-mt8umikivytz.n8x.biz.id/webhook/cf1a7beb-3a83-4c6d-8302-748f5331a3d0', 'https://n8n-mt8umikivytz.n8x.biz.id/webhook-test/cf1a7beb-3a83-4c6d-8302-748f5331a3d0');
             }
 
+
             if (isset($response['code']) && $response['code'] == 404) {
                 return redirect()->route('customer.create')->with('error', $response['message']);
             } else if (isset($response[0]['alamat'])) {
+                $prospek = Prospek::where('no_tel', $data['whatsapp_id'])->first();
+                if ($prospek) {
+                    $prospek->delete();
+                }
                 return redirect()->route('customer.index', $response[0])->with('success',  'Data ' . $response[0]['nama'] . ' telah berjaya disimpan.');
             } else {
                 return redirect()->route('customer.create')->with('error', 'Data gagal diproses. Sila semak data yang di masukkan.');
