@@ -1,6 +1,6 @@
-<div class="w-full px-2 sm:px-4 lg:px-6 py-4 min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 via-purple-50 to-pink-50">
+<div class="w-full py-4 min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 via-purple-50 to-pink-50">
         <!-- Header -->
-        <div class="mb-6">
+        <div class="mb-4">
             <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
@@ -29,7 +29,7 @@
 
         <!-- Flash Messages -->
         @if (session()->has('message'))
-            <div class="mb-6 p-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-700 rounded-lg shadow-sm">
+            <div class="mb-4 p-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-700 rounded-lg shadow-sm">
                 <div class="flex items-center">
                     <i class="fas fa-check-circle text-green-500 mr-2"></i>
                     <span class="text-sm">{{ session('message') }}</span>
@@ -38,7 +38,7 @@
         @endif
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
             <div class="bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 rounded-lg p-4 text-white shadow-lg transform hover:scale-105 transition-all duration-300">
                 <div class="flex items-center justify-between">
                     <div>
@@ -93,7 +93,7 @@
         </div>
 
         <!-- Search and Filters -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-4">
             <div class="px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-gray-50 via-white to-gray-50">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div>
@@ -118,7 +118,7 @@
             </div>
         </div>
         <!-- Iklan Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-4">
             @forelse($iklan as $item)
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:scale-105 transition-all duration-300 hover:shadow-xl group" wire:key="iklan-{{ $item->id }}">
                     <!-- Card Header -->
@@ -153,7 +153,7 @@
                     </div>
 
                     <!-- Card Body -->
-                    <div class="p-4">
+                    <div class="p-3">
                         <!-- Title and Status -->
                         <div class="flex items-start justify-between mb-3">
                             <h3 class="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2" title="{{ $item->nama_iklan }}">
@@ -169,7 +169,7 @@
                         </div>
 
                         <!-- AI Toggle -->
-                        <div class="flex items-center justify-between mb-4 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-100">
+                        <div class="flex items-center justify-between mb-3 p-2 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-100">
                             <div class="flex items-center space-x-2">
                                 <div class="w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-600 rounded flex items-center justify-center">
                                     <i class="fas fa-robot text-white text-xs"></i>
@@ -206,7 +206,7 @@
                         </div>
 
                         <!-- Created Date -->
-                        <div class="mt-3 pt-3 border-t border-gray-100">
+                        <div class="mt-2 pt-2 border-t border-gray-100">
                             <div class="flex items-center text-xs text-gray-500">
                                 <i class="fas fa-calendar-plus mr-1"></i>
                                 <span>Dicipta: {{ $item->created_at->format('d M Y') }}</span>
