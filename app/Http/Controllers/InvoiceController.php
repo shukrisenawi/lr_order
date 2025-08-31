@@ -189,4 +189,8 @@ class InvoiceController extends Controller
 
         return $pdf->download('invoice-' . $invoice->invoice_no . '.pdf');
     }
+    public function viewInvoice()
+    {
+        return view('invoice.view-invoice');
+    }
 }
