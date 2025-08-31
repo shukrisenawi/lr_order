@@ -8,6 +8,7 @@ use App\Models\Bisnes;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Http\Controllers\CustomerController;
@@ -177,6 +178,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/jt-express', 'App\Http\Controllers\JTExpressController@index')->name('jt-express');
         Route::post('/jt-express/send-order', 'App\Http\Controllers\JTExpressController@sendOrder')->name('jt-express.send-order');
     });
+
+    // Profile routes
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::post('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    Route::delete('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
 });
 
 // Image routes for web interface (no authentication required)

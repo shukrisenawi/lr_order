@@ -27,6 +27,13 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f8f9fa;
+            padding-top: 3.5rem; /* Account for fixed header */
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding-top: 3rem; /* Smaller padding for mobile */
+            }
         }
 
         .gradient-header {
@@ -315,9 +322,9 @@
 
     @endphp
     <!-- Header -->
-    <header class="gradient-header shadow-xl backdrop-blur-sm border-b border-white/10">
-        <div class="max-w-7xl mx-auto px-2 sm:px-3 lg:px-4">
-            <div class="flex justify-between items-center h-10 sm:h-12">
+    <header class="gradient-header shadow-xl backdrop-blur-sm border-b border-white/10 fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+            <div class="flex justify-between items-center h-12 sm:h-14">
                 <!-- Left Section: Logo and Title -->
                 <div class="flex items-center space-x-2">
                     <!-- Mobile menu button -->
@@ -328,15 +335,15 @@
                     </button>
 
                     <!-- Logo -->
-                    <div class="flex items-center space-x-1">
+                    <div class="flex items-center space-x-2">
                         <img src="{{ asset('img/logo-01.png') }}" alt="Logo"
-                            class="w-5 h-5 sm:w-6 sm:h-6 rounded-full object-cover border-2 border-white/30 shadow-lg">
+                            class="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover border-2 border-white/30 shadow-lg">
                         <div class="hidden sm:block">
-                            <h1 class="text-xs sm:text-sm font-bold text-white leading-tight">SISTEM TEMPAHAN</h1>
-                            <p class="text-xs text-white/80 font-medium">PERNIAGAAN</p>
+                            <h1 class="text-sm sm:text-base font-bold text-white leading-tight">SISTEM TEMPAHAN</h1>
+                            <p class="text-sm text-white/80 font-medium">PERNIAGAAN</p>
                         </div>
                         <div class="sm:hidden">
-                            <h1 class="text-xs font-bold text-white">LR ORDER</h1>
+                            <h1 class="text-sm font-bold text-white">LR ORDER</h1>
                         </div>
                     </div>
                 </div>
@@ -348,15 +355,15 @@
                         @if ($userBisnes->count() > 0)
                             <div class="relative inline-block text-left">
                                 <button type="button"
-                                    class="inline-flex items-center px-2 py-1 border border-white/20 shadow-lg text-xs leading-4 font-medium rounded-lg text-white bg-white/10 hover:bg-white/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 backdrop-blur-sm"
+                                    class="inline-flex items-center px-3 py-1.5 border border-white/20 shadow-lg text-sm leading-4 font-medium rounded-lg text-white bg-white/10 hover:bg-white/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 backdrop-blur-sm"
                                     id="bisnes-menu-button" aria-expanded="true" aria-haspopup="true"
                                     onclick="toggleBisnesDropdown()">
                                     <img src="{{ $selectedBisnes && $selectedBisnes->gambar ? \App\Helpers\ImageHelper::businessImageUrl($selectedBisnes->gambar) : asset('img/logo-01.png') }}"
-                                        alt="Logo"
-                                        class="w-4 h-4 rounded-full object-cover mr-1 border-2 border-white/40 shadow-sm">
+                                        alt="Business Logo"
+                                        class="w-5 h-5 rounded-full object-cover mr-2 border-2 border-white/40 shadow-sm">
                                     <span
-                                        class="hidden lg:inline text-xs">{{ $selectedBisnes ? Str::limit($selectedBisnes->nama_bisnes, 12) : 'Pilih' }}</span>
-                                    <i class="fas fa-chevron-down ml-1 text-white/80 text-xs"></i>
+                                        class="hidden lg:inline text-sm">{{ $selectedBisnes ? Str::limit($selectedBisnes->nama_bisnes, 15) : 'Pilih Senarai' }}</span>
+                                    <i class="fas fa-chevron-down ml-1 text-white/80 text-sm"></i>
                                 </button>
 
                                 <div class="origin-top-right absolute right-0 mt-3 w-72 rounded-2xl shadow-2xl bg-white/95 backdrop-blur-lg ring-1 ring-black/10 focus:outline-none hidden z-50 border border-white/20"
@@ -368,7 +375,7 @@
                                                 class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 {{ $selectedBisnes && $selectedBisnes->id == $bisnes->id ? 'bg-gradient-to-r from-blue-100 to-purple-100 font-medium' : '' }} transition-all duration-200 rounded-lg mx-2"
                                                 role="menuitem">
                                                 <img src="{{ $bisnes && $bisnes->gambar ? \App\Helpers\ImageHelper::businessImageUrl($bisnes->gambar) : asset('img/logo-01.png') }}"
-                                                    alt="Logo"
+                                                    alt="Business Logo"
                                                     class="w-8 h-8 rounded-full object-cover mr-3 border-2 border-white/50 shadow-sm">
                                                 <div class="flex-1">
                                                     <div class="font-medium text-gray-900">{{ $bisnes->nama_bisnes }}
@@ -408,23 +415,35 @@
                     <div class="flex items-center space-x-1">
                         <!-- User Info -->
                         <div
-                            class="hidden sm:flex items-center space-x-1 bg-white/10 rounded-lg px-1.5 py-0.5 backdrop-blur-sm">
-                            <div
-                                class="w-5 h-5 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-lg">
-                                <span
-                                    class="text-white font-bold text-xs">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                            </div>
+                            class="hidden sm:flex items-center space-x-2 bg-white/10 rounded-lg px-2 py-1 backdrop-blur-sm">
+                            @if(Auth::user()->avatar)
+                                <img src="{{ Auth::user()->avatar_url }}"
+                                     alt="Avatar"
+                                     class="w-6 h-6 rounded-full object-cover shadow-lg border-2 border-white/30"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div
+                                    class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-lg border-2 border-white/30 hidden">
+                                    <span
+                                        class="text-white font-bold text-sm">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+                                </div>
+                            @else
+                                <div
+                                    class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-lg border-2 border-white/30">
+                                    <span
+                                        class="text-white font-bold text-sm">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+                                </div>
+                            @endif
                             <span
-                                class="text-white font-medium text-xs hidden lg:inline">{{ Auth::user()->name }}</span>
+                                class="text-white font-medium text-sm hidden lg:inline">{{ Auth::user()->name }}</span>
                         </div>
 
                         <!-- Logout Button -->
                         <form method="POST" action="{{ route('logout') }}" class="inline">
                             @csrf
                             <button type="submit"
-                                class="inline-flex items-center justify-center w-6 h-6 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 shadow-lg backdrop-blur-sm"
+                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 shadow-lg backdrop-blur-sm"
                                 title="Logout">
-                                <i class="fas fa-sign-out-alt text-xs"></i>
+                                <i class="fas fa-sign-out-alt text-sm"></i>
                             </button>
                         </form>
                     </div>
@@ -597,6 +616,13 @@
                                     <i class="fas fa-cog text-xs"></i>
                                 </div>
                                 <span class="font-medium text-sm">Tetapan</span>
+                            </a>
+                            <a href="{{ route('profile.edit') }}"
+                                class="nav-link flex items-center space-x-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('profile.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-user text-xs"></i>
+                                </div>
+                                <span class="font-medium text-sm">Profil</span>
                             </a>
                         </div>
                     </div>
@@ -784,6 +810,13 @@
                                     <i class="fas fa-cog text-sm"></i>
                                 </div>
                                 <span class="font-medium">Tetapan</span>
+                            </a>
+                            <a href="{{ route('profile.edit') }}"
+                                class="nav-link flex items-center space-x-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('profile.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                <div class="w-7 h-7 rounded-lg bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-user text-sm"></i>
+                                </div>
+                                <span class="font-medium">Profil</span>
                             </a>
                         </div>
                     </div>
