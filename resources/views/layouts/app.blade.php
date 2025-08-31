@@ -44,6 +44,16 @@
             /* Chrome, Safari, and Opera */
         }
 
+        /* Hide scrollbar for sidebar */
+        .sidebar-gradient {
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .sidebar-gradient::-webkit-scrollbar {
+            display: none;
+        }
+
         @media (max-width: 640px) {
             body {
                 padding-top: 3rem;
@@ -480,7 +490,7 @@
         <!-- Mobile Sidebar -->
         <div id="mobile-menu"
             class="md:hidden fixed inset-0 z-50 hidden transform transition-transform duration-300 ease-in-out">
-            <div class="sidebar-gradient h-full w-64 sm:w-72 p-3 overflow-y-auto shadow-2xl relative">
+            <div class="sidebar-gradient h-full w-64 sm:w-72 p-3 overflow-hidden shadow-2xl relative">
                 <!-- Decorative elements -->
                 <div
                     class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/5 to-transparent rounded-full -translate-y-16 translate-x-16">
@@ -653,8 +663,8 @@
         </div>
 
         <!-- Desktop Sidebar -->
-        <aside class="hidden md:block w-56 lg:w-64 sidebar-gradient h-screen sticky top-0">
-            <div class="p-2 lg:p-3 overflow-y-auto h-full relative">
+        <aside class="hidden md:block w-56 lg:w-64 sidebar-gradient h-screen-minus-header sticky top-0">
+            <div class="p-2 lg:p-3 overflow-hidden h-full relative">
                 <!-- Decorative elements for desktop -->
                 <div
                     class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-white/5 to-transparent rounded-full -translate-y-10 translate-x-10">
