@@ -1,4 +1,5 @@
-<div class="w-full px-2 sm:px-4 lg:px-6 py-4 min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 via-purple-50 to-pink-50">
+<div
+    class="w-full px-2 sm:px-4 lg:px-6 py-4 min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 via-purple-50 to-pink-50">
     <!-- Header -->
     <div class="mb-6">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -6,11 +7,13 @@
                 <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Pengurusan Invoice</h1>
                 <p class="text-sm text-gray-600">Urus invoice anda</p>
                 <div class="flex items-center gap-2 mt-3">
-                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <span
+                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                         <i class="fas fa-file-invoice mr-1"></i>
                         Jumlah: {{ $invoices->total() }}
                     </span>
-                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    <span
+                        class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                         <i class="fas fa-money-bill-wave mr-1"></i>
                         Total: RM {{ number_format($invoices->sum('jumlah'), 2) }}
                     </span>
@@ -152,24 +155,27 @@
                         <tr class="hover:bg-blue-50 transition-colors duration-200"
                             wire:key="invoice-{{ $invoice->id }}">
                             <td class="px-4 py-3 text-sm font-medium text-gray-900">
-                                <a href="{{ route('invoice.show', $invoice) }}" class="text-blue-600 hover:text-blue-800">
+                                <a href="{{ route('invoice.show', $invoice) }}"
+                                    class="text-blue-600 hover:text-blue-800">
                                     {{ $invoice->invoice_no }}
                                 </a>
                             </td>
                             <td class="px-4 py-3 text-sm text-gray-600">{{ $invoice->nama_penerima }}</td>
                             <td class="px-4 py-3 text-sm text-gray-600">RM {{ number_format($invoice->jumlah, 2) }}</td>
                             <td class="px-4 py-3 text-sm">
-                                <span class="px-2 py-1 text-xs font-semibold rounded-full
-                                    @if($invoice->status === 'paid') bg-green-100 text-green-800
+                                <span
+                                    class="px-2 py-1 text-xs font-semibold rounded-full
+                                    @if ($invoice->status === 'paid') bg-green-100 text-green-800
                                     @elseif($invoice->status === 'pending') bg-yellow-100 text-yellow-800
                                     @else bg-red-100 text-red-800 @endif">
                                     {{ ucfirst($invoice->status) }}
                                 </span>
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-600">{{ $invoice->created_at->format('d/m/Y') }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-600">{{ $invoice->created_at->format('d/m/Y') }}
+                            </td>
                             <td class="px-4 py-3">
                                 <div class="flex space-x-1">
-                                    <a href="{{ route('invoice.show', $invoice) }}"
+                                    <a href="{{ route('invoice.view-invoice', $invoice) }}"
                                         class="inline-flex items-center px-2 py-1 text-sm font-medium text-blue-700 bg-blue-50 rounded hover:bg-blue-100 transition-colors duration-200">
                                         <i class="fas fa-eye mr-1"></i>
                                         View
@@ -201,7 +207,8 @@
                                         <i class="fas fa-file-invoice text-gray-400 text-xl"></i>
                                     </div>
                                     <h3 class="text-base font-medium text-gray-900 mb-1">No invoices found</h3>
-                                    <p class="text-sm text-gray-500 mb-2">Try changing your search or add a new invoice</p>
+                                    <p class="text-sm text-gray-500 mb-2">Try changing your search or add a new invoice
+                                    </p>
                                     <a href="{{ route('invoice.create') }}"
                                         class="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition-all duration-300">
                                         <i class="fas fa-plus mr-2"></i>

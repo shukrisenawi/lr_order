@@ -34,6 +34,7 @@ Route::get('/test-login', function () {
 Route::get('/test-invoice-pdf', function () {
     // Create a sample invoice data structure
     $invoice = (object) [
+        'id' => 1,
         'invoice_no' => 'INV001',
         'created_at' => now(),
         'nama_penerima' => 'John Doe',
@@ -50,13 +51,61 @@ Route::get('/test-invoice-pdf', function () {
                 'product_name' => 'Line Item',
                 'kuantiti' => 1,
                 'harga' => 99.00,
-                'total' => 99.00
+                'total' => 99.00,
+                'produk_custom' => 'Sample product description'
             ]
         ])
     ];
 
-    return view('invoice.pdf', compact('invoice'));
+    return view('invoice.view-invoice', compact('invoice'));
 })->name('test-invoice-pdf');
+
+// Test Browsershot PDF route
+Route::get('/test-browsershot-pdf', function () {
+    try {
+        // Test with a simple HTML content first
+        $html = '
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Test PDF</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                .header { color: #333; font-size: 24px; margin-bottom: 20px; }
+                .content { font-size: 14px; line-height: 1.6; }
+            </style>
+        </head>
+        <body>
+            <div class="header">Test PDF Generation</div>
+            <div class="content">
+                <p>This is a test PDF generated using Spatie Browsershot.</p>
+                <p>Invoice Number: INV001</p>
+                <p>Customer: John Doe</p>
+                <p>Amount: RM105.93</p>
+                <p>Date: ' . now()->format('d M Y') . '</p>
+            </div>
+        </body>
+        </html>';
+
+        // Generate PDF using Browsershot with HTML content
+        $pdf = \Spatie\Browsershot\Browsershot::html($html)
+            ->setOption('args', ['--no-sandbox', '--disable-setuid-sandbox'])
+            ->format('A4')
+            ->margins(10, 10, 10, 10)
+            ->showBackground()
+            ->pdf();
+
+        // Return PDF as download
+        return response($pdf)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="test-browsershot.pdf"');
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'PDF generation failed',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+})->name('test-browsershot-pdf');
 
 // Authentication routes
 Route::middleware(['guest'])->group(function () {
@@ -179,7 +228,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('customer', CustomerController::class)->except(['index']);
 
     Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');
-    Route::get('/invoice/view-invoice', [InvoiceController::class, 'viewInvoice'])->name('invoice.view-invoice');
+    Route::get('/invoice/view-invoice/{invoice?}', [InvoiceController::class, 'viewInvoice'])->name('invoice.view-invoice');
     Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('invoice.create');
     Route::get('/invoice/create/{customer}', [InvoiceController::class, 'create'])->name('invoice.customer');
     Route::post('/invoice', [InvoiceController::class, 'store'])->name('invoice.store');
@@ -188,6 +237,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
     Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
     Route::get('/invoice/{invoice}/pdf', [InvoiceController::class, 'generatePdf'])->name('invoice.pdf');
+    Route::get('/invoice/{invoice}/download-pdf', [InvoiceController::class, 'downloadPdf'])->name('invoice.download-pdf');
 
     Route::get('/tracking', function () {
         return view('tracking-livewire');

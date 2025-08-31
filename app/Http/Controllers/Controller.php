@@ -18,21 +18,36 @@ abstract class Controller extends BaseController
         $this->bisnes_id = session('selected_bisnes_id');
     }
 
-    public function sentN8n($data, $test = true, $link_production, $link_test)
+    public function sentN8n($data, $test = true, $link_production, $link_test, $type = 'GET')
     {
         try {
-            // $data['sessionId'] = uniqid();
-            if (env('APP_DEV') && $test) {
-                $response = Http::withoutVerifying()->get(
-                    $link_test,
-                    $data
-                );
+            if ($type == 'GET') {
+                if (env('APP_DEV') && $test) {
+                    $response = Http::withoutVerifying()->get(
+                        $link_test,
+                        $data
+                    );
+                } else {
+                    $response = Http::get(
+                        $link_production,
+                        $data
+                    );
+                }
             } else {
-                $response = Http::get(
-                    $link_production,
-                    $data
-                );
+                if (env('APP_DEV') && $test) {
+                    $response = Http::withoutVerifying()->post(
+                        $link_test,
+                        $data
+                    );
+                } else {
+                    $response = Http::post(
+                        $link_production,
+                        $data
+                    );
+                }
             }
+            // $data['sessionId'] = uniqid();
+
             return $response->json();
         } catch (\Illuminate\Validation\ValidationException $e) {
             dd($e->validator->errors()->all());

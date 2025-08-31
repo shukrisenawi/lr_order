@@ -10,6 +10,7 @@ use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Spatie\Browsershot\Browsershot;
 
 class InvoiceController extends Controller
 {
@@ -189,8 +190,49 @@ class InvoiceController extends Controller
 
         return $pdf->download('invoice-' . $invoice->invoice_no . '.pdf');
     }
-    public function viewInvoice()
+
+    public function downloadPdf(Invoice $invoice)
     {
-        return view('invoice.view-invoice');
+        // Verify invoice belongs to authenticated user
+        if ($invoice->bisnes->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $invoice->load(['bisnes', 'items.produk']);
+
+        // Render the invoice view to HTML
+        $html = view('invoice.view-invoice', compact('invoice'))->render();
+
+        // Generate PDF using Browsershot with HTML content
+        $pdf = Browsershot::html($html)
+            ->setOption('args', [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-web-security',
+                '--disable-features=VizDisplayCompositor'
+            ])
+            ->format('A4')
+            ->margins(10, 10, 10, 10)
+            ->showBackground()
+            ->pdf();
+
+        // Return PDF as download
+        return response($pdf)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="invoice-' . $invoice->invoice_no . '.pdf"');
+    }
+
+    public function viewInvoice(Invoice $invoice = null)
+    {
+        if ($invoice) {
+            // Verify invoice belongs to authenticated user
+            if ($invoice->bisnes->user_id !== Auth::id()) {
+                abort(403);
+            }
+
+            $invoice->load(['bisnes', 'items.produk']);
+        }
+
+        return view('invoice.view-invoice', compact('invoice'));
     }
 }

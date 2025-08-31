@@ -52,6 +52,11 @@
                         Kembali ke Senarai
                     </a>
                 @endif
+                <a href="{{ route('invoice.view-invoice', $invoice) }}"
+                    class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white font-medium rounded-xl shadow-lg hover:from-cyan-600 hover:to-cyan-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2">
+                    <i class="fas fa-eye mr-2"></i>
+                    Lihat Invoice
+                </a>
                 <a href="{{ route('invoice.edit', $invoice) }}"
                     class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-medium rounded-xl shadow-lg hover:from-indigo-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     <i class="fas fa-edit mr-2"></i>

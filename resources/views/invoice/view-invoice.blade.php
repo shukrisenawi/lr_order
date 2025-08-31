@@ -261,7 +261,7 @@
             <div class="party">
                 <h4>From</h4>
                 <div class="company">{{ $invoice->bisnes->nama_bisnes ?? 'Business name' }}</div>
-                <div>contact@{{ strtolower(str_replace(' ', '', $invoice - > bisnes - > nama_bisnes ?? 'business')) }}.com</div>
+                <div>contact@{{ strtolower(str_replace(' ', '', $invoice->bisnes->nama_bisnes ?? 'business')) }}.com</div>
                 <div>Your address</div>
                 <div>P: (123) 456 7890</div>
             </div>
@@ -365,7 +365,12 @@
         </section>
 
         <div class="toolbar">
-            <button class="btn secondary" onclick="window.location.reload()">Reset</button>
+            @if(isset($invoice) && $invoice)
+                <a href="{{ route('invoice.show', $invoice) }}" class="btn secondary" style="text-decoration: none;">Back to Invoice</a>
+                <a href="{{ route('invoice.download-pdf', $invoice) }}" class="btn" style="text-decoration: none; background: #059669; box-shadow: 0 2px 8px rgba(5, 150, 105, .25);">Download PDF</a>
+            @else
+                <button class="btn secondary" onclick="window.location.reload()">Reset</button>
+            @endif
             <button class="btn" onclick="window.print()">Print</button>
         </div>
     </div>

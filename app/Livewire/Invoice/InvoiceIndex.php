@@ -63,17 +63,13 @@ class InvoiceIndex extends Component
 
     public function render()
     {
-        $invoices = Invoice::with(['bisnes', 'items'])
-            ->whereHas('bisnes', function ($query) {
-                $query->where('user_id', Auth::id());
-            })
-            ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('invoice_no', 'like', '%' . $this->search . '%')
-                        ->orWhere('nama_penerima', 'like', '%' . $this->search . '%')
-                        ->orWhere('no_tel', 'like', '%' . $this->search . '%');
-                });
-            })
+        $invoices = Invoice::where('bisnes_id', session('selected_bisnes_id'))->when($this->search, function ($query) {
+            $query->where(function ($q) {
+                $q->where('invoice_no', 'like', '%' . $this->search . '%')
+                    ->orWhere('nama_penerima', 'like', '%' . $this->search . '%')
+                    ->orWhere('no_tel', 'like', '%' . $this->search . '%');
+            });
+        })
             ->when($this->statusFilter, function ($query) {
                 $query->where('status', $this->statusFilter);
             })
