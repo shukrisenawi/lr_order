@@ -247,8 +247,12 @@
         <header>
             <div class="title">Invoice</div>
             <div class="brand">
-                <img class="logo" src="https://dummyimage.com/300x300/ffffff/cccccc&text=LOGO" alt="Logo">
-                <div class="name">YOUR COMPANY NAME</div>
+                @if (file_exists(public_path('img/logo-01.png')))
+                    <img class="logo" src="{{ asset('img/logo-01.png') }}" alt="Logo">
+                @else
+                    <img class="logo" src="https://dummyimage.com/300x300/ffffff/cccccc&text=LOGO" alt="Logo">
+                @endif
+                <div class="name">{{ strtoupper($invoice->bisnes->nama_bisnes ?? 'YOUR COMPANY NAME') }}</div>
                 <div class="tag">COMPANY TAGLINE</div>
             </div>
         </header>
@@ -256,36 +260,38 @@
         <section class="parties">
             <div class="party">
                 <h4>From</h4>
-                <div class="company">Business name</div>
-                <div>your@email.com</div>
+                <div class="company">{{ $invoice->bisnes->nama_bisnes ?? 'Business name' }}</div>
+                <div>contact@{{ strtolower(str_replace(' ', '', $invoice - > bisnes - > nama_bisnes ?? 'business')) }}.com</div>
                 <div>Your address</div>
                 <div>P: (123) 456 7890</div>
             </div>
             <div class="party">
                 <h4>For</h4>
-                <div class="company">Client name</div>
+                <div class="company">{{ $invoice->nama_penerima ?? 'Client name' }}</div>
                 <div>client@email.com</div>
-                <div>Client address</div>
-                <div>P: 099 876 54321</div>
+                <div>{{ $invoice->alamat ?? 'Client address' }}</div>
+                <div>P: {{ $invoice->no_tel ?? '099 876 54321' }}</div>
             </div>
         </section>
 
         <section class="meta">
             <div class="box">
                 <div class="label">Number</div>
-                <div class="value">INV0001</div>
+                <div class="value">{{ $invoice->invoice_no ?? 'INV0001' }}</div>
             </div>
             <div class="box">
                 <div class="label">Date</div>
-                <div class="value">04 May 2018</div>
+                <div class="value">{{ $invoice->created_at ? $invoice->created_at->format('d M Y') : '04 May 2018' }}
+                </div>
             </div>
             <div class="box">
                 <div class="label">Terms</div>
-                <div class="value">Next Day</div>
+                <div class="value">{{ $invoice->kurier ?? 'Next Day' }}</div>
             </div>
             <div class="box">
                 <div class="label">Due</div>
-                <div class="value">05 May 2018</div>
+                <div class="value">
+                    {{ $invoice->created_at ? $invoice->created_at->addDays(1)->format('d M Y') : '05 May 2018' }}</div>
             </div>
         </section>
 
@@ -300,13 +306,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="desc">Line item<br><span style="color:var(--muted); font-size:12px;">additional
-                                details</span></td>
-                        <td class="price">$99.00</td>
-                        <td class="qty">1</td>
-                        <td class="amount">$99.00</td>
-                    </tr>
+                    @forelse($invoice->items ?? [] as $item)
+                        <tr>
+                            <td class="desc">{{ $item->product_name ?? 'Line item' }}<br><span
+                                    style="color:var(--muted); font-size:12px;">{{ $item->produk_custom ?? 'additional details' }}</span>
+                            </td>
+                            <td class="price">RM{{ number_format($item->harga ?? 99.0, 2) }}</td>
+                            <td class="qty">{{ $item->kuantiti ?? 1 }}</td>
+                            <td class="amount">
+                                RM{{ number_format(($item->harga ?? 99.0) * ($item->kuantiti ?? 1), 2) }}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td class="desc">Line item<br><span style="color:var(--muted); font-size:12px;">additional
+                                    details</span></td>
+                            <td class="price">RM99.00</td>
+                            <td class="qty">1</td>
+                            <td class="amount">RM99.00</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </section>
@@ -314,27 +332,36 @@
         <section class="totals">
             <div></div>
             <table class="total-table">
+                @php
+                    $subtotal = $invoice->items
+                        ? $invoice->items->sum(function ($item) {
+                            return $item->harga * $item->kuantiti;
+                        })
+                        : 99.0;
+                    $tax = $subtotal * 0.07; // 7% tax
+                    $total = $subtotal + $tax;
+                @endphp
                 <tr>
                     <td>Subtotal</td>
-                    <td>$99.00</td>
+                    <td>RM{{ number_format($subtotal, 2) }}</td>
                 </tr>
                 <tr>
                     <td>Tax (7%)</td>
-                    <td>$6.93</td>
+                    <td>RM{{ number_format($tax, 2) }}</td>
                 </tr>
                 <tr>
                     <td style="font-weight:800;">Total</td>
-                    <td>$105.93</td>
+                    <td>RM{{ number_format($total, 2) }}</td>
                 </tr>
                 <tr class="balance-row">
                     <td>Balance Due</td>
-                    <td>$105.93</td>
+                    <td>RM{{ number_format($invoice->jumlah ?? $total, 2) }}</td>
                 </tr>
             </table>
         </section>
 
         <section class="notes">
-            <strong>Notes:</strong> any relevant info, terms, payment instructions, etc.
+            <strong>Notes:</strong> {{ $invoice->catatan ?? 'any relevant info, terms, payment instructions, etc.' }}
         </section>
 
         <div class="toolbar">
