@@ -66,7 +66,7 @@ class TrackingController extends Controller
         $digest = base64_encode(md5($bizContent . env('API_JNT_PRIVATE_KEY'), true));
         $headers = [
             "apiAccount" => env('API_JNT_KEY'),
-            "digest"     => "jT6DfSTy9Gf8JXcn2hgMcg==",
+            "digest"     => $digest,
             "timestamp" => time(),
             "Content-Type" => "application/x-www-form-urlencoded; charset=UTF-8",
         ];
