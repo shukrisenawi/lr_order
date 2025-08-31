@@ -42,103 +42,22 @@ class TrackingController extends Controller
     public function store(Request $request)
     {
         $data = [
-            "customerCode" => "JTMY017482",
-            "actionType" => "add",
-            "password" => "EF215AD17C6ECC95635603976017D96F",
-            "txlogisticId" => "NM20240619001",
-            "expressType" => "EZ",
-            "serviceType" => "1",
-            "sender" => [
-                "name" => "MOHAMAD SHUKRI BIN SENAWI",
-                "postCode" => "08200",
-                "phone" => "60195168839",
-                "address" => "NO 17222, KAMPUNG KUALA TELOI, 08200 SIK, KEDAH",
-                "countryCode" => "MYS",
-                "prov" => "KEDAH",
-                "city" => "SIK",
-                "area" => "KAMPUNG KUALA TELOI"
-            ],
-            "receiver" => [
-                "name" => "BUQORI BIN SENAWI",
-                "postCode" => "08200",
-                "phone" => "60166831403",
-                "address" => "167 KG BATU 5, 08200 SIK, KEDAH",
-                "countryCode" => "MYS",
-                "prov" => "KEDAH",
-                "city" => "SIK",
-                "area" => "KAMPUNG BATU 5"
-            ],
-            "payType" => "PP_PM",
-            "goodsType" => "PARCEL",
-            "weight" => 10,
-            "items" => [
+            "billCode" => "630002864925",
+            "details" => [
                 [
-                    "itemName" => "basketball",
-                    "englishName" => "basketball",
-                    "itemDesc" => "This is a basketball",
-                    "number" => 2,
-                    "itemValue" => "50",
-                    "weight" => "10",
-                    "itemCurrency" => "USD"
-                ],
-                [
-                    "itemName" => "phone",
-                    "englishName" => "phone",
-                    "itemDesc" => "This is a phone",
-                    "number" => 1,
-                    "itemValue" => "4000",
-                    "weight" => "100",
-                    "itemCurrency" => "USD"
-                ]
-            ],
-            "packageInfo" => [
-                "packageQuantity" => 10,
-                "goodsType" => "ITN2",
-                "weight" => 10,
-                "length" => 10,
-                "width" => 10,
-                "packageValue" => "880"
-            ],
-            "sendStartTime" => "2024-06-19 13:45:00",
-            "sendEndTime" => "2024-06-25 16:23:00",
-            "remark" => "",
-            "returnInfo" => [
-                "name" => "J&T return",
-                "postCode" => "31000",
-                "phone" => "60987654",
-                "address" => "4678, Laluan Sentang 35"
-            ],
-            "offerFeeInfo" => [
-                "offerValue" => "12"
-            ],
-            "customsInfo" => [
-                "customsCode" => "2000001",
-                "nationalInspectionNo" => "456DEF",
-                "originPlace" => "China",
-                "brandName" => "Brand X",
-                "oldItem" => 0,
-                "number" => "10",
-                "weight" => "25.5",
-                "unitWeight" => "2.5",
-                "totalValue" => "100",
-                "unitPrice" => "10",
-                "currency" => "USD"
-            ],
-            "codInfo" => [
-                "codValue" => 100
-            ],
-            "multipleVotes" => [
-                [
-                    "actualWeight" => "21",
-                    "length" => "12",
-                    "width" => "12",
-                    "height" => "12"
-                ],
-                [
-                    "actualWeight" => "21",
-                    "length" => "12",
-                    "width" => "12",
-                    "height" => "12"
+                    "billCode" => "630002864925",
+                    "desc" => "【Selangor Network】's Tommy (13100001234) has collected the item. Complaints hotline: 16623452345 ",
+                    "scanNetworkArea" => "Lbh IRC",
+                    "scanNetworkCity" => "Putrajaya",
+                    "scanNetworkDetailAddress" => " IOI City Tower Two ",
+                    "scanNetworkId" => 17896,
+                    "scanNetworkName" => "Selangor Network",
+                    "scanNetworkProvince" => "Selangor",
+                    "scanNetworkTypeName" => "Network",
+                    "scanTime" => "2024-06-19 12:33:22",
+                    "scanType" => "Express pickup",
+                    "scanTypeCode" => "10",
+                    "timeZone" => "UTC+8"
                 ]
             ]
         ];
@@ -147,7 +66,7 @@ class TrackingController extends Controller
         $digest = base64_encode(md5($bizContent . env('API_JNT_PRIVATE_KEY'), true));
         $headers = [
             "apiAccount" => env('API_JNT_KEY'),
-            "digest"     => $digest,
+            "digest"     => "jT6DfSTy9Gf8JXcn2hgMcg==",
             "timestamp" => time(),
             "Content-Type" => "application/x-www-form-urlencoded; charset=UTF-8",
         ];
