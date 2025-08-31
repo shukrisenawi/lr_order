@@ -31,6 +31,16 @@
             /* Account for fixed header */
         }
 
+        /* Hide scrollbar */
+        html {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+        }
+
+        html::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, and Opera */
+        }
+
         @media (max-width: 640px) {
             body {
                 padding-top: 3rem;
