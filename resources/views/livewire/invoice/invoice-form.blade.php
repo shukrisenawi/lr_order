@@ -87,7 +87,7 @@
         </div>
 
         <!-- Customer Search -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-xl overflow-visible">
             <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-4 py-3">
                 <h2 class="text-xl font-semibold text-white flex items-center">
                     <i class="fas fa-search mr-3"></i>
@@ -106,10 +106,10 @@
                             class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-100 focus:outline-none transition-all duration-300 shadow-sm"
                             placeholder="Cari berdasarkan nama, telefon atau email...">
                         @if($show_customer_dropdown && count($customer_results) > 0)
-                            <div class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                            <div class="absolute z-60 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
                                 @foreach($customer_results as $customer)
                                     <div wire:click="selectCustomer({{ $customer->id }})"
-                                         class="px-4 py-3 hover:bg-purple-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-200">
+                                          class="px-4 py-3 hover:bg-purple-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-200">
                                         <div class="flex items-center justify-between">
                                             <div>
                                                 <div class="font-semibold text-gray-900">{{ $customer->nama_penerima }}</div>
