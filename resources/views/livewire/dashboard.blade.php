@@ -1,9 +1,9 @@
-<div class="max-w-6xl mx-auto px-3 py-3">
+<div class="w-full px-2 sm:px-4 lg:px-6 py-4 min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 via-purple-50 to-pink-50">
     <!-- Welcome Header -->
-    <div class="mb-4">
+    <div class="mb-6">
         <div class="flex items-center justify-between">
             <div>
-                <h1 class="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Dashboard</h1>
+                <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Dashboard</h1>
                 <p class="text-gray-600 text-sm">Welcome back, <span class="font-medium text-indigo-600">{{ Auth::user()->name }}</span></p>
             </div>
             <div class="text-right">
@@ -14,7 +14,7 @@
     </div>
 
     <!-- Key Stats -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4" wire:poll.30s="loadStats">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6" wire:poll.30s="loadStats">
         <!-- Business Card -->
         <div class="group relative overflow-hidden bg-gradient-to-br from-blue-500 to-blue-600 p-4 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
             <div class="absolute top-0 right-0 w-16 h-16 bg-white/10 rounded-full -translate-y-8 translate-x-8"></div>
@@ -97,7 +97,7 @@
     </div>
 
     <!-- Quick Actions -->
-    <div class="bg-gradient-to-r from-white to-gray-50 p-4 rounded-xl shadow-lg border border-gray-100 mb-4">
+    <div class="bg-gradient-to-r from-white to-gray-50 p-4 rounded-lg shadow-lg border border-gray-100 mb-6">
         <div class="flex items-center mb-3">
             <div class="bg-gradient-to-r from-indigo-500 to-purple-500 p-2 rounded-lg mr-3">
                 <i class="fas fa-bolt text-white text-sm"></i>
@@ -136,7 +136,7 @@
     </div>
 
     <!-- Recent Activity -->
-    <div class="bg-gradient-to-r from-white to-gray-50 p-4 rounded-xl shadow-lg border border-gray-100">
+    <div class="bg-gradient-to-r from-white to-gray-50 p-4 rounded-lg shadow-lg border border-gray-100">
         <div class="flex items-center mb-3">
             <div class="bg-gradient-to-r from-gray-500 to-gray-600 p-2 rounded-lg mr-3">
                 <i class="fas fa-history text-white text-sm"></i>
