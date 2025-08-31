@@ -153,7 +153,7 @@ class TrackingController extends Controller
         ];
 
 
-        $response = Http::withoutVerifying()->withHeaders($headers)->asForm()->post(env('API_JNT_URL'), ['bizContent' => $bizContent]);
+        $response = Http::withoutVerifying()->withHeaders($headers)->asForm()->post("https://demoopenapi.jtexpress.my/webopenplatformapi/api/order/addOrder?uuid=21c93fb6688741dca7344cceed379434&pid=826855848172060694", ['bizContent' => $bizContent]);
 
         dd($response->body());
         // $request->merge(['bisnes_id' => session('selected_bisnes_id')]);
