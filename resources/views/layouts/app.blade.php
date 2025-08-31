@@ -252,6 +252,16 @@
             background: rgba(255, 255, 255, 0.2);
             border-left: 2px solid white;
         }
+
+        .h-screen-minus-header {
+            height: calc(100vh - 3.5rem);
+        }
+
+        @media (max-width: 640px) {
+            .h-screen-minus-header {
+                height: calc(100vh - 3rem);
+            }
+        }
     </style>
 
     <script>
@@ -452,7 +462,7 @@
         </div>
     </header>
 
-    <div class="flex">
+    <div class="flex h-screen-minus-header">
         <!-- Mobile Sidebar -->
         <div id="mobile-menu"
             class="md:hidden fixed inset-0 z-50 hidden transform transition-transform duration-300 ease-in-out">
@@ -825,7 +835,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 p-4">
+        <main class="flex-1 p-4 overflow-y-auto">
             @if (session('success'))
                 <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
                     role="alert">
