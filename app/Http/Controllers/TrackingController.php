@@ -42,45 +42,6 @@ class TrackingController extends Controller
     public function store(Request $request)
     {
         $data = [
-            "billCode" => "630002864925",
-            "details" => [
-                [
-                    "billCode" => "630002864925",
-                    "customerCode" => "JTMY017482",
-                    "password" => "EF215AD17C6ECC95635603976017D96F",
-                    "desc" => "【Selangor Network】's Tommy (13100001234) has collected the item. Complaints hotline: 16623452345 ",
-                    "scanNetworkArea" => "Lbh IRC",
-                    "scanNetworkCity" => "Putrajaya",
-                    "scanNetworkDetailAddress" => " IOI City Tower Two ",
-                    "scanNetworkId" => 17896,
-                    "scanNetworkName" => "Selangor Network",
-                    "scanNetworkProvince" => "Selangor",
-                    "scanNetworkTypeName" => "Network",
-                    "scanTime" => "2024-06-19 12:33:22",
-                    "scanType" => "Express pickup",
-                    "scanTypeCode" => "10",
-                    "timeZone" => "UTC+8"
-                ]
-            ]
-        ];
-
-        $bizContent = json_encode($data);
-        $digest = base64_encode(md5($bizContent . env('API_JNT_PRIVATE_KEY'), true));
-        $headers = [
-            "apiAccount" => env('API_JNT_KEY'),
-            "digest"     => $digest,
-            "timestamp" => time(),
-            "Content-Type" => "application/x-www-form-urlencoded; charset=UTF-8",
-        ];
-
-
-        $response = Http::withoutVerifying()->withHeaders($headers)->asForm()->post(env('API_JNT_URL'), ['bizContent' => $bizContent]);
-
-        dd($response->body());
-
-        exit;
-
-        $data = [
             "customerCode" => "JTMY017482",
             "actionType" => "add",
             "password" => "EF215AD17C6ECC95635603976017D96F",
