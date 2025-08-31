@@ -27,12 +27,14 @@
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #f8f9fa;
-            padding-top: 3.5rem; /* Account for fixed header */
+            padding-top: 3.5rem;
+            /* Account for fixed header */
         }
 
         @media (max-width: 640px) {
             body {
-                padding-top: 3rem; /* Smaller padding for mobile */
+                padding-top: 3rem;
+                /* Smaller padding for mobile */
             }
         }
 
@@ -426,11 +428,10 @@
                         <!-- User Info -->
                         <div
                             class="hidden sm:flex items-center space-x-2 bg-white/10 rounded-lg px-2 py-1 backdrop-blur-sm">
-                            @if(Auth::user()->avatar)
-                                <img src="{{ Auth::user()->avatar_url }}"
-                                     alt="Avatar"
-                                     class="w-6 h-6 rounded-full object-cover shadow-lg border-2 border-white/30"
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            @if (Auth::user()->avatar)
+                                <img src="{{ Auth::user()->avatar_url }}" alt="Avatar"
+                                    class="w-6 h-6 rounded-full object-cover shadow-lg border-2 border-white/30"
+                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                 <div
                                     class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-lg border-2 border-white/30 hidden">
                                     <span
@@ -835,7 +836,7 @@
         </aside>
 
         <!-- Main Content -->
-        <main class="flex-1 p-4 overflow-y-auto">
+        <main class="flex-1 overflow-y-auto">
             @if (session('success'))
                 <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
                     role="alert">
