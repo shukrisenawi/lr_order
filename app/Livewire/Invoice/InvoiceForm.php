@@ -7,6 +7,7 @@ use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Produk;
 use App\Models\Bisnes;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 
 class InvoiceForm extends Component
@@ -20,12 +21,16 @@ class InvoiceForm extends Component
     public $catatan;
     public $status = 'pending';
     public $items = [];
-    public $bisnes_list = [];
     public $produk_list = [];
     public $isEdit = false;
 
+    // Customer search properties
+    public $customer_search = '';
+    public $customer_results = [];
+    public $selected_customer_id = null;
+    public $show_customer_dropdown = false;
+
     protected $rules = [
-        'bisnes_id' => 'required|exists:bisnes,id',
         'nama_penerima' => 'required|string|max:255',
         'alamat' => 'required|string',
         'no_tel' => 'required|string|max:20',
@@ -41,7 +46,6 @@ class InvoiceForm extends Component
 
     public function mount($invoice = null, $customer = null)
     {
-        $this->bisnes_list = Bisnes::where('user_id', Auth::id())->get();
         $this->produk_list = Produk::where('bisnes_id', session('selected_bisnes_id'))->get();
         $this->bisnes_id = session('selected_bisnes_id');
 
@@ -94,12 +98,43 @@ class InvoiceForm extends Component
         }
     }
 
-    public function updatedBisnesId($value)
+    public function updatedCustomerSearch($value)
     {
-        $this->produk_list = Produk::where('bisnes_id', $value)->get();
-        // Reset items if business changes
-        $this->items = [];
-        $this->addItem();
+        if (strlen($value) >= 2) {
+            $this->customer_results = Customer::where('bisnes_id', $this->bisnes_id)
+                ->where(function ($query) use ($value) {
+                    $query->where('nama_penerima', 'like', '%' . $value . '%')
+                          ->orWhere('no_tel', 'like', '%' . $value . '%')
+                          ->orWhere('email', 'like', '%' . $value . '%');
+                })
+                ->limit(10)
+                ->get();
+            $this->show_customer_dropdown = true;
+        } else {
+            $this->customer_results = [];
+            $this->show_customer_dropdown = false;
+        }
+    }
+
+    public function selectCustomer($customerId)
+    {
+        $customer = Customer::find($customerId);
+        if ($customer) {
+            $this->nama_penerima = $customer->nama_penerima;
+            $this->alamat = $customer->alamat;
+            $this->no_tel = $customer->no_tel;
+            $this->selected_customer_id = $customerId;
+            $this->customer_search = $customer->nama_penerima;
+            $this->show_customer_dropdown = false;
+        }
+    }
+
+    public function clearCustomerSelection()
+    {
+        $this->selected_customer_id = null;
+        $this->customer_search = '';
+        $this->customer_results = [];
+        $this->show_customer_dropdown = false;
     }
 
     public function updatedItemsProdukId($value, $key)
@@ -118,14 +153,8 @@ class InvoiceForm extends Component
     {
         $this->validate();
 
-        // Verify bisnes belongs to authenticated user
-        $bisnes = Bisnes::where('id', $this->bisnes_id)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
-
         if ($this->isEdit) {
             $this->invoice->update([
-                'bisnes_id' => $this->bisnes_id,
                 'nama_penerima' => $this->nama_penerima,
                 'alamat' => $this->alamat,
                 'no_tel' => $this->no_tel,

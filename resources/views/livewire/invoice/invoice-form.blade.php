@@ -65,26 +65,6 @@
             <div class="p-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div class="space-y-2">
-                        <label for="bisnes_id" class="block text-sm font-semibold text-gray-800 flex items-center">
-                            <i class="fas fa-building mr-2 text-blue-500"></i>
-                            Perniagaan <span class="text-red-500">*</span>
-                        </label>
-                        <select wire:model="bisnes_id" id="bisnes_id"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
-                            <option value="">Pilih Perniagaan</option>
-                            @foreach ($bisnes_list as $bisnes)
-                                <option value="{{ $bisnes->id }}" {{ $bisnes->id == $bisnes_id ? 'selected' : '' }}>{{ $bisnes->nama_bisnes }}</option>
-                            @endforeach
-                        </select>
-                        @error('bisnes_id')
-                            <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-                                <i class="fas fa-exclamation-circle mr-1"></i>
-                                {{ $message }}
-                            </div>
-                        @enderror
-                    </div>
-
-                    <div class="space-y-2">
                         <label for="status" class="block text-sm font-semibold text-gray-800 flex items-center">
                             <i class="fas fa-circle mr-2 text-green-500"></i>
                             Status <span class="text-red-500">*</span>
@@ -106,6 +86,65 @@
             </div>
         </div>
 
+        <!-- Customer Search -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-500 to-purple-600 px-6 py-4">
+                <h2 class="text-xl font-semibold text-white flex items-center">
+                    <i class="fas fa-search mr-3"></i>
+                    Cari Customer
+                </h2>
+            </div>
+
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div class="relative">
+                        <label for="customer_search" class="block text-sm font-semibold text-gray-800 flex items-center mb-2">
+                            <i class="fas fa-user-search mr-2 text-purple-500"></i>
+                            Cari Customer
+                        </label>
+                        <input type="text" wire:model.live="customer_search" id="customer_search"
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-purple-500 focus:ring-4 focus:ring-purple-100 focus:outline-none transition-all duration-300 shadow-sm"
+                            placeholder="Cari berdasarkan nama, telefon atau email...">
+                        @if($show_customer_dropdown && count($customer_results) > 0)
+                            <div class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                                @foreach($customer_results as $customer)
+                                    <div wire:click="selectCustomer({{ $customer->id }})"
+                                         class="px-4 py-3 hover:bg-purple-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-200">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <div class="font-semibold text-gray-900">{{ $customer->nama_penerima }}</div>
+                                                <div class="text-sm text-gray-600">{{ $customer->no_tel }}</div>
+                                                <div class="text-xs text-gray-500">{{ Str::limit($customer->alamat, 50) }}</div>
+                                            </div>
+                                            <i class="fas fa-chevron-right text-purple-400"></i>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+
+                    @if($selected_customer_id)
+                        <div class="bg-green-50 border border-green-200 rounded-xl p-4">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                                    <div>
+                                        <div class="font-semibold text-green-800">Customer Dipilih</div>
+                                        <div class="text-sm text-green-600">{{ $nama_penerima }}</div>
+                                    </div>
+                                </div>
+                                <button wire:click="clearCustomerSelection"
+                                        class="text-red-500 hover:text-red-700 transition-colors duration-200">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+
         <!-- Customer Information -->
         <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div class="bg-gradient-to-r from-green-500 to-emerald-600 px-6 py-4">
@@ -116,6 +155,28 @@
             </div>
 
             <div class="p-6">
+                @if(!$selected_customer_id)
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-info-circle text-blue-500 mr-3"></i>
+                            <div>
+                                <div class="font-semibold text-blue-800">Maklumat Customer Manual</div>
+                                <div class="text-sm text-blue-600">Isi maklumat customer secara manual atau cari customer yang sedia ada</div>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="bg-green-50 border border-green-200 rounded-xl p-4 mb-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-500 mr-3"></i>
+                            <div>
+                                <div class="font-semibold text-green-800">Maklumat Customer Auto-Isi</div>
+                                <div class="text-sm text-green-600">Maklumat customer telah diisi secara automatik dari data customer yang dipilih</div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <!-- Recipient Name -->
                     <div class="space-y-2">
@@ -124,8 +185,8 @@
                             Nama Penerima <span class="text-red-500">*</span>
                         </label>
                         <input type="text" wire:model="nama_penerima" id="nama_penerima"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
-                            placeholder="Contoh: Encik Ahmad">
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl {{ $selected_customer_id ? 'bg-gray-50' : 'bg-white' }} focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
+                            placeholder="Contoh: Encik Ahmad" {{ $selected_customer_id ? 'readonly' : '' }}>
                         @error('nama_penerima')
                             <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
                                 <i class="fas fa-exclamation-circle mr-1"></i>
@@ -141,8 +202,8 @@
                             No Telefon <span class="text-red-500">*</span>
                         </label>
                         <input type="text" wire:model="no_tel" id="no_tel"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
-                            placeholder="Contoh: 0123456789">
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl {{ $selected_customer_id ? 'bg-gray-50' : 'bg-white' }} focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm"
+                            placeholder="Contoh: 0123456789" {{ $selected_customer_id ? 'readonly' : '' }}>
                         @error('no_tel')
                             <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
                                 <i class="fas fa-exclamation-circle mr-1"></i>
@@ -158,8 +219,8 @@
                             Alamat <span class="text-red-500">*</span>
                         </label>
                         <textarea wire:model="alamat" id="alamat" rows="3"
-                            class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm resize-none"
-                            placeholder="Masukkan alamat lengkap"></textarea>
+                            class="w-full px-4 py-3 border border-gray-200 rounded-xl {{ $selected_customer_id ? 'bg-gray-50' : 'bg-white' }} focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm resize-none"
+                            placeholder="Masukkan alamat lengkap" {{ $selected_customer_id ? 'readonly' : '' }}></textarea>
                         @error('alamat')
                             <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
                                 <i class="fas fa-exclamation-circle mr-1"></i>
