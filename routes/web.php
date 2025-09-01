@@ -272,6 +272,22 @@ Route::middleware(['auth'])->group(function () {
         return view('jadual-pengajian-show', compact('jadual'));
     })->name('jadual-pengajian.show');
 
+    // Waktu Solat Routes
+    Route::get('/waktu-solat', function () {
+        return view('waktu-solat-livewire');
+    })->name('waktu-solat.index');
+    Route::get('/waktu-solat/create', function () {
+        return view('waktu-solat-create');
+    })->name('waktu-solat.create');
+    Route::get('/waktu-solat/{waktu}/edit', function ($waktu) {
+        $waktu = \App\Models\WaktuSolat::findOrFail($waktu);
+        return view('waktu-solat-edit', compact('waktu'));
+    })->name('waktu-solat.edit');
+    Route::get('/waktu-solat/{waktu}', function ($waktu) {
+        $waktu = \App\Models\WaktuSolat::findOrFail($waktu);
+        return view('waktu-solat-show', compact('waktu'));
+    })->name('waktu-solat.show');
+
     // Settings routes
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/', [SettingsController::class, 'index'])->name('index');
