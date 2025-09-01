@@ -218,6 +218,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/prospek/{prospek}', [ProspekController::class, 'update'])->name('prospek.update');
     Route::resource('prospek', ProspekController::class)->except(['index']);
 
+    Route::get('/jadual', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        return view('jadual-livewire');
+    })->name('jadual.index');
+    Route::post('/jadual/{jadual}', [ProspekController::class, 'update'])->name('jadual.update');
+    Route::resource('jadual', ProspekController::class)->except(['index']);
+
+
     Route::get('/customer', function () {
         if (empty(session('selected_bisnes_id')))
             return redirect()->route('bisnes.index');
@@ -246,6 +255,22 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/tracking/{tracking}', [TrackingController::class, 'update'])->name('tracking.update');
     Route::post('/tracking/{tracking}/create-shipment', [TrackingController::class, 'createShipment'])->name('tracking.create-shipment');
     Route::get('/tracking/{tracking}/track-shipment', [TrackingController::class, 'trackShipment'])->name('tracking.track-shipment');
+
+    // Jadual Pengajian Routes
+    Route::get('/jadual-pengajian', function () {
+        return view('jadual-pengajian-livewire');
+    })->name('jadual-pengajian.index');
+    Route::get('/jadual-pengajian/create', function () {
+        return view('jadual-pengajian-create');
+    })->name('jadual-pengajian.create');
+    Route::get('/jadual-pengajian/{jadual}/edit', function ($jadual) {
+        $jadual = \App\Models\JadualPengajian::findOrFail($jadual);
+        return view('jadual-pengajian-edit', compact('jadual'));
+    })->name('jadual-pengajian.edit');
+    Route::get('/jadual-pengajian/{jadual}', function ($jadual) {
+        $jadual = \App\Models\JadualPengajian::findOrFail($jadual);
+        return view('jadual-pengajian-show', compact('jadual'));
+    })->name('jadual-pengajian.show');
 
     // Settings routes
     Route::prefix('settings')->name('settings.')->group(function () {

@@ -616,6 +616,15 @@
                                 <span id="customer-badge"
                                     class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-1.5 py-0.5 animate-pulse shadow-lg">0</span>
                             </a>
+                            <a href="{{ route('jadual-pengajian.index') }}"
+                                class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('jadual-pengajian.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                        <i class="fas fa-calendar text-xs"></i>
+                                    </div>
+                                    <span class="font-medium text-sm">Jadual Pengajian</span>
+                                </div>
+                            </a>
                             <a href="{{ route('customer.index') }}"
                                 class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('customer.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                 <div class="flex items-center space-x-2">
@@ -783,6 +792,29 @@
                                     <span id="customer-badge-desktop"
                                         class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-2 py-1 animate-pulse shadow-lg">0</span>
                                 </a>
+                                <a href="{{ route('jadual-pengajian.index') }}"
+                                    class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('jadual-pengajian.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                            <i class="fas fa-calendar text-xs"></i>
+                                        </div>
+                                        <span class="font-medium text-sm">Jadual Pengajian</span>
+                                    </div>
+                                </a>
+                                @if ($selectedBisnes && $selectedBisnes->id == 3)
+                                    <a href="{{ route('jadual.index') }}"
+                                        class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('jadual.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="flex items-center space-x-3">
+                                            <div
+                                                class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-search-plus text-xs"></i>
+                                            </div>
+                                            <span class="font-medium text-sm">Jadual Pengajian</span>
+                                        </div>
+                                        <span id="customer-badge-desktop"
+                                            class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-2 py-1 animate-pulse shadow-lg">0</span>
+                                    </a>
+                                @endif
                                 @if ($selectedBisnes && $selectedBisnes->type_id == 1)
                                     <a href="{{ route('customer.index') }}"
                                         class="nav-link flex items-center justify-between px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('customer.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
