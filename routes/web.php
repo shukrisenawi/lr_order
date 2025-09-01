@@ -218,6 +218,30 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/prospek/{prospek}', [ProspekController::class, 'update'])->name('prospek.update');
     Route::resource('prospek', ProspekController::class)->except(['index']);
 
+    // Anak Khariah Routes
+    Route::get('/anak-khariah', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        return view('anak-khariah-livewire');
+    })->name('anak-khariah.index');
+    Route::get('/anak-khariah/create', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        return view('anak-khariah-create');
+    })->name('anak-khariah.create');
+    Route::get('/anak-khariah/{anakKhariah}/edit', function ($anakKhariah) {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        $anakKhariah = \App\Models\AnakKhariah::findOrFail($anakKhariah);
+        return view('anak-khariah-edit', compact('anakKhariah'));
+    })->name('anak-khariah.edit');
+    Route::get('/anak-khariah/{anakKhariah}', function ($anakKhariah) {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        $anakKhariah = \App\Models\AnakKhariah::findOrFail($anakKhariah);
+        return view('anak-khariah-show', compact('anakKhariah'));
+    })->name('anak-khariah.show');
+
     Route::get('/jadual', function () {
         if (empty(session('selected_bisnes_id')))
             return redirect()->route('bisnes.index');
