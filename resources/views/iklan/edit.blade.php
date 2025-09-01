@@ -133,10 +133,34 @@
 
                                     <!-- Emoji Picker Button -->
                                     <button type="button" onclick="toggleEmojiPickerEdit()"
-                                        class="absolute top-4 right-4 p-3 text-gray-400 hover:text-purple-600 transition-colors duration-200 focus:outline-none rounded-xl hover:bg-purple-100 shadow-sm">
+                                        class="absolute top-4 right-16 p-3 text-gray-400 hover:text-purple-600 transition-colors duration-200 focus:outline-none rounded-xl hover:bg-purple-100 shadow-sm">
                                         <i class="fas fa-smile text-xl"></i>
                                     </button>
+
+                                    <!-- External Image Button -->
+                                    <button type="button" onclick="insertImageEdit()"
+                                        class="absolute top-4 right-8 p-3 text-gray-400 hover:text-blue-600 transition-all duration-200 focus:outline-none rounded-xl hover:bg-blue-100 shadow-sm hover:shadow-md">
+                                        <i class="fas fa-image text-xl"></i>
+                                    </button>
+
+                                    <!-- Select Uploaded Image Button -->
+                                    <button type="button" onclick="toggleImagePickerEdit()"
+                                        class="absolute top-4 right-4 p-3 text-gray-400 hover:text-green-600 transition-all duration-200 focus:outline-none rounded-xl hover:bg-green-100 shadow-sm hover:shadow-md">
+                                        <i class="fas fa-images text-xl"></i>
+                                    </button>
                                 </div>
+
+                                <!-- Live Preview Area -->
+                                <div class="mt-4">
+                                    <div class="flex items-center mb-2">
+                                        <i class="fas fa-eye text-purple-600 mr-2"></i>
+                                        <span class="text-sm font-medium text-gray-700">Pratonton:</span>
+                                    </div>
+                                    <div id="live-preview-edit" class="w-full min-h-[100px] p-4 border-2 border-gray-200 rounded-2xl bg-gray-50 text-gray-800 text-lg leading-relaxed">
+                                        <!-- Preview content will be rendered here -->
+                                    </div>
+                                </div>
+
                                 <p class="mt-3 text-sm text-gray-600 font-medium">Klik ikon emoji untuk menambah emoji ke dalam keterangan</p>
                                 @error('keterangan')
                                     <p class="mt-3 text-sm text-red-600 flex items-center font-medium">
@@ -217,26 +241,57 @@
                             </div>
                     </div>
                 </div>
-                <!-- Emoji Picker Dropdown (moved here for better organization) -->
-                <div id="emojiPickerCreate"
-                    class="absolute top-12 right-0 z-50 bg-white border border-gray-300 rounded-lg shadow-lg p-3 hidden w-64 max-h-48 overflow-y-auto">
+                <!-- Emoji Picker Dropdown -->
+                <div id="emojiPickerEdit"
+                    class="bg-white border border-gray-300 rounded-lg shadow-lg p-3 hidden w-64 max-h-48 overflow-y-auto"
+                    style="position: fixed !important; top: 48px !important; right: 0px !important; z-index: 9999 !important;">
                     <div class="grid grid-cols-8 gap-1">
                         <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
-                            onclick="insertEmojiCreate('😀')">😀</button>
+                            onclick="insertEmojiEdit('😀')">😀</button>
                         <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
-                            onclick="insertEmojiCreate('🤖')">🤖</button>
+                            onclick="insertEmojiEdit('🤖')">🤖</button>
                         <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
-                            onclick="insertEmojiCreate('💡')">💡</button>
+                            onclick="insertEmojiEdit('💡')">💡</button>
                         <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
-                            onclick="insertEmojiCreate('📝')">📝</button>
+                            onclick="insertEmojiEdit('📝')">📝</button>
                         <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
-                            onclick="insertEmojiCreate('✅')">✅</button>
+                            onclick="insertEmojiEdit('✅')">✅</button>
                         <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
-                            onclick="insertEmojiCreate('🚀')">🚀</button>
+                            onclick="insertEmojiEdit('🚀')">🚀</button>
                         <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
-                            onclick="insertEmojiCreate('🎯')">🎯</button>
+                            onclick="insertEmojiEdit('🎯')">🎯</button>
                         <button type="button" class="emoji-btn p-1 hover:bg-gray-100 rounded text-lg"
-                            onclick="insertEmojiCreate('💪')">💪</button>
+                            onclick="insertEmojiEdit('💪')">💪</button>
+                    </div>
+                </div>
+
+                <!-- Image Picker Modal -->
+                <div id="imagePickerEdit"
+                    class="bg-white/95 backdrop-blur-sm border-2 border-green-200 rounded-2xl shadow-2xl p-4 hidden w-96 max-h-96 overflow-y-auto"
+                    style="position: fixed !important; top: 64px !important; right: 16px !important; z-index: 9999 !important;">
+                    <div class="mb-3">
+                        <h4 class="font-bold text-gray-800 text-center">Pilih Gambar dari Upload</h4>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3">
+                        @if($gambar->count() > 0)
+                            @foreach($gambar as $img)
+                                <div class="group cursor-pointer p-2 hover:bg-green-100 rounded-xl transition-all duration-200"
+                                     onclick="event.stopPropagation(); selectUploadedImageEdit('{{ asset($img->path) }}')">
+                                    <div class="aspect-square bg-gray-100 rounded-lg overflow-hidden mb-2">
+                                        <img src="{{ asset($img->path) }}" alt="{{ $img->nama }}"
+                                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                                             onclick="event.stopPropagation();">
+                                    </div>
+                                    <p class="text-xs text-gray-600 text-center truncate">{{ $img->nama }}</p>
+                                </div>
+                            @endforeach
+                        @else
+                            <div class="col-span-2 text-center py-8">
+                                <i class="fas fa-images text-gray-400 text-3xl mb-2"></i>
+                                <p class="text-gray-500 text-sm">Tiada gambar yang diupload</p>
+                                <a href="{{ route('gambar.create') }}" class="text-blue-500 text-sm hover:underline">Upload gambar baru</a>
+                            </div>
+                        @endif
                     </div>
                 </div>
                 <!-- Actions -->
@@ -254,5 +309,280 @@
                 </div>
             </form>
         </div>
+
+        <!-- Modals moved outside form for proper fixed positioning -->
     </div>
+
+    <script>
+        // Enhanced Emoji Picker Functions for Edit
+        function toggleEmojiPickerEdit() {
+            const emojiPicker = document.getElementById('emojiPickerEdit');
+            const isHidden = emojiPicker.classList.contains('hidden');
+
+            if (isHidden) {
+                emojiPicker.classList.remove('hidden');
+                emojiPicker.style.opacity = '0';
+                emojiPicker.style.transform = 'translateY(-10px) scale(0.95)';
+
+                setTimeout(() => {
+                    emojiPicker.style.transition = 'all 0.3s ease';
+                    emojiPicker.style.opacity = '1';
+                    emojiPicker.style.transform = 'translateY(0) scale(1)';
+                }, 10);
+            } else {
+                emojiPicker.style.transition = 'all 0.3s ease';
+                emojiPicker.style.opacity = '0';
+                emojiPicker.style.transform = 'translateY(-10px) scale(0.95)';
+
+                setTimeout(() => {
+                    emojiPicker.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function insertEmojiEdit(emoji) {
+            const textarea = document.getElementById('info_textarea_edit');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            textarea.value = textBefore + emoji + ' ' + textAfter;
+            textarea.focus();
+            textarea.setSelectionRange(cursorPos + emoji.length + 1, cursorPos + emoji.length + 1);
+
+            // Add a nice animation effect
+            textarea.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                textarea.style.transform = 'scale(1)';
+            }, 150);
+
+            // Update live preview
+            updateLivePreviewEdit();
+        }
+
+        function insertImageEdit() {
+            const url = prompt('Masukkan URL gambar (external link yang boleh diakses dari luar):');
+            if (url && url.trim() !== '') {
+                const textarea = document.getElementById('info_textarea_edit');
+                const cursorPos = textarea.selectionStart;
+                const textBefore = textarea.value.substring(0, cursorPos);
+                const textAfter = textarea.value.substring(cursorPos);
+
+                const imageMarkdown = `![Gambar](${url.trim()}) `;
+                textarea.value = textBefore + imageMarkdown + textAfter;
+                textarea.focus();
+                textarea.setSelectionRange(cursorPos + imageMarkdown.length, cursorPos + imageMarkdown.length);
+
+                // Add a nice animation effect
+                textarea.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    textarea.style.transform = 'scale(1)';
+                }, 150);
+
+                // Update live preview
+                updateLivePreviewEdit();
+            }
+        }
+
+        function selectUploadedImageEdit(url) {
+            console.log('Image selected (edit):', url); // Debug log
+            const textarea = document.getElementById('info_textarea_edit');
+            const cursorPos = textarea.selectionStart;
+            const textBefore = textarea.value.substring(0, cursorPos);
+            const textAfter = textarea.value.substring(cursorPos);
+
+            const imageMarkdown = `![Gambar](${url}) `;
+            textarea.value = textBefore + imageMarkdown + textAfter;
+            textarea.focus();
+            textarea.setSelectionRange(cursorPos + imageMarkdown.length, cursorPos + imageMarkdown.length);
+
+            // Close the picker
+            toggleImagePickerEdit();
+
+            // Add a nice animation effect
+            textarea.style.transform = 'scale(1.02)';
+            setTimeout(() => {
+                textarea.style.transform = 'scale(1)';
+            }, 150);
+
+            // Update live preview
+            updateLivePreviewEdit();
+        }
+
+        function toggleImagePickerEdit() {
+            const imagePicker = document.getElementById('imagePickerEdit');
+            const isHidden = imagePicker.classList.contains('hidden');
+
+            if (isHidden) {
+                imagePicker.classList.remove('hidden');
+                imagePicker.style.opacity = '0';
+                imagePicker.style.transform = 'translateY(-10px) scale(0.95)';
+
+                setTimeout(() => {
+                    imagePicker.style.transition = 'all 0.3s ease';
+                    imagePicker.style.opacity = '1';
+                    imagePicker.style.transform = 'translateY(0) scale(1)';
+                }, 10);
+            } else {
+                imagePicker.style.transition = 'all 0.3s ease';
+                imagePicker.style.opacity = '0';
+                imagePicker.style.transform = 'translateY(-10px) scale(0.95)';
+
+                setTimeout(() => {
+                    imagePicker.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function updateLivePreviewEdit() {
+            const textarea = document.getElementById('info_textarea_edit');
+            const preview = document.getElementById('live-preview-edit');
+            const content = textarea.value;
+
+            // Convert markdown images to HTML
+            let html = content
+                .replace(/\!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="max-w-full h-auto rounded-lg shadow-sm my-2" style="max-height: 200px;">')
+                .replace(/\n/g, '<br>');
+
+            // If no content, show placeholder
+            if (!content.trim()) {
+                html = '<span class="text-gray-400 italic">Pratonton akan muncul di sini...</span>';
+            }
+
+            preview.innerHTML = html;
+        }
+
+        // Close emoji picker and image picker when clicking outside
+        document.addEventListener('click', function(event) {
+            const emojiPicker = document.getElementById('emojiPickerEdit');
+            const imagePicker = document.getElementById('imagePickerEdit');
+            const emojiButton = event.target.closest('button[onclick="toggleEmojiPickerEdit()"]');
+            const imageButton = event.target.closest('button[onclick="toggleImagePickerEdit()"]');
+            const emojiPickerElement = event.target.closest('#emojiPickerEdit');
+            const imagePickerElement = event.target.closest('#imagePickerEdit');
+
+            if (!emojiButton && !emojiPickerElement && !emojiPicker.classList.contains('hidden')) {
+                emojiPicker.style.transition = 'all 0.3s ease';
+                emojiPicker.style.opacity = '0';
+                emojiPicker.style.transform = 'translateY(-10px) scale(0.95)';
+
+                setTimeout(() => {
+                    emojiPicker.classList.add('hidden');
+                }, 300);
+            }
+
+            if (!imageButton && !imagePickerElement && !imagePicker.classList.contains('hidden')) {
+                imagePicker.style.transition = 'all 0.3s ease';
+                imagePicker.style.opacity = '0';
+                imagePicker.style.transform = 'translateY(-10px) scale(0.95)';
+
+                setTimeout(() => {
+                    imagePicker.classList.add('hidden');
+                }, 300);
+            }
+        });
+
+        // Form Enhancement Functions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add floating label effect
+            const inputs = document.querySelectorAll('input[type="text"], input[type="number"], textarea');
+
+            inputs.forEach(input => {
+                // Add focus and blur effects
+                input.addEventListener('focus', function() {
+                    this.parentElement.classList.add('focused');
+                });
+
+                input.addEventListener('blur', function() {
+                    this.parentElement.classList.remove('focused');
+                });
+
+                // Add typing animation effect
+                input.addEventListener('input', function() {
+                    this.style.transform = 'scale(1.01)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 100);
+                });
+            });
+
+            // Add form validation feedback
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                const submitButton = form.querySelector('button[type="submit"]');
+                const originalText = submitButton.innerHTML;
+
+                submitButton.innerHTML = `
+                    <div class="flex items-center">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Mengemaskini...
+                    </div>
+                `;
+                submitButton.disabled = true;
+            });
+
+            // Add character counter for textarea
+            const textarea = document.getElementById('info_textarea_edit');
+            if (textarea) {
+                const counterDiv = document.createElement('div');
+                counterDiv.className = 'text-sm text-gray-500 mt-2 text-right';
+                counterDiv.id = 'char-counter-edit';
+                textarea.parentElement.appendChild(counterDiv);
+
+                function updateCounter() {
+                    const count = textarea.value.length;
+                    const maxLength = 1000; // Suggested max length
+                    counterDiv.textContent = `${count}/${maxLength} aksara`;
+
+                    if (count > maxLength * 0.9) {
+                        counterDiv.className = 'text-sm text-orange-500 mt-2 text-right font-medium';
+                    } else if (count > maxLength) {
+                        counterDiv.className = 'text-sm text-red-500 mt-2 text-right font-medium';
+                    } else {
+                        counterDiv.className = 'text-sm text-gray-500 mt-2 text-right';
+                    }
+                }
+
+                textarea.addEventListener('input', updateCounter);
+                textarea.addEventListener('input', updateLivePreviewEdit); // Add live preview update
+                updateCounter(); // Initial count
+                updateLivePreviewEdit(); // Initial preview
+            }
+
+            // Add smooth scroll to form errors
+            const errorElements = document.querySelectorAll('.text-red-600');
+            if (errorElements.length > 0) {
+                errorElements[0].scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        });
+
+        // Add some nice hover effects for cards
+        document.querySelectorAll('.group').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-2px)';
+            });
+
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+
+    <style>
+        /* Ensure image picker items are clickable */
+        #imagePickerEdit .cursor-pointer {
+            cursor: pointer !important;
+            pointer-events: auto !important;
+        }
+
+        #imagePickerEdit img {
+            pointer-events: none !important; /* Prevent img click from interfering */
+        }
+    </style>
 @endsection

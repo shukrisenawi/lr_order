@@ -22,7 +22,8 @@ class IklanController extends Controller
     public function create()
     {
         $latestDay = Iklan::where('bisnes_id', session('selected_bisnes_id'))->max('hari');
-        return view('iklan.create', compact('latestDay'));
+        $gambar = Gambar::where('bisnes_id', session('selected_bisnes_id'))->get();
+        return view('iklan.create', compact('latestDay', 'gambar'));
     }
 
     public function show(Iklan $iklan)
@@ -50,7 +51,8 @@ class IklanController extends Controller
 
     public function edit(Iklan $iklan)
     {
-        return view('iklan.edit', compact('iklan'));
+        $gambar = Gambar::where('bisnes_id', session('selected_bisnes_id'))->get();
+        return view('iklan.edit', compact('iklan', 'gambar'));
     }
 
     public function update(Request $request, Iklan $iklan)
