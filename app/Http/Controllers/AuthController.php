@@ -23,7 +23,7 @@ class AuthController extends Controller
     {
         // Rate limiting - max 5 attempts per minute
         $key = 'login-attempts-' . $request->ip();
-        
+
         if (RateLimiter::tooManyAttempts($key, 5)) {
             $seconds = RateLimiter::availableIn($key);
             return back()->withErrors([
@@ -33,8 +33,8 @@ class AuthController extends Controller
 
         // Allow login with username or email
         $user = User::where('name', $request->username)
-                   ->orWhere('email', $request->username)
-                   ->first();
+            ->orWhere('email', $request->username)
+            ->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
             // Check if email is verified
@@ -46,13 +46,33 @@ class AuthController extends Controller
 
             // Clear rate limiter on successful login
             RateLimiter::clear($key);
-            
-            // Regenerate session for security
-            $request->session()->regenerate();
-            
+
+            // Debug logging
+            \Log::info('Login attempt', [
+                'username' => $request->username,
+                'remember_raw' => $request->input('remember'),
+                'remember_boolean' => $request->boolean('remember'),
+                'user_id' => $user->id
+            ]);
+
             // Login with remember me functionality
             Auth::login($user, $request->boolean('remember'));
-            
+
+            // Debug logging after login
+            \Log::info('After Auth::login', [
+                'authenticated' => Auth::check(),
+                'user_id' => Auth::id(),
+                'remember' => $request->boolean('remember')
+            ]);
+
+            // Regenerate session for security
+            $request->session()->regenerate();
+
+            \Log::info('After session regenerate', [
+                'session_id' => session()->getId(),
+                'authenticated' => Auth::check()
+            ]);
+
             return redirect()->intended('/dashboard');
         }
 
@@ -87,7 +107,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         return redirect()->route('verification.notice')
-                        ->with('success', 'Pendaftaran berjaya! Sila semak emel anda untuk pengesahan.');
+            ->with('success', 'Pendaftaran berjaya! Sila semak emel anda untuk pengesahan.');
     }
 
     public function logout(Request $request)

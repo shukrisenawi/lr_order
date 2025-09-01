@@ -121,7 +121,7 @@
                 <!-- Remember Me & Forgot Password -->
                 <div class="flex items-center justify-between">
                     <label class="flex items-center">
-                        <input type="checkbox" name="remember"
+                        <input type="checkbox" name="remember" value="1"
                             class="w-4 h-4 bg-white/20 border-white/30 rounded text-purple-400 focus:ring-purple-400">
                         <span class="ml-2 text-sm text-white/80">Remember me</span>
                     </label>

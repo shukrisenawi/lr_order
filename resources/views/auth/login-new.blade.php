@@ -163,7 +163,7 @@
                 <!-- Remember Me & Forgot Password -->
                 <div class="flex items-center justify-between">
                     <label class="flex items-center cursor-pointer">
-                        <input type="checkbox" name="remember"
+                        <input type="checkbox" name="remember" value="1"
                             class="w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500">
                         <span class="ml-2 text-sm text-gray-600">Remember me</span>
                     </label>
