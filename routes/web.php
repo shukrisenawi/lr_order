@@ -242,6 +242,38 @@ Route::middleware(['auth'])->group(function () {
         return view('anak-khariah-show', compact('anakKhariah'));
     })->name('anak-khariah.show');
 
+    // Tenaga Pengajar Routes
+    Route::get('/tenaga-pengajar', function () {
+        return view('tenaga-pengajar-livewire');
+    })->name('tenaga-pengajar.index');
+    Route::get('/tenaga-pengajar/create', function () {
+        return view('tenaga-pengajar-create');
+    })->name('tenaga-pengajar.create');
+    Route::get('/tenaga-pengajar/{tenagaPengajar}/edit', function ($tenagaPengajar) {
+        $tenagaPengajar = \App\Models\TenagaPengajar::findOrFail($tenagaPengajar);
+        return view('tenaga-pengajar-edit', compact('tenagaPengajar'));
+    })->name('tenaga-pengajar.edit');
+    Route::get('/tenaga-pengajar/{tenagaPengajar}', function ($tenagaPengajar) {
+        $tenagaPengajar = \App\Models\TenagaPengajar::findOrFail($tenagaPengajar);
+        return view('tenaga-pengajar-show', compact('tenagaPengajar'));
+    })->name('tenaga-pengajar.show');
+
+    // Kitab Pengajian Routes
+    Route::get('/kitab-pengajian', function () {
+        return view('kitab-pengajian-livewire');
+    })->name('kitab-pengajian.index');
+    Route::get('/kitab-pengajian/create', function () {
+        return view('kitab-pengajian-create');
+    })->name('kitab-pengajian.create');
+    Route::get('/kitab-pengajian/{kitabPengajian}/edit', function ($kitabPengajian) {
+        $kitabPengajian = \App\Models\KitabPengajian::findOrFail($kitabPengajian);
+        return view('kitab-pengajian-edit', compact('kitabPengajian'));
+    })->name('kitab-pengajian.edit');
+    Route::get('/kitab-pengajian/{kitabPengajian}', function ($kitabPengajian) {
+        $kitabPengajian = \App\Models\KitabPengajian::findOrFail($kitabPengajian);
+        return view('kitab-pengajian-show', compact('kitabPengajian'));
+    })->name('kitab-pengajian.show');
+
     Route::get('/jadual', function () {
         if (empty(session('selected_bisnes_id')))
             return redirect()->route('bisnes.index');
@@ -311,6 +343,22 @@ Route::middleware(['auth'])->group(function () {
         $waktu = \App\Models\WaktuSolat::findOrFail($waktu);
         return view('waktu-solat-show', compact('waktu'));
     })->name('waktu-solat.show');
+
+    // Pengajian Routes
+    Route::get('/pengajian', function () {
+        return view('pengajian-livewire');
+    })->name('pengajian.index');
+    Route::get('/pengajian/create', function () {
+        return view('pengajian-create');
+    })->name('pengajian.create');
+    Route::get('/pengajian/{pengajian}/edit', function ($pengajian) {
+        $pengajian = \App\Models\Pengajian::findOrFail($pengajian);
+        return view('pengajian-edit', compact('pengajian'));
+    })->name('pengajian.edit');
+    Route::get('/pengajian/{pengajian}', function ($pengajian) {
+        $pengajian = \App\Models\Pengajian::findOrFail($pengajian);
+        return view('pengajian-show', compact('pengajian'));
+    })->name('pengajian.show');
 
     // Settings routes
     Route::prefix('settings')->name('settings.')->group(function () {
