@@ -51,13 +51,23 @@
     @livewireStyles
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --accent-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --sidebar-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-            --sidebar-gradient-mobile: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 70%, #f5576c 100%);
-            --sidebar-overlay: linear-gradient(45deg, rgba(102, 126, 234, 0.1) 0%, rgba(240, 147, 251, 0.1) 100%);
-            --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            @if(env('APP_DEBUG'))
+                --primary-gradient: linear-gradient(135deg, #000000 0%, #6b7280 100%);
+                --secondary-gradient: linear-gradient(135deg, #000000 0%, #6b7280 100%);
+                --accent-gradient: linear-gradient(135deg, #000000 0%, #6b7280 100%);
+                --sidebar-gradient: linear-gradient(135deg, #000000 0%, #6b7280 50%, #000000 100%);
+                --sidebar-gradient-mobile: linear-gradient(135deg, #000000 0%, #6b7280 30%, #000000 70%, #6b7280 100%);
+                --sidebar-overlay: linear-gradient(45deg, rgba(0, 0, 0, 0.1) 0%, rgba(107, 114, 128, 0.1) 100%);
+                --success-gradient: linear-gradient(135deg, #000000 0%, #6b7280 100%);
+            @else
+                --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                --accent-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+                --sidebar-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+                --sidebar-gradient-mobile: linear-gradient(135deg, #667eea 0%, #764ba2 30%, #f093fb 70%, #f5576c 100%);
+                --sidebar-overlay: linear-gradient(45deg, rgba(102, 126, 234, 0.1) 0%, rgba(240, 147, 251, 0.1) 100%);
+                --success-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            @endif
         }
 
         body {
