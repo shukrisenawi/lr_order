@@ -50,17 +50,20 @@ class DatabaseToggle extends Component
             // Update component state
             $this->isLiveDatabase = ($newPreference === 'live');
 
+            // Apply the database connection immediately
+            $this->applyDatabaseConnection();
+
             // Dispatch success message
             $this->dispatch('database-switched', [
                 'type' => $newPreference,
-                'message' => 'Database preference saved to ' . ($newPreference === 'live' ? 'Live' : 'Local') . ' (JSON file updated)'
+                'message' => 'Database switched to ' . ($newPreference === 'live' ? 'Live' : 'Local') . ' and connection applied'
             ]);
 
-            Log::info('Database preference saved to JSON file. New state: ' . $newPreference);
+            Log::info('Database preference saved and connection applied. New state: ' . $newPreference);
         } catch (\Exception $e) {
             Log::error('Database toggle failed: ' . $e->getMessage());
             $this->dispatch('database-error', [
-                'message' => 'Failed to save database preference: ' . $e->getMessage()
+                'message' => 'Failed to switch database: ' . $e->getMessage()
             ]);
         }
     }

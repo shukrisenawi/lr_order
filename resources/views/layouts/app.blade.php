@@ -938,16 +938,8 @@
                                     <p class="text-sm text-white/80 font-medium">PERNIAGAAN</p>
                                 </div>
                                 <div class="border-l border-white/30 pl-3">
-                                    <div id="current-time" class="text-white font-mono text-lg">
-                                        {{ now()->setTimezone('Asia/Kuala_Lumpur')->format('h:i:s A') }}</div>
+
                                 </div>
-                            </div>
-                        </div>
-                        <div class="sm:hidden">
-                            <div class="flex items-center space-x-2">
-                                <h1 class="text-sm font-bold text-white">LR ORDER</h1>
-                                <div id="current-time-mobile" class="text-white/80 font-mono text-xs">
-                                    {{ now()->setTimezone('Asia/Kuala_Lumpur')->format('h:i A') }}</div>
                             </div>
                         </div>
                     </div>
@@ -957,10 +949,12 @@
                 <div class="flex-1 flex justify-center px-4">
                     <div class="flex items-center space-x-4 text-white text-sm">
                         <!-- Date and Islamic Date -->
-                        <div class="text-center">
+                        <div class="flex gap-5 items-center">
+                            <div id="current-time" class="text-white font-mono text-lg">
+                                {{ now()->setTimezone('Asia/Kuala_Lumpur')->format('h:i:s A') }}</div>
                             <div id="current-date" class="font-medium">{{ now()->format('d/m/Y') }}</div>
                             @if ($waktuSolat && $waktuSolat->tarikh_hijrah)
-                                <div class="text-white/70 text-xs">{{ $waktuSolat->tarikh_hijrah }}</div>
+                                <div class="font-medium">{{ $waktuSolat->tarikh_hijrah }}</div>
                             @endif
                         </div>
 
@@ -1056,17 +1050,6 @@
 
                     <!-- User Menu -->
                     <div class="flex items-center space-x-1">
-                        @if (env('APP_DEV'))
-                            <!-- Database Toggle -->
-                            @livewire('database-toggle')
-                        @endif
-
-                        <!-- Fullscreen Button -->
-                        <button id="fullscreen-btn" type="button"
-                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 shadow-lg backdrop-blur-sm"
-                            title="Toggle Fullscreen" onclick="toggleFullscreen()">
-                            <i class="fas fa-expand text-xs"></i>
-                        </button>
 
                         <!-- User Info -->
                         <div
