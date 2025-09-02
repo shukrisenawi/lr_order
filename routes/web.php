@@ -391,6 +391,38 @@ Route::middleware(['auth'])->group(function () {
         return view('pengajian-show', compact('pengajian'));
     })->name('pengajian.show');
 
+    // Program Routes
+    Route::get('/program', function () {
+        return view('program-livewire');
+    })->name('program.index');
+    Route::get('/program/create', function () {
+        return view('program-create');
+    })->name('program.create');
+    Route::get('/program/{program}/edit', function ($program) {
+        $program = \App\Models\Program::findOrFail($program);
+        return view('program-edit', compact('program'));
+    })->name('program.edit');
+    Route::get('/program/{program}', function ($program) {
+        $program = \App\Models\Program::findOrFail($program);
+        return view('program-show', compact('program'));
+    })->name('program.show');
+
+    // Pengumuman Routes
+    Route::get('/pengumuman', function () {
+        return view('pengumuman-livewire');
+    })->name('pengumuman.index');
+    Route::get('/pengumuman/create', function () {
+        return view('pengumuman-create');
+    })->name('pengumuman.create');
+    Route::get('/pengumuman/{pengumuman}/edit', function ($pengumuman) {
+        $pengumuman = \App\Models\Pengumuman::findOrFail($pengumuman);
+        return view('pengumuman-edit', compact('pengumuman'));
+    })->name('pengumuman.edit');
+    Route::get('/pengumuman/{pengumuman}', function ($pengumuman) {
+        $pengumuman = \App\Models\Pengumuman::findOrFail($pengumuman);
+        return view('pengumuman-show', compact('pengumuman'));
+    })->name('pengumuman.show');
+
     // Settings routes
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/', [SettingsController::class, 'index'])->name('index');

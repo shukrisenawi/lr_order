@@ -455,7 +455,10 @@
             maxAttempts: 20,
             restoreInterval: null,
             userInteractionHandlers: [],
-            monitoringInterval: null
+            monitoringInterval: null,
+            lastToggleTime: 0,
+            debounceDelay: 500, // Increased debounce to 500ms
+            isToggling: false // Flag to prevent simultaneous operations
         };
 
         function updateFullscreenButton(isFullscreen) {
@@ -477,10 +480,51 @@
             const btn = document.getElementById('fullscreen-btn');
             if (!btn) return;
 
-            if (!document.fullscreenElement) {
-                // Enter fullscreen
-                document.documentElement.requestFullscreen().then(() => {
+            // Prevent toggling if already in progress
+            if (fullscreenState.isRestoring || fullscreenState.isToggling) {
+                console.log('Fullscreen toggle blocked - operation in progress');
+                return;
+            }
+
+            // Debounce to prevent rapid toggling
+            const now = Date.now();
+            if (now - fullscreenState.lastToggleTime < fullscreenState.debounceDelay) {
+                console.log('Fullscreen toggle debounced');
+                return;
+            }
+            fullscreenState.lastToggleTime = now;
+            fullscreenState.isToggling = true;
+
+            // Safety timeout to reset toggling flag after 5 seconds
+            setTimeout(() => {
+                fullscreenState.isToggling = false;
+            }, 5000);
+
+            // Check if we're currently in fullscreen
+            const isCurrentlyFullscreen = !!(
+                document.fullscreenElement ||
+                document.webkitFullscreenElement ||
+                document.mozFullScreenElement ||
+                document.msFullscreenElement
+            );
+
+            if (!isCurrentlyFullscreen) {
+                // Enter fullscreen - try different methods for better compatibility
+                const enterFullscreen = () => {
+                    if (document.documentElement.requestFullscreen) {
+                        return document.documentElement.requestFullscreen();
+                    } else if (document.documentElement.webkitRequestFullscreen) {
+                        return document.documentElement.webkitRequestFullscreen();
+                    } else if (document.documentElement.mozRequestFullScreen) {
+                        return document.documentElement.mozRequestFullScreen();
+                    } else if (document.documentElement.msRequestFullscreen) {
+                        return document.documentElement.msRequestFullscreen();
+                    }
+                };
+
+                enterFullscreen().then(() => {
                     fullscreenState.isEnabled = true;
+                    fullscreenState.isToggling = false; // Reset toggling flag
                     localStorage.setItem('fullscreenMode', 'true');
                     updateFullscreenButton(true);
                     console.log('Entered fullscreen mode');
@@ -488,18 +532,33 @@
                 }).catch(err => {
                     console.log(`Error entering fullscreen: ${err.message}`);
                     fullscreenState.isEnabled = false;
+                    fullscreenState.isToggling = false; // Reset toggling flag on error
                     localStorage.setItem('fullscreenMode', 'false');
                 });
             } else {
-                // Exit fullscreen
-                document.exitFullscreen().then(() => {
+                // Exit fullscreen - try different methods for better compatibility
+                const exitFullscreen = () => {
+                    if (document.exitFullscreen) {
+                        return document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                        return document.webkitExitFullscreen();
+                    } else if (document.mozCancelFullScreen) {
+                        return document.mozCancelFullScreen();
+                    } else if (document.msExitFullscreen) {
+                        return document.msExitFullscreen();
+                    }
+                };
+
+                exitFullscreen().then(() => {
                     fullscreenState.isEnabled = false;
+                    fullscreenState.isToggling = false; // Reset toggling flag
                     localStorage.setItem('fullscreenMode', 'false');
                     updateFullscreenButton(false);
                     console.log('Exited fullscreen mode');
                     stopFullscreenMonitoring();
                 }).catch(err => {
                     console.log(`Error exiting fullscreen: ${err.message}`);
+                    fullscreenState.isToggling = false; // Reset toggling flag on error
                 });
             }
         }
@@ -512,14 +571,22 @@
 
             fullscreenState.monitoringInterval = setInterval(() => {
                 const shouldBeFullscreen = localStorage.getItem('fullscreenMode') === 'true';
-                const isCurrentlyFullscreen = !!document.fullscreenElement;
+                const isCurrentlyFullscreen = !!(
+                    document.fullscreenElement ||
+                    document.webkitFullscreenElement ||
+                    document.mozFullScreenElement ||
+                    document.msFullscreenElement
+                );
 
                 if (shouldBeFullscreen && !isCurrentlyFullscreen && !fullscreenState.isRestoring) {
-                    console.log('Monitoring detected fullscreen loss - attempting immediate restoration');
+                    console.log('Monitoring detected fullscreen loss - attempting restoration');
                     fullscreenState.restoreAttempts = 0; // Reset attempts for monitoring restoration
-                    attemptFullscreenRestore();
+                    // Add a small delay to prevent immediate conflicts
+                    setTimeout(() => {
+                        attemptFullscreenRestore();
+                    }, 100);
                 }
-            }, 500); // Check every 500ms for very aggressive monitoring
+            }, 1000); // Check every 1 second (less aggressive)
         }
 
         function stopFullscreenMonitoring() {
@@ -531,7 +598,12 @@
 
         // Enhanced fullscreen change listener
         function handleFullscreenChange() {
-            const isFullscreen = !!document.fullscreenElement;
+            const isFullscreen = !!(
+                document.fullscreenElement ||
+                document.webkitFullscreenElement ||
+                document.mozFullScreenElement ||
+                document.msFullscreenElement
+            );
 
             if (isFullscreen) {
                 fullscreenState.isEnabled = true;
@@ -567,7 +639,12 @@
             }
 
             const shouldRestore = localStorage.getItem('fullscreenMode') === 'true';
-            const isCurrentlyFullscreen = !!document.fullscreenElement;
+            const isCurrentlyFullscreen = !!(
+                document.fullscreenElement ||
+                document.webkitFullscreenElement ||
+                document.mozFullScreenElement ||
+                document.msFullscreenElement
+            );
 
             if (!shouldRestore || isCurrentlyFullscreen) {
                 updateFullscreenButton(isCurrentlyFullscreen);
@@ -658,7 +735,12 @@
 
             // Check if we should restore fullscreen
             const shouldRestore = localStorage.getItem('fullscreenMode') === 'true';
-            const isCurrentlyFullscreen = !!document.fullscreenElement;
+            const isCurrentlyFullscreen = !!(
+                document.fullscreenElement ||
+                document.webkitFullscreenElement ||
+                document.mozFullScreenElement ||
+                document.msFullscreenElement
+            );
 
             updateFullscreenButton(isCurrentlyFullscreen);
 
@@ -787,6 +869,20 @@
         // Initialize prayer selector when DOM is loaded
         document.addEventListener('DOMContentLoaded', function() {
             handlePrayerSelection();
+        });
+
+        // Add F11 key support for fullscreen
+        document.addEventListener('keydown', function(event) {
+            // Check if F11 is pressed (more specific check)
+            if (event.key === 'F11' || event.keyCode === 122) {
+                // Only prevent default if we're not in an input field
+                if (event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA' && !event.target.isContentEditable) {
+                    event.preventDefault(); // Prevent default F11 behavior
+                    event.stopPropagation(); // Stop event bubbling
+                    console.log('F11 pressed - triggering fullscreen toggle');
+                    toggleFullscreen(); // Use our custom fullscreen function
+                }
+            }
         });
     </script>
 </head>
@@ -1395,6 +1491,26 @@
                                                     <i class="fas fa-graduation-cap text-xs"></i>
                                                 </div>
                                                 <span class="font-medium text-sm">Pengajian</span>
+                                            </div>
+                                        </a>
+                                        <a href="{{ route('program.index') }}"
+                                            class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('program.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                            <div class="flex items-center space-x-3">
+                                                <div
+                                                    class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                    <i class="fas fa-calendar-alt text-xs"></i>
+                                                </div>
+                                                <span class="font-medium text-sm">Program</span>
+                                            </div>
+                                        </a>
+                                        <a href="{{ route('pengumuman.index') }}"
+                                            class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('pengumuman.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                            <div class="flex items-center space-x-3">
+                                                <div
+                                                    class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                    <i class="fas fa-bullhorn text-xs"></i>
+                                                </div>
+                                                <span class="font-medium text-sm">Pengumuman</span>
                                             </div>
                                         </a>
                                         <a href="{{ route('jadual-pengajian.index') }}"
