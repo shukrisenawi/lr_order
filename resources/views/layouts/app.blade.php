@@ -1055,6 +1055,11 @@
 
                     <!-- User Menu -->
                     <div class="flex items-center space-x-1">
+                        @if(env('APP_DEV'))
+                            <!-- Database Toggle -->
+                            @livewire('database-toggle')
+                        @endif
+
                         <!-- Fullscreen Button -->
                         <button id="fullscreen-btn" type="button"
                             class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 shadow-lg backdrop-blur-sm"
