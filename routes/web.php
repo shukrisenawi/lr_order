@@ -423,6 +423,22 @@ Route::middleware(['auth'])->group(function () {
         return view('pengumuman-show', compact('pengumuman'));
     })->name('pengumuman.show');
 
+    // Landing Page Admin Routes
+    Route::get('/landing-page', function () {
+        return view('landing-page-livewire');
+    })->name('landing-page.index');
+    Route::get('/landing-page/create', function () {
+        return view('landing-page-create');
+    })->name('landing-page.create');
+    Route::get('/landing-page/{landingPage}/edit', function ($landingPage) {
+        $landingPage = \App\Models\LandingPage::findOrFail($landingPage);
+        return view('landing-page-edit', compact('landingPage'));
+    })->name('landing-page.edit');
+    Route::get('/landing-page/{landingPage}', function ($landingPage) {
+        $landingPage = \App\Models\LandingPage::findOrFail($landingPage);
+        return view('landing-page-show', compact('landingPage'));
+    })->name('landing-page.show');
+
     // Settings routes
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/', [SettingsController::class, 'index'])->name('index');
@@ -448,6 +464,15 @@ Route::prefix('images')->name('web.image.')->group(function () {
     Route::get('/gallery/{filename}', [ImageController::class, 'galleryImage'])->name('gallery');
     Route::get('/serve/{path}', [ImageController::class, 'serveImage'])->name('serve');
 });
+
+// Public Landing Page Routes (no authentication required)
+Route::get('/page/{slug}', function ($slug) {
+    $landingPage = \App\Models\LandingPage::where('slug', $slug)
+        ->where('status', 'published')
+        ->firstOrFail();
+
+    return view('landing-page-public', compact('landingPage'));
+})->name('landing-page.public.show');
 
 // API routes
 Route::prefix('api')->middleware('auth')->group(function () {
