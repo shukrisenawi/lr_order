@@ -141,10 +141,6 @@
                 </div>
             </div>
 
-            <!-- Reset DB Button -->
-            <div class="hidden sm:flex sm:items-center sm:ml-6">
-                @livewire('header-reset-db')
-            </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
