@@ -30,6 +30,11 @@ Route::get('/test-login', function () {
     return view('test-login');
 });
 
+// Test SweetAlert route
+Route::get('/test-sweetalert', function () {
+    return redirect('/dashboard')->with('success', 'SweetAlert 2 berfungsi dengan baik!');
+})->name('test-sweetalert');
+
 // Test invoice PDF route
 Route::get('/test-invoice-pdf', function () {
     // Create a sample invoice data structure
@@ -157,7 +162,7 @@ Route::get('/switch-bisnes/{bisnes}', function (Bisnes $bisnes) {
         abort(403);
     }
     session(['selected_bisnes_id' => $bisnes->id]);
-    return redirect()->route('dashboard')->with('success', 'Bisnes ditukar kepada: ' . $bisnes->nama_bisnes);
+    return redirect()->back()->with('success', 'Bisnes ditukar kepada: ' . $bisnes->nama_bisnes);
 })->name('switch-bisnes')->middleware('auth');
 
 // Protected routes

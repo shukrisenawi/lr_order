@@ -25,6 +25,7 @@
         "openai": "^5.16.0",
         "puppeteer": "^24.17.1",
         "pusher-js": "^8.4.0",
+        "sweetalert2": "^11.22.5",
         "tinymce": "^8.0.2"
     }
 }

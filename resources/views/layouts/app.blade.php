@@ -48,6 +48,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-blade.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
+    <!-- SweetAlert 2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @livewireStyles
     <style>
         :root {
@@ -1624,26 +1626,88 @@
 
         <!-- Main Content -->
         <main class="{{ $showNavigation ? 'flex-1' : 'flex-1 md:ml-0' }} overflow-y-auto">
-            @if (session('success'))
-                <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
-                    role="alert">
-                    <span class="block sm:inline">{{ session('success') }}</span>
-                </div>
-            @endif
-
-            @if (session('error'))
-                <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                    role="alert">
-                    <span class="block sm:inline">{{ session('error') }}</span>
-                </div>
-            @endif
-
             @yield('content')
         </main>
     </div>
 
     @yield('scripts')
     @livewireScripts
+
+    <!-- Session Alerts with SweetAlert 2 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            @if(session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berjaya!',
+                    text: '{{ session("success") }}',
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true,
+                    background: '#d1fae5',
+                    color: '#065f46'
+                });
+            @endif
+
+            @if(session('message'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berjaya!',
+                    text: '{{ session("message") }}',
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true,
+                    background: '#d1fae5',
+                    color: '#065f46'
+                });
+            @endif
+
+            @if(session('error'))
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Ralat!',
+                    text: '{{ session("error") }}',
+                    timer: 4000,
+                    timerProgressBar: true,
+                    showConfirmButton: true,
+                    position: 'center',
+                    confirmButtonColor: '#dc2626'
+                });
+            @endif
+
+            @if(session('warning'))
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Amaran!',
+                    text: '{{ session("warning") }}',
+                    timer: 4000,
+                    timerProgressBar: true,
+                    showConfirmButton: true,
+                    position: 'center',
+                    confirmButtonColor: '#d97706'
+                });
+            @endif
+
+            @if(session('info'))
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Maklumat!',
+                    text: '{{ session("info") }}',
+                    timer: 3000,
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true,
+                    background: '#dbeafe',
+                    color: '#1e40af'
+                });
+            @endif
+        });
+    </script>
 
     <!-- Laravel Echo and Pusher for realtime updates -->
     <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
