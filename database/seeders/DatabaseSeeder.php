@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             BisnesTypeSeeder::class,
             BisnesSeeder::class,
             WaktuSolatSeeder::class,
+            KumpulanSeeder::class,
         ]);
     }
 }

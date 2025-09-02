@@ -19,7 +19,6 @@ class AnakKhariah extends Model
         'no_tel',
         'gambar',
         'bisnes_id',
-        'kumpulan_id',
         'on',
     ];
 
@@ -33,8 +32,8 @@ class AnakKhariah extends Model
         return $this->belongsTo(Bisnes::class, 'bisnes_id');
     }
 
-    public function kumpulan()
+    public function kumpulans()
     {
-        return $this->belongsTo(Kumpulan::class, 'kumpulan_id');
+        return $this->belongsToMany(Kumpulan::class, 'anak_khariah_kumpulan');
     }
 }

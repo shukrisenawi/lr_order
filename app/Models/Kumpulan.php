@@ -29,6 +29,6 @@ class Kumpulan extends Model
 
     public function anakKhariahs()
     {
-        return $this->hasMany(AnakKhariah::class, 'kumpulan_id');
+        return $this->belongsToMany(AnakKhariah::class, 'anak_khariah_kumpulan');
     }
 }
