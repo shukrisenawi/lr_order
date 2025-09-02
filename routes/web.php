@@ -153,17 +153,11 @@ Route::get('/quick-login', function () {
 
 // Switch business route
 Route::get('/switch-bisnes/{bisnes}', function (Bisnes $bisnes) {
-
-
     if ($bisnes->user_id !== auth()->id()) {
         abort(403);
     }
     session(['selected_bisnes_id' => $bisnes->id]);
-    return redirect()->back();
-    // if ($bisnes)
-    //     return redirect()->back()->with('success', 'Bisnes ditukar kepada: ' . $bisnes->nama_bisnes);
-    // else
-    //     return redirect()->back()->with('success', 'Senarai Bisnes.');
+    return redirect()->route('dashboard')->with('success', 'Bisnes ditukar kepada: ' . $bisnes->nama_bisnes);
 })->name('switch-bisnes')->middleware('auth');
 
 // Protected routes
@@ -177,9 +171,9 @@ Route::middleware(['auth'])->group(function () {
             return redirect()->route('bisnes.create')->with('info', 'Sila buat bisnes terlebih dahulu sebelum mengakses dashboard.');
         }
 
-        // If no business selected, redirect to business selection
+        // If no business selected, show company selection screen
         if (empty(session('selected_bisnes_id'))) {
-            return redirect()->route('bisnes.index')->with('info', 'Sila pilih bisnes terlebih dahulu.');
+            return view('company-selection', compact('userBisnes'));
         }
 
         return view('dashboard-livewire');

@@ -3,6 +3,7 @@
     use App\Models\WaktuSolat;
     $today = now()->toDateString();
     $waktuSolat = WaktuSolat::where('tarikh', $today)->first();
+    $showNavigation = session('selected_bisnes_id') ? true : false;
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -771,6 +772,7 @@
                 <!-- Right Section: Business Selector and User Menu -->
                 <div class="flex items-center space-x-1">
                     <!-- Business Selector -->
+                    @if($showNavigation)
                     <div class="relative hidden sm:block">
                         @if ($userBisnes->count() > 0)
                             <div class="relative inline-block text-left">
@@ -830,6 +832,7 @@
                             </a>
                         @endif
                     </div>
+                    @endif
 
                     <!-- User Menu -->
                     <div class="flex items-center space-x-1">
@@ -878,8 +881,10 @@
         </div>
     </header>
 
+
     <div class="flex h-screen-minus-header">
         <!-- Mobile Sidebar -->
+        @if($showNavigation)
         <div id="mobile-menu"
             class="md:hidden fixed inset-0 z-50 hidden transform transition-transform duration-300 ease-in-out">
             <div class="sidebar-gradient h-full w-64 sm:w-72 p-3 overflow-hidden shadow-2xl relative">
@@ -1107,8 +1112,10 @@
                 </nav>
             </div>
         </div>
+        @endif
 
         <!-- Desktop Sidebar -->
+        @if($showNavigation)
         <aside class="hidden md:block w-56 lg:w-64 sidebar-gradient h-screen-minus-header sticky top-0">
             <div class="p-2 lg:p-3 overflow-hidden h-full relative">
                 <!-- Decorative elements for desktop -->
@@ -1375,9 +1382,10 @@
                 </nav>
             </div>
         </aside>
+        @endif
 
         <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto">
+        <main class="{{ $showNavigation ? 'flex-1' : 'flex-1 md:ml-0' }} overflow-y-auto">
             @if (session('success'))
                 <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
                     role="alert">

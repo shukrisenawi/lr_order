@@ -29,11 +29,33 @@ class Dashboard extends Component
     protected $selectedBisnesId = 0;
 
     public $selectedBisnes;
+    public $dashboardType = 'default';
 
     public function mount(DashboardService $dashboardService)
     {
         $this->selectedBisnesId = session('selected_bisnes_id', 0);
         $this->selectedBisnes = \App\Models\Bisnes::find($this->selectedBisnesId);
+
+        // Determine dashboard type based on business type
+        if ($this->selectedBisnes) {
+            switch ($this->selectedBisnes->type_id) {
+                case 1:
+                    $this->dashboardType = 'business_ai';
+                    break;
+                case 2:
+                    $this->dashboardType = 'business_standard';
+                    break;
+                case 3:
+                    $this->dashboardType = 'education';
+                    break;
+                case 4:
+                    $this->dashboardType = 'data_population';
+                    break;
+                default:
+                    $this->dashboardType = 'default';
+            }
+        }
+
         $this->loadStats();
         $this->loadAnalytics($dashboardService);
     }
