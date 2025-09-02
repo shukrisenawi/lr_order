@@ -10,6 +10,7 @@ class LandingPage extends Model
     protected $table = 'landing_page';
 
     protected $fillable = [
+        'bisnes_id',
         'title',
         'slug',
         'content',
@@ -23,6 +24,11 @@ class LandingPage extends Model
     protected $casts = [
         'settings' => 'array',
     ];
+
+    public function bisnes()
+    {
+        return $this->belongsTo(Bisnes::class);
+    }
 
     // Automatically generate slug from title
     protected static function boot()

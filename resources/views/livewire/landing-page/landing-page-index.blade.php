@@ -59,6 +59,7 @@
                                 @endif
                             </div>
                         </th>
+                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Bisnes</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Slug</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
@@ -86,6 +87,7 @@
                             <td class="px-6 py-4">
                                 <div class="text-sm font-medium text-gray-900">{{ $item->title }}</div>
                             </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->bisnes->nama_bisnes ?? 'N/A' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->slug }}</td>
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
@@ -126,7 +128,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-16 text-center">
+                            <td colspan="6" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <div class="bg-gray-100 rounded-full p-4 mb-4">
                                         <i class="fas fa-file-alt text-gray-400 text-2xl"></i>

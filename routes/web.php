@@ -189,6 +189,11 @@ Route::middleware(['auth'])->group(function () {
         return view('ai-livewire');
     })->name('ai');
 
+    // Analisa AI Route
+    Route::get('/analisa-ai', function () {
+        return view('analisa-ai-livewire');
+    })->name('analisa-ai.index');
+
     // Business Management Routes
     Route::get('/bisnes', function () {
         return view('bisnes-livewire');
@@ -464,6 +469,21 @@ Route::prefix('images')->name('web.image.')->group(function () {
     Route::get('/gallery/{filename}', [ImageController::class, 'galleryImage'])->name('gallery');
     Route::get('/serve/{path}', [ImageController::class, 'serveImage'])->name('serve');
 });
+
+// TinyMCE Image Upload Route
+Route::post('/admin/upload-image', function (Request $request) {
+    if ($request->hasFile('file')) {
+        $file = $request->file('file');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $path = $file->storeAs('public/uploads/tinymce', $filename);
+
+        return response()->json([
+            'location' => asset('storage/uploads/tinymce/' . $filename)
+        ]);
+    }
+
+    return response()->json(['error' => 'No file uploaded'], 400);
+})->middleware('auth')->name('tinymce.upload');
 
 // Public Landing Page Routes (no authentication required)
 Route::get('/page/{slug}', function ($slug) {

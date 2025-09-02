@@ -43,6 +43,11 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('img/logo-01.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-blade.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
     @livewireStyles
     <style>
         :root {
@@ -1362,6 +1367,7 @@
                                     class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-1.5 py-0.5 animate-pulse shadow-lg">0</span>
                             </a>
                         @endif
+
                         <!-- Business Management Section -->
                         <div class="pt-1.5">
                             <h3 class="nav-section-header flex items-center">
@@ -1451,6 +1457,14 @@
                                                 </div>
                                                 <span class="font-medium text-sm">Data Penduduk</span>
                                             </div>
+                                        </a>
+                                        <a href="{{ route('analisa-ai.index') }}"
+                                            class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105  {{ !$isFromAi && request()->routeIs('analisa-ai.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                            <div
+                                                class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-brain text-xs"></i>
+                                            </div>
+                                            <span class="font-medium text-sm">Analisa AI</span>
                                         </a>
                                     @endif
                                     @if ($selectedBisnes && $selectedBisnes->id == 3)

@@ -80,6 +80,26 @@
 
                 <!-- Sidebar Column -->
                 <div class="space-y-6">
+                    <!-- Business -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-800 mb-2">
+                            Bisnes
+                        </label>
+                        <select wire:model="bisnes_id"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('bisnes_id') border-red-500 bg-red-50 @enderror">
+                            <option value="">Pilih Bisnes</option>
+                            @foreach($bisnes as $b)
+                                <option value="{{ $b->id }}">{{ $b->nama_bisnes }}</option>
+                            @endforeach
+                        </select>
+                        @error('bisnes_id')
+                            <p class="mt-2 text-sm text-red-600 flex items-center">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+
                     <!-- Status -->
                     <div>
                         <label class="block text-sm font-semibold text-gray-800 mb-2">

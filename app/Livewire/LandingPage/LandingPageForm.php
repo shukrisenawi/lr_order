@@ -4,11 +4,13 @@ namespace App\Livewire\LandingPage;
 
 use Livewire\Component;
 use App\Models\LandingPage;
+use App\Models\Bisnes;
 use Illuminate\Support\Str;
 
 class LandingPageForm extends Component
 {
     public $landingPage;
+    public $bisnes_id = '';
     public $title = '';
     public $slug = '';
     public $content = '';
@@ -18,15 +20,26 @@ class LandingPageForm extends Component
     public $template = 'default';
     public $isEdit = false;
 
-    protected $rules = [
-        'title' => 'required|string|max:255',
-        'slug' => 'required|string|max:255|unique:landing_page,slug',
-        'content' => 'required|string',
-        'status' => 'required|in:draft,published',
-        'meta_title' => 'nullable|string|max:255',
-        'meta_description' => 'nullable|string|max:500',
-        'template' => 'required|string|max:50',
-    ];
+    protected function rules()
+    {
+        $rules = [
+            'bisnes_id' => 'required|exists:bisnes,id',
+            'title' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:landing_page,slug',
+            'content' => 'required|string',
+            'status' => 'required|in:draft,published',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string|max:500',
+            'template' => 'required|string|max:50',
+        ];
+
+        // If editing, exclude current record from slug uniqueness check
+        if ($this->isEdit && $this->landingPage) {
+            $rules['slug'] = 'required|string|max:255|unique:landing_page,slug,' . $this->landingPage->id;
+        }
+
+        return $rules;
+    }
 
     protected $messages = [
         'title.required' => 'Tajuk diperlukan.',
@@ -54,6 +67,7 @@ class LandingPageForm extends Component
         if ($landingPage) {
             $this->landingPage = $landingPage;
             $this->isEdit = true;
+            $this->bisnes_id = $landingPage->bisnes_id;
             $this->title = $landingPage->title;
             $this->slug = $landingPage->slug;
             $this->content = $landingPage->content;
@@ -61,16 +75,33 @@ class LandingPageForm extends Component
             $this->meta_title = $landingPage->meta_title ?? '';
             $this->meta_description = $landingPage->meta_description ?? '';
             $this->template = $landingPage->template;
-
-            // Update validation rules for edit mode
-            $this->rules['slug'] = 'required|string|max:255|unique:landing_page,slug,' . $landingPage->id;
+        } else {
+            // Set default business for new landing pages
+            $defaultBisnes = Bisnes::first();
+            if ($defaultBisnes) {
+                $this->bisnes_id = $defaultBisnes->id;
+            }
         }
     }
 
     public function updatedTitle()
     {
         if (!$this->isEdit || empty($this->slug)) {
-            $this->slug = Str::slug($this->title);
+            $baseSlug = Str::slug($this->title);
+            $slug = $baseSlug;
+            $counter = 1;
+
+            // Check for uniqueness, excluding current record if editing
+            while (LandingPage::where('slug', $slug)
+                ->when($this->isEdit && $this->landingPage, function ($query) {
+                    return $query->where('id', '!=', $this->landingPage->id);
+                })
+                ->exists()) {
+                $slug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+
+            $this->slug = $slug;
         }
     }
 
@@ -79,6 +110,7 @@ class LandingPageForm extends Component
         $this->validate();
 
         $data = [
+            'bisnes_id' => $this->bisnes_id,
             'title' => $this->title,
             'slug' => $this->slug,
             'content' => $this->content,
@@ -101,6 +133,7 @@ class LandingPageForm extends Component
 
     public function render()
     {
-        return view('livewire.landing-page.landing-page-form');
+        $bisnes = Bisnes::all();
+        return view('livewire.landing-page.landing-page-form', compact('bisnes'));
     }
 }

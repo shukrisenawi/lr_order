@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('landing_page', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('bisnes_id')->constrained('bisnes')->onDelete('cascade');
             $table->string('title');
             $table->string('slug')->unique();
             $table->longText('content'); // Rich text content

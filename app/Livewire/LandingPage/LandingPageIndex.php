@@ -55,10 +55,15 @@ class LandingPageIndex extends Component
 
     public function render()
     {
-        $landingPages = LandingPage::when($this->search, function ($query) {
+        $landingPages = LandingPage::with('bisnes')
+            ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('title', 'like', '%' . $this->search . '%')
-                        ->orWhere('content', 'like', '%' . $this->search . '%');
+                        ->orWhere('content', 'like', '%' . $this->search . '%')
+                        ->orWhere('slug', 'like', '%' . $this->search . '%')
+                        ->orWhereHas('bisnes', function ($subQuery) {
+                            $subQuery->where('nama_bisnes', 'like', '%' . $this->search . '%');
+                        });
                 });
             })
             ->orderBy($this->sortField, $this->sortDirection)
