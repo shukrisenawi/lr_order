@@ -22,6 +22,11 @@
                     <i class="fas fa-plus mr-2"></i>
                     Tambah Anak Khariah Baru
                 </a>
+                <a href="{{ route('anak-khariah.add-to-kumpulan') }}"
+                    class="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-medium rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    <i class="fas fa-users mr-2"></i>
+                    Tambah ke Kumpulan
+                </a>
             </div>
         </div>
     </div>
@@ -33,6 +38,16 @@
             <div class="flex items-center">
                 <i class="fas fa-check-circle text-green-500 mr-2"></i>
                 <span class="text-sm">{{ session('message') }}</span>
+            </div>
+        </div>
+    @endif
+
+    @if (session()->has('error'))
+        <div
+            class="mb-6 p-3 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-700 rounded-lg shadow-sm">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+                <span class="text-sm">{{ session('error') }}</span>
             </div>
         </div>
     @endif
@@ -129,7 +144,7 @@
                             <td class="px-4 py-3 text-sm text-gray-600">{{ $item->gelaran ?? '-' }}</td>
                             <td class="px-4 py-3 text-sm text-gray-600">{{ $item->no_tel }}</td>
                             <td class="px-4 py-3 text-sm text-gray-600">{{ $item->tarikh_lahir ? $item->tarikh_lahir->format('d/m/Y') : '-' }}</td>
-                            <td class="px-4 py-3 text-sm text-gray-600">{{ $item->kumpulan ? $item->kumpulan->nama : '-' }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-600">{{ $item->kumpulans->count() > 0 ? $item->kumpulans->first()->nama : '-' }}</td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 @if($item->gambar)
                                     <img src="{{ asset('storage/' . $item->gambar) }}" alt="Gambar" class="w-10 h-10 rounded-full object-cover">
@@ -202,4 +217,5 @@
             </div>
         @endif
     </div>
+
 </div>

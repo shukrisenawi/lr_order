@@ -54,5 +54,69 @@
             </div>
         </div>
     </div>
+
+    <!-- Anak Khariah in this Group -->
+    <div class="mt-8">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-900">Anak Khariah dalam Kumpulan Ini</h2>
+                    <p class="text-sm text-gray-600">Senarai anak khariah yang menyertai kumpulan {{ $kumpulan->nama }}</p>
+                </div>
+                <div class="text-sm text-gray-500">
+                    Jumlah: {{ $kumpulan->anakKhariahs->count() }}
+                </div>
+            </div>
+
+            @if($kumpulan->anakKhariahs->count() > 0)
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    @foreach($kumpulan->anakKhariahs as $anak)
+                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 hover:border-indigo-300 transition-colors duration-200">
+                            <div class="flex items-center space-x-3">
+                                <!-- Avatar -->
+                                <div class="flex-shrink-0">
+                                    @if($anak->gambar)
+                                        <img src="{{ asset('storage/' . $anak->gambar) }}" alt="Avatar {{ $anak->nama }}" class="w-12 h-12 rounded-full object-cover">
+                                    @else
+                                        <div class="w-12 h-12 rounded-full bg-gray-200 flex items-center justify-center">
+                                            <i class="fas fa-user text-gray-400"></i>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <!-- Name and Details -->
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">{{ $anak->nama }}</p>
+                                    @if($anak->gelaran)
+                                        <p class="text-xs text-gray-500 truncate">{{ $anak->gelaran }}</p>
+                                    @endif
+                                    @if($anak->no_tel)
+                                        <p class="text-xs text-gray-500">{{ $anak->no_tel }}</p>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- View Detail Button -->
+                            <div class="mt-3">
+                                <a href="{{ route('anak-khariah.show', $anak) }}"
+                                    class="inline-flex items-center justify-center w-full px-3 py-2 text-sm font-medium text-indigo-700 bg-indigo-50 rounded-md hover:bg-indigo-100 transition-colors duration-200">
+                                    <i class="fas fa-eye mr-2"></i>
+                                    View Detail
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center py-8">
+                    <div class="bg-gray-100 rounded-full p-3 mb-4 inline-block">
+                        <i class="fas fa-users text-gray-400 text-xl"></i>
+                    </div>
+                    <h3 class="text-base font-medium text-gray-900 mb-2">Tiada anak khariah dalam kumpulan ini</h3>
+                    <p class="text-sm text-gray-500">Tambah anak khariah ke kumpulan ini melalui menu pengurusan anak khariah.</p>
+                </div>
+            @endif
+        </div>
+    </div>
 </div>
 @endsection

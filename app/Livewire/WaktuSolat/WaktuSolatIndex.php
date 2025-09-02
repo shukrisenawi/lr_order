@@ -10,6 +10,7 @@ use App\Imports\WaktuSolatImport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Hash;
 
 class WaktuSolatIndex extends Component
 {
@@ -24,6 +25,8 @@ class WaktuSolatIndex extends Component
     public $isBlinking = false;
     public $showResetModal = false;
     public $adminPassword = '';
+    public $showDeleteModal = false;
+    public $deletePassword = '';
 
     protected $queryString = ['search'];
 
@@ -161,6 +164,35 @@ class WaktuSolatIndex extends Component
         }
 
         $this->closeResetModal();
+    }
+
+    public function deleteAll()
+    {
+        $this->showDeleteModal = true;
+    }
+
+    public function confirmDeleteAll()
+    {
+        if (!Hash::check($this->deletePassword, auth()->user()->password)) {
+            session()->flash('error', 'Kata laluan salah. Sila cuba lagi.');
+            $this->deletePassword = '';
+            return;
+        }
+
+        $this->performDeleteAll();
+        $this->closeDeleteModal();
+    }
+
+    private function performDeleteAll()
+    {
+        WaktuSolat::truncate();
+        session()->flash('message', 'Semua data waktu solat telah dipadamkan.');
+    }
+
+    public function closeDeleteModal()
+    {
+        $this->showDeleteModal = false;
+        $this->deletePassword = '';
     }
 
     public function render()

@@ -13,6 +13,11 @@
                     Tambah Waktu Baru
                 </a>
                 <div class="flex items-center gap-2">
+                    <button wire:click="deleteAll"
+                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-xl shadow-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        <i class="fas fa-trash-alt mr-2"></i>
+                        Padam Semua
+                    </button>
                     <input type="file" wire:model="excelFile" accept=".xlsx,.xls"
                         class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                     <button wire:click="importExcel" wire:loading.attr="disabled" :disabled="$loading"
@@ -267,6 +272,47 @@
                                         <i class="fas fa-times mr-2"></i>
                                         Batal
                                     </button>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <!-- Delete All Modal -->
+                    @if ($showDeleteModal)
+                        <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50" id="delete-modal">
+                            <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                                <div class="mt-3">
+                                    <div class="flex items-center justify-center mb-4">
+                                        <div class="bg-red-100 rounded-full p-3">
+                                            <i class="fas fa-exclamation-triangle text-red-600 text-2xl"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="text-lg font-medium text-gray-900 text-center mb-2">Pengesahan Padam Semua Data</h3>
+                                    <p class="text-sm text-gray-500 text-center mb-4">
+                                        Adakah anda pasti mahu memadamkan SEMUA data waktu solat? Tindakan ini tidak boleh dibuat asal.
+                                    </p>
+                                    <div class="mb-4">
+                                        <label for="deletePassword" class="block text-sm font-medium text-gray-700 mb-2">
+                                            Masukkan kata laluan anda untuk pengesahan:
+                                        </label>
+                                        <input type="password" wire:model="deletePassword" id="deletePassword"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500"
+                                            placeholder="Kata laluan">
+                                        @error('deletePassword')
+                                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="flex justify-end space-x-3">
+                                        <button wire:click="closeDeleteModal"
+                                            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                                            Batal
+                                        </button>
+                                        <button wire:click="confirmDeleteAll"
+                                            class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 disabled:opacity-50"
+                                            :disabled="!$wire.deletePassword">
+                                            Padam Semua
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

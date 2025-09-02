@@ -15,12 +15,13 @@ class AuthenticationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test user
         User::create([
             'name' => 'shukrisenawi',
             'email' => 'shukrisenawi@gmail.com',
             'password' => Hash::make('password123'),
+            'email_verified_at' => now(),
         ]);
     }
 
@@ -118,7 +119,7 @@ class AuthenticationTest extends TestCase
         ]);
 
         $response->assertSessionHasErrors('username');
-        $this->assertStringContainsString('Too many login attempts', session('errors')->first('username'));
+        $this->assertStringContainsString('Terlalu banyak percubaan log masuk', session('errors')->first('username'));
     }
 
     #[Test]
@@ -132,7 +133,7 @@ class AuthenticationTest extends TestCase
 
         $response->assertRedirect('/dashboard');
         $this->assertAuthenticated();
-        
+
         // Check if remember cookie is set
         $response->assertCookie('remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d');
     }

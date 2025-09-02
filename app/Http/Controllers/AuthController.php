@@ -73,7 +73,7 @@ class AuthController extends Controller
                 'authenticated' => Auth::check()
             ]);
 
-            return redirect()->intended('/dashboard');
+            return redirect('/dashboard');
         }
 
         // Increment failed attempts

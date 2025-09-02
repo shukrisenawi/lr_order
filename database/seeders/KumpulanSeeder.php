@@ -23,7 +23,7 @@ class KumpulanSeeder extends Seeder
             Kumpulan::create([
                 'nama' => $group,
                 'description' => null,
-                'bisnes_id' => null,
+                'bisnes_id' => 3,
                 'on' => true,
             ]);
         }

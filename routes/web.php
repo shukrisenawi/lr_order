@@ -162,7 +162,7 @@ Route::get('/switch-bisnes/{bisnes}', function (Bisnes $bisnes) {
         abort(403);
     }
     session(['selected_bisnes_id' => $bisnes->id]);
-    return redirect()->back()->with('success', 'Bisnes ditukar kepada: ' . $bisnes->nama_bisnes);
+    return redirect()->back();
 })->name('switch-bisnes')->middleware('auth');
 
 // Protected routes
@@ -265,6 +265,11 @@ Route::middleware(['auth'])->group(function () {
             return redirect()->route('bisnes.index');
         return view('anak-khariah-livewire');
     })->name('anak-khariah.index');
+    Route::get('/anak-khariah/add-to-kumpulan', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        return view('anak-khariah-add-to-kumpulan');
+    })->name('anak-khariah.add-to-kumpulan');
     Route::get('/anak-khariah/create', function () {
         if (empty(session('selected_bisnes_id')))
             return redirect()->route('bisnes.index');
@@ -303,7 +308,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/kumpulan/{kumpulan}', function ($kumpulan) {
         if (empty(session('selected_bisnes_id')))
             return redirect()->route('bisnes.index');
-        $kumpulan = \App\Models\Kumpulan::findOrFail($kumpulan);
+        $kumpulan = \App\Models\Kumpulan::with('anakKhariahs')->findOrFail($kumpulan);
         return view('kumpulan-show', compact('kumpulan'));
     })->name('kumpulan.show');
 

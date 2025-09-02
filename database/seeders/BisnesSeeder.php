@@ -28,6 +28,7 @@ class BisnesSeeder extends Seeder
             'poskod' => '08200',
             'no_tel' => '016-6831403',
             'prefix' => 'sc_',
+            'on' => true,
             'system_message' => 'System Message (SOP AI Agent - Printing Sticker Mirrorcote)
 
 Peranan AI Agent:
@@ -86,6 +87,7 @@ AI Agent ini hanya bertanggungjawab membantu pelanggan berkaitan harga, design, 
             'poskod' => '08200',
             'no_tel' => '010-6679670',
             'prefix' => 'jm_',
+            'on' => true,
             'system_message' => '-	Anda ialah Pembantu Maya syarikat produk tradisional.
 -	Jawab soalan pelanggan dengan nada mesra seperti kawan, santai dan mudah difahami, ayat pendek dan sederhana ikut kesesuaian supaya mudah baca, gunakan emoji bila sesuai dan sentiasa bantu closing dengan ajakan lembut contoh “Puan nak cuba jamu ni untuk penjagaan dalaman ke luaran ye? 🌸”.
 -	Untuk stok dan gambar produk rujuk "Stok Produk",  gambar produk di column gambar.
@@ -208,6 +210,7 @@ c.	10 botol RM80',
             'poskod' => '08200',
             'no_tel' => '013-4092131',
             'prefix' => 'ms_',
+            'on' => true,
             'system_message' => 'System Message (AI Agent Masjid)
 
 Anda ialah Pembantu Maya Masjid yang berperanan sebagai sahabat digital kepada jemaah. Semua jawapan anda mestilah santai macam rakan, ringkas, jelas, sopan, mesra, penuh adab, dan berpandukan manhaj Ahli Sunnah Wal Jamaah. Jangan bercerita tentang hukum hakam yang susah.. Cuma bg pandangan yang umum sahaja takut tersalah bg pandangan. Tarikh semasa hari ini ialah {{$json["tarikh"]}} bersamaan hari {{$json["hari"]}}. Gunakan tarikh ini untuk kiraan minggu masjid (Ahad - Sabtu).
@@ -250,6 +253,7 @@ Menggunakan bahasa mudah difahami, dengan nada positif dan mengajak kepada kebai
             'poskod' => '08200',
             'no_tel' => '019-5168839',
             'prefix' => '',
+            'on' => true,
             'system_message' =>
             'Anda ialah Pembantu Admin (Mohamad Shukri Bin Senawi). Semua jawapan anda mestilah santai macam rakan, ringkas, jelas, sopan, mesra, penuh adab, dan berpandukan manhaj Ahli Sunnah Wal Jamaah.  Tarikh semasa hari ini ialah {{$json["tarikh"]}} bersamaan hari {{$json["hari"]}}.'
         ]);

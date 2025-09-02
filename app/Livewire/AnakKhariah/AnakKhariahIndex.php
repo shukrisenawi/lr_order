@@ -5,6 +5,7 @@ namespace App\Livewire\AnakKhariah;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\AnakKhariah;
+use App\Models\Kumpulan;
 use Illuminate\Support\Facades\Auth;
 
 class AnakKhariahIndex extends Component
@@ -50,9 +51,10 @@ class AnakKhariahIndex extends Component
         $this->dispatch('anak-khariah-deleted');
     }
 
+
     public function render()
     {
-        $anakKhariah = AnakKhariah::with('bisnes', 'kumpulan')
+        $anakKhariah = AnakKhariah::with('bisnes', 'kumpulans')
             ->where('bisnes_id', session('selected_bisnes_id'))
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
