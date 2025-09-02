@@ -28,9 +28,12 @@ class Dashboard extends Component
 
     protected $selectedBisnesId = 0;
 
+    public $selectedBisnes;
+
     public function mount(DashboardService $dashboardService)
     {
         $this->selectedBisnesId = session('selected_bisnes_id', 0);
+        $this->selectedBisnes = \App\Models\Bisnes::find($this->selectedBisnesId);
         $this->loadStats();
         $this->loadAnalytics($dashboardService);
     }
@@ -38,34 +41,17 @@ class Dashboard extends Component
     public function loadStats()
     {
         // Get the selected business ID from session
-        $selectedBisnesId = session('selected_bisnes_id', 0);
+        $selectedBisnesId = session('selected_bisnes_id');
+
+        // Always filter by selected business since dashboard requires business selection
+        $this->totalBisnes = 1; // Since we're filtering by a specific business
+        $this->totalProduk = Produk::where('bisnes_id', $selectedBisnesId)->count();
+        $this->totalCustomer = Customer::where('bisnes_id', $selectedBisnesId)->count();
+        $this->totalInvoice = Invoice::where('bisnes_id', $selectedBisnesId)->count();
+        $this->totalRevenue = Invoice::where('bisnes_id', $selectedBisnesId)->sum('jumlah');
 
         // Load value2 (this could be any business-related metric)
         $this->value2 = $this->calculateValue2($selectedBisnesId);
-
-        if ($selectedBisnesId == 0) {
-            // No filtering by business, show all data for user
-            $this->totalBisnes = Bisnes::where('user_id', Auth::id())->count();
-            $this->totalProduk = Produk::whereHas('bisnes', function ($query) {
-                $query->where('user_id', Auth::id());
-            })->count();
-            $this->totalCustomer = Customer::whereHas('bisnes', function ($query) {
-                $query->where('user_id', Auth::id());
-            })->count();
-            $this->totalInvoice = Invoice::whereHas('bisnes', function ($query) {
-                $query->where('user_id', Auth::id());
-            })->count();
-            $this->totalRevenue = Invoice::whereHas('bisnes', function ($query) {
-                $query->where('user_id', Auth::id());
-            })->sum('jumlah');
-        } else {
-            // Filter by selected business
-            $this->totalBisnes = 1; // Since we're filtering by a specific business
-            $this->totalProduk = Produk::where('bisnes_id', $selectedBisnesId)->count();
-            $this->totalCustomer = Customer::where('bisnes_id', $selectedBisnesId)->count();
-            $this->totalInvoice = Invoice::where('bisnes_id', $selectedBisnesId)->count();
-            $this->totalRevenue = Invoice::where('bisnes_id', $selectedBisnesId)->sum('jumlah');
-        }
     }
 
     private function calculateValue2($selectedBisnesId)

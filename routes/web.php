@@ -169,6 +169,19 @@ Route::get('/switch-bisnes/{bisnes}', function (Bisnes $bisnes) {
 // Protected routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
+        // Check if user has businesses
+        $userBisnes = Bisnes::where('user_id', Auth::id())->get();
+
+        // If no businesses, redirect to create business
+        if ($userBisnes->isEmpty()) {
+            return redirect()->route('bisnes.create')->with('info', 'Sila buat bisnes terlebih dahulu sebelum mengakses dashboard.');
+        }
+
+        // If no business selected, redirect to business selection
+        if (empty(session('selected_bisnes_id'))) {
+            return redirect()->route('bisnes.index')->with('info', 'Sila pilih bisnes terlebih dahulu.');
+        }
+
         return view('dashboard-livewire');
     })->name('dashboard');
 
