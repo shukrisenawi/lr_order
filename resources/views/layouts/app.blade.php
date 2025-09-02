@@ -1053,6 +1053,7 @@
                         </div>
                     @endif
 
+
                     <!-- User Menu -->
                     <div class="flex items-center space-x-1">
                         @if (env('APP_DEV'))

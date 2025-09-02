@@ -2,21 +2,29 @@
     <div class="flex items-center space-x-2">
         <span class="text-white/80 text-xs font-medium">DB:</span>
         <div class="relative inline-block w-12 h-6 bg-white/20 rounded-full transition-all duration-300 cursor-pointer"
-             wire:click="toggleDatabase">
-            <input type="checkbox"
-                   {{ $isLiveDatabase ? 'checked' : '' }}
-                   class="sr-only peer">
-            <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-all duration-300 {{ $isLiveDatabase ? 'translate-x-6 bg-green-400' : '' }}"></div>
+            wire:click="toggleDatabase">
+            <input type="checkbox" {{ $isLiveDatabase ? 'checked' : '' }} class="sr-only peer">
+            <div
+                class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-all duration-300 {{ $isLiveDatabase ? 'translate-x-6 bg-green-400' : '' }}">
+            </div>
         </div>
         <span class="text-white text-xs font-medium min-w-[35px] relative">
             {{ $isLiveDatabase ? '' : 'Local' }}
-            @if($isLiveDatabase)
-                <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full animate-pulse ml-1">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            @if ($isLiveDatabase)
+                <span
+                    class="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full animate-pulse ml-1">
+                    <span
+                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
                     <span class="relative">LIVE</span>
                 </span>
             @endif
         </span>
+        <!-- Apply Database Connection Button -->
+        <button wire:click="applyDatabaseConnection"
+            class="inline-flex items-center justify-center w-6 h-6 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200"
+            title="Apply Database Connection from JSON">
+            <i class="fas fa-play text-xs"></i>
+        </button>
     </div>
 
     <script>
@@ -49,8 +57,10 @@
                     if (data.type === 'live') {
                         // Add blinking LIVE badge
                         const badge = document.createElement('span');
-                        badge.className = 'inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full animate-pulse ml-1';
-                        badge.innerHTML = '<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative">LIVE</span>';
+                        badge.className =
+                            'inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full animate-pulse ml-1';
+                        badge.innerHTML =
+                            '<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative">LIVE</span>';
                         statusText.appendChild(badge);
                     } else {
                         // Add Local text
@@ -63,12 +73,18 @@
                 // Show error notification
                 showNotification(data.message, 'error');
             });
+
+            Livewire.on('database-applied', (data) => {
+                // Show success notification for applied connection
+                showNotification(data.message, 'success');
+            });
         });
 
         function showNotification(message, type = 'info') {
             // Create notification element
             const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 z-50 bg-${type === 'success' ? 'green' : 'red'}-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
+            notification.className =
+                `fixed top-4 right-4 z-50 bg-${type === 'success' ? 'green' : 'red'}-500 text-white px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
             notification.innerHTML = `
                 <div class="flex items-center space-x-2">
                     <i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}-circle"></i>

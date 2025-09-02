@@ -68,6 +68,11 @@
                     <option value="maghrib">Maghrib</option>
                     <option value="isyak">Isyak</option>
                 </select>
+                <button wire:click="showResetModal"
+                    class="inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-xl shadow-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                    <i class="fas fa-database mr-2"></i>
+                    Reset DB
+                </button>
                 @if($isBlinking)
                     <div class="text-red-600 font-semibold animate-pulse">
                         <i class="fas fa-exclamation-triangle mr-2"></i>
@@ -242,6 +247,30 @@
                             </span>
                         @endif
                     </div>
+
+                    <!-- Reset DB Modal -->
+                    @if($showResetModal)
+                        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                            <div class="bg-white p-6 rounded-xl shadow-xl max-w-md w-full mx-4">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4">Pengesahan Reset Database</h3>
+                                <p class="text-gray-600 mb-4">Tindakan ini akan memadam semua data dan menjana semula. Masukkan kata laluan admin untuk meneruskan.</p>
+                                <input type="password" wire:model="adminPassword" placeholder="Kata Laluan Admin"
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-red-100 focus:border-red-500 transition-all duration-300 mb-4">
+                                <div class="flex gap-3">
+                                    <button wire:click="resetDatabase"
+                                        class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-xl shadow-lg hover:from-red-600 hover:to-red-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                                        <i class="fas fa-check mr-2"></i>
+                                        Sahkan Reset
+                                    </button>
+                                    <button wire:click="closeResetModal"
+                                        class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-gray-500 to-gray-600 text-white font-medium rounded-xl shadow-lg hover:from-gray-600 hover:to-gray-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                        <i class="fas fa-times mr-2"></i>
+                                        Batal
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         @endif
