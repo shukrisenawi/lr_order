@@ -100,12 +100,19 @@
 
     <!-- Search -->
     <div class="mb-8">
-        <div class="relative max-w-md">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <i class="fas fa-search text-gray-400"></i>
+        <div class="flex gap-4 items-center">
+            <div class="relative flex-1 max-w-md">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-gray-400"></i>
+                </div>
+                <input type="text" wire:model.live="search" placeholder="Cari nama, lokaliti, K/P..."
+                    class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
             </div>
-            <input type="text" wire:model.live="search" placeholder="Cari nama, lokaliti, K/P..."
-                class="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm">
+            <button wire:click="clearFilters"
+                class="inline-flex items-center justify-center px-4 py-3 bg-gray-500 text-white font-medium rounded-xl shadow-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                <i class="fas fa-times mr-2"></i>
+                Clear
+            </button>
         </div>
     </div>
 
@@ -145,6 +152,7 @@
                 <thead class="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                     <tr>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Bil</th>
+                        @if(!$selectedNamaDm)
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
                             wire:click="sortBy('nama_dm')">
                             <div class="flex items-center">
@@ -160,7 +168,10 @@
                                 @endif
                             </div>
                         </th>
+                        @endif
+                        @if(!$selectedNamaLokaliti)
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nama Lokaliti</th>
+                        @endif
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No. K/P Baru</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
                             wire:click="sortBy('nama_pemilih')">
@@ -188,10 +199,14 @@
                         <tr class="hover:bg-blue-50 transition-colors duration-200"
                             wire:key="data-penduduk-{{ $item->id }}">
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $dataPenduduks->firstItem() + $index }}</td>
+                            @if(!$selectedNamaDm)
                             <td class="px-6 py-4">
                                 <div class="text-sm font-medium text-gray-900">{{ $item->nama_dm }}</div>
                             </td>
+                            @endif
+                            @if(!$selectedNamaLokaliti)
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->nama_lokaliti }}</td>
+                            @endif
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->no_kp_baru }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->nama_pemilih }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ Str::limit($item->alamat_kp, 30) }}</td>
@@ -214,7 +229,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="12" class="px-6 py-16 text-center">
+                            <td colspan="{{ 7 + (!$selectedNamaDm ? 1 : 0) + (!$selectedNamaLokaliti ? 1 : 0) }}" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <div class="bg-gray-100 rounded-full p-4 mb-4">
                                         <i class="fas fa-users text-gray-400 text-2xl"></i>

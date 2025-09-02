@@ -109,6 +109,14 @@ class DataPendudukIndex extends Component
         $this->deletePassword = '';
     }
 
+    public function clearFilters()
+    {
+        $this->search = '';
+        $this->selectedNamaDm = '';
+        $this->selectedNamaLokaliti = '';
+        $this->resetPage();
+    }
+
     public function gotoPage($page)
     {
         $this->setPage($page);
