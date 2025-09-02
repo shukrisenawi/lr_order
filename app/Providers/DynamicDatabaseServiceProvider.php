@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class DynamicDatabaseServiceProvider extends ServiceProvider
 {
@@ -28,7 +29,15 @@ class DynamicDatabaseServiceProvider extends ServiceProvider
 
     private function setupDynamicDatabaseConnection()
     {
-        $dbPreference = Cache::get('database_preference', 'local');
+        // Check cache first, then session as backup
+        $dbPreference = Cache::get('database_preference', null);
+
+        if ($dbPreference === null) {
+            // If cache is empty, check session
+            $dbPreference = session('database_preference', 'local');
+            // Set cache to match session to avoid repeated session reads
+            Cache::put('database_preference', $dbPreference, now()->addHours(24));
+        }
 
         if ($dbPreference === 'live') {
             $this->switchToLiveDatabase();

@@ -1349,16 +1349,6 @@
                     <div
                         class="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-white/5 to-transparent rounded-full translate-y-8 -translate-x-8">
                     </div>
-                    <!-- Header -->
-                    <div class="flex items-center mb-4 pb-2 border-b border-white/20">
-                        <div class="flex items-center space-x-3">
-                            <img src="{{ asset('img/logo-01.png') }}" alt="Logo"
-                                class="w-8 h-8 rounded-full object-cover border-2 border-white/30 shadow-lg">
-                            <div>
-                                <h2 class="text-white text-lg font-bold">Menu</h2>
-                            </div>
-                        </div>
-                    </div>
                     <nav class="space-y-0.5">
                         <!-- Dashboard -->
                         <a href="{{ route('dashboard') }}"
