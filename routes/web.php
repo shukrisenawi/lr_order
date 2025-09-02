@@ -283,6 +283,30 @@ Route::middleware(['auth'])->group(function () {
         return view('anak-khariah-show', compact('anakKhariah'));
     })->name('anak-khariah.show');
 
+    // Kumpulan Routes
+    Route::get('/kumpulan', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        return view('kumpulan-livewire');
+    })->name('kumpulan.index');
+    Route::get('/kumpulan/create', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        return view('kumpulan-create');
+    })->name('kumpulan.create');
+    Route::get('/kumpulan/{kumpulan}/edit', function ($kumpulan) {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        $kumpulan = \App\Models\Kumpulan::findOrFail($kumpulan);
+        return view('kumpulan-edit', compact('kumpulan'));
+    })->name('kumpulan.edit');
+    Route::get('/kumpulan/{kumpulan}', function ($kumpulan) {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        $kumpulan = \App\Models\Kumpulan::findOrFail($kumpulan);
+        return view('kumpulan-show', compact('kumpulan'));
+    })->name('kumpulan.show');
+
     // Tenaga Pengajar Routes
     Route::get('/tenaga-pengajar', function () {
         return view('tenaga-pengajar-livewire');

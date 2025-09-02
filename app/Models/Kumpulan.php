@@ -5,26 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AnakKhariah extends Model
+class Kumpulan extends Model
 {
     use HasFactory;
 
-    protected $table = 'anak_khariah';
+    protected $table = 'kumpulan';
 
     protected $fillable = [
         'nama',
-        'gelaran',
-        'alamat',
-        'tarikh_lahir',
-        'no_tel',
-        'gambar',
+        'description',
         'bisnes_id',
-        'kumpulan_id',
         'on',
     ];
 
     protected $casts = [
-        'tarikh_lahir' => 'date',
         'on' => 'boolean',
     ];
 
@@ -33,8 +27,8 @@ class AnakKhariah extends Model
         return $this->belongsTo(Bisnes::class, 'bisnes_id');
     }
 
-    public function kumpulan()
+    public function anakKhariahs()
     {
-        return $this->belongsTo(Kumpulan::class, 'kumpulan_id');
+        return $this->hasMany(AnakKhariah::class, 'kumpulan_id');
     }
 }

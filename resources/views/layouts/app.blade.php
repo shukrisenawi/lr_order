@@ -1232,6 +1232,15 @@
                                         <span class="font-medium text-sm">Anak Khariah</span>
                                     </div>
                                 </a>
+                                <a href="{{ route('kumpulan.index') }}"
+                                    class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('kumpulan.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                            <i class="fas fa-users text-xs"></i>
+                                        </div>
+                                        <span class="font-medium text-sm">Kumpulan</span>
+                                    </div>
+                                </a>
                                 <a href="{{ route('tenaga-pengajar.index') }}"
                                     class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('tenaga-pengajar.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                     <div class="flex items-center space-x-2">
@@ -1467,6 +1476,16 @@
                                                     <i class="fas fa-heart text-xs"></i>
                                                 </div>
                                                 <span class="font-medium text-sm">Anak Khariah</span>
+                                            </div>
+                                        </a>
+                                        <a href="{{ route('kumpulan.index') }}"
+                                            class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('kumpulan.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                            <div class="flex items-center space-x-3">
+                                                <div
+                                                    class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                    <i class="fas fa-users text-xs"></i>
+                                                </div>
+                                                <span class="font-medium text-sm">Kumpulan</span>
                                             </div>
                                         </a>
                                         <a href="{{ route('tenaga-pengajar.index') }}"

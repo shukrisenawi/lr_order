@@ -18,6 +18,7 @@ class AnakKhariahForm extends Component
     public $tarikh_lahir;
     public $no_tel;
     public $gambar;
+    public $kumpulan_id;
     public $on = true;
 
     protected $rules = [
@@ -27,6 +28,7 @@ class AnakKhariahForm extends Component
         'tarikh_lahir' => 'nullable|date',
         'no_tel' => 'required|string|max:20',
         'gambar' => 'nullable|image|max:2048',
+        'kumpulan_id' => 'nullable|exists:kumpulan,id',
         'on' => 'boolean',
     ];
 
@@ -39,6 +41,7 @@ class AnakKhariahForm extends Component
             $this->alamat = $anakKhariah->alamat;
             $this->tarikh_lahir = $anakKhariah->tarikh_lahir?->format('Y-m-d');
             $this->no_tel = $anakKhariah->no_tel;
+            $this->kumpulan_id = $anakKhariah->kumpulan_id;
             $this->on = $anakKhariah->on;
         } else {
             $this->anakKhariah = new AnakKhariah();
@@ -55,6 +58,7 @@ class AnakKhariahForm extends Component
             'alamat' => $this->alamat,
             'tarikh_lahir' => $this->tarikh_lahir,
             'no_tel' => $this->no_tel,
+            'kumpulan_id' => $this->kumpulan_id,
             'on' => $this->on,
             'bisnes_id' => session('selected_bisnes_id'),
         ];

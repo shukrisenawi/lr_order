@@ -58,6 +58,23 @@
                     @enderror
                 </div>
 
+                <!-- Kumpulan -->
+                <div>
+                    <label for="kumpulan_id" class="block text-sm font-medium text-gray-700 mb-2">
+                        Kumpulan
+                    </label>
+                    <select wire:model="kumpulan_id" id="kumpulan_id"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition-colors">
+                        <option value="">Pilih Kumpulan</option>
+                        @foreach(\App\Models\Kumpulan::where('bisnes_id', session('selected_bisnes_id'))->where('on', true)->get() as $kumpulan)
+                            <option value="{{ $kumpulan->id }}">{{ $kumpulan->nama }}</option>
+                        @endforeach
+                    </select>
+                    @error('kumpulan_id')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Tarikh Lahir -->
                 <div>
                     <label for="tarikh_lahir" class="block text-sm font-medium text-gray-700 mb-2">
