@@ -19,8 +19,15 @@ class WaktuSolatIndex extends Component
     public $sortDirection = 'desc';
     public $excelFile;
     public $loading = false;
+    public $selectedPrayerTime = '';
+    public $isBlinking = false;
 
     protected $queryString = ['search'];
+
+    public function mount()
+    {
+        $this->checkBlinking();
+    }
 
     public function updatingSearch()
     {
@@ -69,6 +76,57 @@ class WaktuSolatIndex extends Component
         } finally {
             $this->loading = false;
         }
+    }
+
+    public function updatedSelectedPrayerTime()
+    {
+        $this->checkBlinking();
+    }
+
+    public function refreshBlinking()
+    {
+        $this->checkBlinking();
+    }
+
+    private function checkBlinking()
+    {
+        if (!$this->selectedPrayerTime) {
+            $this->isBlinking = false;
+            return;
+        }
+
+        // Get today's prayer times
+        $today = now()->toDateString();
+        $waktu = WaktuSolat::where('tarikh', $today)->first();
+
+        if (!$waktu) {
+            $this->isBlinking = false;
+            return;
+        }
+
+        $prayerTimes = [
+            'imsak' => $waktu->imsak,
+            'subuh' => $waktu->subuh,
+            'syuruk' => $waktu->syuruk,
+            'zohor' => $waktu->zohor,
+            'asar' => $waktu->asar,
+            'maghrib' => $waktu->maghrib,
+            'isyak' => $waktu->isyak,
+        ];
+
+        if (!isset($prayerTimes[$this->selectedPrayerTime])) {
+            $this->isBlinking = false;
+            return;
+        }
+
+        $prayerTime = $prayerTimes[$this->selectedPrayerTime];
+        $currentTime = now();
+        $prayerDateTime = \Carbon\Carbon::createFromFormat('H:i', $prayerTime, $currentTime->timezone)->setDate($currentTime->year, $currentTime->month, $currentTime->day);
+
+        $timeDiff = $currentTime->diffInMinutes($prayerDateTime, false);
+
+        // Blink when prayer time is 5 minutes or less away (approaching)
+        $this->isBlinking = $timeDiff <= 5 && $timeDiff >= 0;
     }
 
     public function render()

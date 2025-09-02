@@ -52,6 +52,40 @@
         </div>
     @endif
 
+    <!-- Prayer Time Selector -->
+    <div class="mb-8">
+        <div class="bg-white rounded-2xl shadow-xl p-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Pilih Waktu Solat</h3>
+            <div class="flex items-center gap-4">
+                <select wire:model.live="selectedPrayerTime"
+                    class="px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @if($isBlinking) animate-pulse bg-red-50 border-red-300 @endif">
+                    <option value="">Pilih Waktu Solat</option>
+                    <option value="imsak">Imsak</option>
+                    <option value="subuh">Subuh</option>
+                    <option value="syuruk">Syuruk</option>
+                    <option value="zohor">Zohor</option>
+                    <option value="asar">Asar</option>
+                    <option value="maghrib">Maghrib</option>
+                    <option value="isyak">Isyak</option>
+                </select>
+                @if($isBlinking)
+                    <div class="text-red-600 font-semibold animate-pulse">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        Waktu solat dalam 5 minit!
+                    </div>
+                @endif
+            </div>
+
+            <script>
+                document.addEventListener('livewire:loaded', () => {
+                    setInterval(() => {
+                        @this.call('refreshBlinking');
+                    }, 60000); // Check every minute
+                });
+            </script>
+        </div>
+    </div>
+
     <!-- Search -->
     <div class="mb-8">
         <div class="relative max-w-md">
