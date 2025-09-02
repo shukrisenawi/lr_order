@@ -8,8 +8,14 @@
                    class="sr-only peer">
             <div class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-md transition-all duration-300 {{ $isLiveDatabase ? 'translate-x-6 bg-green-400' : '' }}"></div>
         </div>
-        <span class="text-white text-xs font-medium min-w-[35px]">
-            {{ $isLiveDatabase ? 'Live' : 'Local' }}
+        <span class="text-white text-xs font-medium min-w-[35px] relative">
+            {{ $isLiveDatabase ? '' : 'Local' }}
+            @if($isLiveDatabase)
+                <span class="inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full animate-pulse ml-1">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                    <span class="relative">LIVE</span>
+                </span>
+            @endif
         </span>
     </div>
 
@@ -32,6 +38,24 @@
                     toggleBall.classList.add('translate-x-6', 'bg-green-400');
                 } else {
                     toggleBall.classList.remove('translate-x-6', 'bg-green-400');
+                }
+
+                // Update text and badge
+                const statusText = toggleContainer.nextElementSibling;
+                if (statusText) {
+                    // Clear existing content
+                    statusText.innerHTML = '';
+
+                    if (data.type === 'live') {
+                        // Add blinking LIVE badge
+                        const badge = document.createElement('span');
+                        badge.className = 'inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full animate-pulse ml-1';
+                        badge.innerHTML = '<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative">LIVE</span>';
+                        statusText.appendChild(badge);
+                    } else {
+                        // Add Local text
+                        statusText.textContent = 'Local';
+                    }
                 }
             });
 

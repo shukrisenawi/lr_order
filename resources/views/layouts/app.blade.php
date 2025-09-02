@@ -51,7 +51,7 @@
     @livewireStyles
     <style>
         :root {
-            @if(env('APP_DEBUG'))
+            @if (env('APP_DEBUG'))
                 --primary-gradient: linear-gradient(135deg, #000000 0%, #6b7280 100%);
                 --secondary-gradient: linear-gradient(135deg, #000000 0%, #6b7280 100%);
                 --accent-gradient: linear-gradient(135deg, #000000 0%, #6b7280 100%);
@@ -915,7 +915,7 @@
     @endphp
     <!-- Header -->
     <header class="gradient-header shadow-xl backdrop-blur-sm border-b border-white/10 fixed top-0 left-0 right-0 z-50">
-        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+        <div class="max-w-full mx-auto px-3 sm:px-4 lg:px-6">
             <div class="flex items-center h-10 sm:h-12">
                 <!-- Left Section: Logo, Title and Time -->
                 <div class="flex items-center space-x-2">
@@ -1055,7 +1055,7 @@
 
                     <!-- User Menu -->
                     <div class="flex items-center space-x-1">
-                        @if(env('APP_DEV'))
+                        @if (env('APP_DEV'))
                             <!-- Database Toggle -->
                             @livewire('database-toggle')
                         @endif

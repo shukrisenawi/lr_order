@@ -5,6 +5,8 @@ namespace App\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Artisan;
 
 class DatabaseToggle extends Component
 {
@@ -17,12 +19,9 @@ class DatabaseToggle extends Component
 
     public function checkCurrentDatabase()
     {
-        try {
-            $currentHost = Config::get('database.connections.mysql.host');
-            $this->isLiveDatabase = ($currentHost === '103.94.238.99');
-        } catch (\Exception $e) {
-            $this->isLiveDatabase = false;
-        }
+        // Check if we have a cached database preference
+        $dbPreference = Cache::get('database_preference', 'local');
+        $this->isLiveDatabase = ($dbPreference === 'live');
     }
 
     public function toggleDatabase()
@@ -30,22 +29,15 @@ class DatabaseToggle extends Component
         try {
             if ($this->isLiveDatabase) {
                 // Switch to local database
-                Config::set('database.connections.mysql.host', '127.0.0.1');
-                Config::set('database.connections.mysql.database', 'lr_order');
-                Config::set('database.connections.mysql.username', 'root');
-                Config::set('database.connections.mysql.password', '');
+                \App\Providers\DynamicDatabaseServiceProvider::switchToLocalDatabase();
+                Cache::put('database_preference', 'local', now()->addHours(24));
                 $this->isLiveDatabase = false;
             } else {
                 // Switch to live database
-                Config::set('database.connections.mysql.host', '103.94.238.99');
-                Config::set('database.connections.mysql.database', 'abimanyu6111_shuk_database');
-                Config::set('database.connections.mysql.username', 'abimanyu6111_sumopod');
-                Config::set('database.connections.mysql.password', 'smh9lEq3gLG.p2_W');
+                \App\Providers\DynamicDatabaseServiceProvider::switchToLiveDatabase();
+                Cache::put('database_preference', 'live', now()->addHours(24));
                 $this->isLiveDatabase = true;
             }
-
-            // Test the connection
-            DB::reconnect('mysql');
 
             // Dispatch success message
             $this->dispatch('database-switched', [
@@ -53,15 +45,13 @@ class DatabaseToggle extends Component
                 'message' => 'Database connection switched to ' . ($this->isLiveDatabase ? 'Live' : 'Local')
             ]);
 
-            // Refresh the page to ensure all components use the new connection
-            return redirect(request()->header('Referer'));
-
         } catch (\Exception $e) {
             $this->dispatch('database-error', [
                 'message' => 'Failed to switch database: ' . $e->getMessage()
             ]);
         }
     }
+
 
     public function render()
     {
