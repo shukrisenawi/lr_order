@@ -1,5 +1,8 @@
 @php
     use App\Models\Bisnes;
+    use App\Models\WaktuSolat;
+    $today = now()->toDateString();
+    $waktuSolat = WaktuSolat::where('tarikh', $today)->first();
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -287,9 +290,54 @@
                 height: calc(100vh - 3rem);
             }
         }
+
+        /* Prayer Times Styling */
+        .prayer-times {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .prayer-times .prayer-item {
+            transition: all 0.3s ease;
+        }
+
+        .prayer-times .prayer-item:hover {
+            transform: translateY(-2px);
+        }
+
+        .current-prayer {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            padding: 0.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .prayer-times {
+                display: none;
+            }
+        }
     </style>
 
     <script>
+        // Live time update
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-GB', {
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('current-time').textContent = timeString;
+        }
+
+        // Update time every second
+        setInterval(updateTime, 1000);
+
         function toggleBisnesDropdown() {
             const dropdown = document.getElementById('bisnes-dropdown');
             dropdown.classList.toggle('hidden');
@@ -317,6 +365,296 @@
                 }, 300);
             }
         }
+
+        // Ultra-aggressive fullscreen functionality with maximum persistence
+        let fullscreenState = {
+            isEnabled: localStorage.getItem('fullscreenMode') === 'true',
+            isRestoring: false,
+            restoreAttempts: 0,
+            maxAttempts: 20,
+            restoreInterval: null,
+            userInteractionHandlers: [],
+            monitoringInterval: null
+        };
+
+        function updateFullscreenButton(isFullscreen) {
+            const btn = document.getElementById('fullscreen-btn');
+            const icon = btn ? btn.querySelector('i') : null;
+
+            if (btn && icon) {
+                if (isFullscreen) {
+                    icon.className = 'fas fa-compress text-xs';
+                    btn.title = 'Exit Fullscreen';
+                } else {
+                    icon.className = 'fas fa-expand text-xs';
+                    btn.title = 'Toggle Fullscreen';
+                }
+            }
+        }
+
+        function toggleFullscreen() {
+            const btn = document.getElementById('fullscreen-btn');
+            if (!btn) return;
+
+            if (!document.fullscreenElement) {
+                // Enter fullscreen
+                document.documentElement.requestFullscreen().then(() => {
+                    fullscreenState.isEnabled = true;
+                    localStorage.setItem('fullscreenMode', 'true');
+                    updateFullscreenButton(true);
+                    console.log('Entered fullscreen mode');
+                    startFullscreenMonitoring();
+                }).catch(err => {
+                    console.log(`Error entering fullscreen: ${err.message}`);
+                    fullscreenState.isEnabled = false;
+                    localStorage.setItem('fullscreenMode', 'false');
+                });
+            } else {
+                // Exit fullscreen
+                document.exitFullscreen().then(() => {
+                    fullscreenState.isEnabled = false;
+                    localStorage.setItem('fullscreenMode', 'false');
+                    updateFullscreenButton(false);
+                    console.log('Exited fullscreen mode');
+                    stopFullscreenMonitoring();
+                }).catch(err => {
+                    console.log(`Error exiting fullscreen: ${err.message}`);
+                });
+            }
+        }
+
+        // Continuous monitoring for fullscreen state
+        function startFullscreenMonitoring() {
+            if (fullscreenState.monitoringInterval) {
+                clearInterval(fullscreenState.monitoringInterval);
+            }
+
+            fullscreenState.monitoringInterval = setInterval(() => {
+                const shouldBeFullscreen = localStorage.getItem('fullscreenMode') === 'true';
+                const isCurrentlyFullscreen = !!document.fullscreenElement;
+
+                if (shouldBeFullscreen && !isCurrentlyFullscreen && !fullscreenState.isRestoring) {
+                    console.log('Monitoring detected fullscreen loss - attempting immediate restoration');
+                    fullscreenState.restoreAttempts = 0; // Reset attempts for monitoring restoration
+                    attemptFullscreenRestore();
+                }
+            }, 500); // Check every 500ms for very aggressive monitoring
+        }
+
+        function stopFullscreenMonitoring() {
+            if (fullscreenState.monitoringInterval) {
+                clearInterval(fullscreenState.monitoringInterval);
+                fullscreenState.monitoringInterval = null;
+            }
+        }
+
+        // Enhanced fullscreen change listener
+        function handleFullscreenChange() {
+            const isFullscreen = !!document.fullscreenElement;
+
+            if (isFullscreen) {
+                fullscreenState.isEnabled = true;
+                localStorage.setItem('fullscreenMode', 'true');
+                updateFullscreenButton(true);
+                startFullscreenMonitoring();
+                console.log('Fullscreen activated - monitoring started');
+            } else {
+                const shouldBeFullscreen = localStorage.getItem('fullscreenMode') === 'true';
+                if (shouldBeFullscreen && !fullscreenState.isRestoring) {
+                    console.log('Fullscreen lost unexpectedly - immediate restoration attempt');
+                    setTimeout(() => {
+                        fullscreenState.restoreAttempts = 0;
+                        attemptFullscreenRestore();
+                    }, 50);
+                } else if (!shouldBeFullscreen) {
+                    fullscreenState.isEnabled = false;
+                    updateFullscreenButton(false);
+                    stopFullscreenMonitoring();
+                    console.log('Fullscreen properly exited');
+                }
+            }
+        }
+
+        // Ultra-aggressive fullscreen restoration
+        function attemptFullscreenRestore() {
+            if (fullscreenState.isRestoring || fullscreenState.restoreAttempts >= fullscreenState.maxAttempts) {
+                if (fullscreenState.restoreAttempts >= fullscreenState.maxAttempts) {
+                    console.log('Max attempts reached - setting up user interaction restore');
+                    setupUserInteractionRestore();
+                }
+                return;
+            }
+
+            const shouldRestore = localStorage.getItem('fullscreenMode') === 'true';
+            const isCurrentlyFullscreen = !!document.fullscreenElement;
+
+            if (!shouldRestore || isCurrentlyFullscreen) {
+                updateFullscreenButton(isCurrentlyFullscreen);
+                return;
+            }
+
+            fullscreenState.isRestoring = true;
+            fullscreenState.restoreAttempts++;
+
+            console.log(
+                `Ultra-aggressive fullscreen restoration attempt (${fullscreenState.restoreAttempts}/${fullscreenState.maxAttempts})`
+            );
+
+            document.documentElement.requestFullscreen().then(() => {
+                fullscreenState.isRestoring = false;
+                fullscreenState.isEnabled = true;
+                updateFullscreenButton(true);
+                startFullscreenMonitoring();
+                console.log('Fullscreen restored successfully - monitoring restarted');
+                // Reset attempts on success
+                fullscreenState.restoreAttempts = 0;
+            }).catch(err => {
+                fullscreenState.isRestoring = false;
+                console.log(`Fullscreen restoration failed: ${err.message}`);
+
+                if (fullscreenState.restoreAttempts < fullscreenState.maxAttempts) {
+                    // Very short delays for aggressive restoration
+                    const delay = Math.min(100 * fullscreenState.restoreAttempts, 1000);
+                    setTimeout(attemptFullscreenRestore, delay);
+                } else {
+                    console.log('Max restoration attempts reached - will restore on next user interaction');
+                    setupUserInteractionRestore();
+                }
+            });
+        }
+
+        // Setup restoration on any user interaction
+        function setupUserInteractionRestore() {
+            const events = ['click', 'keydown', 'touchstart', 'mousemove', 'mousedown', 'mouseup'];
+
+            // Remove existing handlers
+            fullscreenState.userInteractionHandlers.forEach(handler => {
+                events.forEach(event => {
+                    document.removeEventListener(event, handler);
+                });
+            });
+
+            const restoreHandler = function(e) {
+                if (localStorage.getItem('fullscreenMode') === 'true' && !document.fullscreenElement) {
+                    console.log(`User interaction (${e.type}) detected - attempting fullscreen restoration`);
+                    fullscreenState.restoreAttempts = 0; // Reset attempts
+                    attemptFullscreenRestore();
+
+                    // Remove this handler and set up a new one
+                    events.forEach(event => {
+                        document.removeEventListener(event, restoreHandler);
+                    });
+
+                    // Set up new handler for next time
+                    setTimeout(() => setupUserInteractionRestore(), 1000);
+                }
+            };
+
+            fullscreenState.userInteractionHandlers = [restoreHandler];
+
+            events.forEach(event => {
+                document.addEventListener(event, restoreHandler, {
+                    passive: true
+                });
+            });
+        }
+
+        // Initialize fullscreen restoration system
+        function initializeFullscreenRestore() {
+            console.log('Initializing ultra-aggressive fullscreen system');
+
+            // Reset restoration state
+            fullscreenState.restoreAttempts = 0;
+            fullscreenState.isRestoring = false;
+
+            // Add event listeners
+            document.addEventListener('fullscreenchange', handleFullscreenChange);
+            document.addEventListener('fullscreenerror', function(e) {
+                console.log('Fullscreen error:', e);
+                fullscreenState.isRestoring = false;
+                setupUserInteractionRestore();
+            });
+
+            // Check if we should restore fullscreen
+            const shouldRestore = localStorage.getItem('fullscreenMode') === 'true';
+            const isCurrentlyFullscreen = !!document.fullscreenElement;
+
+            updateFullscreenButton(isCurrentlyFullscreen);
+
+            if (shouldRestore && !isCurrentlyFullscreen) {
+                console.log('Page loaded - fullscreen should be restored immediately');
+                // Multiple immediate attempts
+                setTimeout(attemptFullscreenRestore, 50);
+                setTimeout(attemptFullscreenRestore, 200);
+                setTimeout(attemptFullscreenRestore, 500);
+                // Setup user interaction fallback
+                setupUserInteractionRestore();
+                // Start monitoring immediately
+                startFullscreenMonitoring();
+            } else if (shouldRestore && isCurrentlyFullscreen) {
+                startFullscreenMonitoring();
+            }
+        }
+
+        // Enhanced page load handling with multiple triggers
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded - initializing ultra-aggressive fullscreen system');
+            initializeFullscreenRestore();
+        });
+
+        window.addEventListener('load', function() {
+            console.log('Window loaded - secondary fullscreen check');
+            if (localStorage.getItem('fullscreenMode') === 'true' && !document.fullscreenElement) {
+                fullscreenState.restoreAttempts = 0;
+                setTimeout(attemptFullscreenRestore, 100);
+            }
+        });
+
+        // Handle page navigation with immediate restoration
+        window.addEventListener('pageshow', function(event) {
+            console.log('Page shown - immediate fullscreen restoration check');
+            fullscreenState.restoreAttempts = 0;
+
+            setTimeout(() => {
+                initializeFullscreenRestore();
+            }, 50);
+
+            // Additional attempts
+            setTimeout(() => {
+                if (localStorage.getItem('fullscreenMode') === 'true' && !document.fullscreenElement) {
+                    attemptFullscreenRestore();
+                }
+            }, 200);
+        });
+
+        // Handle visibility changes
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden && localStorage.getItem('fullscreenMode') === 'true' && !document
+                .fullscreenElement) {
+                console.log('Tab became visible - immediate fullscreen restoration');
+                fullscreenState.restoreAttempts = 0;
+                setTimeout(attemptFullscreenRestore, 50);
+            }
+        });
+
+        // Handle focus events
+        window.addEventListener('focus', function() {
+            if (localStorage.getItem('fullscreenMode') === 'true' && !document.fullscreenElement) {
+                console.log('Window focused - immediate fullscreen restoration');
+                fullscreenState.restoreAttempts = 0;
+                setTimeout(attemptFullscreenRestore, 50);
+            }
+        });
+
+        // Intercept all navigation clicks to ensure fullscreen persistence
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('a[href]');
+            if (link && localStorage.getItem('fullscreenMode') === 'true') {
+                console.log('Navigation link clicked - ensuring fullscreen will persist');
+                // Force fullscreen state to be saved
+                localStorage.setItem('fullscreenMode', 'true');
+            }
+        });
 
         // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
@@ -359,7 +697,7 @@
     <!-- Header -->
     <header class="gradient-header shadow-xl backdrop-blur-sm border-b border-white/10 fixed top-0 left-0 right-0 z-50">
         <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
-            <div class="flex justify-between items-center h-12 sm:h-14">
+            <div class="flex items-center h-12 sm:h-14">
                 <!-- Left Section: Logo and Title -->
                 <div class="flex items-center space-x-2">
                     <!-- Mobile menu button -->
@@ -380,6 +718,53 @@
                         <div class="sm:hidden">
                             <h1 class="text-sm font-bold text-white">LR ORDER</h1>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Center Section: Prayer Times -->
+                <div class="flex-1 flex justify-center px-4">
+                    <div class="flex items-center space-x-4 text-white text-sm">
+                        <!-- Date and Time -->
+                        <div class="text-center">
+                            <div id="current-date" class="font-medium">{{ now()->format('d/m/Y') }}</div>
+                            <div id="current-time" class="text-white/80 font-mono">{{ now()->format('H:i:s') }}</div>
+                        </div>
+
+                        @if ($waktuSolat)
+                            <!-- Prayer Times -->
+                            <div class="prayer-times hidden sm:flex items-center space-x-3 text-xs">
+                                <div class="prayer-item text-center">
+                                    <div class="text-white/60">Subuh</div>
+                                    <div class="font-medium">
+                                        {{ $waktuSolat->subuh ? \Carbon\Carbon::createFromFormat('H:i:s', $waktuSolat->subuh)->format('h:i A') : '-' }}
+                                    </div>
+                                </div>
+                                <div class="prayer-item text-center">
+                                    <div class="text-white/60">Zohor</div>
+                                    <div class="font-medium">
+                                        {{ $waktuSolat->zohor ? \Carbon\Carbon::createFromFormat('H:i:s', $waktuSolat->zohor)->format('h:i A') : '-' }}
+                                    </div>
+                                </div>
+                                <div class="prayer-item text-center">
+                                    <div class="text-white/60">Asar</div>
+                                    <div class="font-medium">
+                                        {{ $waktuSolat->asar ? \Carbon\Carbon::createFromFormat('H:i:s', $waktuSolat->asar)->format('h:i A') : '-' }}
+                                    </div>
+                                </div>
+                                <div class="prayer-item text-center">
+                                    <div class="text-white/60">Maghrib</div>
+                                    <div class="font-medium">
+                                        {{ $waktuSolat->maghrib ? \Carbon\Carbon::createFromFormat('H:i:s', $waktuSolat->maghrib)->format('h:i A') : '-' }}
+                                    </div>
+                                </div>
+                                <div class="prayer-item text-center">
+                                    <div class="text-white/60">Isyak</div>
+                                    <div class="font-medium">
+                                        {{ $waktuSolat->isyak ? \Carbon\Carbon::createFromFormat('H:i:s', $waktuSolat->isyak)->format('h:i A') : '-' }}
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
@@ -448,6 +833,13 @@
 
                     <!-- User Menu -->
                     <div class="flex items-center space-x-1">
+                        <!-- Fullscreen Button -->
+                        <button id="fullscreen-btn" type="button"
+                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 shadow-lg backdrop-blur-sm"
+                            title="Toggle Fullscreen" onclick="toggleFullscreen()">
+                            <i class="fas fa-expand text-xs"></i>
+                        </button>
+
                         <!-- User Info -->
                         <div
                             class="hidden sm:flex items-center space-x-2 bg-white/10 rounded-lg px-2 py-1 backdrop-blur-sm">
@@ -837,6 +1229,18 @@
                                     <span id="customer-badge-desktop"
                                         class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-2 py-1 animate-pulse shadow-lg">0</span>
                                 </a>
+                                @if ($selectedBisnes && $selectedBisnes->id == 4)
+                                    <a href="{{ route('data-penduduk.index') }}"
+                                        class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('data-penduduk.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="flex items-center space-x-3">
+                                            <div
+                                                class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-heart text-xs"></i>
+                                            </div>
+                                            <span class="font-medium text-sm">Data Penduduk</span>
+                                        </div>
+                                    </a>
+                                @endif
                                 @if ($selectedBisnes && $selectedBisnes->id == 3)
                                     <a href="{{ route('anak-khariah.index') }}"
                                         class="nav-link flex items-center justify-between rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('anak-khariah.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">

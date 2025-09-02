@@ -8,6 +8,7 @@ use Livewire\WithFileUploads;
 use App\Models\JadualPengajian;
 use App\Imports\JadualPengajianImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 
 class JadualPengajianIndex extends Component
 {
@@ -17,6 +18,7 @@ class JadualPengajianIndex extends Component
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
     public $excelFile;
+    public $loading = false;
 
     protected $queryString = ['search'];
 
@@ -50,27 +52,36 @@ class JadualPengajianIndex extends Component
 
     public function importExcel()
     {
-        $this->validate([
-            'excelFile' => 'required|mimes:xlsx,xls',
-        ]);
+        $this->loading = true;
 
-        Excel::import(new JadualPengajianImport, $this->excelFile->getRealPath());
+        try {
+            $this->validate([
+                'excelFile' => 'required|mimes:xlsx,xls',
+            ]);
 
-        session()->flash('message', 'Data Excel berjaya diimport.');
-        $this->excelFile = null;
+            Excel::import(new JadualPengajianImport, $this->excelFile->getRealPath());
+
+            session()->flash('message', 'Data Excel berjaya diimport.');
+            $this->excelFile = null;
+        } catch (\Exception $e) {
+            session()->flash('error', 'Ralat semasa import: ' . $e->getMessage());
+            Log::error('Excel import error: ' . $e->getMessage());
+        } finally {
+            $this->loading = false;
+        }
     }
 
     public function render()
     {
         $jaduals = JadualPengajian::when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('hari', 'like', '%' . $this->search . '%')
-                        ->orWhere('masa', 'like', '%' . $this->search . '%')
-                        ->orWhere('penceramah_program', 'like', '%' . $this->search . '%')
-                        ->orWhere('topik_kitab', 'like', '%' . $this->search . '%')
-                        ->orWhere('tempat', 'like', '%' . $this->search . '%');
-                });
-            })
+            $query->where(function ($q) {
+                $q->where('hari', 'like', '%' . $this->search . '%')
+                    ->orWhere('masa', 'like', '%' . $this->search . '%')
+                    ->orWhere('penceramah_program', 'like', '%' . $this->search . '%')
+                    ->orWhere('topik_kitab', 'like', '%' . $this->search . '%')
+                    ->orWhere('tempat', 'like', '%' . $this->search . '%');
+            });
+        })
             ->orderBy($this->sortField, $this->sortDirection)
             ->paginate(10);
 

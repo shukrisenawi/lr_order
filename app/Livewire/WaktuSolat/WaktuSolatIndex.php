@@ -8,6 +8,7 @@ use Livewire\WithFileUploads;
 use App\Models\WaktuSolat;
 use App\Imports\WaktuSolatImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 
 class WaktuSolatIndex extends Component
 {
@@ -17,6 +18,7 @@ class WaktuSolatIndex extends Component
     public $sortField = 'created_at';
     public $sortDirection = 'desc';
     public $excelFile;
+    public $loading = false;
 
     protected $queryString = ['search'];
 
@@ -50,14 +52,23 @@ class WaktuSolatIndex extends Component
 
     public function importExcel()
     {
-        $this->validate([
-            'excelFile' => 'required|mimes:xlsx,xls',
-        ]);
+        $this->loading = true;
 
-        Excel::import(new WaktuSolatImport, $this->excelFile->getRealPath());
+        try {
+            $this->validate([
+                'excelFile' => 'required|mimes:xlsx,xls',
+            ]);
 
-        session()->flash('message', 'Data Excel berjaya diimport.');
-        $this->excelFile = null;
+            Excel::import(new WaktuSolatImport, $this->excelFile->getRealPath());
+
+            session()->flash('message', 'Data Excel berjaya diimport.');
+            $this->excelFile = null;
+        } catch (\Exception $e) {
+            session()->flash('error', 'Ralat semasa import: ' . $e->getMessage());
+            Log::error('Excel import error: ' . $e->getMessage());
+        } finally {
+            $this->loading = false;
+        }
     }
 
     public function render()

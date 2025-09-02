@@ -218,6 +218,30 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/prospek/{prospek}', [ProspekController::class, 'update'])->name('prospek.update');
     Route::resource('prospek', ProspekController::class)->except(['index']);
 
+    // Data Penduduk Routes
+    Route::get('/data-penduduk', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        return view('data-penduduk-livewire');
+    })->name('data-penduduk.index');
+    Route::get('/data-penduduk/create', function () {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        return view('data-penduduk-create');
+    })->name('data-penduduk.create');
+    Route::get('/data-penduduk/{dataPenduduk}/edit', function ($dataPenduduk) {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        $dataPenduduk = \App\Models\DataPenduduk::findOrFail($dataPenduduk);
+        return view('data-penduduk-edit', compact('dataPenduduk'));
+    })->name('data-penduduk.edit');
+    Route::get('/data-penduduk/{dataPenduduk}', function ($dataPenduduk) {
+        if (empty(session('selected_bisnes_id')))
+            return redirect()->route('bisnes.index');
+        $dataPenduduk = \App\Models\DataPenduduk::findOrFail($dataPenduduk);
+        return view('data-penduduk-show', compact('dataPenduduk'));
+    })->name('data-penduduk.show');
+
     // Anak Khariah Routes
     Route::get('/anak-khariah', function () {
         if (empty(session('selected_bisnes_id')))

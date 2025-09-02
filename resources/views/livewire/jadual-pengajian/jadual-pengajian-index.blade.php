@@ -15,10 +15,16 @@
                 <div class="flex items-center gap-2">
                     <input type="file" wire:model="excelFile" accept=".xlsx,.xls"
                         class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
-                    <button wire:click="importExcel"
-                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-xl shadow-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                        <i class="fas fa-upload mr-2"></i>
-                        Import Excel
+                    <button wire:click="importExcel" wire:loading.attr="disabled" :disabled="$loading"
+                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-medium rounded-xl shadow-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <div wire:loading wire:target="importExcel" class="flex items-center">
+                            <i class="fas fa-spinner fa-spin mr-2"></i>
+                            Memuat...
+                        </div>
+                        <div wire:loading.remove wire:target="importExcel" class="flex items-center">
+                            <i class="fas fa-upload mr-2"></i>
+                            Import Excel
+                        </div>
                     </button>
                 </div>
             </div>
@@ -32,6 +38,16 @@
             <div class="flex items-center">
                 <i class="fas fa-check-circle text-green-500 mr-3"></i>
                 <span>{{ session('message') }}</span>
+            </div>
+        </div>
+    @endif
+
+    @if (session()->has('error'))
+        <div
+            class="mb-8 p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-700 rounded-xl shadow-sm">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
+                <span>{{ session('error') }}</span>
             </div>
         </div>
     @endif
