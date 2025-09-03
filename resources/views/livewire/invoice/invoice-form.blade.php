@@ -305,7 +305,7 @@
                         <div class="flex items-center justify-between">
                             <h2 class="text-base font-semibold text-white flex items-center">
                                 <i class="fas fa-shopping-cart mr-3"></i>
-                                Item Invoice (Pengiraan Automatik)
+                                Item Invoice
                             </h2>
                             <button type="button" wire:click="addItem"
                                 class="inline-flex items-center px-3 py-2 bg-white/20 hover:bg-white/30 text-white rounded-lg transition-all duration-200 focus:outline-none focus:ring-1 focus:ring-white/50 text-sm">
@@ -344,7 +344,6 @@
                                                 Produk
                                             </label>
                                             <select wire:model.live="items.{{ $index }}.produk_id"
-                                                wire:change="updatedItemsProdukId($event.target.value, '{{ $index }}.produk_id')"
                                                 class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base">
                                                 <option value="">Pilih Produk</option>
                                                 @foreach ($produk_list as $produk)
@@ -368,7 +367,6 @@
                                             </label>
                                             <input type="text"
                                                 wire:model.live="items.{{ $index }}.produk_custom"
-                                                wire:change="updatedItemsProdukCustom($event.target.value, '{{ $index }}.produk_custom')"
                                                 class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
                                                 placeholder="Atau masukkan produk custom">
                                             @error('items.' . $index . '.produk_custom')

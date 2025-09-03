@@ -50,7 +50,7 @@ class InvoiceForm extends Component
     protected function rules()
     {
         return [
-            'invoice_no' => 'required|string|max:50|unique:invoices,invoice_no' . ($this->isEdit ? ',' . $this->invoice->id : ''),
+            'invoice_no' => 'required|string|max:50|unique:invoice,invoice_no' . ($this->isEdit ? ',' . $this->invoice->id : ''),
             'nama_penerima' => 'required|string|max:255',
             'alamat' => 'required|string',
             'no_tel' => 'required|string|max:20',
@@ -178,9 +178,12 @@ class InvoiceForm extends Component
         $this->show_customer_dropdown = false;
     }
 
-    public function updatedItemsProdukId($value, $key)
+    public function updatedItemsProdukId($value, $name)
     {
-        $index = explode('.', $key)[0];
+        // Extract index from property name (e.g., "items.0.produk_id" -> 0)
+        preg_match('/items\.(\d+)\.produk_id/', $name, $matches);
+        $index = $matches[1] ?? 0;
+
         if ($value) {
             $produk = Produk::find($value);
             if ($produk) {
@@ -198,9 +201,12 @@ class InvoiceForm extends Component
         }
     }
 
-    public function updatedItemsProdukCustom($value, $key)
+    public function updatedItemsProdukCustom($value, $name)
     {
-        $index = explode('.', $key)[0];
+        // Extract index from property name (e.g., "items.0.produk_custom" -> 0)
+        preg_match('/items\.(\d+)\.produk_custom/', $name, $matches);
+        $index = $matches[1] ?? 0;
+
         if (!empty(trim($value))) {
             // Clear error for produk_id when produk_custom is filled
             $this->resetErrorBag("items.{$index}.produk_id");
@@ -212,28 +218,34 @@ class InvoiceForm extends Component
         }
     }
 
-    public function updatedItemsKuantiti($value, $key)
+    public function updatedItemsKuantiti($value, $name)
     {
-        $index = explode('.', $key)[0];
+        // Extract index from property name (e.g., "items.0.kuantiti" -> 0)
+        preg_match('/items\.(\d+)\.kuantiti/', $name, $matches);
+        $index = $matches[1] ?? 0;
         $this->calculateItemTotal($index);
     }
 
-    public function updatedItemsHargaSeunit($value, $key)
+    public function updatedItemsHargaSeunit($value, $name)
     {
-        $index = explode('.', $key)[0];
+        // Extract index from property name (e.g., "items.0.harga_seunit" -> 0)
+        preg_match('/items\.(\d+)\.harga_seunit/', $name, $matches);
+        $index = $matches[1] ?? 0;
         $this->calculateItemTotal($index);
     }
 
-    public function updatedItemsHarga($value, $key)
+    public function updatedItemsHarga($value, $name)
     {
-        $index = explode('.', $key)[0];
+        // Extract index from property name (e.g., "items.0.harga" -> 0)
+        preg_match('/items\.(\d+)\.harga/', $name, $matches);
+        $index = $matches[1] ?? 0;
         $this->calculateItemHargaSeunit($index);
     }
 
-    public function updatedItems($value, $key)
+    public function updatedItems($value, $name)
     {
         // Handle any changes to items array
-        if (preg_match('/^(\d+)\.(kuantiti|harga_seunit)$/', $key, $matches)) {
+        if (preg_match('/items\.(\d+)\.(kuantiti|harga_seunit)/', $name, $matches)) {
             $index = $matches[1];
             $this->calculateItemTotal($index);
         }
