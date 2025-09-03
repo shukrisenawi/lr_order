@@ -13,7 +13,7 @@ class KodCulaSeeder extends Seeder
      */
     public function run(): void
     {
-        KodCula::insert([
+        $data = [
             ['kod_cula' => '1', 'nama_cula' => 'UMNO'],
             ['kod_cula' => '10', 'nama_cula' => 'PPBM'],
             ['kod_cula' => '11', 'nama_cula' => 'GERAKAN'],
@@ -44,6 +44,13 @@ class KodCulaSeeder extends Seeder
             ['kod_cula' => '98', 'nama_cula' => 'INDIA'],
             ['kod_cula' => '99', 'nama_cula' => 'CINA'],
             ['kod_cula' => '?', 'nama_cula' => 'BELUM DICULA'],
-        ]);
+        ];
+
+        foreach ($data as $item) {
+            KodCula::updateOrCreate(
+                ['kod_cula' => $item['kod_cula']],
+                $item
+            );
+        }
     }
 }

@@ -24,11 +24,7 @@
                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                     </div>
                     <div class="flex items-center gap-2">
-                        <select wire:model.live="perPage" class="px-3 py-2 border border-gray-300 rounded-lg">
-                            <option value="10">10 per halaman</option>
-                            <option value="25">25 per halaman</option>
-                            <option value="50">50 per halaman</option>
-                        </select>
+                        <span class="text-sm text-gray-600">Menunjuk semua data</span>
                     </div>
                 </div>
             </div>
@@ -73,7 +69,7 @@
                                     {{ $kodCula->nama_cula }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $kodCula->created_at->format('d/m/Y') }}
+                                    {{ $kodCula->created_at ? $kodCula->created_at->format('d/m/Y') : '-' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div class="flex justify-end space-x-2">
@@ -110,12 +106,6 @@
                 </table>
             </div>
 
-            <!-- Pagination -->
-            @if($kodCulas->hasPages())
-                <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
-                    {{ $kodCulas->links() }}
-                </div>
-            @endif
         </div>
 
         <!-- Modal -->

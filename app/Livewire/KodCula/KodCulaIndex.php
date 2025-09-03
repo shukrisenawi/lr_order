@@ -4,14 +4,10 @@ namespace App\Livewire\KodCula;
 
 use Livewire\Component;
 use App\Models\KodCula;
-use Livewire\WithPagination;
 
 class KodCulaIndex extends Component
 {
-    use WithPagination;
-
     public $search = '';
-    public $perPage = 10;
     public $sortField = 'kod_cula';
     public $sortDirection = 'asc';
 
@@ -37,7 +33,7 @@ class KodCulaIndex extends Component
 
     public function updatingSearch()
     {
-        $this->resetPage();
+        // No pagination reset needed
     }
 
     public function sortBy($field)
@@ -121,10 +117,10 @@ class KodCulaIndex extends Component
         $kodCulas = KodCula::query()
             ->when($this->search, function ($query) {
                 $query->where('kod_cula', 'like', '%' . $this->search . '%')
-                       ->orWhere('nama_cula', 'like', '%' . $this->search . '%');
+                        ->orWhere('nama_cula', 'like', '%' . $this->search . '%');
             })
             ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->perPage);
+            ->get();
 
         return view('livewire.kod-cula.kod-cula-index', [
             'kodCulas' => $kodCulas,
