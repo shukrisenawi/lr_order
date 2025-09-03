@@ -73,6 +73,23 @@
                     <div class="p-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="space-y-2">
+                                <label for="invoice_no"
+                                    class="block text-sm font-semibold text-gray-800 flex items-center">
+                                    <i class="fas fa-file-invoice mr-2 text-blue-500"></i>
+                                    No Invoice <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" wire:model="invoice_no" id="invoice_no"
+                                    class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
+                                    placeholder="Contoh: INV-001">
+                                @error('invoice_no')
+                                    <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                                        <i class="fas fa-exclamation-circle mr-1"></i>
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+
+                            <div class="space-y-2">
                                 <label for="status"
                                     class="block text-sm font-semibold text-gray-800 flex items-center">
                                     <i class="fas fa-circle mr-2 text-green-500"></i>
@@ -327,6 +344,7 @@
                                                 Produk
                                             </label>
                                             <select wire:model.live="items.{{ $index }}.produk_id"
+                                                wire:change="updatedItemsProdukId($event.target.value, '{{ $index }}.produk_id')"
                                                 class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base">
                                                 <option value="">Pilih Produk</option>
                                                 @foreach ($produk_list as $produk)
@@ -350,6 +368,7 @@
                                             </label>
                                             <input type="text"
                                                 wire:model.live="items.{{ $index }}.produk_custom"
+                                                wire:change="updatedItemsProdukCustom($event.target.value, '{{ $index }}.produk_custom')"
                                                 class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
                                                 placeholder="Atau masukkan produk custom">
                                             @error('items.' . $index . '.produk_custom')
@@ -372,9 +391,8 @@
                                             </label>
                                             <input type="number"
                                                 wire:model.live="items.{{ $index }}.kuantiti"
-                                                wire:change="calculateItemTotal({{ $index }})"
-                                                min="0.01" step="0.01" pattern="[0-9]+(\.[0-9]{1,2})?"
-                                                inputmode="decimal"
+                                                wire:change="calculateItemTotal({{ $index }})" min="0.01"
+                                                step="0.01" pattern="[0-9]+(\.[0-9]{1,2})?" inputmode="decimal"
                                                 class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
                                                 placeholder="1.00">
                                             @error('items.' . $index . '.kuantiti')
@@ -394,9 +412,8 @@
                                             </label>
                                             <input type="number"
                                                 wire:model.live="items.{{ $index }}.harga_seunit"
-                                                wire:change="calculateItemTotal({{ $index }})"
-                                                step="0.01" min="0" pattern="[0-9]+(\.[0-9]{1,2})?"
-                                                inputmode="decimal"
+                                                wire:change="calculateItemTotal({{ $index }})" step="0.01"
+                                                min="0" pattern="[0-9]+(\.[0-9]{1,2})?" inputmode="decimal"
                                                 class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
                                                 placeholder="0.00">
                                             @error('items.' . $index . '.harga_seunit')
@@ -449,7 +466,6 @@
                                     <div class="text-xl font-bold text-green-600">
                                         RM {{ number_format((float) $this->getTotal(), 2) }}
                                     </div>
-                                    <div class="text-sm text-gray-600">Auto-kira setiap 1 saat</div>
                                 </div>
                             </div>
                         </div>

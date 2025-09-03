@@ -15,6 +15,7 @@ class InvoiceForm extends Component
 {
     public $invoice;
     public $bisnes_id;
+    public $invoice_no;
     public $nama_penerima;
     public $alamat;
     public $no_tel;
@@ -46,7 +47,28 @@ class InvoiceForm extends Component
         'items.*.harga' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,2})?$/',
     ];
 
+    protected function rules()
+    {
+        return [
+            'invoice_no' => 'required|string|max:50|unique:invoices,invoice_no' . ($this->isEdit ? ',' . $this->invoice->id : ''),
+            'nama_penerima' => 'required|string|max:255',
+            'alamat' => 'required|string',
+            'no_tel' => 'required|string|max:20',
+            'kurier' => 'nullable|string|max:255',
+            'catatan' => 'nullable|string',
+            'status' => 'required|in:pending,paid,cancelled',
+            'items' => 'required|array|min:1',
+            'items.*.produk_id' => 'nullable|exists:produk,id',
+            'items.*.produk_custom' => 'nullable|string|max:255',
+            'items.*.kuantiti' => 'required|numeric|min:0.01|regex:/^\d+(\.\d{1,2})?$/',
+            'items.*.harga_seunit' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,2})?$/',
+            'items.*.harga' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,2})?$/',
+        ];
+    }
+
     protected $messages = [
+        'invoice_no.required' => 'No invoice wajib diisi',
+        'invoice_no.unique' => 'No invoice sudah digunakan',
         'items.*.kuantiti.regex' => 'Kuantiti mestilah dalam format yang betul (contoh: 1.50)',
         'items.*.harga_seunit.regex' => 'Harga seunit mestilah dalam format yang betul (contoh: 10.50)',
         'items.*.harga.regex' => 'Jumlah harga mestilah dalam format yang betul (contoh: 25.75)',
@@ -66,6 +88,7 @@ class InvoiceForm extends Component
             $this->isEdit = true;
             $this->invoice = $invoice;
             $this->bisnes_id = $invoice->bisnes_id;
+            $this->invoice_no = $invoice->invoice_no;
             $this->nama_penerima = $invoice->nama_penerima;
             $this->alamat = $invoice->alamat;
             $this->no_tel = $invoice->no_tel;
@@ -83,6 +106,9 @@ class InvoiceForm extends Component
                 ];
             })->toArray();
         } else {
+            // Generate invoice number for new invoice
+            $this->invoice_no = $this->generateInvoiceNumber();
+
             // Pre-fill customer data if provided
             if ($customer) {
                 $this->nama_penerima = $customer->nama_penerima;
@@ -162,6 +188,27 @@ class InvoiceForm extends Component
                 $this->items[$index]['produk_custom'] = '';
                 $this->calculateItemTotal($index);
             }
+            // Clear error for produk_custom when produk_id is selected
+            $this->resetErrorBag("items.{$index}.produk_custom");
+        } else {
+            // If produk_id is cleared and produk_custom is also empty, show error
+            if (empty(trim($this->items[$index]['produk_custom'] ?? ''))) {
+                $this->addError("items.{$index}.produk_id", "Sila pilih produk atau isi produk custom untuk item " . ($index + 1));
+            }
+        }
+    }
+
+    public function updatedItemsProdukCustom($value, $key)
+    {
+        $index = explode('.', $key)[0];
+        if (!empty(trim($value))) {
+            // Clear error for produk_id when produk_custom is filled
+            $this->resetErrorBag("items.{$index}.produk_id");
+        } else {
+            // If produk_custom is cleared and produk_id is also empty, show error
+            if (empty($this->items[$index]['produk_id'])) {
+                $this->addError("items.{$index}.produk_custom", "Sila pilih produk atau isi produk custom untuk item " . ($index + 1));
+            }
         }
     }
 
@@ -214,10 +261,19 @@ class InvoiceForm extends Component
 
     public function save()
     {
+        // Custom validation for produk_id and produk_custom
+        foreach ($this->items as $index => $item) {
+            if (empty($item['produk_id']) && empty(trim($item['produk_custom'] ?? ''))) {
+                $this->addError("items.{$index}.produk_id", "Sila pilih produk atau isi produk custom untuk item " . ($index + 1));
+                $this->addError("items.{$index}.produk_custom", "Sila pilih produk atau isi produk custom untuk item " . ($index + 1));
+            }
+        }
+
         $this->validate();
 
         if ($this->isEdit) {
             $this->invoice->update([
+                'invoice_no' => $this->invoice_no,
                 'nama_penerima' => $this->nama_penerima,
                 'alamat' => $this->alamat,
                 'no_tel' => $this->no_tel,
@@ -231,6 +287,7 @@ class InvoiceForm extends Component
         } else {
             $this->invoice = Invoice::create([
                 'bisnes_id' => $this->bisnes_id,
+                'invoice_no' => $this->invoice_no,
                 'nama_penerima' => $this->nama_penerima,
                 'alamat' => $this->alamat,
                 'no_tel' => $this->no_tel,
@@ -290,6 +347,32 @@ class InvoiceForm extends Component
             return $kuantiti * $hargaSeunit;
         }
         return 0;
+    }
+
+    private function generateInvoiceNumber()
+    {
+        $year = date('Y');
+        $month = date('m');
+
+        // Get the latest invoice number for this year and month
+        $latestInvoice = Invoice::where('bisnes_id', $this->bisnes_id)
+            ->where('invoice_no', 'like', "INV-{$year}{$month}%")
+            ->orderBy('invoice_no', 'desc')
+            ->first();
+
+        if ($latestInvoice) {
+            // Extract the sequence number and increment
+            $parts = explode('-', $latestInvoice->invoice_no);
+            if (count($parts) >= 3) {
+                $sequence = (int) $parts[2] + 1;
+            } else {
+                $sequence = 1;
+            }
+        } else {
+            $sequence = 1;
+        }
+
+        return sprintf('INV-%s%s-%03d', $year, $month, $sequence);
     }
 
     public function render()
