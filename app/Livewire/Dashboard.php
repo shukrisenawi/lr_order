@@ -92,8 +92,8 @@ class Dashboard extends Component
 
     public function loadAnalytics(DashboardService $dashboardService)
     {
-        // $selectedBisnesId = session('selected_bisnes_id', 0);
-        // $this->revenueByMonth = $dashboardService->getRevenueByMonth($selectedBisnesId);
+        $selectedBisnesId = session('selected_bisnes_id', 0);
+        $this->revenueByMonth = $dashboardService->getRevenueByMonth($selectedBisnesId);
         // $this->conversionRate = $dashboardService->getProspectConversionRate($selectedBisnesId);
         // $this->topProducts = $dashboardService->getTopProducts(5, $selectedBisnesId);
         // $this->recentActivities = $dashboardService->getRecentActivities(10, $selectedBisnesId);

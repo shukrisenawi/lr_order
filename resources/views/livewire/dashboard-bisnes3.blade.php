@@ -84,7 +84,7 @@
                 <div class="text-center">
                     <div class="text-4xl font-bold text-blue-600 mb-2">{{ $conversionRate['rate'] }}%</div>
                     <p class="text-gray-600">Dari {{ $conversionRate['total'] }} prospek</p>
-                    <p class="text-sm text-gray-500">{{ $conversionRate['converted'] }} ditukar</p>
+                    <p class="text-sm text-gray-500">{{ $conversionRate['converted_prospects'] }} ditukar</p>
                 </div>
             </div>
         </div>
@@ -98,8 +98,8 @@
             <div class="space-y-3">
                 @forelse($topProducts as $product)
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-600">{{ $product['name'] }}</span>
-                        <span class="text-sm font-medium text-gray-900">Produk baru</span>
+                        <span class="text-sm text-gray-600">{{ $product['product_name'] }}</span>
+                        <span class="text-sm font-medium text-gray-900">RM {{ number_format($product['total_revenue'], 2) }}</span>
                     </div>
                 @empty
                     <p class="text-gray-500 text-sm">Tiada data produk</p>
@@ -114,23 +114,23 @@
                 <div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-600">Pendapatan</span>
-                        <span class="font-medium {{ $growthMetrics['revenue']['growth'] >= 0 ? 'text-green-600' : 'text-red-600' }}">
-                            {{ $growthMetrics['revenue']['growth'] }}%
+                        <span class="font-medium {{ $growthMetrics['revenue_growth']['growth_percentage'] >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                            {{ $growthMetrics['revenue_growth']['growth_percentage'] }}%
                         </span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                        <div class="bg-green-600 h-2 rounded-full" style="width: {{ min(100, max(0, $growthMetrics['revenue']['growth'] + 50)) }}%"></div>
+                        <div class="bg-green-600 h-2 rounded-full" style="width: {{ min(100, max(0, $growthMetrics['revenue_growth']['growth_percentage'] + 50)) }}%"></div>
                     </div>
                 </div>
                 <div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-600">Pelanggan</span>
-                        <span class="font-medium {{ $growthMetrics['prospects']['growth'] >= 0 ? 'text-green-600' : 'text-red-600' }}">
-                            {{ $growthMetrics['prospects']['growth'] }}%
+                        <span class="font-medium {{ $growthMetrics['customer_growth']['growth_percentage'] >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                            {{ $growthMetrics['customer_growth']['growth_percentage'] }}%
                         </span>
                     </div>
                     <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
-                        <div class="bg-blue-600 h-2 rounded-full" style="width: {{ min(100, max(0, $growthMetrics['prospects']['growth'] + 50)) }}%"></div>
+                        <div class="bg-blue-600 h-2 rounded-full" style="width: {{ min(100, max(0, $growthMetrics['customer_growth']['growth_percentage'] + 50)) }}%"></div>
                     </div>
                 </div>
             </div>
@@ -143,15 +143,15 @@
                 @forelse($recentActivities as $activity)
                     <div class="flex items-start space-x-3">
                         <div class="flex-shrink-0">
-                            <div class="w-8 h-8 bg-{{ $activity['color'] }}-100 rounded-full flex items-center justify-center">
-                                <svg class="w-4 h-4 text-{{ $activity['color'] }}-600" fill="currentColor" viewBox="0 0 20 20">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                 </svg>
                             </div>
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-sm text-gray-900">{{ $activity['description'] }}</p>
-                            <p class="text-xs text-gray-500">{{ $activity['time'] }}</p>
+                            <p class="text-xs text-gray-500">{{ $activity['date'] }}</p>
                         </div>
                     </div>
                 @empty
