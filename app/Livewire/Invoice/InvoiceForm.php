@@ -40,8 +40,15 @@ class InvoiceForm extends Component
         'items' => 'required|array|min:1',
         'items.*.produk_id' => 'nullable|exists:produk,id',
         'items.*.produk_custom' => 'nullable|string|max:255',
-        'items.*.kuantiti' => 'required|integer|min:1',
-        'items.*.harga' => 'required|numeric|min:0',
+        'items.*.kuantiti' => 'required|numeric|min:0.01|regex:/^\d+(\.\d{1,2})?$/',
+        'items.*.harga_seunit' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,2})?$/',
+        'items.*.harga' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,2})?$/',
+    ];
+
+    protected $messages = [
+        'items.*.kuantiti.regex' => 'Kuantiti mestilah dalam format yang betul (contoh: 1.50)',
+        'items.*.harga_seunit.regex' => 'Harga seunit mestilah dalam format yang betul (contoh: 10.50)',
+        'items.*.harga.regex' => 'Jumlah harga mestilah dalam format yang betul (contoh: 25.75)',
     ];
 
     public function mount($invoice = null, $customer = null)
@@ -70,6 +77,7 @@ class InvoiceForm extends Component
                     'produk_id' => $item->produk_id,
                     'produk_custom' => $item->produk_custom,
                     'kuantiti' => $item->kuantiti,
+                    'harga_seunit' => $item->harga_seunit ?? 0,
                     'harga' => $item->harga,
                 ];
             })->toArray();
@@ -91,6 +99,7 @@ class InvoiceForm extends Component
             'produk_id' => null,
             'produk_custom' => '',
             'kuantiti' => 1,
+            'harga_seunit' => 0,
             'harga' => 0,
         ];
     }
@@ -148,8 +157,47 @@ class InvoiceForm extends Component
         if ($value) {
             $produk = Produk::find($value);
             if ($produk) {
-                $this->items[$index]['harga'] = $produk->harga;
+                $this->items[$index]['harga_seunit'] = $produk->harga;
                 $this->items[$index]['produk_custom'] = '';
+                $this->calculateItemTotal($index);
+            }
+        }
+    }
+
+    public function updatedItemsKuantiti($value, $key)
+    {
+        $index = explode('.', $key)[0];
+        $this->calculateItemTotal($index);
+    }
+
+    public function updatedItemsHargaSeunit($value, $key)
+    {
+        $index = explode('.', $key)[0];
+        $this->calculateItemTotal($index);
+    }
+
+    public function updatedItemsHarga($value, $key)
+    {
+        $index = explode('.', $key)[0];
+        $this->calculateItemHargaSeunit($index);
+    }
+
+    private function calculateItemTotal($index)
+    {
+        if (isset($this->items[$index])) {
+            $kuantiti = !empty($this->items[$index]['kuantiti']) ? (float)$this->items[$index]['kuantiti'] : 0;
+            $hargaSeunit = !empty($this->items[$index]['harga_seunit']) ? (float)$this->items[$index]['harga_seunit'] : 0;
+            $this->items[$index]['harga'] = $kuantiti * $hargaSeunit;
+        }
+    }
+
+    private function calculateItemHargaSeunit($index)
+    {
+        if (isset($this->items[$index])) {
+            $kuantiti = !empty($this->items[$index]['kuantiti']) ? (float)$this->items[$index]['kuantiti'] : 0;
+            $harga = !empty($this->items[$index]['harga']) ? (float)$this->items[$index]['harga'] : 0;
+            if ($kuantiti > 0) {
+                $this->items[$index]['harga_seunit'] = $harga / $kuantiti;
             }
         }
     }
@@ -190,6 +238,7 @@ class InvoiceForm extends Component
                 'produk_id' => $item['produk_id'] ?: null,
                 'produk_custom' => $item['produk_custom'] ?: null,
                 'kuantiti' => $item['kuantiti'],
+                'harga_seunit' => $item['harga_seunit'] ?? 0,
                 'harga' => $item['harga'],
             ]);
         }
@@ -204,8 +253,10 @@ class InvoiceForm extends Component
 
     public function getTotal()
     {
-        return collect($this->items)->sum(function ($item) {
-            return $item['kuantiti'] * $item['harga'];
+        return (float)collect($this->items)->sum(function ($item) {
+            $kuantiti = !empty($item['kuantiti']) ? (float)$item['kuantiti'] : 0;
+            $harga = !empty($item['harga']) ? (float)$item['harga'] : 0;
+            return $kuantiti * $harga;
         });
     }
 

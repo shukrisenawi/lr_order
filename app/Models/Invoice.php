@@ -66,7 +66,7 @@ class Invoice extends Model
     public function calculateTotal()
     {
         return $this->items->sum(function ($item) {
-            return $item->kuantiti * $item->harga;
+            return $item->getTotalAttribute(); // Use the getTotalAttribute method from InvoiceItem
         });
     }
 
