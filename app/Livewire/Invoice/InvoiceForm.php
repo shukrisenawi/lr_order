@@ -9,6 +9,7 @@ use App\Models\Produk;
 use App\Models\Bisnes;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Computed;
 
 class InvoiceForm extends Component
 {
@@ -182,7 +183,16 @@ class InvoiceForm extends Component
         $this->calculateItemHargaSeunit($index);
     }
 
-    private function calculateItemTotal($index)
+    public function updatedItems($value, $key)
+    {
+        // Handle any changes to items array
+        if (preg_match('/^(\d+)\.(kuantiti|harga_seunit)$/', $key, $matches)) {
+            $index = $matches[1];
+            $this->calculateItemTotal($index);
+        }
+    }
+
+    public function calculateItemTotal($index)
     {
         if (isset($this->items[$index])) {
             $kuantiti = !empty($this->items[$index]['kuantiti']) ? (float)$this->items[$index]['kuantiti'] : 0;
@@ -258,6 +268,28 @@ class InvoiceForm extends Component
             $harga = !empty($item['harga']) ? (float)$item['harga'] : 0;
             return $kuantiti * $harga;
         });
+    }
+
+    #[Computed]
+    public function itemTotals()
+    {
+        $totals = [];
+        foreach ($this->items as $index => $item) {
+            $kuantiti = !empty($item['kuantiti']) ? (float)$item['kuantiti'] : 0;
+            $hargaSeunit = !empty($item['harga_seunit']) ? (float)$item['harga_seunit'] : 0;
+            $totals[$index] = $kuantiti * $hargaSeunit;
+        }
+        return $totals;
+    }
+
+    public function getItemTotal($index)
+    {
+        if (isset($this->items[$index])) {
+            $kuantiti = !empty($this->items[$index]['kuantiti']) ? (float)$this->items[$index]['kuantiti'] : 0;
+            $hargaSeunit = !empty($this->items[$index]['harga_seunit']) ? (float)$this->items[$index]['harga_seunit'] : 0;
+            return $kuantiti * $hargaSeunit;
+        }
+        return 0;
     }
 
     public function render()

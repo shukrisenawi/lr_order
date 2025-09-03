@@ -73,7 +73,8 @@
                     <div class="p-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="space-y-2">
-                                <label for="status" class="block text-sm font-semibold text-gray-800 flex items-center">
+                                <label for="status"
+                                    class="block text-sm font-semibold text-gray-800 flex items-center">
                                     <i class="fas fa-circle mr-2 text-green-500"></i>
                                     Status <span class="text-red-500">*</span>
                                 </label>
@@ -123,9 +124,11 @@
                                                 class="px-4 py-3 hover:bg-green-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors duration-200">
                                                 <div class="flex items-center justify-between">
                                                     <div>
-                                                        <div class="font-semibold text-gray-900 text-base">{{ $customer->nama_penerima }}
+                                                        <div class="font-semibold text-gray-900 text-base">
+                                                            {{ $customer->nama_penerima }}
                                                         </div>
-                                                        <div class="text-sm text-gray-600">{{ $customer->no_tel }}</div>
+                                                        <div class="text-sm text-gray-600">{{ $customer->no_tel }}
+                                                        </div>
                                                         <div class="text-sm text-gray-500">
                                                             {{ Str::limit($customer->alamat, 50) }}</div>
                                                     </div>
@@ -172,8 +175,10 @@
                                 <div class="flex items-center">
                                     <i class="fas fa-check-circle text-green-500 mr-2"></i>
                                     <div>
-                                        <div class="font-semibold text-green-800 text-sm">Maklumat Customer Auto-Isi</div>
-                                        <div class="text-sm text-green-600">Maklumat customer telah diisi secara automatik dari
+                                        <div class="font-semibold text-green-800 text-sm">Maklumat Customer Auto-Isi
+                                        </div>
+                                        <div class="text-sm text-green-600">Maklumat customer telah diisi secara
+                                            automatik dari
                                             data customer yang dipilih</div>
                                     </div>
                                 </div>
@@ -183,7 +188,8 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             <!-- Recipient Name -->
                             <div class="space-y-2">
-                                <label for="nama_penerima" class="block text-sm font-semibold text-gray-800 flex items-center">
+                                <label for="nama_penerima"
+                                    class="block text-sm font-semibold text-gray-800 flex items-center">
                                     <i class="fas fa-user mr-2 text-blue-500"></i>
                                     Nama Penerima <span class="text-red-500">*</span>
                                 </label>
@@ -200,7 +206,8 @@
 
                             <!-- Phone Number -->
                             <div class="space-y-2">
-                                <label for="no_tel" class="block text-sm font-semibold text-gray-800 flex items-center">
+                                <label for="no_tel"
+                                    class="block text-sm font-semibold text-gray-800 flex items-center">
                                     <i class="fas fa-phone mr-2 text-green-500"></i>
                                     No Telefon <span class="text-red-500">*</span>
                                 </label>
@@ -217,7 +224,8 @@
 
                             <!-- Courier -->
                             <div class="space-y-2">
-                                <label for="kurier" class="block text-sm font-semibold text-gray-800 flex items-center">
+                                <label for="kurier"
+                                    class="block text-sm font-semibold text-gray-800 flex items-center">
                                     <i class="fas fa-truck mr-2 text-yellow-500"></i>
                                     Kurier
                                 </label>
@@ -234,7 +242,8 @@
 
                             <!-- Address -->
                             <div class="md:col-span-2 lg:col-span-3 space-y-2">
-                                <label for="alamat" class="block text-sm font-semibold text-gray-800 flex items-center">
+                                <label for="alamat"
+                                    class="block text-sm font-semibold text-gray-800 flex items-center">
                                     <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
                                     Alamat <span class="text-red-500">*</span>
                                 </label>
@@ -251,7 +260,8 @@
 
                             <!-- Notes -->
                             <div class="md:col-span-2 lg:col-span-3 space-y-2">
-                                <label for="catatan" class="block text-sm font-semibold text-gray-800 flex items-center">
+                                <label for="catatan"
+                                    class="block text-sm font-semibold text-gray-800 flex items-center">
                                     <i class="fas fa-sticky-note mr-2 text-orange-500"></i>
                                     Catatan
                                 </label>
@@ -288,219 +298,187 @@
                         </div>
                     </div>
 
-            <div class="p-4">
-                <!-- Items Management with Automatic Calculation -->
-                <div class="space-y-4">
-                    @foreach ($items as $index => $item)
-                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200"
-                            wire:key="item-{{ $index }}">
-                            <div class="flex items-center justify-between mb-3">
-                                <h3 class="text-base font-semibold text-gray-900 flex items-center">
-                                    <i class="fas fa-box mr-2 text-orange-500"></i>
-                                    Item {{ $index + 1 }}
-                                </h3>
-                                @if (count($items) > 1)
-                                    <button type="button" wire:click="removeItem({{ $index }})"
-                                        class="inline-flex items-center px-2 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-all duration-200 text-sm">
-                                        <i class="fas fa-trash mr-1"></i>
-                                        Buang
-                                    </button>
-                                @endif
-                            </div>
+                    <div class="p-4">
+                        <!-- Items Management with Automatic Calculation -->
+                        <div class="space-y-4">
+                            @foreach ($items as $index => $item)
+                                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200"
+                                    wire:key="item-{{ $index }}">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <h3 class="text-base font-semibold text-gray-900 flex items-center">
+                                            <i class="fas fa-box mr-2 text-orange-500"></i>
+                                            Item {{ $index + 1 }}
+                                        </h3>
+                                        @if (count($items) > 1)
+                                            <button type="button" wire:click="removeItem({{ $index }})"
+                                                class="inline-flex items-center px-2 py-1 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg transition-all duration-200 text-sm">
+                                                <i class="fas fa-trash mr-1"></i>
+                                                Buang
+                                            </button>
+                                        @endif
+                                    </div>
 
-                            <!-- Row 1: Product and Custom Product -->
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                                <!-- Product Selection -->
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-semibold text-gray-800 flex items-center">
-                                        <i class="fas fa-box-open mr-2 text-blue-500"></i>
-                                        Produk
-                                    </label>
-                                    <select wire:model.live="items.{{ $index }}.produk_id"
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base">
-                                        <option value="">Pilih Produk</option>
-                                        @foreach ($produk_list as $produk)
-                                            <option value="{{ $produk->id }}">{{ $produk->nama }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('items.' . $index . '.produk_id')
-                                        <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-                                            <i class="fas fa-exclamation-circle mr-1"></i>
-                                            {{ $message }}
+                                    <!-- Row 1: Product and Custom Product -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                                        <!-- Product Selection -->
+                                        <div class="space-y-2">
+                                            <label class="block text-sm font-semibold text-gray-800 flex items-center">
+                                                <i class="fas fa-box-open mr-2 text-blue-500"></i>
+                                                Produk
+                                            </label>
+                                            <select wire:model.live="items.{{ $index }}.produk_id"
+                                                class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base">
+                                                <option value="">Pilih Produk</option>
+                                                @foreach ($produk_list as $produk)
+                                                    <option value="{{ $produk->id }}">{{ $produk->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('items.' . $index . '.produk_id')
+                                                <div
+                                                    class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
-                                    @enderror
-                                </div>
 
-                                <!-- Custom Product Name -->
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-semibold text-gray-800 flex items-center">
-                                        <i class="fas fa-edit mr-2 text-purple-500"></i>
-                                        Produk Custom
-                                    </label>
-                                    <input type="text" wire:model.live="items.{{ $index }}.produk_custom"
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
-                                        placeholder="Atau masukkan produk custom">
-                                    @error('items.' . $index . '.produk_custom')
-                                        <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-                                            <i class="fas fa-exclamation-circle mr-1"></i>
-                                            {{ $message }}
+                                        <!-- Custom Product Name -->
+                                        <div class="space-y-2">
+                                            <label class="block text-sm font-semibold text-gray-800 flex items-center">
+                                                <i class="fas fa-edit mr-2 text-purple-500"></i>
+                                                Produk Custom
+                                            </label>
+                                            <input type="text"
+                                                wire:model.live="items.{{ $index }}.produk_custom"
+                                                class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
+                                                placeholder="Atau masukkan produk custom">
+                                            @error('items.' . $index . '.produk_custom')
+                                                <div
+                                                    class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
-                                    @enderror
-                                </div>
-                            </div>
+                                    </div>
 
-                            <!-- Row 2: Quantity, Unit Price, Total Price -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                                <!-- Quantity -->
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-semibold text-gray-800 flex items-center">
-                                        <i class="fas fa-hashtag mr-2 text-green-500"></i>
-                                        Kuantiti <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="number" wire:model.live="items.{{ $index }}.kuantiti"
-                                        min="0.01" step="0.01" pattern="[0-9]+(\.[0-9]{1,2})?"
-                                        inputmode="decimal"
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
-                                        placeholder="1.00">
-                                    @error('items.' . $index . '.kuantiti')
-                                        <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-                                            <i class="fas fa-exclamation-circle mr-1"></i>
-                                            {{ $message }}
+                                    <!-- Row 2: Quantity, Unit Price, Total Price -->
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <!-- Quantity -->
+                                        <div class="space-y-2">
+                                            <label class="block text-sm font-semibold text-gray-800 flex items-center">
+                                                <i class="fas fa-hashtag mr-2 text-green-500"></i>
+                                                Kuantiti <span class="text-red-500">*</span>
+                                            </label>
+                                            <input type="number"
+                                                wire:model.live="items.{{ $index }}.kuantiti"
+                                                wire:change="calculateItemTotal({{ $index }})"
+                                                min="0.01" step="0.01" pattern="[0-9]+(\.[0-9]{1,2})?"
+                                                inputmode="decimal"
+                                                class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
+                                                placeholder="1.00">
+                                            @error('items.' . $index . '.kuantiti')
+                                                <div
+                                                    class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
-                                    @enderror
-                                </div>
 
-                                <!-- Unit Price -->
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-semibold text-gray-800 flex items-center">
-                                        <i class="fas fa-tag mr-2 text-orange-500"></i>
-                                        Harga Seunit (RM) <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="number" wire:model.live="items.{{ $index }}.harga_seunit"
-                                        step="0.01" min="0" pattern="[0-9]+(\.[0-9]{1,2})?"
-                                        inputmode="decimal"
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
-                                        placeholder="0.00">
-                                    @error('items.' . $index . '.harga_seunit')
-                                        <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-                                            <i class="fas fa-exclamation-circle mr-1"></i>
-                                            {{ $message }}
+                                        <!-- Unit Price -->
+                                        <div class="space-y-2">
+                                            <label class="block text-sm font-semibold text-gray-800 flex items-center">
+                                                <i class="fas fa-tag mr-2 text-orange-500"></i>
+                                                Harga Seunit (RM) <span class="text-red-500">*</span>
+                                            </label>
+                                            <input type="number"
+                                                wire:model.live="items.{{ $index }}.harga_seunit"
+                                                wire:change="calculateItemTotal({{ $index }})"
+                                                step="0.01" min="0" pattern="[0-9]+(\.[0-9]{1,2})?"
+                                                inputmode="decimal"
+                                                class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
+                                                placeholder="0.00">
+                                            @error('items.' . $index . '.harga_seunit')
+                                                <div
+                                                    class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
-                                    @enderror
-                                </div>
 
-                                <!-- Total Price (Auto-calculated) -->
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-semibold text-gray-800 flex items-center">
-                                        <i class="fas fa-dollar-sign mr-2 text-yellow-500"></i>
-                                        Jumlah Harga (RM) <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="number" wire:model.live="items.{{ $index }}.harga"
-                                        step="0.01" min="0" pattern="[0-9]+(\.[0-9]{1,2})?"
-                                        inputmode="decimal"
-                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
-                                        placeholder="0.00" readonly>
-                                    @error('items.' . $index . '.harga')
-                                        <div class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
-                                            <i class="fas fa-exclamation-circle mr-1"></i>
-                                            {{ $message }}
+                                        <!-- Total Price (Auto-calculated) -->
+                                        <div class="space-y-2">
+                                            <label class="block text-sm font-semibold text-gray-800 flex items-center">
+                                                <i class="fas fa-dollar-sign mr-2 text-yellow-500"></i>
+                                                Jumlah Harga (RM) <span class="text-red-500">*</span>
+                                            </label>
+                                            <input type="number" wire:model.live="items.{{ $index }}.harga"
+                                                value="{{ number_format($this->items[$index]['harga'] ?? 0, 2) }}"
+                                                step="0.01" min="0" pattern="[0-9]+(\.[0-9]{1,2})?"
+                                                inputmode="decimal"
+                                                class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
+                                                placeholder="0.00" readonly>
+                                            @error('items.' . $index . '.harga')
+                                                <div
+                                                    class="mt-2 p-2 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+                                                    <i class="fas fa-exclamation-circle mr-1"></i>
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
                                         </div>
-                                    @enderror
+                                    </div>
+
+
                                 </div>
-                            </div>
-
-                            <!-- JavaScript for decimal input handling -->
-                            <script>
-                                document.addEventListener('livewire:loaded', function() {
-                                    // Handle decimal input for all number fields with decimal step
-                                    document.addEventListener('input', function(e) {
-                                        if (e.target.type === 'number' && (e.target.step === '0.01' || e.target.min === '0.01')) {
-                                            // Allow only valid decimal numbers
-                                            let value = e.target.value;
-                                            // Remove any non-numeric characters except decimal point
-                                            value = value.replace(/[^0-9.]/g, '');
-                                            // Ensure only one decimal point
-                                            let parts = value.split('.');
-                                            if (parts.length > 2) {
-                                                value = parts[0] + '.' + parts.slice(1).join('');
-                                            }
-                                            // Limit to 2 decimal places
-                                            if (parts.length === 2 && parts[1].length > 2) {
-                                                value = parts[0] + '.' + parts[1].substring(0, 2);
-                                            }
-                                            e.target.value = value;
-                                        }
-                                    });
-
-                                    // Format display on blur
-                                    document.addEventListener('blur', function(e) {
-                                        if (e.target.type === 'number' && (e.target.step === '0.01' || e.target.min === '0.01')) {
-                                            let value = parseFloat(e.target.value);
-                                            if (!isNaN(value) && value > 0) {
-                                                e.target.value = value.toFixed(2);
-                                            }
-                                        }
-                                    });
-
-                                    // Force calculation update on input
-                                    document.addEventListener('input', function(e) {
-                                        if (e.target.type === 'number' && (e.target.step === '0.01' || e.target.min === '0.01')) {
-                                            // Trigger Livewire update for calculation
-                                            let event = new Event('input', { bubbles: true });
-                                            e.target.dispatchEvent(event);
-                                        }
-                                    });
-                                });
-                            </script>
-
+                            @endforeach
                         </div>
-                    @endforeach
+
+                        <!-- Total Summary (Inside Invoice Items Section) -->
+                        <div class="mt-6 bg-green-50 rounded-lg p-4 border border-green-200" wire:poll.1s="getTotal">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calculator text-green-600 text-xl mr-3"></i>
+                                    <div>
+                                        <h3 class="text-base font-bold text-gray-900">Jumlah Keseluruhan</h3>
+                                        <p class="text-sm text-gray-600">Semua item dalam invoice</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xl font-bold text-green-600">
+                                        RM {{ number_format((float) $this->getTotal(), 2) }}
+                                    </div>
+                                    <div class="text-sm text-gray-600">Auto-kira setiap 1 saat</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Total Summary (Inside Invoice Items Section) -->
-                <div class="mt-6 bg-green-50 rounded-lg p-4 border border-green-200" wire:poll.1s="getTotal">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center">
-                            <i class="fas fa-calculator text-green-600 text-xl mr-3"></i>
-                            <div>
-                                <h3 class="text-base font-bold text-gray-900">Jumlah Keseluruhan</h3>
-                                <p class="text-sm text-gray-600">Semua item dalam invoice</p>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xl font-bold text-green-600">
-                                RM {{ number_format((float)$this->getTotal(), 2) }}
-                            </div>
-                            <div class="text-sm text-gray-600">Auto-kira setiap 1 saat</div>
+                <!-- Submit Buttons (Separate Card) -->
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="bg-gray-500 px-4 py-3 rounded-t-xl">
+                        <h2 class="text-base font-semibold text-white flex items-center">
+                            <i class="fas fa-paper-plane mr-3"></i>
+                            Tindakan
+                        </h2>
+                    </div>
+                    <div class="p-4">
+                        <div class="flex flex-col sm:flex-row gap-4 justify-end">
+                            <a href="{{ route('invoice.index') }}"
+                                class="inline-flex items-center justify-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg shadow hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                                <i class="fas fa-times mr-2"></i>
+                                Batal
+                            </a>
+                            <button type="submit"
+                                class="inline-flex items-center justify-center px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg shadow hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <i class="fas fa-save mr-2"></i>
+                                {{ $isEdit ? 'Kemaskini Invoice' : 'Cipta Invoice' }}
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Submit Buttons (Separate Card) -->
-        <div class="bg-white rounded-xl shadow-md overflow-hidden">
-            <div class="bg-gray-500 px-4 py-3 rounded-t-xl">
-                <h2 class="text-base font-semibold text-white flex items-center">
-                    <i class="fas fa-paper-plane mr-3"></i>
-                    Tindakan
-                </h2>
-            </div>
-            <div class="p-4">
-                <div class="flex flex-col sm:flex-row gap-4 justify-end">
-                    <a href="{{ route('invoice.index') }}"
-                        class="inline-flex items-center justify-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg shadow hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                        <i class="fas fa-times mr-2"></i>
-                        Batal
-                    </a>
-                    <button type="submit"
-                        class="inline-flex items-center justify-center px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg shadow hover:shadow-md transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <i class="fas fa-save mr-2"></i>
-                        {{ $isEdit ? 'Kemaskini Invoice' : 'Cipta Invoice' }}
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
     </form>
 </div>
