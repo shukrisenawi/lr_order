@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             BisnesSeeder::class,
             WaktuSolatSeeder::class,
             KumpulanSeeder::class,
+            KodCulaSeeder::class,
         ]);
     }
 }

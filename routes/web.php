@@ -270,6 +270,11 @@ Route::middleware(['auth'])->group(function () {
         return view('data-penduduk-show', compact('dataPenduduk'));
     })->name('data-penduduk.show');
 
+    // Kod Cula Routes
+    Route::get('/kod-cula', function () {
+        return view('kod-cula-livewire');
+    })->name('kod-cula.index');
+
     // Anak Khariah Routes
     Route::get('/anak-khariah', function () {
         if (empty(session('selected_bisnes_id')))

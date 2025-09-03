@@ -27,4 +27,5 @@ class ProspekBuy extends Model
     {
         return $this->hasOneThrough(Prospek::class, ProspekAlamat::class, 'id', 'id', 'prospek_alamat_id', 'prospek_id');
     }
+
 }

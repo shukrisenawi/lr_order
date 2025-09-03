@@ -3,112 +3,48 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\Bisnes;
-use App\Models\Produk;
-use App\Models\Customer;
-use App\Models\Invoice;
 use App\Services\DashboardService;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class DashboardBisnes4 extends Component
 {
-    public $totalBisnes = 0;
-    public $totalProduk = 0;
-    public $totalCustomer = 0;
-    public $totalInvoice = 0;
-    public $totalRevenue = 0;
-    public $value2 = 0; // New property for value2
-
-    // Chart data
-    public $revenueByMonth = [];
-    public $conversionRate = [];
-    public $topProducts = [];
-    public $recentActivities = [];
-    public $growthMetrics = [];
+    // Population data
+    public $populationByCula = [];
+    public $populationByBangsa = [];
+    public $populationByGender = [];
 
     protected $selectedBisnesId = 0;
-
-    public $selectedBisnes;
-    public $dashboardType = 'default';
 
     public function mount(DashboardService $dashboardService)
     {
         $this->selectedBisnesId = session('selected_bisnes_id', 0);
-        $this->selectedBisnes = \App\Models\Bisnes::find($this->selectedBisnesId);
-
-        // Determine dashboard type based on business type
-        if ($this->selectedBisnes) {
-            switch ($this->selectedBisnes->type_id) {
-                case 1:
-                    $this->dashboardType = 'business_ai';
-                    break;
-                case 2:
-                    $this->dashboardType = 'business_standard';
-                    break;
-                case 3:
-                    $this->dashboardType = 'education';
-                    break;
-                case 4:
-                    $this->dashboardType = 'data_population';
-                    break;
-                default:
-                    $this->dashboardType = 'default';
-            }
-        }
-
-        $this->loadStats();
-        $this->loadAnalytics($dashboardService);
+        $this->loadPopulationData($dashboardService);
     }
 
-    public function loadStats()
+    public function loadPopulationData(DashboardService $dashboardService)
     {
-        // Get the selected business ID from session
-        $selectedBisnesId = session('selected_bisnes_id');
+        $selectedBisnesId = session('selected_bisnes_id', 0);
+        $this->populationByCula = $dashboardService->getPopulationByCula($selectedBisnesId);
+        $this->populationByBangsa = $dashboardService->getPopulationByBangsa($selectedBisnesId);
+        $this->populationByGender = $dashboardService->getPopulationByGender($selectedBisnesId);
 
-        // Always filter by selected business since dashboard requires business selection
-        $this->totalBisnes = 1; // Since we're filtering by a specific business
-        $this->totalProduk = Produk::where('bisnes_id', $selectedBisnesId)->count();
-        $this->totalCustomer = Customer::where('bisnes_id', $selectedBisnesId)->count();
-        $this->totalInvoice = Invoice::where('bisnes_id', $selectedBisnesId)->count();
-        $this->totalRevenue = Invoice::where('bisnes_id', $selectedBisnesId)->sum('jumlah');
-
-        // Load value2 (this could be any business-related metric)
-        $this->value2 = $this->calculateValue2($selectedBisnesId);
+        // Debug: Log data untuk memastikan data diambil
+        Log::info('DashboardBisnes4 Data Loaded:', [
+            'cula_count' => count($this->populationByCula['cula_distribution'] ?? []),
+            'bangsa_count' => count($this->populationByBangsa['bangsa_distribution'] ?? []),
+            'gender_count' => count($this->populationByGender['gender_distribution'] ?? []),
+            'total_population' => $this->populationByCula['total_population'] ?? 0
+        ]);
     }
 
-    private function calculateValue2($selectedBisnesId)
+    public function refreshData(DashboardService $dashboardService)
     {
-        // This is a placeholder for value2 calculation
-        // You can replace this with any business metric you want to display
-        if ($selectedBisnesId == 0) {
-            // For all businesses, count total active businesses
-            return Bisnes::where('user_id', Auth::id())->where('on', 1)->count();
-        } else {
-            // For specific business, check if it's active
-            $bisnes = Bisnes::find($selectedBisnesId);
-            return $bisnes && $bisnes->on ? 1 : 0;
-        }
-    }
-
-    public function loadAnalytics(DashboardService $dashboardService)
-    {
-        // $selectedBisnesId = session('selected_bisnes_id', 0);
-        // $this->revenueByMonth = $dashboardService->getRevenueByMonth($selectedBisnesId);
-        // $this->conversionRate = $dashboardService->getProspectConversionRate($selectedBisnesId);
-        // $this->topProducts = $dashboardService->getTopProducts(5, $selectedBisnesId);
-        // $this->recentActivities = $dashboardService->getRecentActivities(10, $selectedBisnesId);
-        // $this->growthMetrics = $dashboardService->getGrowthMetrics($selectedBisnesId);
-    }
-
-    public function refreshStats(DashboardService $dashboardService)
-    {
-        $this->loadStats();
-        $this->loadAnalytics($dashboardService);
+        $this->loadPopulationData($dashboardService);
         $dashboardService->clearCache();
-        $this->dispatch('stats-updated');
+        $this->dispatch('data-refreshed');
     }
 
-    protected $listeners = ['refreshStats'];
+    protected $listeners = ['refreshData'];
 
     public function render()
     {

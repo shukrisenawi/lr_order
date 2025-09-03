@@ -69,6 +69,8 @@
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Prospek</a>
                                 <a href="{{ route('data-penduduk.index') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Data Penduduk</a>
+                                <a href="{{ route('kod-cula.index') }}"
+                                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Kod Cula</a>
                             </div>
                         </div>
                     </div>
@@ -236,6 +238,28 @@
             <x-responsive-nav-link :href="route('data-table')" :active="request()->routeIs('data-table')">
                 {{ __('Jadual Data') }}
             </x-responsive-nav-link>
+
+            <!-- Responsive Prospek Dropdown -->
+            <div class="relative" x-data="{ open: false }">
+                <button @click="open = !open"
+                    class="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition duration-150 ease-in-out">
+                    Prospek
+                    <svg class="ml-2 -mr-0.5 h-4 w-4 float-right" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <div x-show="open" class="mt-1 space-y-1 pl-4">
+                    <x-responsive-nav-link :href="route('prospek.index')" :active="request()->routeIs('prospek.*')">
+                        Prospek
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('data-penduduk.index')" :active="request()->routeIs('data-penduduk.*')">
+                        Data Penduduk
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('kod-cula.index')" :active="request()->routeIs('kod-cula.*')">
+                        Kod Cula
+                    </x-responsive-nav-link>
+                </div>
+            </div>
 
             <!-- Responsive Anak Khariah Dropdown -->
             <div class="relative" x-data="{ open: false }">
