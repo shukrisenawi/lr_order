@@ -139,6 +139,10 @@
                         </div>
                     </div>
 
+                    @php
+                        $selectedBisnes = session('selected_bisnes_id') ? \App\Models\Bisnes::find(session('selected_bisnes_id')) : null;
+                    @endphp
+                    @if($selectedBisnes && $selectedBisnes->type_id == 1)
                     <!-- Tracking Dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" @click.away="open = false"
@@ -166,6 +170,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
 

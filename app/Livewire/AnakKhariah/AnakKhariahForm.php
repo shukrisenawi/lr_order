@@ -34,6 +34,10 @@ class AnakKhariahForm extends Component
 
     public function mount(AnakKhariah $anakKhariah = null)
     {
+        if (session('selected_bisnes_id') != 3) {
+            return redirect()->route('dashboard');
+        }
+
         if ($anakKhariah->exists) {
             $this->anakKhariah = $anakKhariah;
             $this->nama = $anakKhariah->nama;

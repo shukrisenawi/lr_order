@@ -326,6 +326,7 @@
                                 <span class="text-xs md:text-sm font-medium">Create Ad</span>
                             </div>
                         </a>
+                        @if($selectedBisnes && $selectedBisnes->type_id == 1)
                         <a href="{{ route('customer.create') }}"
                             class="group bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white p-3 md:p-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25 relative overflow-hidden">
                             <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
@@ -334,6 +335,7 @@
                                 <span class="text-xs md:text-sm font-medium">Add Customer</span>
                             </div>
                         </a>
+                        @endif
                     @elseif($dashboardType === 'education')
                         <a href="{{ route('anak-khariah.create') }}"
                             class="group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white p-3 md:p-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-blue-500/25 relative overflow-hidden">
@@ -409,6 +411,7 @@
                                 <span class="text-xs md:text-sm font-medium">Add Product</span>
                             </div>
                         </a>
+                        @if($selectedBisnes && $selectedBisnes->type_id == 1)
                         <a href="{{ route('customer.create') }}"
                             class="group bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white p-3 md:p-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-green-500/25 relative overflow-hidden">
                             <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
@@ -417,6 +420,8 @@
                                 <span class="text-xs md:text-sm font-medium">Add Customer</span>
                             </div>
                         </a>
+                        @endif
+                        @if($selectedBisnes && $selectedBisnes->type_id == 1)
                         <a href="{{ route('invoice.create') }}"
                             class="group bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white p-3 md:p-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 relative overflow-hidden">
                             <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
@@ -425,6 +430,7 @@
                                 <span class="text-xs md:text-sm font-medium">Create Invoice</span>
                             </div>
                         </a>
+                        @endif
                         <a href="{{ route('bisnes.create') }}"
                             class="group bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white p-3 md:p-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25 relative overflow-hidden">
                             <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
@@ -446,6 +452,7 @@
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             @if($dashboardType === 'business_ai')
+                                @if($selectedBisnes && $selectedBisnes->type_id == 1)
                                 <a href="{{ route('customer.index') }}"
                                     class="group bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 p-4 rounded-lg transition-all duration-300 transform hover:scale-105 border border-blue-200">
                                     <div class="flex items-center">
@@ -456,6 +463,7 @@
                                         </div>
                                     </div>
                                 </a>
+                                @endif
                                 <a href="{{ route('produk.index') }}"
                                     class="group bg-gradient-to-r from-green-50 to-green-100 hover:from-green-100 hover:to-green-200 p-4 rounded-lg transition-all duration-300 transform hover:scale-105 border border-green-200">
                                     <div class="flex items-center">
@@ -539,6 +547,7 @@
                                     </div>
                                 </a>
                             @else
+                                @if($selectedBisnes && $selectedBisnes->type_id == 1)
                                 <a href="{{ route('customer.index') }}"
                                     class="group bg-gradient-to-r from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200 p-4 rounded-lg transition-all duration-300 transform hover:scale-105 border border-blue-200">
                                     <div class="flex items-center">
@@ -559,6 +568,7 @@
                                         </div>
                                     </div>
                                 </a>
+                                @endif
                                 <a href="{{ route('produk.index') }}"
                                     class="group bg-gradient-to-r from-purple-50 to-purple-100 hover:from-purple-100 hover:to-purple-200 p-4 rounded-lg transition-all duration-300 transform hover:scale-105 border border-purple-200">
                                     <div class="flex items-center">

@@ -18,6 +18,14 @@ class InvoiceIndex extends Component
 
     protected $queryString = ['search', 'statusFilter'];
 
+    public function mount()
+    {
+        $selectedBisnes = \App\Models\Bisnes::find(session('selected_bisnes_id'));
+        if (!$selectedBisnes || $selectedBisnes->type_id != 1) {
+            return redirect()->route('dashboard');
+        }
+    }
+
     public function updatingSearch()
     {
         $this->resetPage();

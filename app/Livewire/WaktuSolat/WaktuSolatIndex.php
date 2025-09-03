@@ -32,6 +32,10 @@ class WaktuSolatIndex extends Component
 
     public function mount()
     {
+        if (session('selected_bisnes_id') != 3) {
+            return redirect()->route('dashboard');
+        }
+
         $this->checkBlinking();
     }
 

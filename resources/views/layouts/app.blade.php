@@ -1286,6 +1286,7 @@
                                         <span class="font-medium text-sm">Waktu Solat</span>
                                     </div>
                                 </a>
+                                @if ($selectedBisnes && $selectedBisnes->type_id == 1)
                                 <a href="{{ route('customer.index') }}"
                                     class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('customer.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                     <div class="flex items-center space-x-2">
@@ -1297,6 +1298,7 @@
                                     <span id="customer-buy-badge"
                                         class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-1.5 py-0.5 animate-pulse shadow-lg">0</span>
                                 </a>
+                                @endif
                             </div>
                         </div>
 

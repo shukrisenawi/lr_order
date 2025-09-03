@@ -27,6 +27,10 @@ class TenagaPengajarForm extends Component
 
     public function mount(TenagaPengajar $tenagaPengajar = null)
     {
+        if (session('selected_bisnes_id') != 3) {
+            return redirect()->route('dashboard');
+        }
+
         if ($tenagaPengajar->exists) {
             $this->tenagaPengajar = $tenagaPengajar;
             $this->nama = $tenagaPengajar->nama;

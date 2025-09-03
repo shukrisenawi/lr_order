@@ -16,6 +16,13 @@ class TenagaPengajarIndex extends Component
 
     protected $queryString = ['search'];
 
+    public function mount()
+    {
+        if (session('selected_bisnes_id') != 3) {
+            return redirect()->route('dashboard');
+        }
+    }
+
     public function updatingSearch()
     {
         $this->resetPage();

@@ -26,6 +26,10 @@ class PengumumanForm extends Component
 
     public function mount($pengumuman = null)
     {
+        if (session('selected_bisnes_id') != 3) {
+            return redirect()->route('dashboard');
+        }
+
         if ($pengumuman) {
             $this->pengumuman = $pengumuman;
             $this->isEdit = true;

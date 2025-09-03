@@ -31,6 +31,10 @@ class DataPendudukIndex extends Component
 
     public function mount()
     {
+        if (session('selected_bisnes_id') != 4) {
+            return redirect()->route('dashboard');
+        }
+
         $this->namaDmOptions = DataPenduduk::select('nama_dm')->distinct()->whereNotNull('nama_dm')->where('nama_dm', '!=', '')->orderBy('nama_dm')->pluck('nama_dm')->toArray();
     }
 

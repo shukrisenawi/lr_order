@@ -17,6 +17,13 @@ class AnalisaAiIndex extends Component
     public $isAnalyzing = false;
     public $errorMessage = '';
 
+    public function mount()
+    {
+        if (session('selected_bisnes_id') != 4) {
+            return redirect()->route('dashboard');
+        }
+    }
+
     protected $rules = [
         'image' => 'required|image|max:5120', // 5MB max
         'prompt' => 'required|string|max:1000',

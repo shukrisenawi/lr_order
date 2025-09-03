@@ -21,6 +21,10 @@ class KumpulanForm extends Component
 
     public function mount(Kumpulan $kumpulan = null)
     {
+        if (session('selected_bisnes_id') != 3) {
+            return redirect()->route('dashboard');
+        }
+
         if ($kumpulan->exists) {
             $this->kumpulan = $kumpulan;
             $this->nama = $kumpulan->nama;

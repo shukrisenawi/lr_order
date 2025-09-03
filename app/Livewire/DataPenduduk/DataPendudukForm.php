@@ -67,6 +67,10 @@ class DataPendudukForm extends Component
 
     public function mount($dataPenduduk = null)
     {
+        if (session('selected_bisnes_id') != 4) {
+            return redirect()->route('dashboard');
+        }
+
         if ($dataPenduduk) {
             $this->dataPenduduk = $dataPenduduk;
             $this->isEdit = true;

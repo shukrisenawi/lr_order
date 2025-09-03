@@ -43,6 +43,10 @@ class PengajianForm extends Component
 
     public function mount($pengajian = null)
     {
+        if (session('selected_bisnes_id') != 3) {
+            return redirect()->route('dashboard');
+        }
+
         if ($pengajian) {
             $this->pengajian = $pengajian;
             $this->isEdit = true;

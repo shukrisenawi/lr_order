@@ -39,6 +39,10 @@ class JadualPengajianForm extends Component
 
     public function mount($jadual = null)
     {
+        if (session('selected_bisnes_id') != 3) {
+            return redirect()->route('dashboard');
+        }
+
         if ($jadual) {
             $this->jadual = $jadual;
             $this->isEdit = true;

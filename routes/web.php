@@ -181,7 +181,18 @@ Route::middleware(['auth'])->group(function () {
             return view('company-selection', compact('userBisnes'));
         }
 
-        return view('dashboard-livewire');
+        switch (session('selected_bisnes_id')) {
+            case 1:
+                return view('dashboard-livewire');
+            case 2:
+                return view('dashboard-livewire');
+            case 3:
+                return view('dashboard-bisnes3-livewire');
+            case 4:
+                return view('dashboard-bisnes4-livewire');
+            default:
+                return view('dashboard-livewire');
+        }
     })->name('dashboard');
 
     // Data Table Route

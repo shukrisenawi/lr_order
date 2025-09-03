@@ -46,6 +46,11 @@ class InvoiceForm extends Component
 
     public function mount($invoice = null, $customer = null)
     {
+        $selectedBisnes = \App\Models\Bisnes::find(session('selected_bisnes_id'));
+        if (!$selectedBisnes || $selectedBisnes->type_id != 1) {
+            return redirect()->route('dashboard');
+        }
+
         $this->produk_list = Produk::where('bisnes_id', session('selected_bisnes_id'))->get();
         $this->bisnes_id = session('selected_bisnes_id');
 

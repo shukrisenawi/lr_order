@@ -37,6 +37,10 @@ class ProgramForm extends Component
 
     public function mount($program = null)
     {
+        if (session('selected_bisnes_id') != 3) {
+            return redirect()->route('dashboard');
+        }
+
         if ($program) {
             $this->program = $program;
             $this->isEdit = true;
