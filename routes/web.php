@@ -272,6 +272,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Kod Cula Routes
     Route::get('/kod-cula', function () {
+        if (session('selected_bisnes_id') != 4) {
+            return redirect()->route('dashboard');
+        }
         return view('kod-cula-livewire');
     })->name('kod-cula.index');
 

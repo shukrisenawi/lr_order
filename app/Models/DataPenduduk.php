@@ -31,4 +31,28 @@ class DataPenduduk extends Model
     protected $casts = [
         'tarikh_lahir' => 'date',
     ];
+
+    public function kodCula()
+    {
+        return $this->belongsTo(KodCula::class, 'kod_cula', 'kod_cula');
+    }
+
+    /**
+     * Get nama_cula from relationship
+     */
+    public function getNamaCulaAttribute()
+    {
+        return $this->kodCula ? $this->kodCula->nama_cula : null;
+    }
+
+    /**
+     * Get display name for kod_cula (kod_cula - nama_cula)
+     */
+    public function getKodCulaDisplayAttribute()
+    {
+        if ($this->kod_cula && $this->kodCula) {
+            return $this->kod_cula . ' - ' . $this->kodCula->nama_cula;
+        }
+        return $this->kod_cula ?: '';
+    }
 }

@@ -69,8 +69,10 @@
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Prospek</a>
                                 <a href="{{ route('data-penduduk.index') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Data Penduduk</a>
+                                @if(session('selected_bisnes_id') == 4)
                                 <a href="{{ route('kod-cula.index') }}"
                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Kod Cula</a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -255,9 +257,11 @@
                     <x-responsive-nav-link :href="route('data-penduduk.index')" :active="request()->routeIs('data-penduduk.*')">
                         Data Penduduk
                     </x-responsive-nav-link>
+                    @if(session('selected_bisnes_id') == 4)
                     <x-responsive-nav-link :href="route('kod-cula.index')" :active="request()->routeIs('kod-cula.*')">
                         Kod Cula
                     </x-responsive-nav-link>
+                    @endif
                 </div>
             </div>
 

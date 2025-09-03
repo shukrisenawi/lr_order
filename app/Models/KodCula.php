@@ -24,4 +24,9 @@ class KodCula extends Model
     {
         return $this->kod_cula . ' - ' . $this->nama_cula;
     }
+
+    public function dataPenduduk()
+    {
+        return $this->hasMany(DataPenduduk::class, 'kod_cula', 'kod_cula');
+    }
 }

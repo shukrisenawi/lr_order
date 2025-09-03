@@ -26,6 +26,7 @@ class KodCulaSeeder extends Seeder
             ['kod_cula' => '1B', 'nama_cula' => 'UMNO SOKONG PAS'],
             ['kod_cula' => '1P', 'nama_cula' => 'UMNO SOKONG PN (TIDAK SOKONG PAS)'],
             ['kod_cula' => '2', 'nama_cula' => 'PAS'],
+            ['kod_cula' => '3', 'nama_cula' => 'PAS'],
             ['kod_cula' => '3B', 'nama_cula' => 'PAS LUAR KEDAH (BORNEO)'],
             ['kod_cula' => '3D', 'nama_cula' => 'PAS LUAR DUN'],
             ['kod_cula' => '3K', 'nama_cula' => 'PAS LUAR KEDAH (SEMENANJUNG)'],
