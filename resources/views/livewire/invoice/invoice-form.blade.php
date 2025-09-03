@@ -389,8 +389,8 @@
                                             </label>
                                             <input type="number"
                                                 wire:model.live="items.{{ $index }}.kuantiti"
-                                                wire:change="calculateItemTotal({{ $index }})" min="0.01"
-                                                step="0.01" pattern="[0-9]+(\.[0-9]{1,2})?" inputmode="decimal"
+                                                wire:change="calculateItemTotal({{ $index }})" min="1"
+                                                step="1" pattern="[0-9]+(\.[0-9]{1,2})?" inputmode="decimal"
                                                 class="w-full px-3 py-2 border border-gray-200 rounded-lg bg-white focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-100 focus:outline-none transition-all duration-300 shadow-sm text-base"
                                                 placeholder="1.00">
                                             @error('items.' . $index . '.kuantiti')

@@ -12,7 +12,7 @@
     --bg-color: #f8f9fa;
     --text-color: #2b2d42;
 }
-
+/*
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color);
@@ -301,7 +301,7 @@ body {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.5rem; /* gap-2 */
-}
+} */
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -316,4 +316,8 @@ body {
     .form-card-header {
         padding: 0.5rem; /* py-2 on mobile */
     }
+}
+
+input{
+@apply border border-blue-300;
 }

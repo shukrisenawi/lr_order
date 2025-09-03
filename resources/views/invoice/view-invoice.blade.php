@@ -6,6 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Invoice</title>
     <style>
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                /* Chrome/Edge */
+                print-color-adjust: exact;
+                /* Standard */
+                color-adjust: exact;
+                /* Firefox */
+            }
+        }
+
+        @media print {
+            .colored {
+                background-color: red !important;
+                -webkit-print-color-adjust: exact;
+            }
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
+
+            .footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                font-size: 12px;
+                color: #555;
+            }
+        }
+
         :root {
             --accent: #1e66b6;
             --muted: #6b7280;
@@ -247,52 +282,58 @@
         <header>
             <div class="title">Invoice</div>
             <div class="brand">
-                @if (file_exists(public_path('img/logo-01.png')))
-                    <img class="logo" src="{{ asset('img/logo-01.png') }}" alt="Logo">
-                @else
-                    <img class="logo" src="https://dummyimage.com/300x300/ffffff/cccccc&text=LOGO" alt="Logo">
-                @endif
-                <div class="name">{{ strtoupper($invoice->bisnes->nama_bisnes ?? 'YOUR COMPANY NAME') }}</div>
-                <div class="tag">COMPANY TAGLINE</div>
+                <img style="max-width: 150px"
+                    src="{{ \App\Helpers\ImageHelper::businessImageUrl($invoice->bisnes->gambar) }}" alt="Logo">
             </div>
         </header>
 
         <section class="parties">
             <div class="party">
                 <h4>From</h4>
-                <div class="company">{{ $invoice->bisnes->nama_bisnes ?? 'Business name' }}</div>
-                <div>contact@{{ strtolower(str_replace(' ', '', $invoice->bisnes->nama_bisnes ?? 'business')) }}.com</div>
-                <div>Your address</div>
-                <div>P: (123) 456 7890</div>
+                <div class="company">{{ $invoice->bisnes->nama_bisnes }}</div>
+                <div>{!! str_replace(',', ',<br>', $invoice->bisnes->alamat) !!}</div>
+
+                <div>{{ $invoice->bisnes->no_tel }}</div>
             </div>
             <div class="party">
                 <h4>For</h4>
-                <div class="company">{{ $invoice->nama_penerima ?? 'Client name' }}</div>
-                <div>client@email.com</div>
-                <div>{{ $invoice->alamat ?? 'Client address' }}</div>
-                <div>P: {{ $invoice->no_tel ?? '099 876 54321' }}</div>
+                <div class="company">{{ $invoice->nama_penerima }}</div>
+                <div>{!! str_replace(',', ',<br>', $invoice->alamat) !!}</div>
+                <div>{{ $invoice->no_tel }}</div>
             </div>
         </section>
 
-        <section class="meta">
+        <section class="flex meta gap-5 ">
             <div class="box">
                 <div class="label">Number</div>
-                <div class="value">{{ $invoice->invoice_no ?? 'INV0001' }}</div>
+                <div class="value">{{ $invoice->invoice_no ?? '' }}</div>
             </div>
             <div class="box">
                 <div class="label">Date</div>
-                <div class="value">{{ $invoice->created_at ? $invoice->created_at->format('d M Y') : '04 May 2018' }}
+                <div class="value">{{ $invoice->created_at ? $invoice->created_at->format('d M Y') : '' }}
                 </div>
             </div>
-            <div class="box">
-                <div class="label">Terms</div>
-                <div class="value">{{ $invoice->kurier ?? 'Next Day' }}</div>
-            </div>
-            <div class="box">
-                <div class="label">Due</div>
-                <div class="value">
-                    {{ $invoice->created_at ? $invoice->created_at->addDays(1)->format('d M Y') : '05 May 2018' }}</div>
-            </div>
+            @if ($invoice->kurier)
+                <div class="box">
+                    <div class="label">Kurier</div>
+                    <div class="value">{{ $invoice->kurier }}</div>
+                </div>
+            @endif
+            @if ($invoice->status == 'unpaid')
+                <div class="box">
+                    <div class="label">Due</div>
+                    <div class="value">
+                        {{ $invoice->created_at ? $invoice->created_at->addDays(30)->format('d M Y') : '' }}
+                    </div>
+                </div>
+            @elseif($invoice->status == 'paid')
+                <div class="box">
+                    <div class="label">Payment</div>
+                    <div class="value">
+                        PAID
+                    </div>
+                </div>
+            @endif
         </section>
 
         <section class="items">
@@ -308,66 +349,46 @@
                 <tbody>
                     @forelse($invoice->items ?? [] as $item)
                         <tr>
-                            <td class="desc">{{ $item->product_name ?? 'Line item' }}<br><span
-                                    style="color:var(--muted); font-size:12px;">{{ $item->produk_custom ?? 'additional details' }}</span>
-                            </td>
-                            <td class="price">RM{{ number_format($item->harga ?? 99.0, 2) }}</td>
-                            <td class="qty">{{ $item->kuantiti ?? 1 }}</td>
+                            <td class="desc">{{ $item->product_name }} </td>
+                            <td class="price">RM{{ number_format($item->harga ?? '0.00') }}</td>
+                            <td class="qty">{{ $item->kuantiti ?? 0 }}</td>
                             <td class="amount">
-                                RM{{ number_format(($item->harga ?? 99.0) * ($item->kuantiti ?? 1), 2) }}</td>
+                                RM{{ number_format(($item->harga ?? '0.00') * ($item->kuantiti ?? 0), 2) }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td class="desc">Line item<br><span style="color:var(--muted); font-size:12px;">additional
-                                    details</span></td>
-                            <td class="price">RM99.00</td>
-                            <td class="qty">1</td>
-                            <td class="amount">RM99.00</td>
+                            <td class="desc" colspan="4">Tiada item</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </section>
 
-        <section class="totals">
-            <div></div>
-            <table class="total-table">
-                @php
-                    $subtotal = $invoice->items
-                        ? $invoice->items->sum(function ($item) {
-                            return $item->harga * $item->kuantiti;
-                        })
-                        : 99.0;
-                    $tax = $subtotal * 0.07; // 7% tax
-                    $total = $subtotal + $tax;
-                @endphp
-                <tr>
-                    <td>Subtotal</td>
-                    <td>RM{{ number_format($subtotal, 2) }}</td>
-                </tr>
-                <tr>
-                    <td>Tax (7%)</td>
-                    <td>RM{{ number_format($tax, 2) }}</td>
-                </tr>
-                <tr>
-                    <td style="font-weight:800;">Total</td>
-                    <td>RM{{ number_format($total, 2) }}</td>
-                </tr>
-                <tr class="balance-row">
-                    <td>Balance Due</td>
-                    <td>RM{{ number_format($invoice->jumlah ?? $total, 2) }}</td>
-                </tr>
-            </table>
-        </section>
+        <table class="total-table">
+            @php
+                $subtotal = $invoice->items
+                    ? $invoice->items->sum(function ($item) {
+                        return $item->harga * $item->kuantiti;
+                    })
+                    : '0.00';
+                $tax = $subtotal * 0.0; // 7% tax
+                $total = $subtotal + $tax;
+            @endphp
+            <tr>
+                <td style="text-right"></td>
+                <td style="font-size:15px; font-weight:bold; padding-right:10px">Total :
+                    &nbsp;&nbsp;&nbsp;&nbsp;RM{{ number_format($total, 2) }}</td>
+            </tr>
+        </table>
 
-        <section class="notes">
+        <section class="notes footer">
             <strong>Notes:</strong> {{ $invoice->catatan ?? 'any relevant info, terms, payment instructions, etc.' }}
         </section>
 
         <div class="toolbar">
-            @if(isset($invoice) && $invoice)
-                <a href="{{ route('invoice.show', $invoice) }}" class="btn secondary" style="text-decoration: none;">Back to Invoice</a>
-                <a href="{{ route('invoice.download-pdf', $invoice) }}" class="btn" style="text-decoration: none; background: #059669; box-shadow: 0 2px 8px rgba(5, 150, 105, .25);">Download PDF</a>
+            @if (isset($invoice) && $invoice)
+                <a href="{{ route('invoice.show', $invoice) }}" class="btn secondary"
+                    style="text-decoration: none;">Back to Invoice</a>
             @else
                 <button class="btn secondary" onclick="window.location.reload()">Reset</button>
             @endif

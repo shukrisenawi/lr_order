@@ -232,7 +232,6 @@ class InvoiceController extends Controller
 
             $invoice->load(['bisnes', 'items.produk']);
         }
-
         return view('invoice.view-invoice', compact('invoice'));
     }
 }
