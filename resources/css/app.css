@@ -12,7 +12,7 @@
     --bg-color: #f8f9fa;
     --text-color: #2b2d42;
 }
-/*
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color);
@@ -106,9 +106,6 @@ body {
     background: var(--secondary-color);
 }
 
-/* ===== FORM DESIGN UTILITY CLASSES ===== */
-
-/* Form Cards */
 .form-card {
     background: white;
     border-radius: 0.75rem; /* rounded-xl */
@@ -116,7 +113,6 @@ body {
     overflow: hidden;
 }
 
-/* Random gradient backgrounds for different cards */
 .form-card-header:nth-child(odd) {
     padding: 0.75rem; /* py-3 */
     background: linear-gradient(to right, #667eea, #764ba2, #f093fb, #f5576c); /* purple-blue-pink-red */
@@ -150,10 +146,9 @@ body {
 }
 
 .form-card-body {
-    padding: 0.75rem; /* p-3 */
+    padding: 0.75rem;
 }
 
-/* Form Elements */
 .form-input, .form-select, .form-textarea {
     width: 100%;
     padding: 0.25rem 0.5rem; /* px-2 py-1 */
@@ -318,6 +313,6 @@ body {
     }
 }
 
-input{
-@apply border border-blue-300;
+input[type:text], select, textarea {
+@apply border border-gray-300 text-sm py-2 px-5;
 }

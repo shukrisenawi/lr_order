@@ -1,11 +1,22 @@
+@if(request()->has('customer') || request()->has('print') || request()->routeIs('invoice.print'))
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Invoice</title>
-    <style>
+@else
+@extends('layouts.app')
+
+@section('title', 'Invoice Preview')
+
+@section('content')
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="p-6">
+@endif
+            <div class="page">
+            <style>
         @media print {
             body {
                 -webkit-print-color-adjust: exact;
@@ -275,9 +286,10 @@
             }
         }
     </style>
+@if(request()->has('customer') || request()->has('print') || request()->routeIs('invoice.print'))
 </head>
-
 <body>
+@endif
     <div class="page">
         <header>
             <div class="title">Invoice</div>
@@ -386,15 +398,25 @@
         </section>
 
         <div class="toolbar">
-            @if (isset($invoice) && $invoice)
+            @if (isset($invoice) && $invoice && !request()->has('customer') && !request()->routeIs('invoice.print'))
                 <a href="{{ route('invoice.show', $invoice) }}" class="btn secondary"
                     style="text-decoration: none;">Back to Invoice</a>
-            @else
+            @elseif (!isset($invoice) || (!request()->has('customer') && !request()->routeIs('invoice.print')))
                 <button class="btn secondary" onclick="window.location.reload()">Reset</button>
+            @endif
+            @if (isset($invoice) && $invoice && (request()->has('customer') || request()->routeIs('invoice.print')))
+                <a href="{{ route('invoice.index') }}" class="btn secondary"
+                    style="text-decoration: none;">Back to List</a>
             @endif
             <button class="btn" onclick="window.print()">Print</button>
         </div>
     </div>
+@if(request()->has('customer') || request()->has('print') || request()->routeIs('invoice.print'))
 </body>
-
 </html>
+@else
+        </div>
+    </div>
+</div>
+@endsection
+@endif

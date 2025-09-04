@@ -64,6 +64,31 @@
                 <option value="cancelled">Cancelled</option>
             </select>
         </div>
+
+        <script>
+            function copyShareLink(url) {
+                navigator.clipboard.writeText(url).then(function() {
+                    // Simple alert for feedback
+                    alert('Link copied to clipboard! Share this link with your customer for printing.');
+                }, function(err) {
+                    console.error('Could not copy text: ', err);
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = url;
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        alert('Link copied to clipboard! Share this link with your customer for printing.');
+                    } catch (err) {
+                        console.error('Fallback: Could not copy text: ', err);
+                        alert('Failed to copy link. Please copy manually: ' + url);
+                    }
+                    document.body.removeChild(textArea);
+                });
+            }
+        </script>
     </div>
 
     <!-- Table -->
@@ -190,6 +215,11 @@
                                         <i class="fas fa-file-pdf mr-1"></i>
                                         PDF
                                     </a>
+                                    <button onclick="copyShareLink('{{ route('invoice.print', $invoice) }}')"
+                                        class="inline-flex items-center px-2 py-1 text-sm font-medium text-purple-700 bg-purple-50 rounded hover:bg-purple-100 transition-colors duration-200">
+                                        <i class="fas fa-share mr-1"></i>
+                                        Share
+                                    </button>
                                     <button wire:click="delete({{ $invoice->id }})"
                                         wire:confirm="Are you sure you want to delete this invoice?"
                                         class="inline-flex items-center px-2 py-1 text-sm font-medium text-red-700 bg-red-50 rounded hover:bg-red-100 transition-colors duration-200">

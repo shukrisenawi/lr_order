@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'sumopod' => [
+        'api_key' => env('SUMOPOD_API_KEY'),
+        'base_url' => env('SUMOPOD_BASE_URL', 'https://ai.sumopod.com/v1'),
+    ],
+
 ];

@@ -50,6 +50,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-php.min.js"></script>
     <!-- SweetAlert 2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- OpenAI JavaScript Library -->
+    <script src="https://cdn.jsdelivr.net/npm/openai@4.20.1/dist/index.min.js"></script>
     @livewireStyles
     <style>
         :root {
@@ -1152,6 +1154,17 @@
                                 class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-1.5 py-0.5 animate-pulse shadow-lg">0</span>
                         </a>
 
+                        <!-- ChatGPT -->
+                        <a href="{{ route('chatgpt.index') }}"
+                            class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('chatgpt.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-comments text-xs"></i>
+                                </div>
+                                <span class="font-medium text-sm">ChatGPT</span>
+                            </div>
+                        </a>
+
                         <!-- Business Management Section -->
                         <div class="pt-1.5">
                             <h3 class="nav-section-header flex items-center">
@@ -1367,6 +1380,17 @@
                                 </div>
                                 <span id="ai-badge-desktop"
                                     class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-1.5 py-0.5 animate-pulse shadow-lg">0</span>
+                            </a>
+
+                            <!-- ChatGPT -->
+                            <a href="{{ route('chatgpt.index') }}"
+                                class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('chatgpt.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                        <i class="fas fa-comments text-xs"></i>
+                                    </div>
+                                    <span class="font-medium text-sm">ChatGPT</span>
+                                </div>
                             </a>
                         @endif
 
@@ -1663,6 +1687,25 @@
 
     @yield('scripts')
     @livewireScripts
+
+    <!-- Floating Chat Bubble -->
+    @livewire('floating-chat-bubble')
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded - checking for floating chat bubble');
+            setTimeout(function() {
+                const bubble = document.querySelector('[wire\\:click="openChatModal"]');
+                if (bubble) {
+                    console.log('Floating chat bubble found:', bubble);
+                    bubble.style.border = '3px solid red';
+                    bubble.style.zIndex = '9999';
+                } else {
+                    console.log('Floating chat bubble NOT found');
+                }
+            }, 2000);
+        });
+    </script>
 
     <!-- Session Alerts with SweetAlert 2 -->
     <script>

@@ -74,7 +74,7 @@ class InvoiceController extends Controller
         // Update total
         $invoice->updateTotal();
 
-        return redirect()->route('invoice.show', $invoice)
+        return redirect()->route('invoice.view-invoice', $invoice)
             ->with('success', 'Invoice created successfully!');
     }
 
@@ -160,7 +160,7 @@ class InvoiceController extends Controller
         // Update total
         $invoice->updateTotal();
 
-        return redirect()->route('invoice.show', $invoice)
+        return redirect()->route('invoice.view-invoice', $invoice)
             ->with('success', 'Invoice updated successfully!');
     }
 

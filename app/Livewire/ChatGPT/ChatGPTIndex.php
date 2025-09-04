@@ -1,0 +1,271 @@
+<?php
+
+namespace App\Livewire\ChatGPT;
+
+use Livewire\Component;
+use Illuminate\Support\Facades\Http;
+use App\Services\DatabaseQueryService;
+
+class ChatGPTIndex extends Component
+{
+    public $messages = [];
+    public $newMessage = '';
+    public $isTyping = false;
+    public $errorMessage = '';
+    public $selectedModel = 'gemini/gemini-2.0-flash-lite';
+    public $embedded = false;
+
+    protected $databaseQueryService;
+    protected $listeners = ['modelChanged' => 'handleModelChange'];
+
+    public function __construct()
+    {
+        $this->databaseQueryService = new DatabaseQueryService();
+    }
+
+    public function handleModelChange($model)
+    {
+        $this->selectedModel = $model;
+    }
+
+    public function mount($embedded = false, $selectedModel = null)
+    {
+        $this->embedded = $embedded;
+
+        if ($selectedModel) {
+            $this->selectedModel = $selectedModel;
+        }
+
+        // Initialize with welcome message
+        $welcomeMessage = $this->embedded
+            ? 'Halo! Saya AI assistant dengan akses database. Tanya saya tentang data dalam sistem!'
+            : 'Halo! Saya adalah asisten AI yang boleh membantu anda dengan soalan tentang data dalam sistem. Saya boleh memberikan maklumat tentang pelanggan, invois, produk, dan banyak lagi. Apa yang boleh saya bantu hari ini?';
+
+        $this->messages = [
+            [
+                'role' => 'assistant',
+                'content' => $welcomeMessage,
+                'timestamp' => now()->format('H:i')
+            ]
+        ];
+    }
+
+    protected $rules = [
+        'newMessage' => 'required|string|max:2000',
+    ];
+
+    protected $messages_validation = [
+        'newMessage.required' => 'Sila masukkan mesej.',
+        'newMessage.string' => 'Mesej mestilah teks.',
+        'newMessage.max' => 'Mesej maksimum 2000 aksara.',
+    ];
+
+    public function sendMessage()
+    {
+        $this->validate();
+
+        // Add user message
+        $this->messages[] = [
+            'role' => 'user',
+            'content' => $this->newMessage,
+            'timestamp' => now()->format('H:i')
+        ];
+
+        $userMessage = $this->newMessage;
+        $this->newMessage = '';
+        $this->isTyping = true;
+        $this->errorMessage = '';
+
+        // Call AI API directly
+        $this->callAIAPI($userMessage);
+    }
+
+    private function callAIAPI($userMessage)
+    {
+        try {
+            // Check if the user is asking about data/database queries
+            $databaseResult = $this->handleDatabaseQuery($userMessage);
+
+            if ($databaseResult !== null) {
+                // If we have database results, include them in the AI context
+                $enhancedMessage = $userMessage . "\n\nMaklumat dari database:\n" . $databaseResult;
+            } else {
+                $enhancedMessage = $userMessage;
+            }
+
+            // Get database schema information for context
+            $schemaInfo = $this->getDatabaseContext();
+
+            // Prepare messages for API
+            $messages = [
+                [
+                    'role' => 'system',
+                    'content' => 'You are a helpful AI assistant with access to a business management database. ' .
+                                'Respond in Malay language unless specifically asked otherwise. ' .
+                                'You have access to the following database tables: ' . $schemaInfo . '. ' .
+                                'If the user asks about data, provide helpful analysis and insights based on the available information. ' .
+                                'Always be helpful, accurate, and provide actionable information.'
+                ]
+            ];
+
+            // Add conversation history (excluding the current user message)
+            foreach ($this->messages as $msg) {
+                if ($msg['role'] !== 'user' || $msg['content'] !== $userMessage) {
+                    $messages[] = [
+                        'role' => $msg['role'],
+                        'content' => $msg['content']
+                    ];
+                }
+            }
+
+            // Add the enhanced user message (with database results if available)
+            $messages[] = [
+                'role' => 'user',
+                'content' => $enhancedMessage
+            ];
+
+            // Make API call to SumoPod AI
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . config('services.sumopod.api_key'),
+                'Content-Type' => 'application/json',
+            ])->post(config('services.sumopod.base_url') . '/chat/completions', [
+                'model' => $this->selectedModel,
+                'messages' => $messages,
+                'max_tokens' => 1000,
+                'temperature' => 0.7
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                $aiResponse = $data['choices'][0]['message']['content'] ?? 'Maaf, tidak dapat mendapatkan respons dari AI.';
+
+                $this->addAssistantMessage($aiResponse);
+            } else {
+                $this->setErrorMessage('Gagal mendapatkan respons dari AI. Sila cuba lagi.');
+            }
+
+        } catch (\Exception $e) {
+            $this->setErrorMessage('Ralat: ' . $e->getMessage());
+        }
+    }
+
+    private function handleDatabaseQuery($userMessage)
+    {
+        try {
+            // Check if this looks like a database query
+            $queryResult = $this->databaseQueryService->generateQueryFromNaturalLanguage($userMessage);
+
+            if ($queryResult) {
+                $result = $this->databaseQueryService->executeSafeQuery(
+                    $queryResult['sql'],
+                    $queryResult['bindings'] ?? []
+                );
+
+                return $this->databaseQueryService->formatQueryResult($result, $queryResult['description']);
+            }
+
+            return null;
+        } catch (\Exception $e) {
+            return "Ralat semasa mengakses database: " . $e->getMessage();
+        }
+    }
+
+    private function getDatabaseContext()
+    {
+        $schema = $this->databaseQueryService->getDatabaseSchema();
+        $tableNames = array_keys($schema);
+
+        $context = implode(', ', $tableNames);
+        $context .= '. Anda boleh menanya tentang: bilangan rekod, senarai data, carian spesifik, dan statistik dari jadual-jadual ini.';
+
+        return $context;
+    }
+
+    public function getDatabaseSummary()
+    {
+        try {
+            $summary = $this->databaseQueryService->getTableSummary();
+            $response = "Ringkasan Database:\n\n";
+
+            foreach ($summary as $table => $info) {
+                $response .= "**$table**: {$info['description']}\n";
+                $response .= "- Jumlah rekod: {$info['record_count']}\n\n";
+            }
+
+            return $response;
+        } catch (\Exception $e) {
+            return "Ralat mendapatkan ringkasan database: " . $e->getMessage();
+        }
+    }
+
+    public function addAssistantMessage($message)
+    {
+        $this->messages[] = [
+            'role' => 'assistant',
+            'content' => $message,
+            'timestamp' => now()->format('H:i')
+        ];
+        $this->isTyping = false;
+    }
+
+    public function setErrorMessage($message)
+    {
+        $this->errorMessage = $message;
+        $this->isTyping = false;
+    }
+
+    public function clearChat()
+    {
+        $this->messages = [
+            [
+                'role' => 'assistant',
+                'content' => 'Halo! Saya adalah asisten AI yang siap membantu anda. Apa yang boleh saya bantu hari ini?',
+                'timestamp' => now()->format('H:i')
+            ]
+        ];
+        $this->errorMessage = '';
+    }
+
+    public function getAvailableModels()
+    {
+        return [
+            'claude-3-5-haiku' => 'Claude 3.5 Haiku - $1.00/$5.00',
+            'claude-3-5-sonnet' => 'Claude 3.5 Sonnet - $3.00/$15.00',
+            'claude-3-7-sonnet' => 'Claude 3.7 Sonnet - $3.00/$15.00',
+            'deepseek/deepseek-chat' => 'DeepSeek Chat - $0.27/$1.10',
+            'deepseek/deepseek-reasoner' => 'DeepSeek Reasoner - $0.55/$2.19',
+            'gemini/gemini-2.0-flash' => 'Gemini 2.0 Flash - $0.10/$0.40',
+            'gemini/gemini-2.0-flash-lite' => 'Gemini 2.0 Flash Lite - $0.07/$0.30',
+            'gemini/gemini-2.5-flash' => 'Gemini 2.5 Flash - $0.30/$2.50',
+            'gemini/gemini-2.5-flash-lite' => 'Gemini 2.5 Flash Lite - $0.10/$0.40',
+            'gemini/gemini-2.5-pro' => 'Gemini 2.5 Pro - $1.25/$10.00',
+            'gpt-4.1' => 'GPT-4.1 - $2.00/$8.00',
+            'gpt-4.1-mini' => 'GPT-4.1 Mini - $0.40/$1.60',
+            'gpt-4.1-nano' => 'GPT-4.1 Nano - $0.10/$0.40',
+            'gpt-4o' => 'GPT-4o - $2.50/$10.00',
+            'gpt-4o-mini' => 'GPT-4o Mini - $0.15/$0.60',
+            'gpt-4o-mini-transcribe' => 'GPT-4o Mini Transcribe - $1.25/$5.00',
+            'gpt-4o-mini-tts' => 'GPT-4o Mini TTS - $2.50/$10.00',
+            'gpt-4o-transcribe' => 'GPT-4o Transcribe - $2.50/$10.00',
+            'gpt-5' => 'GPT-5 - $1.25/$10.00',
+            'gpt-5-chat' => 'GPT-5 Chat - $1.25/$10.00',
+            'gpt-5-mini' => 'GPT-5 Mini - $0.25/$2.00',
+            'gpt-5-nano' => 'GPT-5 Nano - $0.05/$0.40',
+            'gpt-image-1' => 'GPT Image 1 - $10.00/$40.00',
+            'text-embedding-3-large' => 'Text Embedding 3 Large - $0.13/$0.00',
+            'text-embedding-3-small' => 'Text Embedding 3 Small - $0.02/$0.00',
+            'text-embedding-ada-002' => 'Text Embedding Ada 002 - $0.10/$0.00',
+            'text-embedding-ada-002-v2' => 'Text Embedding Ada 002 v2 - $0.10/$0.00',
+            'whisper-1' => 'Whisper 1 - $0.00/$0.00',
+            'claude-sonnet-4' => 'Claude Sonnet 4 - $3.00/$15.00',
+            'openrouter/qwen/qwen3-coder' => 'Qwen 3 Coder - $1.00/$5.00'
+        ];
+    }
+
+    public function render()
+    {
+        return view('livewire.chat-gpt.chat-gpt-index', [
+            'availableModels' => $this->getAvailableModels()
+        ]);
+    }
+}

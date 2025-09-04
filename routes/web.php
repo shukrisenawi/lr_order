@@ -210,6 +210,11 @@ Route::middleware(['auth'])->group(function () {
         return view('analisa-ai-livewire');
     })->name('analisa-ai.index');
 
+    // ChatGPT Route
+    Route::get('/chatgpt', function () {
+        return view('chat-gpt-livewire');
+    })->name('chatgpt.index');
+
     // Business Management Routes
     Route::get('/bisnes', function () {
         return view('bisnes-livewire');
@@ -392,6 +397,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
     Route::get('/invoice/{invoice}/pdf', [InvoiceController::class, 'generatePdf'])->name('invoice.pdf');
     Route::get('/invoice/{invoice}/download-pdf', [InvoiceController::class, 'downloadPdf'])->name('invoice.download-pdf');
+    Route::get('/invoice/{invoice}/print', [InvoiceController::class, 'viewInvoice'])->name('invoice.print');
 
     Route::get('/tracking', function () {
         return view('tracking-livewire');
