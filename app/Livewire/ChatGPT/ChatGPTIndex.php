@@ -15,6 +15,7 @@ class ChatGPTIndex extends Component
     public $errorMessage = '';
     public $selectedModel = 'gemini/gemini-2.0-flash-lite';
     public $embedded = false;
+    public $uploadedImage;
 
     protected $databaseQueryService;
     protected $listeners = ['modelChanged' => 'handleModelChange'];
@@ -53,16 +54,23 @@ class ChatGPTIndex extends Component
 
     protected $rules = [
         'newMessage' => 'required|string|max:2000',
+        'uploadedImage' => 'nullable|image|max:2048',
     ];
 
     protected $messages_validation = [
         'newMessage.required' => 'Sila masukkan mesej.',
         'newMessage.string' => 'Mesej mestilah teks.',
         'newMessage.max' => 'Mesej maksimum 2000 aksara.',
+        'uploadedImage.image' => 'Fail yang dimuat naik mestilah imej.',
+        'uploadedImage.max' => 'Saiz imej maksimum 2MB.',
     ];
 
     public function sendMessage()
     {
+        // Trim the message first
+        $this->newMessage = trim($this->newMessage);
+
+        // Validate the message
         $this->validate();
 
         // Prevent sending if already in the process of sending
@@ -70,36 +78,86 @@ class ChatGPTIndex extends Component
             return; // Exit if already sending
         }
 
+        // Check if message is empty after trimming
+        if (empty($this->newMessage)) {
+            return; // Don't send empty messages
+        }
+
         // Check for duplicate messages before adding
         if (!in_array($this->newMessage, array_column($this->messages, 'content'))) {
+            $userMessage = $this->newMessage;
+
+            // Prepare content for API
+            $content = $userMessage;
+
+            if ($this->uploadedImage && $this->supportsVision($this->selectedModel)) {
+                $imageData = base64_encode(file_get_contents($this->uploadedImage->getRealPath()));
+                $mimeType = $this->uploadedImage->getMimeType();
+                $content = [
+                    ['type' => 'text', 'text' => $userMessage],
+                    ['type' => 'image_url', 'image_url' => ['url' => 'data:' . $mimeType . ';base64,' . $imageData]]
+                ];
+            } elseif ($this->uploadedImage && !$this->supportsVision($this->selectedModel)) {
+                $this->setErrorMessage('Model yang dipilih tidak menyokong input imej.');
+                return;
+            }
+
             $this->messages[] = [
                 'role' => 'user',
-                'content' => $this->newMessage,
+                'content' => $content,
                 'timestamp' => now()->format('H:i')
             ];
 
-            $userMessage = $this->newMessage;
             $this->newMessage = ''; // Clear message input
+            $this->uploadedImage = null; // Clear uploaded image
             $this->isSending = true; // Set sending state
             $this->isTyping = true; // Indicate that typing has started
             $this->errorMessage = '';
 
             // Call AI API directly after setting sending state
-            $this->callAIAPI($userMessage);
+            $this->callAIAPI($content);
         }
     }
 
-    private function callAIAPI($userMessage)
+    private function supportsVision($model)
+    {
+        $visionModels = [
+            'gpt-4o',
+            'gpt-4o-mini',
+            'gpt-4.1',
+            'gpt-4.1-mini',
+            'gpt-4.1-nano',
+            'gpt-5',
+            'gpt-5-chat',
+            'gpt-5-mini',
+            'gpt-5-nano',
+            'claude-3-5-haiku',
+            'claude-3-5-sonnet',
+            'claude-3-7-sonnet',
+            'claude-sonnet-4',
+            'gemini/gemini-2.0-flash',
+            'gemini/gemini-2.0-flash-lite',
+            'gemini/gemini-2.5-flash',
+            'gemini/gemini-2.5-flash-lite',
+            'gemini/gemini-2.5-pro'
+        ];
+        return in_array($model, $visionModels) || str_contains($model, 'gpt-4') || str_contains($model, 'claude') || str_contains($model, 'gemini');
+    }
+
+    private function callAIAPI($content)
     {
         try {
+            // Extract text for database query
+            $textForQuery = is_array($content) ? $content[0]['text'] : $content;
+
             // Check if the user is asking about data/database queries
-            $databaseResult = $this->handleDatabaseQuery($userMessage);
+            $databaseResult = $this->handleDatabaseQuery($textForQuery);
 
             if ($databaseResult !== null) {
                 // If we have database results, include them in the AI context
-                $enhancedMessage = $userMessage . "\n\nMaklumat dari database:\n" . $databaseResult;
+                $enhancedMessage = $textForQuery . "\n\nMaklumat dari database:\n" . $databaseResult;
             } else {
-                $enhancedMessage = $userMessage;
+                $enhancedMessage = $textForQuery;
             }
 
             // Get database schema information for context
@@ -118,8 +176,10 @@ class ChatGPTIndex extends Component
             ];
 
             // Add conversation history (excluding the current user message)
-            foreach ($this->messages as $msg) {
-                if ($msg['role'] !== 'user' || $msg['content'] !== $userMessage) {
+            foreach ($this->messages as $index => $msg) {
+                if ($msg['role'] === 'user' && $index === count($this->messages) - 1) {
+                    // Skip the current user message, will add enhanced later
+                } else {
                     $messages[] = [
                         'role' => $msg['role'],
                         'content' => $msg['content']
@@ -128,9 +188,10 @@ class ChatGPTIndex extends Component
             }
 
             // Add the enhanced user message (with database results if available)
+            $userContent = is_array($content) ? $content : $enhancedMessage;
             $messages[] = [
                 'role' => 'user',
-                'content' => $enhancedMessage
+                'content' => $userContent
             ];
 
             // Make API call to SumoPod AI
