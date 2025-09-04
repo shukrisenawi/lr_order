@@ -1688,24 +1688,6 @@
     @yield('scripts')
     @livewireScripts
 
-    <!-- Floating Chat Bubble -->
-    @livewire('floating-chat-bubble')
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Page loaded - checking for floating chat bubble');
-            setTimeout(function() {
-                const bubble = document.querySelector('[wire\\:click="openChatModal"]');
-                if (bubble) {
-                    console.log('Floating chat bubble found:', bubble);
-                    bubble.style.border = '3px solid red';
-                    bubble.style.zIndex = '9999';
-                } else {
-                    console.log('Floating chat bubble NOT found');
-                }
-            }, 2000);
-        });
-    </script>
 
     <!-- Session Alerts with SweetAlert 2 -->
     <script>

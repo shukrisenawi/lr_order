@@ -11,6 +11,7 @@ class ChatGPTIndex extends Component
     public $messages = [];
     public $newMessage = '';
     public $isTyping = false;
+    public $isSending = false; // New property to manage send button state
     public $errorMessage = '';
     public $selectedModel = 'gemini/gemini-2.0-flash-lite';
     public $embedded = false;
@@ -64,20 +65,28 @@ class ChatGPTIndex extends Component
     {
         $this->validate();
 
-        // Add user message
-        $this->messages[] = [
-            'role' => 'user',
-            'content' => $this->newMessage,
-            'timestamp' => now()->format('H:i')
-        ];
+        // Prevent sending if already in the process of sending
+        if ($this->isSending) {
+            return; // Exit if already sending
+        }
 
-        $userMessage = $this->newMessage;
-        $this->newMessage = '';
-        $this->isTyping = true;
-        $this->errorMessage = '';
+        // Check for duplicate messages before adding
+        if (!in_array($this->newMessage, array_column($this->messages, 'content'))) {
+            $this->messages[] = [
+                'role' => 'user',
+                'content' => $this->newMessage,
+                'timestamp' => now()->format('H:i')
+            ];
 
-        // Call AI API directly
-        $this->callAIAPI($userMessage);
+            $userMessage = $this->newMessage;
+            $this->newMessage = ''; // Clear message input
+            $this->isSending = true; // Set sending state
+            $this->isTyping = true; // Indicate that typing has started
+            $this->errorMessage = '';
+
+            // Call AI API directly after setting sending state
+            $this->callAIAPI($userMessage);
+        }
     }
 
     private function callAIAPI($userMessage)
@@ -101,10 +110,10 @@ class ChatGPTIndex extends Component
                 [
                     'role' => 'system',
                     'content' => 'You are a helpful AI assistant with access to a business management database. ' .
-                                'Respond in Malay language unless specifically asked otherwise. ' .
-                                'You have access to the following database tables: ' . $schemaInfo . '. ' .
-                                'If the user asks about data, provide helpful analysis and insights based on the available information. ' .
-                                'Always be helpful, accurate, and provide actionable information.'
+                        'Respond in Malay language unless specifically asked otherwise. ' .
+                        'You have access to the following database tables: ' . $schemaInfo . '. ' .
+                        'If the user asks about data, provide helpful analysis and insights based on the available information. ' .
+                        'Always be helpful, accurate, and provide actionable information.'
                 ]
             ];
 
@@ -143,9 +152,10 @@ class ChatGPTIndex extends Component
             } else {
                 $this->setErrorMessage('Gagal mendapatkan respons dari AI. Sila cuba lagi.');
             }
-
         } catch (\Exception $e) {
             $this->setErrorMessage('Ralat: ' . $e->getMessage());
+        } finally {
+            $this->isSending = false; // Reset sending state after response
         }
     }
 
