@@ -1,4 +1,8 @@
-<div class="fixed bottom-6 right-6 z-50">
+@php
+    $isChatGPTPage = request()->routeIs('chatgpt.index');
+@endphp
+
+<div class="fixed bottom-6 right-6 z-50 {{ $isChatGPTPage ? 'hidden' : '' }}">
     <!-- Chat Bubble Button -->
     <div x-data="{ isOpen: @entangle('isOpen') }" x-on:click.away="isOpen = false" class="relative">
 
