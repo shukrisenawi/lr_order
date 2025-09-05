@@ -1688,6 +1688,9 @@
     @yield('scripts')
     @livewireScripts
 
+    <!-- Floating Chat Widget -->
+    @livewire('floating-chat')
+
 
     <!-- Session Alerts with SweetAlert 2 -->
     <script>

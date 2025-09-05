@@ -228,6 +228,13 @@ class ChatGPTIndex extends Component
     private function handleDatabaseQuery($userMessage)
     {
         try {
+            // Check for invoice search request first
+            $invoiceSearch = $this->detectInvoiceSearch($userMessage);
+            if ($invoiceSearch) {
+                $this->redirectToInvoiceSearch($invoiceSearch);
+                return null; // Don't return message since we're redirecting
+            }
+
             // Check if this looks like a database query
             $queryResult = $this->databaseQueryService->generateQueryFromNaturalLanguage($userMessage);
 
@@ -244,6 +251,33 @@ class ChatGPTIndex extends Component
         } catch (\Exception $e) {
             return "Ralat semasa mengakses database: " . $e->getMessage();
         }
+    }
+
+    private function detectInvoiceSearch($message)
+    {
+        $message = strtolower($message);
+
+        // Patterns to detect invoice search requests
+        $patterns = [
+            '/(?:cari|tolong cari|find|search)\s+(?:nombor\s+)?invoice\s+(\w+)/i',
+            '/(?:cari|tolong cari|find|search)\s+(\w+)\s+(?:invoice|invois)/i',
+            '/invoice\s+(?:nombor\s+)?(\w+)/i',
+            '/nombor\s+invoice\s+(\w+)/i'
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $message, $matches)) {
+                return trim($matches[1]);
+            }
+        }
+
+        return null;
+    }
+
+    private function redirectToInvoiceSearch($invoiceNumber)
+    {
+        // Emit event to redirect using JavaScript
+        $this->dispatch('redirect-to-invoice', url: route('invoice.index', ['search' => $invoiceNumber]));
     }
 
     private function getDatabaseContext()

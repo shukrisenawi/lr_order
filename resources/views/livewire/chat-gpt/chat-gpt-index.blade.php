@@ -67,4 +67,13 @@
         </div>
     </div>
     @endif
+
+    <!-- JavaScript for handling redirects -->
+    <script>
+        document.addEventListener('livewire:loaded', () => {
+            Livewire.on('redirect-to-invoice', (data) => {
+                window.location.href = data.url;
+            });
+        });
+    </script>
 </div>
