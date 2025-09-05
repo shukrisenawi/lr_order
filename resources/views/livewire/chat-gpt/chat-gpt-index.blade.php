@@ -2,7 +2,16 @@
     <!-- Header -->
     <div class="bg-white shadow p-4 flex items-center justify-between">
         <h1 class="text-xl font-semibold text-gray-800">Live Chat</h1>
-        <span class="text-sm text-gray-500">Online</span>
+        <div class="flex items-center gap-4">
+            <select wire:model.live="selectedModel" class="text-sm border border-gray-300 rounded px-2 py-1 focus:border-blue-500 focus:ring-blue-500">
+                @foreach($availableModels as $key => $model)
+                    <option value="{{ $key }}" {{ $selectedModel === $key ? 'selected' : '' }}>
+                        {{ $model }}
+                    </option>
+                @endforeach
+            </select>
+            <span class="text-sm text-gray-500">Online</span>
+        </div>
     </div>
 
     <!-- Chat Body -->
