@@ -3,34 +3,33 @@
     <div x-data="{ isOpen: @entangle('isOpen') }" x-on:click.away="isOpen = false" class="relative">
 
         <!-- Chat Window -->
-        <div x-show="isOpen" x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 transform scale-95 translate-y-4"
-            x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 transform scale-100 translate-y-0"
-            x-transition:leave-end="opacity-0 transform scale-95 translate-y-4"
-            class="absolute bottom-16 right-0 w-80 h-96 bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
-            style="display: none;">
-
+        <div x-show="isOpen"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform scale-95 translate-y-4"
+             x-transition:enter-end="opacity-100 transform scale-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100 transform scale-100 translate-y-0"
+             x-transition:leave-end="opacity-0 transform scale-95 translate-y-4"
+             class="absolute bottom-16 right-0 w-96 h-[28rem] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
+             style="display: none;">
             <!-- Chat Header -->
-            <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                        <i class="fas fa-robot text-sm"></i>
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-3 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <div class="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">
+                        <i class="fas fa-robot text-xs"></i>
                     </div>
                     <div>
-                        <h3 class="font-semibold text-sm">AI Assistant</h3>
+                        <h3 class="font-semibold text-xs">AI Assistant</h3>
                         <p class="text-xs text-white/80">Online</p>
                     </div>
                 </div>
-                <button wire:click="closeChat" class="text-white/80 hover:text-white transition-colors">
-                    <i class="fas fa-times text-sm"></i>
+                <button wire:click="closeChat"
+                        class="text-white/80 hover:text-white transition-colors">
+                    <i class="fas fa-times text-xs"></i>
                 </button>
             </div>
-
             <!-- Chat Messages -->
-            <div class="flex-1 overflow-y-auto p-4 space-y-3 h-64 flex flex-col-reverse" id="chat-messages"
-                wire:poll.1s>
+            <div class="flex-1 overflow-y-auto p-4 space-y-3 h-80 flex flex-col-reverse" id="chat-messages">
                 @foreach (array_reverse($messages) as $msg)
                     <div class="flex {{ $msg['role'] === 'user' ? 'justify-end' : 'justify-start' }}">
                         <div
@@ -92,21 +91,45 @@
 </div>
 
 <script>
-    document.addEventListener('livewire:loaded', () => {
-        // Scroll ke atas bila chat dibuka atau ada perubahan mesej
+document.addEventListener('alpine:initialized', () => {
+    // Listen for typing events
+    Livewire.on('typing', (duration) => {
+        // Typing animation is handled by Livewire
+    });
+});
+
+// Listen for redirect events and scroll events
+document.addEventListener('livewire:loaded', () => {
+    Livewire.on('redirect-to-invoice', (data) => {
+        window.location.href = data.url;
+    });
+
+    // Auto-scroll to bottom when new message is added
+    Livewire.on('scroll-to-bottom', () => {
         const chatMessages = document.getElementById('chat-messages');
         if (chatMessages) {
-            const observer = new MutationObserver(() => {
-                if (chatMessages.offsetParent !== null) {
-                    setTimeout(() => {
-                        chatMessages.scrollTop = 0;
-                    }, 200);
-                }
-            });
-            observer.observe(chatMessages, {
-                childList: true,
-                subtree: true
-            });
+            setTimeout(() => {
+                chatMessages.scrollTop = 0; // Scroll to top because of flex-col-reverse
+            }, 100);
         }
     });
+
+    // Scroll to bottom when chat is opened
+    const observer = new MutationObserver(() => {
+        const chatMessages = document.getElementById('chat-messages');
+        if (chatMessages && chatMessages.offsetParent !== null) { // Check if visible
+            setTimeout(() => {
+                chatMessages.scrollTop = 0; // Scroll to top because of flex-col-reverse
+            }, 200);
+        }
+    });
+
+    // Observe changes to the chat messages container
+    setTimeout(() => {
+        const chatMessages = document.getElementById('chat-messages');
+        if (chatMessages) {
+            observer.observe(chatMessages, { childList: true, subtree: true });
+        }
+    }, 500);
+});
 </script>

@@ -200,10 +200,6 @@ class FloatingChat extends Component
         $this->dispatch('scroll-to-bottom');
     }
 
-    public function scrollToBottom()
-    {
-        $this->dispatch('scroll-to-bottom');
-    }
 
     public function render()
     {
