@@ -176,7 +176,10 @@ class ChatGPTIndex extends Component
             $messages = [
                 [
                     'role' => 'system',
-                    'content' => $this->systemMessage
+                    'content' => $this->systemMessage . ' ' .
+                        'CRITICAL: For ANY question about data quantities, counts, or existence, you MUST tell the user that you cannot provide that information directly and they should ask specific questions that will be processed by the database system. ' .
+                        'NEVER make up numbers or statistics. If asked "how many invoices" or similar count questions, respond by saying you need to check the database and the system will provide the accurate count. ' .
+                        'Only provide information that has been verified through database queries. For any unverified information, direct the user to ask specific questions.'
                 ]
             ];
 
@@ -228,11 +231,24 @@ class ChatGPTIndex extends Component
     private function handleDatabaseQuery($userMessage)
     {
         try {
-            // Check for invoice search request first
+            // Check for simple count queries first
+            $countResult = $this->handleSimpleCountQuery($userMessage);
+            if ($countResult !== null) {
+                return $countResult;
+            }
+
+            // Check for invoice search request
             $invoiceSearch = $this->detectInvoiceSearch($userMessage);
             if ($invoiceSearch) {
-                $this->redirectToInvoiceSearch($invoiceSearch);
-                return null; // Don't return message since we're redirecting
+                // Verify if invoice exists in database
+                $invoiceExists = $this->verifyInvoiceExists($invoiceSearch);
+
+                if ($invoiceExists) {
+                    $this->redirectToInvoiceSearch($invoiceSearch);
+                    return null; // Don't return message since we're redirecting
+                } else {
+                    return "Maaf, invoice nombor " . $invoiceSearch . " tidak ditemui dalam database sistem. Sila pastikan nombor invoice adalah betul.";
+                }
             }
 
             // Check if this looks like a database query
@@ -272,6 +288,48 @@ class ChatGPTIndex extends Component
         }
 
         return null;
+    }
+
+    private function handleSimpleCountQuery($message)
+    {
+        $message = strtolower($message);
+
+        // Patterns for count queries
+        $patterns = [
+            '/(?:berapa\s+)?(?:banyak|jumlah|ada)\s+invoice/i',
+            '/(?:berapa\s+)?(?:banyak|jumlah|ada)\s+inv?ois/i',
+            '/invoice\s+(?:berapa|ada)\s+(?:banyak|jumlah)/i',
+            '/(?:berapa\s+)?(?:banyak|jumlah)\s+(?:data\s+)?invoice/i',
+            '/total\s+invoice/i',
+            '/jumlah\s+keseluruhan\s+invoice/i'
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $message)) {
+                try {
+                    $count = \App\Models\Invoice::where('bisnes_id', session('selected_bisnes_id'))->count();
+                    return "Berdasarkan database, terdapat sejumlah {$count} invoice dalam sistem.";
+                } catch (\Exception $e) {
+                    return "Ralat semasa mengakses database: " . $e->getMessage();
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function verifyInvoiceExists($invoiceNumber)
+    {
+        try {
+            // Check if invoice exists in database
+            $invoice = \App\Models\Invoice::where('invoice_no', $invoiceNumber)
+                ->where('bisnes_id', session('selected_bisnes_id'))
+                ->first();
+
+            return $invoice ? true : false;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     private function redirectToInvoiceSearch($invoiceNumber)
