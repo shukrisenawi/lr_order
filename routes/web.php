@@ -30,6 +30,11 @@ Route::get('/test-login', function () {
     return view('test-login');
 });
 
+// Test expired session route
+Route::get('/test-expired', function () {
+    abort(419, 'Page Expired');
+})->middleware('auth');
+
 // Test SweetAlert route
 Route::get('/test-sweetalert', function () {
     return redirect('/dashboard')->with('success', 'SweetAlert 2 berfungsi dengan baik!');

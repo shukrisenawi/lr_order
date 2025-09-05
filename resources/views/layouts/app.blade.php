@@ -1692,6 +1692,50 @@
     @livewire('floating-chat')
 
 
+    <!-- Global form submission handler for CSRF token expired -->
+    <script>
+        // Handle form submissions that result in 419 error
+        document.addEventListener('submit', function(e) {
+            const form = e.target;
+            const originalSubmit = form.onsubmit;
+
+            // Override form submission to handle 419 errors
+            form.onsubmit = function(event) {
+                // Call original onsubmit if it exists
+                if (originalSubmit && !originalSubmit.call(this, event)) {
+                    return false;
+                }
+
+                // For AJAX forms, let axios handle it
+                if (form.hasAttribute('data-ajax') || form.classList.contains('ajax-form')) {
+                    return true;
+                }
+
+                // For regular forms, we'll let Laravel handle CSRF normally
+                // but we can add a fallback here if needed
+                return true;
+            };
+        });
+
+        // Handle any fetch/XHR errors globally
+        window.addEventListener('unhandledrejection', function(event) {
+            const reason = event.reason;
+            if (reason && reason.response && reason.response.status === 419) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Sesi Tamat',
+                    text: 'Sesi anda telah tamat. Sila log masuk semula.',
+                    confirmButtonText: 'Log Masuk',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then(() => {
+                    window.location.href = '/login';
+                });
+            }
+        });
+    </script>
+
     <!-- Session Alerts with SweetAlert 2 -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
