@@ -195,6 +195,14 @@ class FloatingChat extends Component
         ];
         $this->isTyping = false;
         $this->isSending = false;
+
+        // Auto-scroll to bottom after adding message
+        $this->dispatch('scroll-to-bottom');
+    }
+
+    public function scrollToBottom()
+    {
+        $this->dispatch('scroll-to-bottom');
     }
 
     public function render()
