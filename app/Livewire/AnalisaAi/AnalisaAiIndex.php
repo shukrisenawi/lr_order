@@ -16,6 +16,7 @@ class AnalisaAiIndex extends Component
     public $analysisResult = '';
     public $isAnalyzing = false;
     public $errorMessage = '';
+    public $selectedModel = 'gpt-4o-mini';
 
     public function mount()
     {
@@ -70,8 +71,20 @@ class AnalisaAiIndex extends Component
         $this->resetValidation();
     }
 
+    public function getAvailableModels()
+    {
+        return [
+            'gpt-4o-mini' => 'GPT-4o Mini - $0.15/$0.60',
+            'gpt-4o' => 'GPT-4o - $2.50/$10.00',
+            'claude-3-5-haiku' => 'Claude 3.5 Haiku - $1.00/$5.00',
+            'gemini/gemini-2.0-flash-lite' => 'Gemini 2.0 Flash Lite - $0.07/$0.30',
+        ];
+    }
+
     public function render()
     {
-        return view('livewire.analisa-ai.analisa-ai-index');
+        return view('livewire.analisa-ai.analisa-ai-index', [
+            'availableModels' => $this->getAvailableModels()
+        ]);
     }
 }

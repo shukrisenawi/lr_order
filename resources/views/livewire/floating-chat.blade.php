@@ -24,7 +24,7 @@
                     </div>
                     <div>
                         <h3 class="font-semibold text-xs">AI Assistant</h3>
-                        <p class="text-xs text-white/80">Online</p>
+                        <p class="text-xs text-white/80">Online - {{ $selectedModel }}</p>
                     </div>
                 </div>
                 <button wire:click="closeChat"

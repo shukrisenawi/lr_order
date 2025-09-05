@@ -30,6 +30,12 @@ class ChatGPTIndex extends Component
     public function handleModelChange($model)
     {
         $this->selectedModel = $model;
+        session(['chat_selected_model' => $model]);
+    }
+
+    public function updatedSelectedModel($value)
+    {
+        session(['chat_selected_model' => $value]);
     }
 
     public function mount($embedded = false, $selectedModel = null)
@@ -38,6 +44,8 @@ class ChatGPTIndex extends Component
 
         if ($selectedModel) {
             $this->selectedModel = $selectedModel;
+        } elseif (session()->has('chat_selected_model')) {
+            $this->selectedModel = session('chat_selected_model');
         }
 
         // Set default system message
@@ -56,7 +64,8 @@ class ChatGPTIndex extends Component
             [
                 'role' => 'assistant',
                 'content' => $welcomeMessage,
-                'timestamp' => now()->format('H:i')
+                'timestamp' => now()->format('H:i'),
+                'model' => $this->selectedModel
             ]
         ];
     }
@@ -114,7 +123,8 @@ class ChatGPTIndex extends Component
             $this->messages[] = [
                 'role' => 'user',
                 'content' => $content,
-                'timestamp' => now()->format('H:i')
+                'timestamp' => now()->format('H:i'),
+                'model' => $this->selectedModel
             ];
 
             $this->newMessage = ''; // Clear message input
@@ -371,7 +381,8 @@ class ChatGPTIndex extends Component
         $this->messages[] = [
             'role' => 'assistant',
             'content' => $message,
-            'timestamp' => now()->format('H:i')
+            'timestamp' => now()->format('H:i'),
+            'model' => $this->selectedModel
         ];
         $this->isTyping = false;
     }
@@ -388,7 +399,8 @@ class ChatGPTIndex extends Component
             [
                 'role' => 'assistant',
                 'content' => 'Halo! Saya adalah asisten AI yang siap membantu anda. Apa yang boleh saya bantu hari ini?',
-                'timestamp' => now()->format('H:i')
+                'timestamp' => now()->format('H:i'),
+                'model' => $this->selectedModel
             ]
         ];
         $this->errorMessage = '';

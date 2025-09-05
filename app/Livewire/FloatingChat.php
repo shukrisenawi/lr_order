@@ -16,7 +16,7 @@ class FloatingChat extends Component
     public $errorMessage = '';
     public $selectedModel = 'gemini/gemini-2.0-flash-lite';
 
-    protected $listeners = ['openChat' => 'openChat'];
+    protected $listeners = ['openChat' => 'openChat', 'modelChanged' => 'handleModelChange'];
     protected $databaseQueryService;
 
     public function __construct()
@@ -26,6 +26,11 @@ class FloatingChat extends Component
 
     public function mount()
     {
+        // Load selected model from session if exists
+        if (session()->has('floating_chat_selected_model')) {
+            $this->selectedModel = session('floating_chat_selected_model');
+        }
+
         // Initialize with welcome message
         $this->messages = [
             [
@@ -49,6 +54,16 @@ class FloatingChat extends Component
     public function toggleChat()
     {
         $this->isOpen = !$this->isOpen;
+    }
+
+    public function handleModelChange($model)
+    {
+        $this->selectedModel = $model;
+    }
+
+    public function updatedSelectedModel($value)
+    {
+        session(['floating_chat_selected_model' => $value]);
     }
 
     public function sendMessage()

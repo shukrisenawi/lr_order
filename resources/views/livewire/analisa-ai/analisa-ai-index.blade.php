@@ -9,6 +9,18 @@
                 </h1>
                 <p class="text-gray-600">Muat naik gambar dan dapatkan analisis AI berdasarkan prompt anda</p>
             </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <label class="text-sm font-medium text-gray-700">Model AI:</label>
+                    <select wire:model.live="selectedModel" class="text-sm border border-gray-300 rounded-lg px-3 py-2 focus:border-blue-500 focus:ring-blue-500">
+                        @foreach($availableModels as $key => $model)
+                            <option value="{{ $key }}" {{ $selectedModel === $key ? 'selected' : '' }}>
+                                {{ $model }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -113,7 +125,7 @@
                             'Authorization': 'Bearer sk-6kaYJsk90RNguElbuHmmMQ'
                         },
                         body: JSON.stringify({
-                            model: 'gpt-4o-mini',
+                            model: @js($selectedModel),
                             messages: [{
                                 role: 'user',
                                 content: [
@@ -282,6 +294,12 @@
                                 <h4 class="text-lg font-semibold text-gray-900 mb-3">Hasil Analisis:</h4>
                                 <div class="text-gray-700 leading-relaxed whitespace-pre-wrap">
                                     {!! nl2br(e($analysisResult)) !!}
+                                </div>
+                                <div class="mt-3 pt-3 border-t border-gray-200">
+                                    <div class="text-xs text-gray-500 flex items-center">
+                                        <i class="fas fa-robot mr-1"></i>
+                                        Model: {{ $selectedModel }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
