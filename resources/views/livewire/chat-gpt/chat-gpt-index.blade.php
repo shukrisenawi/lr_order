@@ -34,7 +34,11 @@
                     <div class="flex flex-col">
                         <!-- Message Content -->
                         <div class="mb-1">
-                            {{ is_array($msg['content']) ? $msg['content'][0]['text'] ?? '' : $msg['content'] }}
+                            @if($msg['role'] === 'assistant')
+                                {!! app(\Parsedown::class)->setSafeMode(true)->text(is_array($msg['content']) ? $msg['content'][0]['text'] ?? '' : $msg['content']) !!}
+                            @else
+                                {{ is_array($msg['content']) ? $msg['content'][0]['text'] ?? '' : $msg['content'] }}
+                            @endif
                         </div>
                         <!-- Model Info -->
                         @if(isset($msg['model']) && $msg['model'])

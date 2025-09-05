@@ -59,7 +59,11 @@
                         <div
                             class="max-w-xs px-3 py-2 rounded-lg text-sm
                                     {{ $msg['role'] === 'user' ? 'bg-blue-500 text-white rounded-br-sm' : 'bg-gray-100 text-gray-800 rounded-bl-sm' }}">
-                            {{ $msg['content'] }}
+                            @if($msg['role'] === 'assistant')
+                                {!! app(\Parsedown::class)->setSafeMode(true)->text($msg['content']) !!}
+                            @else
+                                {{ $msg['content'] }}
+                            @endif
                         </div>
                     </div>
                 @endforeach

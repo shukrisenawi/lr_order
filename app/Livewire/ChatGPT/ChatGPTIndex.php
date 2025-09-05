@@ -81,7 +81,7 @@ class ChatGPTIndex extends Component
             $this->messages = [
                 [
                     'role' => 'assistant',
-                    'content' => $welcomeMessage,
+                    'content' => $welcomeMessage . "\n\n**Contoh format markdown:**\n- *Italic text*\n- **Bold text**\n- `Code inline`\n\n```php\necho 'Hello World';\n```",
                     'timestamp' => now()->format('H:i'),
                     'model' => $this->selectedModel
                 ]

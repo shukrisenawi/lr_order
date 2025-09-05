@@ -49,7 +49,7 @@ class FloatingChat extends Component
             $this->messages = [
                 [
                     'role' => 'assistant',
-                    'content' => 'Halo! Saya AI assistant dengan akses database. Saya boleh membantu mencari invoice dan data lain. Apa yang boleh saya bantu?',
+                    'content' => 'Halo! Saya AI assistant dengan akses database. Saya boleh membantu mencari invoice dan data lain. Apa yang boleh saya bantu?' . "\n\n**Contoh format markdown:**\n- *Italic text*\n- **Bold text**\n- `Code inline`\n\n```php\necho 'Hello World';\n```",
                     'timestamp' => now()->format('H:i')
                 ]
             ];
