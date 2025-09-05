@@ -136,7 +136,7 @@ class DatabaseQueryService
 
     private function isCountQuery($query)
     {
-        $countKeywords = ['berapa banyak', 'jumlah', 'berapa orang', 'berapa buah', 'total', 'count'];
+        $countKeywords = ['berapa banyak', 'jumlah', 'berapa orang', 'berapa buah', 'total', 'count', 'ada berapa'];
         foreach ($countKeywords as $keyword) {
             if (strpos($query, $keyword) !== false) {
                 return true;
@@ -179,6 +179,118 @@ class DatabaseQueryService
             return [
                 'sql' => 'SELECT COUNT(*) as total FROM prospek',
                 'description' => 'Jumlah prospek dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'penduduk') !== false || strpos($query, 'data penduduk') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM data_penduduk',
+                'description' => 'Jumlah data penduduk dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'invoice item') !== false || strpos($query, 'item invois') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM invoice_item',
+                'description' => 'Jumlah item invois dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'gambar') !== false || strpos($query, 'image') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM gambar',
+                'description' => 'Jumlah gambar dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'iklan') !== false || strpos($query, 'advertisement') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM iklan',
+                'description' => 'Jumlah iklan dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'tracking') !== false || strpos($query, 'penjejakan') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM tracking',
+                'description' => 'Jumlah data tracking dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'jadual pengajian') !== false || strpos($query, 'jadual') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM jadual_pengajian',
+                'description' => 'Jumlah jadual pengajian dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'waktu solat') !== false || strpos($query, 'solat') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM waktu_solat',
+                'description' => 'Jumlah jadual waktu solat dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'anak khariah') !== false || strpos($query, 'pelajar') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM anak_khariah',
+                'description' => 'Jumlah anak khariah dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'tenaga pengajar') !== false || strpos($query, 'guru') !== false || strpos($query, 'pengajar') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM tenaga_pengajar',
+                'description' => 'Jumlah tenaga pengajar dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'kitab pengajian') !== false || strpos($query, 'kitab') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM kitab_pengajian',
+                'description' => 'Jumlah kitab pengajian dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'pengajian') !== false && strpos($query, 'kitab') === false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM pengajian',
+                'description' => 'Jumlah sesi pengajian dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'program') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM program',
+                'description' => 'Jumlah program dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'pengumuman') !== false || strpos($query, 'announcement') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM pengumuman',
+                'description' => 'Jumlah pengumuman dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'landing page') !== false || strpos($query, 'laman web') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM landing_page',
+                'description' => 'Jumlah landing page dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'kumpulan') !== false || strpos($query, 'group') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM kumpulan',
+                'description' => 'Jumlah kumpulan dalam sistem'
+            ];
+        }
+
+        if (strpos($query, 'kod cula') !== false || strpos($query, 'kod') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM kod_cula',
+                'description' => 'Jumlah kod cula dalam sistem'
             ];
         }
 
@@ -233,6 +345,118 @@ class DatabaseQueryService
             ];
         }
 
+        if (strpos($query, 'penduduk') !== false || strpos($query, 'data penduduk') !== false) {
+            return [
+                'sql' => 'SELECT nama_pemilih, no_kp_baru, jantina, bangsa, nama_lokaliti FROM data_penduduk ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 data penduduk terkini'
+            ];
+        }
+
+        if (strpos($query, 'invoice item') !== false || strpos($query, 'item invois') !== false) {
+            return [
+                'sql' => 'SELECT invoice_id, nama_produk, kuantiti, harga_seunit FROM invoice_item ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 item invois terkini'
+            ];
+        }
+
+        if (strpos($query, 'gambar') !== false || strpos($query, 'image') !== false) {
+            return [
+                'sql' => 'SELECT nama_fail, saiz_fail, jenis_fail FROM gambar ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 gambar terkini'
+            ];
+        }
+
+        if (strpos($query, 'iklan') !== false || strpos($query, 'advertisement') !== false) {
+            return [
+                'sql' => 'SELECT tajuk, kandungan, status FROM iklan ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 iklan terkini'
+            ];
+        }
+
+        if (strpos($query, 'tracking') !== false || strpos($query, 'penjejakan') !== false) {
+            return [
+                'sql' => 'SELECT invoice_id, status, tarikh FROM tracking ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 data tracking terkini'
+            ];
+        }
+
+        if (strpos($query, 'jadual pengajian') !== false || strpos($query, 'jadual') !== false) {
+            return [
+                'sql' => 'SELECT tajuk, tarikh, masa, tempat FROM jadual_pengajian ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 jadual pengajian terkini'
+            ];
+        }
+
+        if (strpos($query, 'waktu solat') !== false || strpos($query, 'solat') !== false) {
+            return [
+                'sql' => 'SELECT nama_solat, waktu, tarikh FROM waktu_solat ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 waktu solat terkini'
+            ];
+        }
+
+        if (strpos($query, 'anak khariah') !== false || strpos($query, 'pelajar') !== false) {
+            return [
+                'sql' => 'SELECT nama, no_ic, alamat FROM anak_khariah ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 anak khariah terkini'
+            ];
+        }
+
+        if (strpos($query, 'tenaga pengajar') !== false || strpos($query, 'guru') !== false || strpos($query, 'pengajar') !== false) {
+            return [
+                'sql' => 'SELECT nama, no_tel, kepakaran FROM tenaga_pengajar ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 tenaga pengajar terkini'
+            ];
+        }
+
+        if (strpos($query, 'kitab pengajian') !== false || strpos($query, 'kitab') !== false) {
+            return [
+                'sql' => 'SELECT tajuk, pengarang, penerbit FROM kitab_pengajian ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 kitab pengajian terkini'
+            ];
+        }
+
+        if (strpos($query, 'pengajian') !== false && strpos($query, 'kitab') === false) {
+            return [
+                'sql' => 'SELECT tajuk, tarikh, tempat FROM pengajian ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 sesi pengajian terkini'
+            ];
+        }
+
+        if (strpos($query, 'program') !== false) {
+            return [
+                'sql' => 'SELECT nama_program, tarikh, tempat FROM program ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 program terkini'
+            ];
+        }
+
+        if (strpos($query, 'pengumuman') !== false || strpos($query, 'announcement') !== false) {
+            return [
+                'sql' => 'SELECT tajuk, kandungan, tarikh FROM pengumuman ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 pengumuman terkini'
+            ];
+        }
+
+        if (strpos($query, 'landing page') !== false || strpos($query, 'laman web') !== false) {
+            return [
+                'sql' => 'SELECT tajuk, kandungan, status FROM landing_page ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 landing page terkini'
+            ];
+        }
+
+        if (strpos($query, 'kumpulan') !== false || strpos($query, 'group') !== false) {
+            return [
+                'sql' => 'SELECT nama_kumpulan, deskripsi FROM kumpulan ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 kumpulan terkini'
+            ];
+        }
+
+        if (strpos($query, 'kod cula') !== false || strpos($query, 'kod') !== false) {
+            return [
+                'sql' => 'SELECT kod, nama_lokaliti FROM kod_cula ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 kod cula terkini'
+            ];
+        }
+
         return null;
     }
 
@@ -277,6 +501,134 @@ class DatabaseQueryService
                 'sql' => 'SELECT gelaran, no_tel, status FROM prospek WHERE gelaran LIKE ? OR no_tel LIKE ?',
                 'bindings' => ["%$searchTerm%", "%$searchTerm%"],
                 'description' => "Hasil carian prospek untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'penduduk') !== false || strpos($query, 'data penduduk') !== false) {
+            return [
+                'sql' => 'SELECT nama_pemilih, no_kp_baru, jantina, bangsa FROM data_penduduk WHERE nama_pemilih LIKE ? OR no_kp_baru LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian data penduduk untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'invoice item') !== false || strpos($query, 'item invois') !== false) {
+            return [
+                'sql' => 'SELECT invoice_id, nama_produk, kuantiti FROM invoice_item WHERE nama_produk LIKE ?',
+                'bindings' => ["%$searchTerm%"],
+                'description' => "Hasil carian item invois untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'gambar') !== false || strpos($query, 'image') !== false) {
+            return [
+                'sql' => 'SELECT nama_fail, saiz_fail FROM gambar WHERE nama_fail LIKE ?',
+                'bindings' => ["%$searchTerm%"],
+                'description' => "Hasil carian gambar untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'iklan') !== false || strpos($query, 'advertisement') !== false) {
+            return [
+                'sql' => 'SELECT tajuk, kandungan FROM iklan WHERE tajuk LIKE ? OR kandungan LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian iklan untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'tracking') !== false || strpos($query, 'penjejakan') !== false) {
+            return [
+                'sql' => 'SELECT invoice_id, status FROM tracking WHERE invoice_id LIKE ?',
+                'bindings' => ["%$searchTerm%"],
+                'description' => "Hasil carian tracking untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'jadual pengajian') !== false || strpos($query, 'jadual') !== false) {
+            return [
+                'sql' => 'SELECT tajuk, tempat FROM jadual_pengajian WHERE tajuk LIKE ? OR tempat LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian jadual pengajian untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'waktu solat') !== false || strpos($query, 'solat') !== false) {
+            return [
+                'sql' => 'SELECT nama_solat, waktu FROM waktu_solat WHERE nama_solat LIKE ?',
+                'bindings' => ["%$searchTerm%"],
+                'description' => "Hasil carian waktu solat untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'anak khariah') !== false || strpos($query, 'pelajar') !== false) {
+            return [
+                'sql' => 'SELECT nama, no_ic FROM anak_khariah WHERE nama LIKE ? OR no_ic LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian anak khariah untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'tenaga pengajar') !== false || strpos($query, 'guru') !== false || strpos($query, 'pengajar') !== false) {
+            return [
+                'sql' => 'SELECT nama, kepakaran FROM tenaga_pengajar WHERE nama LIKE ? OR kepakaran LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian tenaga pengajar untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'kitab pengajian') !== false || strpos($query, 'kitab') !== false) {
+            return [
+                'sql' => 'SELECT tajuk, pengarang FROM kitab_pengajian WHERE tajuk LIKE ? OR pengarang LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian kitab pengajian untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'pengajian') !== false && strpos($query, 'kitab') === false) {
+            return [
+                'sql' => 'SELECT tajuk, tempat FROM pengajian WHERE tajuk LIKE ? OR tempat LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian sesi pengajian untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'program') !== false) {
+            return [
+                'sql' => 'SELECT nama_program, tempat FROM program WHERE nama_program LIKE ? OR tempat LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian program untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'pengumuman') !== false || strpos($query, 'announcement') !== false) {
+            return [
+                'sql' => 'SELECT tajuk, kandungan FROM pengumuman WHERE tajuk LIKE ? OR kandungan LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian pengumuman untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'landing page') !== false || strpos($query, 'laman web') !== false) {
+            return [
+                'sql' => 'SELECT tajuk, kandungan FROM landing_page WHERE tajuk LIKE ? OR kandungan LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian landing page untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'kumpulan') !== false || strpos($query, 'group') !== false) {
+            return [
+                'sql' => 'SELECT nama_kumpulan, deskripsi FROM kumpulan WHERE nama_kumpulan LIKE ? OR deskripsi LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian kumpulan untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'kod cula') !== false || strpos($query, 'kod') !== false) {
+            return [
+                'sql' => 'SELECT kod, nama_lokaliti FROM kod_cula WHERE kod LIKE ? OR nama_lokaliti LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian kod cula untuk: '$searchTerm'"
             ];
         }
 
