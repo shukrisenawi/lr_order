@@ -16,6 +16,8 @@ class ChatGPTIndex extends Component
     public $selectedModel = 'gemini/gemini-2.0-flash-lite';
     public $embedded = false;
     public $uploadedImage;
+    public $systemMessage = '';
+    public $showSystemMessageModal = false;
 
     protected $databaseQueryService;
     protected $listeners = ['modelChanged' => 'handleModelChange'];
@@ -37,6 +39,13 @@ class ChatGPTIndex extends Component
         if ($selectedModel) {
             $this->selectedModel = $selectedModel;
         }
+
+        // Set default system message
+        $this->systemMessage = session('chat_system_message', 'You are a helpful AI assistant with access to a business management database. ' .
+            'Respond in Malay language unless specifically asked otherwise. ' .
+            'You have access to the following database tables: ' . $this->getDatabaseContext() . '. ' .
+            'If the user asks about data, provide helpful analysis and insights based on the available information. ' .
+            'Always be helpful, accurate, and provide actionable information.');
 
         // Initialize with welcome message
         $welcomeMessage = $this->embedded
@@ -167,11 +176,7 @@ class ChatGPTIndex extends Component
             $messages = [
                 [
                     'role' => 'system',
-                    'content' => 'You are a helpful AI assistant with access to a business management database. ' .
-                        'Respond in Malay language unless specifically asked otherwise. ' .
-                        'You have access to the following database tables: ' . $schemaInfo . '. ' .
-                        'If the user asks about data, provide helpful analysis and insights based on the available information. ' .
-                        'Always be helpful, accurate, and provide actionable information.'
+                    'content' => $this->systemMessage
                 ]
             ];
 
@@ -295,6 +300,23 @@ class ChatGPTIndex extends Component
             ]
         ];
         $this->errorMessage = '';
+    }
+
+    public function openSystemMessageModal()
+    {
+        $this->showSystemMessageModal = true;
+    }
+
+    public function closeSystemMessageModal()
+    {
+        $this->showSystemMessageModal = false;
+    }
+
+    public function updateSystemMessage()
+    {
+        session(['chat_system_message' => $this->systemMessage]);
+        $this->closeSystemMessageModal();
+        session()->flash('message', 'System message telah dikemas kini.');
     }
 
     public function getAvailableModels()
