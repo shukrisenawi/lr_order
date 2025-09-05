@@ -469,6 +469,12 @@ class ChatGPTIndex extends Component
         $this->messages = [];
     }
 
+    public function checkTypingStatus()
+    {
+        // This method is called by wire:poll to ensure reactivity
+        return $this->isTyping;
+    }
+
     public function getAvailableModels()
     {
         return [
