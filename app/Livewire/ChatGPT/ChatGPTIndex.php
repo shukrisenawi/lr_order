@@ -20,7 +20,7 @@ class ChatGPTIndex extends Component
     public $showSystemMessageModal = false;
 
     protected $databaseQueryService;
-    protected $listeners = ['modelChanged' => 'handleModelChange'];
+    protected $listeners = ['modelChanged' => 'handleModelChange', 'syncModelFromFloatingChat' => 'syncModelFromFloatingChat', 'syncSystemMessageFromChatGPT' => 'syncSystemMessageFromFloatingChat'];
 
     public function __construct()
     {
@@ -36,6 +36,21 @@ class ChatGPTIndex extends Component
     public function updatedSelectedModel($value)
     {
         session(['chat_selected_model' => $value]);
+
+        // Emit event to sync with FloatingChat component if it exists on the page
+        $this->dispatch('syncModelFromChatGPT', $value);
+    }
+
+    public function syncModelFromFloatingChat($model)
+    {
+        $this->selectedModel = $model;
+        session(['chat_selected_model' => $model]);
+    }
+
+    public function syncSystemMessageFromFloatingChat($message)
+    {
+        $this->systemMessage = $message;
+        session(['chat_system_message' => $message]);
     }
 
     public function mount($embedded = false, $selectedModel = null)
@@ -421,6 +436,9 @@ class ChatGPTIndex extends Component
         session(['chat_system_message' => $this->systemMessage]);
         $this->closeSystemMessageModal();
         session()->flash('message', 'System message telah dikemas kini.');
+
+        // Emit event to sync with FloatingChat component if it exists on the page
+        $this->dispatch('syncSystemMessageFromChatGPT', $this->systemMessage);
     }
 
     public function getAvailableModels()
