@@ -20,7 +20,7 @@ class ChatGPTIndex extends Component
     public $showSystemMessageModal = false;
 
     protected $databaseQueryService;
-    protected $listeners = ['modelChanged' => 'handleModelChange', 'syncModelFromFloatingChat' => 'syncModelFromFloatingChat', 'syncSystemMessageFromChatGPT' => 'syncSystemMessageFromFloatingChat'];
+    protected $listeners = ['modelChanged' => 'handleModelChange', 'syncModelFromFloatingChat' => 'syncModelFromFloatingChat', 'syncSystemMessageFromChatGPT' => 'syncSystemMessageFromFloatingChat', 'clearChatOnLogout' => 'clearChatOnLogout'];
 
     public function __construct()
     {
@@ -70,19 +70,25 @@ class ChatGPTIndex extends Component
             'If the user asks about data, provide helpful analysis and insights based on the available information. ' .
             'Always be helpful, accurate, and provide actionable information.');
 
-        // Initialize with welcome message
-        $welcomeMessage = $this->embedded
-            ? 'Halo! Saya AI assistant dengan akses database. Tanya saya tentang data dalam sistem!'
-            : 'Halo! Saya adalah asisten AI yang boleh membantu anda dengan soalan tentang data dalam sistem. Saya boleh memberikan maklumat tentang pelanggan, invois, produk, dan banyak lagi. Apa yang boleh saya bantu hari ini?';
+        // Load messages from session if exists, otherwise initialize with welcome message
+        if (session()->has('chatgpt_messages')) {
+            $this->messages = session('chatgpt_messages');
+        } else {
+            $welcomeMessage = $this->embedded
+                ? 'Halo! Saya AI assistant dengan akses database. Tanya saya tentang data dalam sistem!'
+                : 'Halo! Saya adalah asisten AI yang boleh membantu anda dengan soalan tentang data dalam sistem. Saya boleh memberikan maklumat tentang pelanggan, invois, produk, dan banyak lagi. Apa yang boleh saya bantu hari ini?';
 
-        $this->messages = [
-            [
-                'role' => 'assistant',
-                'content' => $welcomeMessage,
-                'timestamp' => now()->format('H:i'),
-                'model' => $this->selectedModel
-            ]
-        ];
+            $this->messages = [
+                [
+                    'role' => 'assistant',
+                    'content' => $welcomeMessage,
+                    'timestamp' => now()->format('H:i'),
+                    'model' => $this->selectedModel
+                ]
+            ];
+            // Save initial messages to session
+            session(['chatgpt_messages' => $this->messages]);
+        }
     }
 
     protected $rules = [
@@ -141,6 +147,9 @@ class ChatGPTIndex extends Component
                 'timestamp' => now()->format('H:i'),
                 'model' => $this->selectedModel
             ];
+
+            // Save messages to session
+            session(['chatgpt_messages' => $this->messages]);
 
             $this->newMessage = ''; // Clear message input
             $this->uploadedImage = null; // Clear uploaded image
@@ -400,6 +409,9 @@ class ChatGPTIndex extends Component
             'model' => $this->selectedModel
         ];
         $this->isTyping = false;
+
+        // Save messages to session
+        session(['chatgpt_messages' => $this->messages]);
     }
 
     public function setErrorMessage($message)
@@ -419,6 +431,9 @@ class ChatGPTIndex extends Component
             ]
         ];
         $this->errorMessage = '';
+
+        // Clear messages from session and save welcome message
+        session(['chatgpt_messages' => $this->messages]);
     }
 
     public function openSystemMessageModal()
@@ -439,6 +454,13 @@ class ChatGPTIndex extends Component
 
         // Emit event to sync with FloatingChat component if it exists on the page
         $this->dispatch('syncSystemMessageFromChatGPT', $this->systemMessage);
+    }
+
+    public function clearChatOnLogout()
+    {
+        // Clear all chat-related session data on logout
+        session()->forget(['chatgpt_messages']);
+        $this->messages = [];
     }
 
     public function getAvailableModels()
