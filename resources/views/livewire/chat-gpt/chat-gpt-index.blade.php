@@ -34,7 +34,7 @@
                     </svg>
                 </button>
                 <span
-                    class="text-xs text-white/60 truncate max-w-32">{{ $availableModels[$selectedModel] ?? $selectedModel }}</span>
+                    class="text-xs text-white/60 truncate max-w-150">{{ $availableModels[$selectedModel] ?? $selectedModel }}</span>
             </div>
             <button wire:click="clearChat" wire:confirm="Adakah anda pasti mahu menghapuskan semua mesej?"
                 class="text-white/80 hover:text-white p-1 rounded transition-colors" title="Clear Messages">
@@ -48,8 +48,8 @@
     </div>
 
     <!-- Chat Body -->
-    <div class="flex-1 overflow-y-auto p-3 space-y-2">
-        @foreach ($messages as $msg)
+    <div class="flex-1 overflow-y-auto p-3 space-y-2 flex flex-col-reverse" id="chat-messages">
+        @foreach (array_reverse($messages) as $msg)
             <div class="flex {{ $msg['role'] === 'user' ? 'justify-end' : 'justify-start' }} mb-2 message-enter">
                 <div class="max-w-xs lg:max-w-md xl:max-w-4xl">
                     @if ($msg['role'] === 'user')
@@ -171,7 +171,7 @@
 
             // Auto-scroll to bottom when new message is added
             Livewire.on('scroll-to-bottom', () => {
-                const chatBody = document.querySelector('.flex-1.overflow-y-auto');
+                const chatBody = document.getElementById('chat-messages');
                 if (chatBody) {
                     setTimeout(() => {
                         chatBody.scrollTop = chatBody.scrollHeight;
@@ -181,7 +181,7 @@
 
             // Scroll to bottom on page load
             setTimeout(() => {
-                const chatBody = document.querySelector('.flex-1.overflow-y-auto');
+                const chatBody = document.getElementById('chat-messages');
                 if (chatBody) {
                     chatBody.scrollTop = chatBody.scrollHeight;
                 }
@@ -190,7 +190,7 @@
 
         // Add smooth scrolling for better UX
         document.addEventListener('DOMContentLoaded', () => {
-            const chatBody = document.querySelector('.flex-1.overflow-y-auto');
+            const chatBody = document.getElementById('chat-messages');
             if (chatBody) {
                 chatBody.style.scrollBehavior = 'smooth';
             }
@@ -199,21 +199,21 @@
 
     <style>
         /* Custom scrollbar */
-        .flex-1.overflow-y-auto::-webkit-scrollbar {
+        #chat-messages::-webkit-scrollbar {
             width: 6px;
         }
 
-        .flex-1.overflow-y-auto::-webkit-scrollbar-track {
+        #chat-messages::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 10px;
         }
 
-        .flex-1.overflow-y-auto::-webkit-scrollbar-thumb {
+        #chat-messages::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.3);
             border-radius: 10px;
         }
 
-        .flex-1.overflow-y-auto::-webkit-scrollbar-thumb:hover {
+        #chat-messages::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.5);
         }
 

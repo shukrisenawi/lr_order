@@ -151,6 +151,9 @@ class ChatGPTIndex extends Component
             // Save messages to session
             session(['chatgpt_messages' => $this->messages]);
 
+            // Auto-scroll to bottom after adding user message
+            $this->dispatch('scroll-to-bottom');
+
             $this->newMessage = ''; // Clear message input
             $this->uploadedImage = null; // Clear uploaded image
             $this->isSending = true; // Set sending state
@@ -412,6 +415,9 @@ class ChatGPTIndex extends Component
 
         // Save messages to session
         session(['chatgpt_messages' => $this->messages]);
+
+        // Auto-scroll to bottom after adding message
+        $this->dispatch('scroll-to-bottom');
     }
 
     public function setErrorMessage($message)
