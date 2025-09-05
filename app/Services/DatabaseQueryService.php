@@ -175,12 +175,19 @@ class DatabaseQueryService
             ];
         }
 
+        if (strpos($query, 'prospek') !== false || strpos($query, 'prospect') !== false || strpos($query, 'leads') !== false) {
+            return [
+                'sql' => 'SELECT COUNT(*) as total FROM prospek',
+                'description' => 'Jumlah prospek dalam sistem'
+            ];
+        }
+
         return null;
     }
 
     private function isListQuery($query)
     {
-        $listKeywords = ['senarai', 'list', 'tunjukkan', 'paparkan', 'show'];
+        $listKeywords = ['senarai', 'list', 'tunjukkan', 'paparkan', 'show', 'nama'];
         foreach ($listKeywords as $keyword) {
             if (strpos($query, $keyword) !== false) {
                 return true;
@@ -209,6 +216,20 @@ class DatabaseQueryService
             return [
                 'sql' => 'SELECT invoice_no, nama_penerima, jumlah, status FROM invoice ORDER BY created_at DESC LIMIT 10',
                 'description' => 'Senarai 10 invois terkini'
+            ];
+        }
+
+        if (strpos($query, 'bisnes') !== false || strpos($query, 'perniagaan') !== false || strpos($query, 'syarikat') !== false) {
+            return [
+                'sql' => 'SELECT nama_bisnes, nama_syarikat, no_tel FROM bisnes ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 bisnes terkini'
+            ];
+        }
+
+        if (strpos($query, 'prospek') !== false || strpos($query, 'prospect') !== false || strpos($query, 'leads') !== false) {
+            return [
+                'sql' => 'SELECT gelaran, no_tel, status, created_at FROM prospek ORDER BY created_at DESC LIMIT 10',
+                'description' => 'Senarai 10 prospek terkini'
             ];
         }
 
@@ -248,6 +269,14 @@ class DatabaseQueryService
                 'sql' => 'SELECT nama, harga, deskripsi FROM produk WHERE nama LIKE ? OR deskripsi LIKE ?',
                 'bindings' => ["%$searchTerm%", "%$searchTerm%"],
                 'description' => "Hasil carian produk untuk: '$searchTerm'"
+            ];
+        }
+
+        if (strpos($query, 'prospek') !== false || strpos($query, 'prospect') !== false || strpos($query, 'leads') !== false) {
+            return [
+                'sql' => 'SELECT gelaran, no_tel, status FROM prospek WHERE gelaran LIKE ? OR no_tel LIKE ?',
+                'bindings' => ["%$searchTerm%", "%$searchTerm%"],
+                'description' => "Hasil carian prospek untuk: '$searchTerm'"
             ];
         }
 

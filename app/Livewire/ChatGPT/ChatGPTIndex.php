@@ -195,88 +195,121 @@ class ChatGPTIndex extends Component
         return in_array($model, $visionModels) || str_contains($model, 'gpt-4') || str_contains($model, 'claude') || str_contains($model, 'gemini');
     }
 
-    private function callAIAPI()
+    private function callAIAPI($content)
     {
-        $currentTime = now()->setTimezone('Asia/Kuala_Lumpur')->format('l, d F Y H:i:s T');
+        try {
+            // Extract text for database query
+            $textForQuery = is_array($content) ? $content[0]['text'] : $content;
 
-        // mesej terakhir dari user
-        $textForQuery = end($this->messages)['content'] ?? '';
+            // Check if the user is asking about data/database queries
+            $databaseResult = $this->handleDatabaseQuery($textForQuery);
 
-        // cuba jalankan query dari user input (jika ada)
-        $databaseResult = $this->handleDatabaseQuery($textForQuery);
+            if ($databaseResult !== null) {
+                // If we have database results, include them in the AI context
+                $enhancedMessage = $textForQuery . "\n\nMaklumat dari database:\n" . $databaseResult;
+            } else {
+                $enhancedMessage = $textForQuery;
+            }
 
-        $messages = [
-            [
-                'role' => 'system',
-                'content' => $this->systemMessage,
-            ],
-            [
-                'role' => 'system',
-                'content' => "CRITICAL: Untuk soalan berkaitan jumlah rekod atau data dari database, JANGAN mereka nombor. Jika perlu, hasilkan SQL (SELECT sahaja) untuk saya jalankan. Jangan guna UPDATE, DELETE, DROP, INSERT.",
-            ],
-            [
-                'role' => 'system',
-                'content' => "MAKLUMAT MASA: Sekarang ialah {$currentTime} (waktu Malaysia). Jika pengguna tanya tentang jam, tarikh atau waktu sekarang, WAJIB guna nilai ini dan jangan menafikan akses masa.",
-            ],
-        ];
+            // Get database schema information for context
+            $schemaInfo = $this->getDatabaseContext();
 
-        foreach ($this->messages as $message) {
-            $messages[] = [
-                'role' => $message['role'],
-                'content' => $message['content'],
+            // Prepare messages for API
+            $messages = [
+                [
+                    'role' => 'system',
+                    'content' => $this->systemMessage . ' ' .
+                        'IMPORTANT: When users ask questions about data from the database, you should provide the information directly if it has been retrieved from the database. ' .
+                        'If database results are provided in the conversation, use them to give complete and accurate answers. ' .
+                        'For questions about data quantities or lists, provide the actual data when available. ' .
+                        'Only say you cannot provide information if no database results are available.'
+                ]
             ];
-        }
 
-        if (!empty($databaseResult)) {
+            // Add conversation history (excluding the current user message)
+            foreach ($this->messages as $index => $msg) {
+                if ($msg['role'] === 'user' && $index === count($this->messages) - 1) {
+                    // Skip the current user message, will add later
+                } else {
+                    $messages[] = [
+                        'role' => $msg['role'],
+                        'content' => $msg['content']
+                    ];
+                }
+            }
+
+            // Add the enhanced user message (with database results if available)
+            $userContent = is_array($content) ? $content : $enhancedMessage;
             $messages[] = [
-                'role' => 'system',
-                'content' => "Hasil query database (JSON): " . json_encode($databaseResult),
+                'role' => 'user',
+                'content' => $userContent
             ];
+
+            // Make API call to SumoPod AI
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer ' . config('services.sumopod.api_key'),
+                'Content-Type' => 'application/json',
+            ])->post(config('services.sumopod.base_url') . '/chat/completions', [
+                'model' => $this->selectedModel,
+                'messages' => $messages,
+                'max_tokens' => 1000,
+                'temperature' => 0.7
+            ]);
+
+            if ($response->successful()) {
+                $data = $response->json();
+                $aiResponse = $data['choices'][0]['message']['content'] ?? 'Maaf, tidak dapat mendapatkan respons dari AI.';
+
+                $this->addAssistantMessage($aiResponse);
+            } else {
+                $this->setErrorMessage('Gagal mendapatkan respons dari AI. Sila cuba lagi.');
+            }
+        } catch (\Exception $e) {
+            $this->setErrorMessage('Ralat: ' . $e->getMessage());
+        } finally {
+            $this->isSending = false; // Reset sending state after response
         }
-
-        // tambah nota masa sebagai user context
-        $messages[] = [
-            'role' => 'user',
-            'content' => "Nota: Sekarang ialah {$currentTime} waktu Malaysia.",
-        ];
-
-        $response = Http::withHeaders([
-            'Authorization' => 'Bearer ' . config('services.openai.key'),
-            'Content-Type' => 'application/json',
-        ])->post('https://api.openai.com/v1/chat/completions', [
-            'model' => $this->selectedModel,
-            'messages' => $messages,
-        ]);
-
-        if ($response->successful()) {
-            $this->addMessage('assistant', $response['choices'][0]['message']['content']);
-        } else {
-            $this->addMessage('assistant', 'Ralat: Tidak dapat hubungi AI API.');
-        }
-
-        $this->isTyping = false;
     }
 
-    private function handleDatabaseQuery($userInput)
+    private function handleDatabaseQuery($userMessage)
     {
-        // Cari sama ada user/AI bagi query SQL
-        if (preg_match('/\bSELECT\b/i', $userInput)) {
-            $query = $userInput;
-
-            // Sekat arahan berbahaya
-            if (preg_match('/\b(UPDATE|DELETE|INSERT|DROP|ALTER|TRUNCATE)\b/i', $query)) {
-                return ['error' => 'Query tidak dibenarkan.'];
+        try {
+            // Check for simple count queries first
+            $countResult = $this->handleSimpleCountQuery($userMessage);
+            if ($countResult !== null) {
+                return $countResult;
             }
 
-            try {
-                $result = \DB::select($query);
-                return $result;
-            } catch (\Exception $e) {
-                return ['error' => $e->getMessage()];
+            // Check for invoice search
+            $invoiceSearch = $this->detectInvoiceSearch($userMessage);
+            if ($invoiceSearch) {
+                // Verify if invoice exists in database
+                $invoiceExists = $this->verifyInvoiceExists($invoiceSearch);
+
+                if ($invoiceExists) {
+                    $this->redirectToInvoiceSearch($invoiceSearch);
+                    return null; // Don't return message since we're redirecting
+                } else {
+                    return "Maaf, invoice nombor " . $invoiceSearch . " tidak ditemui dalam database sistem. Sila pastikan nombor invoice adalah betul.";
+                }
             }
+
+            // Check if this looks like a database query using DatabaseQueryService
+            $queryResult = $this->databaseQueryService->generateQueryFromNaturalLanguage($userMessage);
+
+            if ($queryResult) {
+                $result = $this->databaseQueryService->executeSafeQuery(
+                    $queryResult['sql'],
+                    $queryResult['bindings'] ?? []
+                );
+
+                return $this->databaseQueryService->formatQueryResult($result, $queryResult['description']);
+            }
+
+            return null;
+        } catch (\Exception $e) {
+            return "Ralat semasa mengakses database: " . $e->getMessage();
         }
-
-        return [];
     }
 
 
