@@ -64,8 +64,13 @@ class ChatGPTIndex extends Component
         }
 
         // Set default system message
+        $currentTime = now()->setTimezone('Asia/Kuala_Lumpur')->format('l, d F Y H:i:s T');
         $this->systemMessage = session('chat_system_message', 'You are a helpful AI assistant with access to a business management database. ' .
             'Respond in Malay language unless specifically asked otherwise. ' .
+            'IMPORTANT: Current date and time information: ' . $currentTime . '. ' .
+            'You MUST use this current time information to answer questions about time, date, or schedule. ' .
+            'When asked "pukul berapa", "jam berapa", "tarikh apa", or similar time questions, you MUST provide the current time from the information above. ' .
+            'Do NOT say you don\'t have access to current time - you DO have access to it. ' .
             'You have access to the following database tables: ' . $this->getDatabaseContext() . '. ' .
             'If the user asks about data, provide helpful analysis and insights based on the available information. ' .
             'Always be helpful, accurate, and provide actionable information.');
@@ -82,7 +87,7 @@ class ChatGPTIndex extends Component
                 [
                     'role' => 'assistant',
                     'content' => $welcomeMessage . "\n\n**Contoh format markdown:**\n- *Italic text*\n- **Bold text**\n- `Code inline`\n\n```php\necho 'Hello World';\n```",
-                    'timestamp' => now()->format('H:i'),
+                    'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A'),
                     'model' => $this->selectedModel
                 ]
             ];
@@ -144,7 +149,7 @@ class ChatGPTIndex extends Component
             $this->messages[] = [
                 'role' => 'user',
                 'content' => $content,
-                'timestamp' => now()->format('H:i'),
+                'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A'),
                 'model' => $this->selectedModel
             ];
 
@@ -190,121 +195,90 @@ class ChatGPTIndex extends Component
         return in_array($model, $visionModels) || str_contains($model, 'gpt-4') || str_contains($model, 'claude') || str_contains($model, 'gemini');
     }
 
-    private function callAIAPI($content)
+    private function callAIAPI()
     {
-        try {
-            // Extract text for database query
-            $textForQuery = is_array($content) ? $content[0]['text'] : $content;
+        $currentTime = now()->setTimezone('Asia/Kuala_Lumpur')->format('l, d F Y H:i:s T');
 
-            // Check if the user is asking about data/database queries
-            $databaseResult = $this->handleDatabaseQuery($textForQuery);
+        // mesej terakhir dari user
+        $textForQuery = end($this->messages)['content'] ?? '';
 
-            if ($databaseResult !== null) {
-                // If we have database results, include them in the AI context
-                $enhancedMessage = $textForQuery . "\n\nMaklumat dari database:\n" . $databaseResult;
-            } else {
-                $enhancedMessage = $textForQuery;
-            }
+        // cuba jalankan query dari user input (jika ada)
+        $databaseResult = $this->handleDatabaseQuery($textForQuery);
 
-            // Get database schema information for context
-            $schemaInfo = $this->getDatabaseContext();
+        $messages = [
+            [
+                'role' => 'system',
+                'content' => $this->systemMessage,
+            ],
+            [
+                'role' => 'system',
+                'content' => "CRITICAL: Untuk soalan berkaitan jumlah rekod atau data dari database, JANGAN mereka nombor. Jika perlu, hasilkan SQL (SELECT sahaja) untuk saya jalankan. Jangan guna UPDATE, DELETE, DROP, INSERT.",
+            ],
+            [
+                'role' => 'system',
+                'content' => "MAKLUMAT MASA: Sekarang ialah {$currentTime} (waktu Malaysia). Jika pengguna tanya tentang jam, tarikh atau waktu sekarang, WAJIB guna nilai ini dan jangan menafikan akses masa.",
+            ],
+        ];
 
-            // Prepare messages for API
-            $messages = [
-                [
-                    'role' => 'system',
-                    'content' => $this->systemMessage . ' ' .
-                        'CRITICAL: For ANY question about data quantities, counts, or existence, you MUST tell the user that you cannot provide that information directly and they should ask specific questions that will be processed by the database system. ' .
-                        'NEVER make up numbers or statistics. If asked "how many invoices" or similar count questions, respond by saying you need to check the database and the system will provide the accurate count. ' .
-                        'Only provide information that has been verified through database queries. For any unverified information, direct the user to ask specific questions.'
-                ]
-            ];
-
-            // Add conversation history (excluding the current user message)
-            foreach ($this->messages as $index => $msg) {
-                if ($msg['role'] === 'user' && $index === count($this->messages) - 1) {
-                    // Skip the current user message, will add enhanced later
-                } else {
-                    $messages[] = [
-                        'role' => $msg['role'],
-                        'content' => $msg['content']
-                    ];
-                }
-            }
-
-            // Add the enhanced user message (with database results if available)
-            $userContent = is_array($content) ? $content : $enhancedMessage;
+        foreach ($this->messages as $message) {
             $messages[] = [
-                'role' => 'user',
-                'content' => $userContent
+                'role' => $message['role'],
+                'content' => $message['content'],
             ];
-
-            // Make API call to SumoPod AI
-            $response = Http::withHeaders([
-                'Authorization' => 'Bearer ' . config('services.sumopod.api_key'),
-                'Content-Type' => 'application/json',
-            ])->post(config('services.sumopod.base_url') . '/chat/completions', [
-                'model' => $this->selectedModel,
-                'messages' => $messages,
-                'max_tokens' => 1000,
-                'temperature' => 0.7
-            ]);
-
-            if ($response->successful()) {
-                $data = $response->json();
-                $aiResponse = $data['choices'][0]['message']['content'] ?? 'Maaf, tidak dapat mendapatkan respons dari AI.';
-
-                $this->addAssistantMessage($aiResponse);
-            } else {
-                $this->setErrorMessage('Gagal mendapatkan respons dari AI. Sila cuba lagi.');
-            }
-        } catch (\Exception $e) {
-            $this->setErrorMessage('Ralat: ' . $e->getMessage());
-        } finally {
-            $this->isSending = false; // Reset sending state after response
         }
+
+        if (!empty($databaseResult)) {
+            $messages[] = [
+                'role' => 'system',
+                'content' => "Hasil query database (JSON): " . json_encode($databaseResult),
+            ];
+        }
+
+        // tambah nota masa sebagai user context
+        $messages[] = [
+            'role' => 'user',
+            'content' => "Nota: Sekarang ialah {$currentTime} waktu Malaysia.",
+        ];
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . config('services.openai.key'),
+            'Content-Type' => 'application/json',
+        ])->post('https://api.openai.com/v1/chat/completions', [
+            'model' => $this->selectedModel,
+            'messages' => $messages,
+        ]);
+
+        if ($response->successful()) {
+            $this->addMessage('assistant', $response['choices'][0]['message']['content']);
+        } else {
+            $this->addMessage('assistant', 'Ralat: Tidak dapat hubungi AI API.');
+        }
+
+        $this->isTyping = false;
     }
 
-    private function handleDatabaseQuery($userMessage)
+    private function handleDatabaseQuery($userInput)
     {
-        try {
-            // Check for simple count queries first
-            $countResult = $this->handleSimpleCountQuery($userMessage);
-            if ($countResult !== null) {
-                return $countResult;
+        // Cari sama ada user/AI bagi query SQL
+        if (preg_match('/\bSELECT\b/i', $userInput)) {
+            $query = $userInput;
+
+            // Sekat arahan berbahaya
+            if (preg_match('/\b(UPDATE|DELETE|INSERT|DROP|ALTER|TRUNCATE)\b/i', $query)) {
+                return ['error' => 'Query tidak dibenarkan.'];
             }
 
-            // Check for invoice search request
-            $invoiceSearch = $this->detectInvoiceSearch($userMessage);
-            if ($invoiceSearch) {
-                // Verify if invoice exists in database
-                $invoiceExists = $this->verifyInvoiceExists($invoiceSearch);
-
-                if ($invoiceExists) {
-                    $this->redirectToInvoiceSearch($invoiceSearch);
-                    return null; // Don't return message since we're redirecting
-                } else {
-                    return "Maaf, invoice nombor " . $invoiceSearch . " tidak ditemui dalam database sistem. Sila pastikan nombor invoice adalah betul.";
-                }
+            try {
+                $result = \DB::select($query);
+                return $result;
+            } catch (\Exception $e) {
+                return ['error' => $e->getMessage()];
             }
-
-            // Check if this looks like a database query
-            $queryResult = $this->databaseQueryService->generateQueryFromNaturalLanguage($userMessage);
-
-            if ($queryResult) {
-                $result = $this->databaseQueryService->executeSafeQuery(
-                    $queryResult['sql'],
-                    $queryResult['bindings'] ?? []
-                );
-
-                return $this->databaseQueryService->formatQueryResult($result, $queryResult['description']);
-            }
-
-            return null;
-        } catch (\Exception $e) {
-            return "Ralat semasa mengakses database: " . $e->getMessage();
         }
+
+        return [];
     }
+
 
     private function detectInvoiceSearch($message)
     {
@@ -408,7 +382,7 @@ class ChatGPTIndex extends Component
         $this->messages[] = [
             'role' => 'assistant',
             'content' => $message,
-            'timestamp' => now()->format('H:i'),
+            'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A'),
             'model' => $this->selectedModel
         ];
         $this->isTyping = false;
@@ -432,7 +406,7 @@ class ChatGPTIndex extends Component
             [
                 'role' => 'assistant',
                 'content' => 'Halo! Saya adalah asisten AI yang siap membantu anda. Apa yang boleh saya bantu hari ini?',
-                'timestamp' => now()->format('H:i'),
+                'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A'),
                 'model' => $this->selectedModel
             ]
         ];

@@ -58,6 +58,9 @@
                                 {{ is_array($msg['content']) ? $msg['content'][0]['text'] ?? '' : $msg['content'] }}
                             </div>
                         </div>
+                        <div class="text-xs text-blue-300 mt-1 px-1 text-right">
+                            {{ $msg['timestamp'] }}
+                        </div>
                     @else
                         <!-- Assistant Message -->
                         <div
@@ -65,6 +68,9 @@
                             <div class="text-sm leading-relaxed">
                                 {!! app(\Parsedown::class)->setSafeMode(true)->text(is_array($msg['content']) ? $msg['content'][0]['text'] ?? '' : $msg['content']) !!}
                             </div>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1 px-1 text-left">
+                            {{ $msg['timestamp'] }}
                         </div>
                     @endif
                 </div>

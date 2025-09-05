@@ -65,14 +65,19 @@
             <div class="flex-1 overflow-y-auto p-4 space-y-3 h-80 flex flex-col-reverse" id="chat-messages">
                 @foreach (array_reverse($messages) as $msg)
                     <div class="flex {{ $msg['role'] === 'user' ? 'justify-end' : 'justify-start' }}">
-                        <div
-                            class="max-w-xs px-3 py-2 rounded-lg text-sm
-                                    {{ $msg['role'] === 'user' ? 'bg-blue-500 text-white rounded-br-sm' : 'bg-gray-100 text-gray-800 rounded-bl-sm' }}">
-                            @if ($msg['role'] === 'assistant')
-                                {!! app(\Parsedown::class)->setSafeMode(true)->text($msg['content']) !!}
-                            @else
-                                {{ $msg['content'] }}
-                            @endif
+                        <div class="max-w-xs">
+                            <div
+                                class="px-3 py-2 rounded-lg text-sm
+                                         {{ $msg['role'] === 'user' ? 'bg-blue-500 text-white rounded-br-sm' : 'bg-gray-100 text-gray-800 rounded-bl-sm' }}">
+                                @if ($msg['role'] === 'assistant')
+                                    {!! app(\Parsedown::class)->setSafeMode(true)->text($msg['content']) !!}
+                                @else
+                                    {{ $msg['content'] }}
+                                @endif
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1 px-1 {{ $msg['role'] === 'user' ? 'text-right' : 'text-left' }}">
+                                {{ $msg['timestamp'] }}
+                            </div>
                         </div>
                     </div>
                 @endforeach

@@ -36,8 +36,13 @@ class FloatingChat extends Component
         }
 
         // Load system message from ChatGPT session
+        $currentTime = now()->setTimezone('Asia/Kuala_Lumpur')->format('l, d F Y h:i:s A T');
         $this->systemMessage = session('chat_system_message', 'You are a helpful AI assistant with access to a business management database. ' .
             'Respond in Malay language unless specifically asked otherwise. ' .
+            'IMPORTANT: Current date and time information: ' . $currentTime . '. ' .
+            'You MUST use this current time information to answer questions about time, date, or schedule. ' .
+            'When asked "pukul berapa", "jam berapa", "tarikh apa", or similar time questions, you MUST provide the current time from the information above. ' .
+            'Do NOT say you don\'t have access to current time - you DO have access to it. ' .
             'You have access to the following database tables: ' . $this->getDatabaseContext() . '. ' .
             'If the user asks about data, provide helpful analysis and insights based on the available information. ' .
             'Always be helpful, accurate, and provide actionable information.');
@@ -50,7 +55,7 @@ class FloatingChat extends Component
                 [
                     'role' => 'assistant',
                     'content' => 'Halo! Saya AI assistant dengan akses database. Saya boleh membantu mencari invoice dan data lain. Apa yang boleh saya bantu?' . "\n\n**Contoh format markdown:**\n- *Italic text*\n- **Bold text**\n- `Code inline`\n\n```php\necho 'Hello World';\n```",
-                    'timestamp' => now()->format('H:i')
+                    'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A')
                 ]
             ];
             // Save initial messages to session
@@ -117,7 +122,7 @@ class FloatingChat extends Component
         $this->messages[] = [
             'role' => 'user',
             'content' => $userMessage,
-            'timestamp' => now()->format('H:i')
+            'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A')
         ];
 
         // Save messages to session
@@ -326,7 +331,7 @@ class FloatingChat extends Component
         $this->messages[] = [
             'role' => 'assistant',
             'content' => $message,
-            'timestamp' => now()->format('H:i')
+            'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A')
         ];
         $this->isTyping = false;
         $this->isSending = false;
@@ -364,7 +369,7 @@ class FloatingChat extends Component
             [
                 'role' => 'assistant',
                 'content' => 'Halo! Saya adalah asisten AI yang siap membantu anda. Apa yang boleh saya bantu hari ini?',
-                'timestamp' => now()->format('H:i')
+                'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A')
             ]
         ];
         $this->errorMessage = '';
