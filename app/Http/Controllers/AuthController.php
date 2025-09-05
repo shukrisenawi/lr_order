@@ -112,6 +112,11 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        // Dispatch event to clear chat messages before logout
+        if (class_exists('\Livewire\Livewire')) {
+            \Livewire\Livewire::dispatch('clearChatOnLogout');
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

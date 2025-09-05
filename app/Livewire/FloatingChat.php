@@ -18,7 +18,7 @@ class FloatingChat extends Component
     public $systemMessage = '';
     public $showSystemMessageModal = false;
 
-    protected $listeners = ['openChat' => 'openChat', 'modelChanged' => 'handleModelChange', 'syncModelFromChatGPT' => 'syncModelFromChatGPT', 'syncSystemMessageFromFloatingChat' => 'syncSystemMessageFromChatGPT'];
+    protected $listeners = ['openChat' => 'openChat', 'modelChanged' => 'handleModelChange', 'syncModelFromChatGPT' => 'syncModelFromChatGPT', 'syncSystemMessageFromFloatingChat' => 'syncSystemMessageFromChatGPT', 'clearChatOnLogout' => 'clearChatOnLogout'];
     protected $databaseQueryService;
 
     public function __construct()
@@ -42,14 +42,20 @@ class FloatingChat extends Component
             'If the user asks about data, provide helpful analysis and insights based on the available information. ' .
             'Always be helpful, accurate, and provide actionable information.');
 
-        // Initialize with welcome message
-        $this->messages = [
-            [
-                'role' => 'assistant',
-                'content' => 'Halo! Saya AI assistant dengan akses database. Saya boleh membantu mencari invoice dan data lain. Apa yang boleh saya bantu?',
-                'timestamp' => now()->format('H:i')
-            ]
-        ];
+        // Load messages from session if exists, otherwise initialize with welcome message
+        if (session()->has('floating_chat_messages')) {
+            $this->messages = session('floating_chat_messages');
+        } else {
+            $this->messages = [
+                [
+                    'role' => 'assistant',
+                    'content' => 'Halo! Saya AI assistant dengan akses database. Saya boleh membantu mencari invoice dan data lain. Apa yang boleh saya bantu?',
+                    'timestamp' => now()->format('H:i')
+                ]
+            ];
+            // Save initial messages to session
+            session(['floating_chat_messages' => $this->messages]);
+        }
     }
 
     public function openChat()
@@ -113,6 +119,9 @@ class FloatingChat extends Component
             'content' => $userMessage,
             'timestamp' => now()->format('H:i')
         ];
+
+        // Save messages to session
+        session(['floating_chat_messages' => $this->messages]);
 
         $this->newMessage = '';
         $this->isSending = true;
@@ -322,6 +331,9 @@ class FloatingChat extends Component
         $this->isTyping = false;
         $this->isSending = false;
 
+        // Save messages to session
+        session(['floating_chat_messages' => $this->messages]);
+
         // Auto-scroll to bottom after adding message
         $this->dispatch('scroll-to-bottom');
     }
@@ -344,6 +356,28 @@ class FloatingChat extends Component
 
         // Emit event to sync with ChatGPT component if it exists on the page
         $this->dispatch('syncSystemMessageFromFloatingChat', $this->systemMessage);
+    }
+
+    public function clearChat()
+    {
+        $this->messages = [
+            [
+                'role' => 'assistant',
+                'content' => 'Halo! Saya adalah asisten AI yang siap membantu anda. Apa yang boleh saya bantu hari ini?',
+                'timestamp' => now()->format('H:i')
+            ]
+        ];
+        $this->errorMessage = '';
+
+        // Clear messages from session
+        session(['floating_chat_messages' => $this->messages]);
+    }
+
+    public function clearChatOnLogout()
+    {
+        // Clear all chat-related session data on logout
+        session()->forget(['floating_chat_messages', 'floating_chat_selected_model']);
+        $this->messages = [];
     }
 
     public function getAvailableModels()
