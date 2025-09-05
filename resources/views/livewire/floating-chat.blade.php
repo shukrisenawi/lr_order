@@ -1,6 +1,7 @@
 <div class="fixed bottom-6 right-6 z-50">
     <!-- Chat Bubble Button -->
     <div x-data="{ isOpen: @entangle('isOpen') }"
+         x-on:click.away="isOpen = false"
          class="relative">
 
         <!-- Chat Window -->
@@ -76,6 +77,7 @@
 
         <!-- Floating Button -->
         <button wire:click="toggleChat"
+                x-on:click.stop=""
                 class="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 flex items-center justify-center relative group">
 
             <!-- Notification Badge -->
