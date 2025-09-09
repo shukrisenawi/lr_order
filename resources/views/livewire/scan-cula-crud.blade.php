@@ -40,7 +40,7 @@
             <div class="border-b border-gray-200">
                 <nav class="-mb-px flex space-x-8" aria-label="Tabs">
                     <!-- Tab Baru (approve=0) -->
-                    <button wire:click="setActiveTab('baru')"
+                    <button style="cursor: pointer" wire:click="setActiveTab('baru')"
                         class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-all duration-200 {{ $activeTab === 'baru' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                         <div class="flex items-center">
                             <svg class="w-4 h-4 mr-2 {{ $activeTab === 'baru' ? 'text-indigo-500' : 'text-gray-400' }}"
@@ -57,7 +57,7 @@
                     </button>
 
                     <!-- Tab Rekod Cula (approve=1) -->
-                    <button wire:click="setActiveTab('rekod')"
+                    <button style="cursor: pointer" wire:click="setActiveTab('rekod')"
                         class="whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm transition-all duration-200 {{ $activeTab === 'rekod' ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                         <div class="flex items-center">
                             <svg class="w-4 h-4 mr-2 {{ $activeTab === 'rekod' ? 'text-indigo-500' : 'text-gray-400' }}"
@@ -211,7 +211,48 @@
                                     <td class="px-6 py-4 text-sm text-gray-700 max-w-xs truncate"
                                         title="{{ $scanCula->alamat }}">{{ Str::limit($scanCula->alamat, 40) }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">
-                                        {{ $scanCula->cula }}</td>
+                                        @if ($editingCulaId === $scanCula->id)
+                                            <div class="flex items-center space-x-2">
+                                                <input type="text" wire:model="editingCulaValue"
+                                                    wire:keydown.enter="saveCula({{ $scanCula->id }})"
+                                                    wire:keydown.escape="cancelEditingCula"
+                                                    class="inline-edit-input flex-1 px-2 py-1 text-sm border border-indigo-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                    placeholder="Masukkan cula...">
+                                                <button wire:click="saveCula({{ $scanCula->id }})"
+                                                    class="p-1 text-green-600 hover:bg-green-50 rounded"
+                                                    title="Simpan">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                </button>
+                                                <button wire:click="cancelEditingCula"
+                                                    class="p-1 text-red-600 hover:bg-red-50 rounded" title="Batal">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        @else
+                                            <div class="flex items-center space-x-2 group">
+                                                <span>{{ $scanCula->cula }}</span>
+                                                <button wire:click="startEditingCula({{ $scanCula->id }})"
+                                                    class="edit-cula-btn p-1 text-indigo-600 hover:bg-indigo-50 rounded opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    title="Edit cula">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                        </path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex space-x-2">
                                             @if (!$scanCula->approve)
@@ -255,7 +296,7 @@
                                                 <span class="copy-text">Copy Code</span>
                                                 <span class="copied-text hidden">Copied!</span>
                                             </button>
-                                            <button wire:click="edit({{ $scanCula->id }})"
+                                            {{-- <button wire:click="edit({{ $scanCula->id }})"
                                                 class="inline-flex items-center px-3 py-1.5 bg-blue-50 text-blue-700 text-xs font-medium rounded-lg hover:bg-blue-100 transition-colors duration-200">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -265,7 +306,7 @@
                                                     </path>
                                                 </svg>
                                                 Edit
-                                            </button>
+                                            </button> --}}
                                             <button wire:click="delete({{ $scanCula->id }})"
                                                 class="inline-flex items-center px-3 py-1.5 bg-red-50 text-red-700 text-xs font-medium rounded-lg hover:bg-red-100 transition-colors duration-200"
                                                 onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
@@ -398,8 +439,48 @@
                                     </div>
                                     <p class="text-xs text-gray-600 mb-1"><strong>KP:</strong> {{ $scanCula->no_kp }}
                                     </p>
-                                    <p class="text-xs text-gray-600 mb-1"><strong>Cula:</strong> <span
-                                            class="font-medium text-indigo-600">{{ $scanCula->cula }}</span></p>
+                                    <p class="text-xs text-gray-600 mb-1">
+                                        <strong>Cula:</strong>
+                                        @if ($editingCulaId === $scanCula->id)
+                                            <div class="flex items-center space-x-2 mt-1">
+                                                <input type="text" wire:model="editingCulaValue"
+                                                    wire:keydown.enter="saveCula({{ $scanCula->id }})"
+                                                    wire:keydown.escape="cancelEditingCula"
+                                                    class="inline-edit-input flex-1 px-2 py-1 text-xs border border-indigo-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                                                    placeholder="Masukkan cula...">
+                                                <button wire:click="saveCula({{ $scanCula->id }})"
+                                                    class="p-1 text-green-600 hover:bg-green-50 rounded"
+                                                    title="Simpan">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                </button>
+                                                <button wire:click="cancelEditingCula"
+                                                    class="p-1 text-red-600 hover:bg-red-50 rounded" title="Batal">
+                                                    <svg class="w-3 h-3" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        @else
+                                            <span class="font-medium text-indigo-600">{{ $scanCula->cula }}</span>
+                                            <button wire:click="startEditingCula({{ $scanCula->id }})"
+                                                class="edit-cula-btn ml-1 p-1 text-indigo-600 hover:bg-indigo-50 rounded inline-block"
+                                                title="Edit cula">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                                    </path>
+                                                </svg>
+                                            </button>
+                                        @endif
+                                    </p>
                                     <p class="text-xs text-gray-600 truncate"><strong>Alamat:</strong>
                                         {{ Str::limit($scanCula->alamat, 30) }}</p>
                                 </div>
@@ -539,6 +620,23 @@
                 .table-row,
                 .mobile-card {
                     transition: background-color 0.3s ease, border-left 0.3s ease;
+                }
+
+                /* Inline editing styles */
+                .inline-edit-input {
+                    min-width: 120px;
+                }
+
+                .inline-edit-input:focus {
+                    outline: none;
+                    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+                }
+
+                /* Hide edit button on mobile by default, show on hover/tap */
+                @media (max-width: 768px) {
+                    .edit-cula-btn {
+                        opacity: 0.7;
+                    }
                 }
             </style>
 

@@ -18,6 +18,8 @@ class ScanCulaCrud extends Component
     public $activeTab = 'baru'; // 'baru' untuk approve=0, 'rekod' untuk approve=1
     public $selectedItems = []; // Array of selected item IDs
     public $selectAll = false; // Master checkbox state
+    public $editingCulaId = null; // ID of the record being edited inline
+    public $editingCulaValue = ''; // Current value being edited
 
     protected $queryString = ['search', 'activeTab'];
 
@@ -39,8 +41,8 @@ class ScanCulaCrud extends Component
             $query->where('approve', true);
         }
 
-        // Urutkan berdasarkan data terbaru (created_at descending)
-        $query->orderBy('created_at', 'desc');
+        // Urutkan berdasarkan no_kp dari rendah ke tinggi (ascending)
+        $query->orderBy('no_kp', 'asc');
 
         // Filter pencarian
         $query->when($this->search, function ($query) {
@@ -190,6 +192,41 @@ class ScanCulaCrud extends Component
         session()->flash('message', "{$count} data berhasil dihapus.");
     }
 
+    public function startEditingCula($id)
+    {
+        $scanCula = ScanCula::findOrFail($id);
+        $this->editingCulaId = $id;
+        $this->editingCulaValue = $scanCula->cula;
+    }
+
+    public function cancelEditingCula()
+    {
+        $this->editingCulaId = null;
+        $this->editingCulaValue = '';
+    }
+
+    public function saveCula($id)
+    {
+        try {
+            $this->validate([
+                'editingCulaValue' => 'required|string|max:255'
+            ]);
+
+            $scanCula = ScanCula::findOrFail($id);
+            $scanCula->update(['cula' => $this->editingCulaValue]);
+
+            $this->editingCulaId = null;
+            $this->editingCulaValue = '';
+
+            session()->flash('message', 'Data cula berhasil diperbarui.');
+            Log::info("Cula updated successfully for ID: {$id}");
+
+        } catch (\Exception $e) {
+            Log::error("Error updating cula for ID {$id}: " . $e->getMessage());
+            session()->flash('error', 'Terjadi kesalahan saat memperbarui data cula.');
+        }
+    }
+
     public function updatedSelectAll($value)
     {
         if ($value) {
@@ -217,7 +254,7 @@ class ScanCulaCrud extends Component
         }
 
         // Apply same sorting as in render method
-        $query->orderBy('created_at', 'desc');
+        $query->orderBy('no_kp', 'asc');
 
         if ($this->search) {
             $query->where(function ($q) {
