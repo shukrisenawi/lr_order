@@ -132,9 +132,30 @@ class ScanCulaCrud extends Component
 
     public function approve($id)
     {
-        $scanCula = ScanCula::findOrFail($id);
-        $scanCula->update(['approve' => true]);
-        session()->flash('message', 'Data berhasil disetujui.');
+        try {
+            Log::info("Approve method called with ID: {$id}");
+
+            $scanCula = ScanCula::findOrFail($id);
+            Log::info("Found ScanCula record: " . $scanCula->id);
+
+            $scanCula->update(['approve' => true]);
+            Log::info("Updated approve status to true for ID: {$id}");
+
+            session()->flash('message', 'Data berhasil disetujui.');
+            Log::info("Flash message set successfully");
+
+            // Force refresh the component
+            $this->render();
+        } catch (\Exception $e) {
+            Log::error("Error in approve method for ID {$id}: " . $e->getMessage());
+            session()->flash('error', 'Terjadi kesalahan saat menyetujui data.');
+        }
+    }
+
+    public function submitApprove($id)
+    {
+        Log::info("Submit approve called for ID: {$id}");
+        return $this->approve($id);
     }
 
     public function unapprove($id)

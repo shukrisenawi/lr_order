@@ -256,21 +256,23 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex space-x-2">
                                             @if (!$scanCula->approve)
-                                                <button style="cursor: pointer"
-                                                    wire:click="approve({{ $scanCula->id }})"
-                                                    wire:loading.class="opacity-50 cursor-not-allowed"
-                                                    class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-700 text-xs font-medium rounded-lg hover:bg-green-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
-                                                    <span wire:loading.remove
-                                                        wire:target="approve({{ $scanCula->id }})">Setuju</span>
-                                                    <span wire:loading
-                                                        wire:target="approve({{ $scanCula->id }})">Menyetujui...</span>
-                                                </button>
+                                                <form wire:submit.prevent="submitApprove({{ $scanCula->id }})" class="inline-block">
+                                                    <button type="submit"
+                                                        wire:loading.class="opacity-50 cursor-not-allowed"
+                                                        onclick="console.log('Approve button clicked for ID: {{ $scanCula->id }}')"
+                                                        class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-700 text-xs font-medium rounded-lg hover:bg-green-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                                            viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                        </svg>
+                                                        <span wire:loading.remove
+                                                            wire:target="submitApprove({{ $scanCula->id }})">Setuju</span>
+                                                        <span wire:loading
+                                                            wire:target="submitApprove({{ $scanCula->id }})">Menyetujui...</span>
+                                                    </button>
+                                                </form>
                                             @else
                                                 <button style="cursor: pointer"
                                                     wire:click="unapprove({{ $scanCula->id }})"
@@ -486,18 +488,20 @@
                                 </div>
                                 <div class="flex space-x-2 ml-4">
                                     @if (!$scanCula->approve)
-                                        <button wire:click="approve({{ $scanCula->id }})"
-                                            wire:loading.attr="disabled"
-                                            wire:loading.class="opacity-50 cursor-not-allowed"
-                                            wire:target="approve({{ $scanCula->id }})"
-                                            class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                            title="Setujui data">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                        </button>
+                                        <form wire:submit.prevent="submitApprove({{ $scanCula->id }})" class="inline-block">
+                                            <button type="submit"
+                                                wire:loading.attr="disabled"
+                                                wire:loading.class="opacity-50 cursor-not-allowed"
+                                                wire:target="submitApprove({{ $scanCula->id }})"
+                                                class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                title="Setujui data">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </button>
+                                        </form>
                                     @else
                                         <button wire:click="unapprove({{ $scanCula->id }})"
                                             class="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors duration-200"
