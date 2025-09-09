@@ -39,6 +39,9 @@ class ScanCulaCrud extends Component
             $query->where('approve', true);
         }
 
+        // Urutkan berdasarkan data terbaru (created_at descending)
+        $query->orderBy('created_at', 'desc');
+
         // Filter pencarian
         $query->when($this->search, function ($query) {
             $query->where(function ($q) {
@@ -212,6 +215,9 @@ class ScanCulaCrud extends Component
         } elseif ($this->activeTab === 'rekod') {
             $query->where('approve', true);
         }
+
+        // Apply same sorting as in render method
+        $query->orderBy('created_at', 'desc');
 
         if ($this->search) {
             $query->where(function ($q) {
