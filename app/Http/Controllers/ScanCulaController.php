@@ -9,17 +9,8 @@ class ScanCulaController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->get('search');
-        $scanCulas = ScanCula::query()
-            ->when($search, function ($query, $search) {
-                $query->where('no_kp', 'like', '%' . $search . '%')
-                      ->orWhere('nama_pemilih', 'like', '%' . $search . '%')
-                      ->orWhere('alamat', 'like', '%' . $search . '%')
-                      ->orWhere('cula', 'like', '%' . $search . '%');
-            })
-            ->paginate(10)->withQueryString();
-
-        return view('scan-cula.index', compact('scanCulas', 'search'));
+        // Use Livewire view instead of the old controller-based view
+        return view('scan-cula-livewire');
     }
 
     public function create()

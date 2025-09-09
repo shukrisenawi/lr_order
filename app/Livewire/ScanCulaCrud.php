@@ -8,29 +8,50 @@ use Livewire\Component;
 
 class ScanCulaCrud extends Component
 {
+    use WithPagination;
+
     protected $paginationTheme = 'tailwind';
 
     public $no_kp, $nama_pemilih, $alamat, $cula, $approve, $scanCulaId, $isOpen = 0;
     public $search = '';
+    public $activeTab = 'baru'; // 'baru' untuk approve=0, 'rekod' untuk approve=1
 
-    protected $queryString = ['search'];
+    protected $queryString = ['search', 'activeTab'];
 
     public function updatingSearch()
     {
         $this->resetPage();
     }
 
+    public function setActiveTab($tab)
+    {
+        $this->activeTab = $tab;
+        $this->resetPage();
+    }
+
     public function render()
     {
+        $query = ScanCula::query();
+
+        // Filter berdasarkan tab aktif
+        if ($this->activeTab === 'baru') {
+            $query->where('approve', false);
+        } elseif ($this->activeTab === 'rekod') {
+            $query->where('approve', true);
+        }
+
+        // Filter pencarian
+        $query->when($this->search, function ($query) {
+            $query->where(function ($q) {
+                $q->where('no_kp', 'like', '%' . $this->search . '%')
+                  ->orWhere('nama_pemilih', 'like', '%' . $this->search . '%')
+                  ->orWhere('alamat', 'like', '%' . $this->search . '%')
+                  ->orWhere('cula', 'like', '%' . $this->search . '%');
+            });
+        });
+
         return view('livewire.scan-cula-crud', [
-            'scanCulas' => ScanCula::query()
-                ->when($this->search, function ($query) {
-                    $query->where('no_kp', 'like', '%' . $this->search . '%')
-                          ->orWhere('nama_pemilih', 'like', '%' . $this->search . '%')
-                          ->orWhere('alamat', 'like', '%' . $this->search . '%')
-                          ->orWhere('cula', 'like', '%' . $this->search . '%');
-                })
-                ->paginate(10)
+            'scanCulas' => $query->paginate(10)
         ]);
     }
 
@@ -101,5 +122,12 @@ class ScanCulaCrud extends Component
     {
         ScanCula::find($id)->delete();
         session()->flash('message', 'Data berhasil dihapus.');
+    }
+
+    public function approve($id)
+    {
+        $scanCula = ScanCula::findOrFail($id);
+        $scanCula->update(['approve' => true]);
+        session()->flash('message', 'Data berhasil disetujui.');
     }
 }
