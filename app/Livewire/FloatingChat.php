@@ -28,6 +28,9 @@ class FloatingChat extends Component
 
     public function mount()
     {
+        if (session()->has('logout')) {
+            $this->clearChat();
+        }
         // Load selected model from ChatGPT session if exists, otherwise use floating chat session
         if (session()->has('chat_selected_model')) {
             $this->selectedModel = session('chat_selected_model');

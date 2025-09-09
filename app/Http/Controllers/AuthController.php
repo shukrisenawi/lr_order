@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Helpers\BisnesHelper;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use Livewire\Livewire;
 
 class AuthController extends Controller
 {
@@ -112,10 +113,8 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // Dispatch event to clear chat messages before logout
-        if (class_exists('\Livewire\Livewire')) {
-            \Livewire\Livewire::dispatch('clearChatOnLogout');
-        }
+        // Set a session flash message to indicate logout
+        session()->flash('logout', true);
 
         Auth::logout();
         $request->session()->invalidate();

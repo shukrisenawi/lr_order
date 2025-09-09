@@ -1165,6 +1165,17 @@
                             </div>
                         </a>
 
+                        <!-- File AI -->
+                        <a href="{{ route('scan-cula.index') }}"
+                            class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('scan-cula.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-file-alt text-xs"></i>
+                                </div>
+                                <span class="font-medium text-sm">File AI</span>
+                            </div>
+                        </a>
+
                         <!-- Business Management Section -->
                         <div class="pt-1.5">
                             <h3 class="nav-section-header flex items-center">
@@ -1300,17 +1311,18 @@
                                     </div>
                                 </a>
                                 @if ($selectedBisnes && $selectedBisnes->type_id == 1)
-                                <a href="{{ route('customer.index') }}"
-                                    class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('customer.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
-                                    <div class="flex items-center space-x-2">
-                                        <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
-                                            <i class="fas fa-handshake text-xs"></i>
+                                    <a href="{{ route('customer.index') }}"
+                                        class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('customer.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="flex items-center space-x-2">
+                                            <div
+                                                class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                <i class="fas fa-handshake text-xs"></i>
+                                            </div>
+                                            <span class="font-medium text-sm">Pelanggan</span>
                                         </div>
-                                        <span class="font-medium text-sm">Pelanggan</span>
-                                    </div>
-                                    <span id="customer-buy-badge"
-                                        class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-1.5 py-0.5 animate-pulse shadow-lg">0</span>
-                                </a>
+                                        <span id="customer-buy-badge"
+                                            class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-1.5 py-0.5 animate-pulse shadow-lg">0</span>
+                                    </a>
                                 @endif
                             </div>
                         </div>
@@ -1381,18 +1393,29 @@
                                 <span id="ai-badge-desktop"
                                     class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-1.5 py-0.5 animate-pulse shadow-lg">0</span>
                             </a>
-
-                            <!-- ChatGPT -->
-                            <a href="{{ route('chatgpt.index') }}"
-                                class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('chatgpt.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
-                                <div class="flex items-center space-x-2">
-                                    <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
-                                        <i class="fas fa-comments text-xs"></i>
-                                    </div>
-                                    <span class="font-medium text-sm">ChatGPT</span>
-                                </div>
-                            </a>
                         @endif
+
+                        <!-- ChatGPT -->
+                        <a href="{{ route('chatgpt.index') }}"
+                            class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('chatgpt.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-comments text-xs"></i>
+                                </div>
+                                <span class="font-medium text-sm">ChatGPT</span>
+                            </div>
+                        </a>
+
+                        <!-- File AI -->
+                        <a href="{{ route('scan-cula.index') }}"
+                            class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('scan-cula.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                    <i class="fas fa-file-alt text-xs"></i>
+                                </div>
+                                <span class="font-medium text-sm">File AI</span>
+                            </div>
+                        </a>
 
                         <!-- Business Management Section -->
                         <div class="pt-1.5">
@@ -1739,11 +1762,11 @@
     <!-- Session Alerts with SweetAlert 2 -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            @if(session('success'))
+            @if (session('success'))
                 Swal.fire({
                     icon: 'success',
                     title: 'Berjaya!',
-                    text: '{{ session("success") }}',
+                    text: '{{ session('success') }}',
                     timer: 3000,
                     timerProgressBar: true,
                     showConfirmButton: false,
@@ -1754,11 +1777,11 @@
                 });
             @endif
 
-            @if(session('message'))
+            @if (session('message'))
                 Swal.fire({
                     icon: 'success',
                     title: 'Berjaya!',
-                    text: '{{ session("message") }}',
+                    text: '{{ session('message') }}',
                     timer: 3000,
                     timerProgressBar: true,
                     showConfirmButton: false,
@@ -1769,11 +1792,11 @@
                 });
             @endif
 
-            @if(session('error'))
+            @if (session('error'))
                 Swal.fire({
                     icon: 'error',
                     title: 'Ralat!',
-                    text: '{{ session("error") }}',
+                    text: '{{ session('error') }}',
                     timer: 4000,
                     timerProgressBar: true,
                     showConfirmButton: true,
@@ -1782,11 +1805,11 @@
                 });
             @endif
 
-            @if(session('warning'))
+            @if (session('warning'))
                 Swal.fire({
                     icon: 'warning',
                     title: 'Amaran!',
-                    text: '{{ session("warning") }}',
+                    text: '{{ session('warning') }}',
                     timer: 4000,
                     timerProgressBar: true,
                     showConfirmButton: true,
@@ -1795,11 +1818,11 @@
                 });
             @endif
 
-            @if(session('info'))
+            @if (session('info'))
                 Swal.fire({
                     icon: 'info',
                     title: 'Maklumat!',
-                    text: '{{ session("info") }}',
+                    text: '{{ session('info') }}',
                     timer: 3000,
                     timerProgressBar: true,
                     showConfirmButton: false,

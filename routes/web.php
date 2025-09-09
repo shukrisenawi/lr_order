@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ScanCulaController;
 use App\Http\Controllers\BisnesController;
 use App\Models\Bisnes;
 use App\Http\Controllers\SettingsController;
@@ -219,6 +220,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chatgpt', function () {
         return view('chat-gpt-livewire');
     })->name('chatgpt.index');
+
+    // Scan Cula Routes
+    Route::resource('scan-cula', ScanCulaController::class);
 
     // Business Management Routes
     Route::get('/bisnes', function () {
