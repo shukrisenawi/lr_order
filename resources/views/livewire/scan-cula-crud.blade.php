@@ -186,9 +186,6 @@
                                     Nama Pemilih</th>
                                 <th
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Alamat</th>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     Cula</th>
                                 <th
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -275,56 +272,10 @@
                                             </div>
                                         @else
                                             <div class="flex items-center space-x-2 group">
-                                                <span>{{ $scanCula->nama_pemilih }}</span>
+                                                <span class="cursor-help" title="Alamat: {{ $scanCula->alamat }}">{{ $scanCula->nama_pemilih }}</span>
                                                 <button wire:click="startEditingNamaPemilih({{ $scanCula->id }})"
                                                     class="edit-namapemilih-btn p-1 text-indigo-600 hover:bg-indigo-50 rounded opacity-0 group-hover:opacity-100 transition-opacity"
                                                     title="Edit nama pemilih">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                                        </path>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        @endif
-                                    </td>
-                                    <td class="px-6 py-4 text-sm text-gray-700 max-w-xs">
-                                        @if ($editingAlamatId === $scanCula->id)
-                                            <div class="flex items-center space-x-2">
-                                                <textarea wire:model="editingAlamatValue"
-                                                    wire:keydown.ctrl.enter="saveAlamat({{ $scanCula->id }})"
-                                                    wire:keydown.escape="cancelEditingAlamat"
-                                                    class="inline-edit-input flex-1 px-2 py-1 text-sm border border-indigo-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
-                                                    rows="2"
-                                                    placeholder="Masukkan alamat...">{{ $editingAlamatValue }}</textarea>
-                                                <div class="flex flex-col space-y-1">
-                                                    <button wire:click="saveAlamat({{ $scanCula->id }})"
-                                                        class="p-1 text-green-600 hover:bg-green-50 rounded"
-                                                        title="Simpan">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                        </svg>
-                                                    </button>
-                                                    <button wire:click="cancelEditingAlamat"
-                                                        class="p-1 text-red-600 hover:bg-red-50 rounded" title="Batal">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div class="flex items-start space-x-2 group">
-                                                <span class="truncate" title="{{ $scanCula->alamat }}">{{ Str::limit($scanCula->alamat, 40) }}</span>
-                                                <button wire:click="startEditingAlamat({{ $scanCula->id }})"
-                                                    class="edit-alamat-btn p-1 text-indigo-600 hover:bg-indigo-50 rounded opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                                                    title="Edit alamat">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -452,7 +403,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="px-6 py-12 text-center">
+                                    <td colspan="6" class="px-6 py-12 text-center">
                                         <div class="flex flex-col items-center">
                                             <svg class="w-12 h-12 text-gray-400 mb-4" fill="none"
                                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -584,7 +535,8 @@
                                                 </button>
                                             </div>
                                         @else
-                                            <h4 class="text-sm font-medium text-gray-900 truncate flex-1">
+                                            <h4 class="text-sm font-medium text-gray-900 truncate flex-1 cursor-help"
+                                                title="Alamat: {{ $scanCula->alamat }}">
                                                 {{ $scanCula->nama_pemilih }}</h4>
                                             <button wire:click="startEditingNamaPemilih({{ $scanCula->id }})"
                                                 class="edit-namapemilih-btn p-1 text-indigo-600 hover:bg-indigo-50 rounded flex-shrink-0"
@@ -677,51 +629,6 @@
                                             <button wire:click="startEditingCula({{ $scanCula->id }})"
                                                 class="edit-cula-btn ml-1 p-1 text-indigo-600 hover:bg-indigo-50 rounded inline-block"
                                                 title="Edit cula">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                                    </path>
-                                                </svg>
-                                            </button>
-                                        @endif
-                                    </p>
-                                    <p class="text-xs text-gray-600">
-                                        <strong>Alamat:</strong>
-                                        @if ($editingAlamatId === $scanCula->id)
-                                            <div class="flex items-center space-x-2 mt-1">
-                                                <textarea wire:model="editingAlamatValue"
-                                                    wire:keydown.ctrl.enter="saveAlamat({{ $scanCula->id }})"
-                                                    wire:keydown.escape="cancelEditingAlamat"
-                                                    class="inline-edit-input flex-1 px-2 py-1 text-xs border border-indigo-300 rounded focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
-                                                    rows="2"
-                                                    placeholder="Masukkan alamat...">{{ $editingAlamatValue }}</textarea>
-                                                <div class="flex flex-col space-y-1">
-                                                    <button wire:click="saveAlamat({{ $scanCula->id }})"
-                                                        class="p-1 text-green-600 hover:bg-green-50 rounded"
-                                                        title="Simpan">
-                                                        <svg class="w-3 h-3" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                        </svg>
-                                                    </button>
-                                                    <button wire:click="cancelEditingAlamat"
-                                                        class="p-1 text-red-600 hover:bg-red-50 rounded" title="Batal">
-                                                        <svg class="w-3 h-3" fill="none" stroke="currentColor"
-                                                            viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <span class="truncate block" title="{{ $scanCula->alamat }}">{{ Str::limit($scanCula->alamat, 30) }}</span>
-                                            <button wire:click="startEditingAlamat({{ $scanCula->id }})"
-                                                class="edit-alamat-btn ml-1 p-1 text-indigo-600 hover:bg-indigo-50 rounded inline-block"
-                                                title="Edit alamat">
                                                 <svg class="w-3 h-3" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -887,8 +794,7 @@
                 @media (max-width: 768px) {
                     .edit-cula-btn,
                     .edit-nokp-btn,
-                    .edit-namapemilih-btn,
-                    .edit-alamat-btn {
+                    .edit-namapemilih-btn {
                         opacity: 0.7;
                     }
                 }

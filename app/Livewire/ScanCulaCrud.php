@@ -24,8 +24,6 @@ class ScanCulaCrud extends Component
     public $editingNoKpValue = ''; // Current value being edited for no_kp
     public $editingNamaPemilihId = null; // ID of the record being edited inline for nama_pemilih
     public $editingNamaPemilihValue = ''; // Current value being edited for nama_pemilih
-    public $editingAlamatId = null; // ID of the record being edited inline for alamat
-    public $editingAlamatValue = ''; // Current value being edited for alamat
 
     protected $queryString = ['search', 'activeTab'];
 
@@ -304,41 +302,6 @@ class ScanCulaCrud extends Component
         }
     }
 
-    // Methods for editing alamat
-    public function startEditingAlamat($id)
-    {
-        $scanCula = ScanCula::findOrFail($id);
-        $this->editingAlamatId = $id;
-        $this->editingAlamatValue = $scanCula->alamat;
-    }
-
-    public function cancelEditingAlamat()
-    {
-        $this->editingAlamatId = null;
-        $this->editingAlamatValue = '';
-    }
-
-    public function saveAlamat($id)
-    {
-        try {
-            $this->validate([
-                'editingAlamatValue' => 'required|string|max:1000'
-            ]);
-
-            $scanCula = ScanCula::findOrFail($id);
-            $scanCula->update(['alamat' => $this->editingAlamatValue]);
-
-            $this->editingAlamatId = null;
-            $this->editingAlamatValue = '';
-
-            session()->flash('message', 'Data alamat berhasil diperbarui.');
-            Log::info("Alamat updated successfully for ID: {$id}");
-
-        } catch (\Exception $e) {
-            Log::error("Error updating alamat for ID {$id}: " . $e->getMessage());
-            session()->flash('error', 'Terjadi kesalahan saat memperbarui data alamat.');
-        }
-    }
 
     public function saveCula($id)
     {
