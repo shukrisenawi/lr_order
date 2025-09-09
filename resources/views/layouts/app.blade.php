@@ -1406,18 +1406,7 @@
                                 <span class="font-medium text-sm">ChatGPT</span>
                             </div>
                         </a>
-                        @if ($selectedBisnes && $selectedBisnes->id == 4)
-                            <!-- File AI -->
-                            <a href="{{ route('scan-cula.index') }}"
-                                class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('scan-cula.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
-                                <div class="flex items-center space-x-2">
-                                    <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
-                                        <i class="fas fa-file-alt text-xs"></i>
-                                    </div>
-                                    <span class="font-medium text-sm">File AI</span>
-                                </div>
-                            </a>
-                        @endif
+
                         <!-- Business Management Section -->
                         <div class="pt-1.5">
                             <h3 class="nav-section-header flex items-center">
@@ -1506,6 +1495,17 @@
                                                     <i class="fas fa-heart text-xs"></i>
                                                 </div>
                                                 <span class="font-medium text-sm">Data Penduduk</span>
+                                            </div>
+                                        </a>
+                                        <!-- File AI -->
+                                        <a href="{{ route('scan-cula.index') }}"
+                                            class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('scan-cula.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                            <div class="flex items-center space-x-2">
+                                                <div
+                                                    class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                                    <i class="fas fa-file-alt text-xs"></i>
+                                                </div>
+                                                <span class="font-medium text-sm">File Cula</span>
                                             </div>
                                         </a>
                                         <a href="{{ route('kod-cula.index') }}"
