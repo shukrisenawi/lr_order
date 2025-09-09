@@ -15,6 +15,8 @@ class ScanCulaCrud extends Component
     public $no_kp, $nama_pemilih, $alamat, $cula, $approve, $scanCulaId, $isOpen = 0;
     public $search = '';
     public $activeTab = 'baru'; // 'baru' untuk approve=0, 'rekod' untuk approve=1
+    public $selectedItems = []; // Array of selected item IDs
+    public $selectAll = false; // Master checkbox state
 
     protected $queryString = ['search', 'activeTab'];
 
@@ -129,5 +131,75 @@ class ScanCulaCrud extends Component
         $scanCula = ScanCula::findOrFail($id);
         $scanCula->update(['approve' => true]);
         session()->flash('message', 'Data berhasil disetujui.');
+    }
+
+    public function bulkApprove()
+    {
+        if (empty($this->selectedItems)) {
+            session()->flash('error', 'Pilih item terlebih dahulu.');
+            return;
+        }
+
+        ScanCula::whereIn('id', $this->selectedItems)->update(['approve' => true]);
+
+        $count = count($this->selectedItems);
+        $this->selectedItems = [];
+        $this->selectAll = false;
+
+        session()->flash('message', "{$count} data berhasil disetujui.");
+    }
+
+    public function bulkDelete()
+    {
+        if (empty($this->selectedItems)) {
+            session()->flash('error', 'Pilih item terlebih dahulu.');
+            return;
+        }
+
+        ScanCula::whereIn('id', $this->selectedItems)->delete();
+
+        $count = count($this->selectedItems);
+        $this->selectedItems = [];
+        $this->selectAll = false;
+
+        session()->flash('message', "{$count} data berhasil dihapus.");
+    }
+
+    public function updatedSelectAll($value)
+    {
+        if ($value) {
+            $this->selectedItems = $this->getCurrentScanCulas()->pluck('id')->toArray();
+        } else {
+            $this->selectedItems = [];
+        }
+    }
+
+    public function updatedSelectedItems()
+    {
+        $currentItems = $this->getCurrentScanCulas()->pluck('id')->toArray();
+        $this->selectAll = !empty($currentItems) && count(array_intersect($this->selectedItems, $currentItems)) === count($currentItems);
+    }
+
+    private function getCurrentScanCulas()
+    {
+        $query = ScanCula::query();
+
+        // Apply same filters as in render method
+        if ($this->activeTab === 'baru') {
+            $query->where('approve', false);
+        } elseif ($this->activeTab === 'rekod') {
+            $query->where('approve', true);
+        }
+
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->where('no_kp', 'like', '%' . $this->search . '%')
+                  ->orWhere('nama_pemilih', 'like', '%' . $this->search . '%')
+                  ->orWhere('alamat', 'like', '%' . $this->search . '%')
+                  ->orWhere('cula', 'like', '%' . $this->search . '%');
+            });
+        }
+
+        return $query->get();
     }
 }

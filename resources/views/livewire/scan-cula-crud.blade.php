@@ -117,6 +117,53 @@
             @endif
         </div>
 
+        <!-- Bulk Actions Bar -->
+        @if (!empty($selectedItems))
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <span class="text-sm font-medium text-blue-800">
+                            {{ count($selectedItems) }} item dipilih
+                        </span>
+                    </div>
+                    <div class="flex space-x-2">
+                        @if ($activeTab === 'baru')
+                            <button wire:click="bulkApprove"
+                                class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Setujui Terpilih
+                            </button>
+                        @endif
+                        <button wire:click="bulkDelete"
+                            class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors duration-200"
+                            onclick="return confirm('Apakah Anda yakin ingin menghapus {{ count($selectedItems) }} item yang dipilih?')">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                </path>
+                            </svg>
+                            Hapus Terpilih
+                        </button>
+                        <button wire:click="$set('selectedItems', [])"
+                            class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            Batal Pilih
+                        </button>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <!-- Data Table -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <!-- Desktop Table View -->
@@ -125,6 +172,11 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
                             <tr>
+                                <th
+                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    <input type="checkbox" wire:model.live="selectAll"
+                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                </th>
                                 <th
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     No KP</th>
@@ -147,7 +199,12 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100">
                             @forelse($scanCulas as $scanCula)
-                                <tr class="hover:bg-indigo-50/30 transition-colors duration-200">
+                                <tr class="table-row hover:bg-indigo-50/30 transition-colors duration-200" data-row-id="{{ $scanCula->id }}">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <input type="checkbox" wire:model.live="selectedItems"
+                                            value="{{ $scanCula->id }}"
+                                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                         {{ $scanCula->no_kp }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -179,8 +236,8 @@
                                                 </button>
                                             @endif
                                             <button
-                                               onclick="copyToClipboard('/kemascula {{ $scanCula->no_kp }}', this)"
-                                               class="copy-button inline-flex items-center px-3 py-1.5 bg-purple-500 text-white text-xs font-medium rounded-lg hover:bg-purple-600 transition-colors duration-200">
+                                                onclick="copyToClipboard('/kemascula {{ $scanCula->no_kp }}', this)"
+                                                class="copy-button inline-flex items-center px-3 py-1.5 bg-purple-500 text-white text-xs font-medium rounded-lg hover:bg-purple-600 transition-colors duration-200">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -219,7 +276,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="px-6 py-12 text-center">
+                                    <td colspan="7" class="px-6 py-12 text-center">
                                         <div class="flex flex-col items-center">
                                             <svg class="w-12 h-12 text-gray-400 mb-4" fill="none"
                                                 stroke="currentColor" viewBox="0 0 24 24">
@@ -242,12 +299,74 @@
                 </div>
             </div>
 
+            <!-- Mobile Bulk Actions Bar -->
+            @if (!empty($selectedItems))
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4 md:hidden">
+                    <div class="flex flex-col space-y-3">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="text-sm font-medium text-blue-800">
+                                {{ count($selectedItems) }} item dipilih
+                            </span>
+                        </div>
+                        <div class="flex flex-wrap gap-2">
+                            @if ($activeTab === 'baru')
+                                <button wire:click="bulkApprove"
+                                    class="inline-flex items-center px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors duration-200">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Setujui
+                                </button>
+                            @endif
+                            <button wire:click="bulkDelete"
+                                class="inline-flex items-center px-3 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors duration-200"
+                                onclick="return confirm('Apakah Anda yakin ingin menghapus {{ count($selectedItems) }} item yang dipilih?')">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                    </path>
+                                </svg>
+                                Hapus
+                            </button>
+                            <button wire:click="$set('selectedItems', [])"
+                                class="inline-flex items-center px-3 py-2 bg-gray-600 text-white text-sm font-medium rounded-lg hover:bg-gray-700 transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Batal
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             <!-- Mobile Card View -->
             <div class="md:hidden">
+                <!-- Mobile Master Checkbox -->
+                <div class="p-4 bg-gray-50 border-b border-gray-200">
+                    <label class="flex items-center">
+                        <input type="checkbox" wire:model.live="selectAll"
+                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded mr-3">
+                        <span class="text-sm font-medium text-gray-700">Pilih Semua</span>
+                    </label>
+                </div>
                 <div class="divide-y divide-gray-200">
                     @forelse($scanCulas as $scanCula)
-                        <div class="p-4 hover:bg-gray-50 transition-colors duration-200">
+                        <div class="mobile-card p-4 hover:bg-gray-50 transition-colors duration-200" data-card-id="{{ $scanCula->id }}">
                             <div class="flex items-start justify-between">
+                                <div class="flex items-center mb-2">
+                                    <input type="checkbox" wire:model.live="selectedItems"
+                                        value="{{ $scanCula->id }}"
+                                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded mr-3">
+                                </div>
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-center space-x-2 mb-2">
                                         <h4 class="text-sm font-medium text-gray-900 truncate">
@@ -277,8 +396,8 @@
                                         </button>
                                     @endif
                                     <button onclick="copyToClipboard('/kemascula {{ $scanCula->no_kp }}', this)"
-                                       class="copy-button p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors duration-200"
-                                       title="Copy Code">
+                                        class="copy-button p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors duration-200"
+                                        title="Copy Code">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                             viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -365,14 +484,60 @@
                 .copy-button.copied-permanently .copied-text {
                     display: inline !important;
                 }
+
+                /* Row highlight styles */
+                .table-row.copying-row {
+                    background-color: #fef3c7 !important;
+                    /* yellow-50 */
+                    border-left: 4px solid #f59e0b !important;
+                    /* yellow-500 */
+                    transition: all 0.3s ease;
+                }
+
+                .mobile-card.copying-card {
+                    background-color: #fef3c7 !important;
+                    /* yellow-50 */
+                    border-left: 4px solid #f59e0b !important;
+                    /* yellow-500 */
+                    transition: all 0.3s ease;
+                }
+
+                /* Smooth transitions for all row highlights */
+                .table-row,
+                .mobile-card {
+                    transition: background-color 0.3s ease, border-left 0.3s ease;
+                }
             </style>
 
             <script>
                 function copyToClipboard(text, button) {
+                    // Find the parent row or card to highlight
+                    const tableRow = button.closest('.table-row');
+                    const mobileCard = button.closest('.mobile-card');
+
                     // Copy text to clipboard
                     navigator.clipboard.writeText(text).then(function() {
                         // Add permanent copied class for color change
                         button.classList.add('copied-permanently');
+
+                        // Remove highlight from all other rows/cards first
+                        document.querySelectorAll('.table-row.copying-row').forEach(row => {
+                            if (row !== tableRow) {
+                                row.classList.remove('copying-row');
+                            }
+                        });
+                        document.querySelectorAll('.mobile-card.copying-card').forEach(card => {
+                            if (card !== mobileCard) {
+                                card.classList.remove('copying-card');
+                            }
+                        });
+
+                        // Highlight the current row/card
+                        if (tableRow) {
+                            tableRow.classList.add('copying-row');
+                        } else if (mobileCard) {
+                            mobileCard.classList.add('copying-card');
+                        }
 
                         // Show success feedback
                         const copyText = button.querySelector('.copy-text');
@@ -410,6 +575,40 @@
                         toast.remove();
                     }, 3000);
                 }
+
+                // Bulk selection helper functions
+                function toggleAllCheckboxes(checked) {
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"][wire\\:model\\.live="selectedItems"]');
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = checked;
+                    });
+                }
+
+                function updateSelectionCount() {
+                    const selectedCheckboxes = document.querySelectorAll(
+                        'input[type="checkbox"][wire\\:model\\.live="selectedItems"]:checked');
+                    const count = selectedCheckboxes.length;
+
+                    // Update any selection count displays
+                    const countDisplays = document.querySelectorAll('.selection-count');
+                    countDisplays.forEach(display => {
+                        display.textContent = count + ' item dipilih';
+                    });
+
+                    return count;
+                }
+
+                // Listen for checkbox changes to update UI
+                document.addEventListener('change', function(e) {
+                    if (e.target.matches('input[type="checkbox"][wire\\:model\\.live="selectedItems"]')) {
+                        updateSelectionCount();
+                    }
+                });
+
+                // Listen for Livewire updates to refresh selection state
+                document.addEventListener('livewire:updated', function() {
+                    updateSelectionCount();
+                });
             </script>
         </div>
     </div>
