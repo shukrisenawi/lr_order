@@ -20,6 +20,12 @@ class ScanCulaCrud extends Component
     public $selectAll = false; // Master checkbox state
     public $editingCulaId = null; // ID of the record being edited inline
     public $editingCulaValue = ''; // Current value being edited
+    public $editingNoKpId = null; // ID of the record being edited inline for no_kp
+    public $editingNoKpValue = ''; // Current value being edited for no_kp
+    public $editingNamaPemilihId = null; // ID of the record being edited inline for nama_pemilih
+    public $editingNamaPemilihValue = ''; // Current value being edited for nama_pemilih
+    public $editingAlamatId = null; // ID of the record being edited inline for alamat
+    public $editingAlamatValue = ''; // Current value being edited for alamat
 
     protected $queryString = ['search', 'activeTab'];
 
@@ -224,6 +230,114 @@ class ScanCulaCrud extends Component
     {
         $this->editingCulaId = null;
         $this->editingCulaValue = '';
+    }
+
+    // Methods for editing no_kp
+    public function startEditingNoKp($id)
+    {
+        $scanCula = ScanCula::findOrFail($id);
+        $this->editingNoKpId = $id;
+        $this->editingNoKpValue = $scanCula->no_kp;
+    }
+
+    public function cancelEditingNoKp()
+    {
+        $this->editingNoKpId = null;
+        $this->editingNoKpValue = '';
+    }
+
+    public function saveNoKp($id)
+    {
+        try {
+            $this->validate([
+                'editingNoKpValue' => 'required|string|max:255'
+            ]);
+
+            $scanCula = ScanCula::findOrFail($id);
+            $scanCula->update(['no_kp' => $this->editingNoKpValue]);
+
+            $this->editingNoKpId = null;
+            $this->editingNoKpValue = '';
+
+            session()->flash('message', 'Data no_kp berhasil diperbarui.');
+            Log::info("No KP updated successfully for ID: {$id}");
+
+        } catch (\Exception $e) {
+            Log::error("Error updating no_kp for ID {$id}: " . $e->getMessage());
+            session()->flash('error', 'Terjadi kesalahan saat memperbarui data no_kp.');
+        }
+    }
+
+    // Methods for editing nama_pemilih
+    public function startEditingNamaPemilih($id)
+    {
+        $scanCula = ScanCula::findOrFail($id);
+        $this->editingNamaPemilihId = $id;
+        $this->editingNamaPemilihValue = $scanCula->nama_pemilih;
+    }
+
+    public function cancelEditingNamaPemilih()
+    {
+        $this->editingNamaPemilihId = null;
+        $this->editingNamaPemilihValue = '';
+    }
+
+    public function saveNamaPemilih($id)
+    {
+        try {
+            $this->validate([
+                'editingNamaPemilihValue' => 'required|string|max:255'
+            ]);
+
+            $scanCula = ScanCula::findOrFail($id);
+            $scanCula->update(['nama_pemilih' => $this->editingNamaPemilihValue]);
+
+            $this->editingNamaPemilihId = null;
+            $this->editingNamaPemilihValue = '';
+
+            session()->flash('message', 'Data nama pemilih berhasil diperbarui.');
+            Log::info("Nama pemilih updated successfully for ID: {$id}");
+
+        } catch (\Exception $e) {
+            Log::error("Error updating nama_pemilih for ID {$id}: " . $e->getMessage());
+            session()->flash('error', 'Terjadi kesalahan saat memperbarui data nama pemilih.');
+        }
+    }
+
+    // Methods for editing alamat
+    public function startEditingAlamat($id)
+    {
+        $scanCula = ScanCula::findOrFail($id);
+        $this->editingAlamatId = $id;
+        $this->editingAlamatValue = $scanCula->alamat;
+    }
+
+    public function cancelEditingAlamat()
+    {
+        $this->editingAlamatId = null;
+        $this->editingAlamatValue = '';
+    }
+
+    public function saveAlamat($id)
+    {
+        try {
+            $this->validate([
+                'editingAlamatValue' => 'required|string|max:1000'
+            ]);
+
+            $scanCula = ScanCula::findOrFail($id);
+            $scanCula->update(['alamat' => $this->editingAlamatValue]);
+
+            $this->editingAlamatId = null;
+            $this->editingAlamatValue = '';
+
+            session()->flash('message', 'Data alamat berhasil diperbarui.');
+            Log::info("Alamat updated successfully for ID: {$id}");
+
+        } catch (\Exception $e) {
+            Log::error("Error updating alamat for ID {$id}: " . $e->getMessage());
+            session()->flash('error', 'Terjadi kesalahan saat memperbarui data alamat.');
+        }
     }
 
     public function saveCula($id)
