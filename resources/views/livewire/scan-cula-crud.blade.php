@@ -129,8 +129,8 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                <span wire:loading.remove wire:target="bulkApprove">Setujui Terpilih</span>
-                                <span wire:loading wire:target="bulkApprove">Menyetujui...</span>
+                                <span wire:loading.remove wire:target="bulkApprove">Telah Cula Terpilih</span>
+                                <span wire:loading wire:target="bulkApprove">Memproses...</span>
                             </button>
                         @elseif ($activeTab === 'rekod')
                             <button wire:click="bulkUnapprove"
@@ -139,7 +139,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
-                                Batal Setuju Terpilih
+                                Belum Cula Terpilih
                             </button>
                         @endif
                         <button wire:click="bulkDelete"
@@ -345,9 +345,9 @@
                                                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                         </svg>
                                                         <span wire:loading.remove
-                                                            wire:target="submitApprove({{ $scanCula->id }})">Setuju</span>
+                                                            wire:target="submitApprove({{ $scanCula->id }})">Telah Cula</span>
                                                         <span wire:loading
-                                                            wire:target="submitApprove({{ $scanCula->id }})">Menyetujui...</span>
+                                                            wire:target="submitApprove({{ $scanCula->id }})">Memproses...</span>
                                                     </button>
                                                 </form>
                                             @else
@@ -359,7 +359,7 @@
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                     </svg>
-                                                    Batal Setuju
+                                                    Belum Cula
                                                 </button>
                                             @endif
                                             <button
@@ -450,8 +450,8 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    <span wire:loading.remove wire:target="bulkApprove">Setujui</span>
-                                    <span wire:loading wire:target="bulkApprove">Menyetujui...</span>
+                                    <span wire:loading.remove wire:target="bulkApprove">Telah Cula</span>
+                                    <span wire:loading wire:target="bulkApprove">Memproses...</span>
                                 </button>
                             @elseif ($activeTab === 'rekod')
                                 <button wire:click="bulkUnapprove"
@@ -461,7 +461,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M6 18L18 6M6 6l12 12"></path>
                                     </svg>
-                                    Batal Setuju
+                                    Belum Cula
                                 </button>
                             @endif
                             <button wire:click="bulkDelete"
@@ -648,7 +648,7 @@
                                                 wire:loading.class="opacity-50 cursor-not-allowed"
                                                 wire:target="submitApprove({{ $scanCula->id }})"
                                                 class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                                title="Setujui data">
+                                                title="Telah Cula">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1084,7 +1084,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        Setujui data ini
+                                        Telah Cula
                                     </span>
                                 </label>
                             </div>

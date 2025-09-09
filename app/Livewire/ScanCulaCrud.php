@@ -145,7 +145,7 @@ class ScanCulaCrud extends Component
             $scanCula->update(['approve' => true]);
             Log::info("Updated approve status to true for ID: {$id}");
 
-            session()->flash('message', 'Data berhasil disetujui.');
+            session()->flash('message', 'Data berhasil ditandai telah cula.');
             Log::info("Flash message set successfully");
 
             // Force refresh the component
@@ -166,7 +166,7 @@ class ScanCulaCrud extends Component
     {
         $scanCula = ScanCula::findOrFail($id);
         $scanCula->update(['approve' => false]);
-        session()->flash('message', 'Persetujuan data berhasil dibatalkan.');
+        session()->flash('message', 'Status cula berhasil dibatalkan.');
     }
 
     public function bulkApprove()
@@ -182,7 +182,7 @@ class ScanCulaCrud extends Component
         $this->selectedItems = [];
         $this->selectAll = false;
 
-        session()->flash('message', "{$count} data berhasil disetujui.");
+        session()->flash('message', "{$count} data berhasil ditandai telah cula.");
     }
 
     public function bulkUnapprove()
@@ -198,7 +198,7 @@ class ScanCulaCrud extends Component
         $this->selectedItems = [];
         $this->selectAll = false;
 
-        session()->flash('message', "{$count} persetujuan data berhasil dibatalkan.");
+        session()->flash('message', "{$count} status cula berhasil dibatalkan.");
     }
 
     public function bulkDelete()
