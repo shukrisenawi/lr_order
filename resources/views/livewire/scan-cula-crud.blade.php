@@ -25,16 +25,6 @@
                     </p>
                 </div>
             </div>
-            @if ($activeTab === 'baru')
-                <button wire:click="create"
-                    class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-sm font-medium rounded-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 transform hover:scale-105 shadow-lg">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    Tambah Data Baru
-                </button>
-            @endif
         </div>
     </div>
 
@@ -95,7 +85,7 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </div>
-                <input wire:model.debounce.300ms="search" type="text"
+                <input wire:model.live="search" type="text"
                     class="block w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:placeholder-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200 shadow-sm"
                     placeholder="Cari berdasarkan nama, no KP, atau alamat...">
                 @if ($search)
@@ -132,13 +122,24 @@
                     </div>
                     <div class="flex space-x-2">
                         @if ($activeTab === 'baru')
-                            <button wire:click="bulkApprove"
-                                class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors duration-200">
+                            <button wire:click="bulkApprove" wire:loading.attr="disabled"
+                                wire:loading.class="opacity-50 cursor-not-allowed" wire:target="bulkApprove"
+                                class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                Setujui Terpilih
+                                <span wire:loading.remove wire:target="bulkApprove">Setujui Terpilih</span>
+                                <span wire:loading wire:target="bulkApprove">Menyetujui...</span>
+                            </button>
+                        @elseif ($activeTab === 'rekod')
+                            <button wire:click="bulkUnapprove"
+                                class="inline-flex items-center px-4 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors duration-200">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Batal Setuju Terpilih
                             </button>
                         @endif
                         <button wire:click="bulkDelete"
@@ -191,15 +192,13 @@
                                     Cula</th>
                                 <th
                                     class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                    Status</th>
-                                <th
-                                    class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                     Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100">
                             @forelse($scanCulas as $scanCula)
-                                <tr class="table-row hover:bg-indigo-50/30 transition-colors duration-200" data-row-id="{{ $scanCula->id }}">
+                                <tr class="table-row hover:bg-indigo-50/30 transition-colors duration-200"
+                                    data-row-id="{{ $scanCula->id }}">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <input type="checkbox" wire:model.live="selectedItems"
                                             value="{{ $scanCula->id }}"
@@ -213,26 +212,34 @@
                                         title="{{ $scanCula->alamat }}">{{ Str::limit($scanCula->alamat, 40) }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-indigo-600">
                                         {{ $scanCula->cula }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span
-                                            class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium {{ $scanCula->approve ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
-                                            <span
-                                                class="w-2 h-2 rounded-full mr-2 {{ $scanCula->approve ? 'bg-green-400' : 'bg-red-400' }}"></span>
-                                            {{ $scanCula->approve ? 'Disetujui' : 'Menunggu' }}
-                                        </span>
-                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <div class="flex space-x-2">
                                             @if (!$scanCula->approve)
-                                                <button wire:click="approve({{ $scanCula->id }})"
-                                                    class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-700 text-xs font-medium rounded-lg hover:bg-green-100 transition-colors duration-200">
+                                                <button style="cursor: pointer"
+                                                    wire:click="approve({{ $scanCula->id }})"
+                                                    wire:loading.class="opacity-50 cursor-not-allowed"
+                                                    class="inline-flex items-center px-3 py-1.5 bg-green-50 text-green-700 text-xs font-medium rounded-lg hover:bg-green-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                                         viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                             stroke-width="2"
                                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                     </svg>
-                                                    Setuju
+                                                    <span wire:loading.remove
+                                                        wire:target="approve({{ $scanCula->id }})">Setuju</span>
+                                                    <span wire:loading
+                                                        wire:target="approve({{ $scanCula->id }})">Menyetujui...</span>
+                                                </button>
+                                            @else
+                                                <button style="cursor: pointer"
+                                                    wire:click="unapprove({{ $scanCula->id }})"
+                                                    class="inline-flex items-center px-3 py-1.5 bg-orange-50 text-orange-700 text-xs font-medium rounded-lg hover:bg-orange-100 transition-colors duration-200">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                    Batal Setuju
                                                 </button>
                                             @endif
                                             <button
@@ -315,14 +322,26 @@
                         </div>
                         <div class="flex flex-wrap gap-2">
                             @if ($activeTab === 'baru')
-                                <button wire:click="bulkApprove"
-                                    class="inline-flex items-center px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors duration-200">
+                                <button wire:click="bulkApprove" wire:loading.attr="disabled"
+                                    wire:loading.class="opacity-50 cursor-not-allowed" wire:target="bulkApprove"
+                                    class="inline-flex items-center px-3 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    Setujui
+                                    <span wire:loading.remove wire:target="bulkApprove">Setujui</span>
+                                    <span wire:loading wire:target="bulkApprove">Menyetujui...</span>
+                                </button>
+                            @elseif ($activeTab === 'rekod')
+                                <button wire:click="bulkUnapprove"
+                                    class="inline-flex items-center px-3 py-2 bg-orange-600 text-white text-sm font-medium rounded-lg hover:bg-orange-700 transition-colors duration-200">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Batal Setuju
                                 </button>
                             @endif
                             <button wire:click="bulkDelete"
@@ -360,7 +379,8 @@
                 </div>
                 <div class="divide-y divide-gray-200">
                     @forelse($scanCulas as $scanCula)
-                        <div class="mobile-card p-4 hover:bg-gray-50 transition-colors duration-200" data-card-id="{{ $scanCula->id }}">
+                        <div class="mobile-card p-4 hover:bg-gray-50 transition-colors duration-200"
+                            data-card-id="{{ $scanCula->id }}">
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center mb-2">
                                     <input type="checkbox" wire:model.live="selectedItems"
@@ -386,12 +406,25 @@
                                 <div class="flex space-x-2 ml-4">
                                     @if (!$scanCula->approve)
                                         <button wire:click="approve({{ $scanCula->id }})"
-                                            class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-200"
+                                            wire:loading.attr="disabled"
+                                            wire:loading.class="opacity-50 cursor-not-allowed"
+                                            wire:target="approve({{ $scanCula->id }})"
+                                            class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                                             title="Setujui data">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </button>
+                                    @else
+                                        <button wire:click="unapprove({{ $scanCula->id }})"
+                                            class="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors duration-200"
+                                            title="Batal setujui">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M6 18L18 6M6 6l12 12"></path>
                                             </svg>
                                         </button>
                                     @endif
@@ -608,6 +641,19 @@
                 // Listen for Livewire updates to refresh selection state
                 document.addEventListener('livewire:updated', function() {
                     updateSelectionCount();
+                });
+
+                // Debug approve button clicks
+                document.addEventListener('click', function(e) {
+                    if (e.target.closest('button[wire\\:click*="approve"]')) {
+                        console.log('Approve button clicked:', e.target);
+                    }
+                });
+
+                // Listen for Livewire errors
+                document.addEventListener('livewire:error', function(e) {
+                    console.error('Livewire error:', e.detail);
+                    showToast('Terjadi kesalahan: ' + e.detail.message, 'error');
                 });
             </script>
         </div>

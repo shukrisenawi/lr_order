@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\ScanCula;
 use Livewire\WithPagination;
 use Livewire\Component;
+use Illuminate\Support\Facades\Log;
 
 class ScanCulaCrud extends Component
 {
@@ -20,10 +21,6 @@ class ScanCulaCrud extends Component
 
     protected $queryString = ['search', 'activeTab'];
 
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
 
     public function setActiveTab($tab)
     {
@@ -46,14 +43,14 @@ class ScanCulaCrud extends Component
         $query->when($this->search, function ($query) {
             $query->where(function ($q) {
                 $q->where('no_kp', 'like', '%' . $this->search . '%')
-                  ->orWhere('nama_pemilih', 'like', '%' . $this->search . '%')
-                  ->orWhere('alamat', 'like', '%' . $this->search . '%')
-                  ->orWhere('cula', 'like', '%' . $this->search . '%');
+                    ->orWhere('nama_pemilih', 'like', '%' . $this->search . '%')
+                    ->orWhere('alamat', 'like', '%' . $this->search . '%')
+                    ->orWhere('cula', 'like', '%' . $this->search . '%');
             });
         });
 
         return view('livewire.scan-cula-crud', [
-            'scanCulas' => $query->paginate(10)
+            'scanCulas' => $query->paginate(30)
         ]);
     }
 
@@ -100,8 +97,10 @@ class ScanCulaCrud extends Component
             'approve' => $this->approve,
         ]);
 
-        session()->flash('message',
-            $this->scanCulaId ? 'Data berhasil diperbarui.' : 'Data berhasil dibuat.');
+        session()->flash(
+            'message',
+            $this->scanCulaId ? 'Data berhasil diperbarui.' : 'Data berhasil dibuat.'
+        );
 
         $this->closeModal();
         $this->resetInputFields();
@@ -133,6 +132,13 @@ class ScanCulaCrud extends Component
         session()->flash('message', 'Data berhasil disetujui.');
     }
 
+    public function unapprove($id)
+    {
+        $scanCula = ScanCula::findOrFail($id);
+        $scanCula->update(['approve' => false]);
+        session()->flash('message', 'Persetujuan data berhasil dibatalkan.');
+    }
+
     public function bulkApprove()
     {
         if (empty($this->selectedItems)) {
@@ -147,6 +153,22 @@ class ScanCulaCrud extends Component
         $this->selectAll = false;
 
         session()->flash('message', "{$count} data berhasil disetujui.");
+    }
+
+    public function bulkUnapprove()
+    {
+        if (empty($this->selectedItems)) {
+            session()->flash('error', 'Pilih item terlebih dahulu.');
+            return;
+        }
+
+        ScanCula::whereIn('id', $this->selectedItems)->update(['approve' => false]);
+
+        $count = count($this->selectedItems);
+        $this->selectedItems = [];
+        $this->selectAll = false;
+
+        session()->flash('message', "{$count} persetujuan data berhasil dibatalkan.");
     }
 
     public function bulkDelete()
@@ -194,9 +216,9 @@ class ScanCulaCrud extends Component
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('no_kp', 'like', '%' . $this->search . '%')
-                  ->orWhere('nama_pemilih', 'like', '%' . $this->search . '%')
-                  ->orWhere('alamat', 'like', '%' . $this->search . '%')
-                  ->orWhere('cula', 'like', '%' . $this->search . '%');
+                    ->orWhere('nama_pemilih', 'like', '%' . $this->search . '%')
+                    ->orWhere('alamat', 'like', '%' . $this->search . '%')
+                    ->orWhere('cula', 'like', '%' . $this->search . '%');
             });
         }
 
