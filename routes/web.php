@@ -19,6 +19,7 @@ use App\Http\Controllers\IklanController;
 use App\Http\Controllers\ProspekController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\TrackingController;
+use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\DB;
 
 // Home route
@@ -164,9 +165,24 @@ Route::get('/quick-login', function () {
 
 // Switch business route
 Route::get('/switch-bisnes/{bisnes}', function (Bisnes $bisnes) {
-    if ($bisnes->user_id !== auth()->id()) {
-        abort(403);
+    $user = Auth::user();
+
+    // Check if user has access to this business
+    $hasAccess = false;
+
+    // Admin can access all businesses
+    if ($user->role === 'admin') {
+        $hasAccess = true;
+    } else {
+        // Check if user has access via pivot table or owns the business
+        $hasAccess = $user->bisnes()->where('bisnes.id', $bisnes->id)->exists() ||
+                    $bisnes->user_id === $user->id;
     }
+
+    if (!$hasAccess) {
+        abort(403, 'Anda tidak mempunyai akses ke bisnes ini.');
+    }
+
     session(['selected_bisnes_id' => $bisnes->id]);
     return redirect()->back();
 })->name('switch-bisnes')->middleware('auth');
@@ -174,20 +190,44 @@ Route::get('/switch-bisnes/{bisnes}', function (Bisnes $bisnes) {
 // Protected routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', function () {
-        // Check if user has businesses
-        $userBisnes = Bisnes::where('user_id', Auth::id())->get();
+        $user = Auth::user();
 
-        // If no businesses, redirect to create business
+        // Get businesses user has access to (owned + assigned via pivot table)
+        $userBisnes = $user->bisnes()->get();
+
+        // If user is admin, also include businesses they own
+        if ($user->role === 'admin') {
+            $ownedBisnes = Bisnes::where('user_id', $user->id)->get();
+            $userBisnes = $userBisnes->merge($ownedBisnes)->unique('id');
+        }
+
+        // If no businesses accessible, redirect appropriately
         if ($userBisnes->isEmpty()) {
-            return redirect()->route('bisnes.create')->with('info', 'Sila buat bisnes terlebih dahulu sebelum mengakses dashboard.');
+            if ($user->role === 'admin') {
+                return redirect()->route('bisnes.create')->with('info', 'Sila buat bisnes terlebih dahulu sebelum mengakses dashboard.');
+            } else {
+                return redirect()->route('profile.edit')->with('warning', 'Anda belum diberi akses ke mana-mana bisnes. Sila hubungi admin.');
+            }
         }
 
-        // If no business selected, show company selection screen
+        // If no business selected, auto-select the first accessible business
         if (empty(session('selected_bisnes_id'))) {
-            return view('company-selection', compact('userBisnes'));
+            $firstBisnes = $userBisnes->first();
+            session(['selected_bisnes_id' => $firstBisnes->id]);
         }
 
-        switch (session('selected_bisnes_id')) {
+        // Verify selected business is still accessible
+        $selectedBisnesId = session('selected_bisnes_id');
+        $selectedBisnes = $userBisnes->find($selectedBisnesId);
+
+        if (!$selectedBisnes) {
+            // Selected business no longer accessible, select first available
+            $firstBisnes = $userBisnes->first();
+            session(['selected_bisnes_id' => $firstBisnes->id]);
+            $selectedBisnesId = $firstBisnes->id;
+        }
+
+        switch ($selectedBisnesId) {
             case 1:
                 return view('dashboard-livewire');
             case 2:
@@ -226,6 +266,10 @@ Route::middleware(['auth'])->group(function () {
 
     // Business Management Routes
     Route::get('/bisnes', function () {
+        // Check if user is admin, if not redirect to dashboard
+        if (auth()->user()->role !== 'admin') {
+            return redirect()->route('dashboard')->with('warning', 'Anda tidak mempunyai akses ke menu bisnes.');
+        }
         return view('bisnes-livewire');
     })->name('bisnes.index');
     Route::get('/bisnes/summary/{bisnes}', [BisnesController::class, 'summary'])->name('bisnes.summary');
@@ -529,6 +573,11 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('profile.password.update');
     Route::post('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
     Route::delete('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
+
+    // Admin User Management Routes
+    Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
+        Route::resource('users', UserManagementController::class);
+    });
 });
 
 // Image routes for web interface (no authentication required)

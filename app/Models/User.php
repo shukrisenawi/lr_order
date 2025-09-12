@@ -23,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'avatar',
         'email_verified_at',
+        'role',
     ];
 
     /**
@@ -63,11 +64,19 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * Get the businesses for the user.
+     * Get the businesses owned by the user.
+     */
+    public function ownedBisnes()
+    {
+        return $this->hasMany(\App\Models\Bisnes::class);
+    }
+
+    /**
+     * Get the businesses the user has access to.
      */
     public function bisnes()
     {
-        return $this->hasMany(\App\Models\Bisnes::class);
+        return $this->belongsToMany(\App\Models\Bisnes::class, 'user_bisnes');
     }
 
     /**

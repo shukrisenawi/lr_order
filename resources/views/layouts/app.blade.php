@@ -912,7 +912,17 @@
     <div id="mobile-overlay" class="mobile-menu-overlay fixed inset-0 z-40 hidden" onclick="toggleMobileMenu()"></div>
 
     @php
-        $userBisnes = Bisnes::where('user_id', Auth::id())->get();
+        $user = Auth::user();
+
+        // Get businesses user has access to (owned + assigned via pivot table)
+        $userBisnes = $user->bisnes()->get();
+
+        // If user is admin, also include businesses they own
+        if ($user->role === 'admin') {
+            $ownedBisnes = Bisnes::where('user_id', $user->id)->get();
+            $userBisnes = $userBisnes->merge($ownedBisnes)->unique('id');
+        }
+
         $selectedBisnes = session('selected_bisnes_id') ? Bisnes::find(session('selected_bisnes_id')) : null;
         $isFromAi = request()->has('from') && request('from') === 'ai';
 
@@ -988,46 +998,45 @@
                 <!-- Right Section: Business Selector and User Menu -->
                 <div class="flex items-center space-x-1">
                     <!-- Business Selector -->
-                    @if ($showNavigation)
+                    @if ($showNavigation && $userBisnes->count() > 0)
                         <div class="relative hidden sm:block">
-                            @if ($userBisnes->count() > 0)
-                                <div class="relative inline-block text-left">
-                                    <button type="button"
-                                        class="inline-flex items-center px-3 py-1.5 border border-white/20 shadow-lg text-sm leading-4 font-medium rounded-lg text-white bg-white/10 hover:bg-white/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 backdrop-blur-sm"
-                                        id="bisnes-menu-button" aria-expanded="true" aria-haspopup="true"
-                                        onclick="toggleBisnesDropdown()">
-                                        <img src="{{ $selectedBisnes && $selectedBisnes->gambar ? \App\Helpers\ImageHelper::businessImageUrl($selectedBisnes->gambar) : asset('img/logo-01.png') }}"
-                                            alt="Business Logo"
-                                            class="w-5 h-5 rounded-full object-cover mr-2 border-2 border-white/40 shadow-sm">
-                                        <span
-                                            class="hidden lg:inline text-sm">{{ $selectedBisnes ? Str::limit($selectedBisnes->nama_bisnes, 15) : 'Pilih Senarai' }}</span>
-                                        <i class="fas fa-chevron-down ml-1 text-white/80 text-xs"></i>
-                                    </button>
+                            <div class="relative inline-block text-left">
+                                <button type="button"
+                                    class="inline-flex items-center px-3 py-1.5 border border-white/20 shadow-lg text-sm leading-4 font-medium rounded-lg text-white bg-white/10 hover:bg-white/20 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 backdrop-blur-sm"
+                                    id="bisnes-menu-button" aria-expanded="true" aria-haspopup="true"
+                                    onclick="toggleBisnesDropdown()">
+                                    <img src="{{ $selectedBisnes && $selectedBisnes->gambar ? \App\Helpers\ImageHelper::businessImageUrl($selectedBisnes->gambar) : asset('img/logo-01.png') }}"
+                                        alt="Business Logo"
+                                        class="w-5 h-5 rounded-full object-cover mr-2 border-2 border-white/40 shadow-sm">
+                                    <span
+                                        class="hidden lg:inline text-sm">{{ $selectedBisnes ? Str::limit($selectedBisnes->nama_bisnes, 15) : 'Pilih Senarai' }}</span>
+                                    <i class="fas fa-chevron-down ml-1 text-white/80 text-xs"></i>
+                                </button>
 
-                                    <div class="origin-top-right absolute right-0 mt-3 w-72 rounded-2xl shadow-2xl bg-white/95 backdrop-blur-lg ring-1 ring-black/10 focus:outline-none hidden z-50 border border-white/20"
-                                        id="bisnes-dropdown" role="menu" aria-orientation="vertical"
-                                        aria-labelledby="bisnes-menu-button">
-                                        <div class="py-3" role="none">
-                                            @foreach ($userBisnes as $bisnes)
-                                                <a href="{{ route('switch-bisnes', $bisnes->id) }}"
-                                                    class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 {{ $selectedBisnes && $selectedBisnes->id == $bisnes->id ? 'bg-gradient-to-r from-blue-100 to-purple-100 font-medium' : '' }} transition-all duration-200 rounded-lg mx-2"
-                                                    role="menuitem">
-                                                    <img src="{{ $bisnes && $bisnes->gambar ? \App\Helpers\ImageHelper::businessImageUrl($bisnes->gambar) : asset('img/logo-01.png') }}"
-                                                        alt="Business Logo"
-                                                        class="w-8 h-8 rounded-full object-cover mr-3 border-2 border-white/50 shadow-sm">
-                                                    <div class="flex-1">
-                                                        <div class="font-medium text-gray-900">
-                                                            {{ $bisnes->nama_bisnes }}
-                                                        </div>
-                                                        <div class="text-xs text-gray-500">
-                                                            {{ Str::limit($bisnes->nama_syarikat, 25) }}</div>
+                                <div class="origin-top-right absolute right-0 mt-3 w-72 rounded-2xl shadow-2xl bg-white/95 backdrop-blur-lg ring-1 ring-black/10 focus:outline-none hidden z-50 border border-white/20"
+                                    id="bisnes-dropdown" role="menu" aria-orientation="vertical"
+                                    aria-labelledby="bisnes-menu-button">
+                                    <div class="py-3" role="none">
+                                        @foreach ($userBisnes as $bisnes)
+                                            <a href="{{ route('switch-bisnes', $bisnes->id) }}"
+                                                class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 {{ $selectedBisnes && $selectedBisnes->id == $bisnes->id ? 'bg-gradient-to-r from-blue-100 to-purple-100 font-medium' : '' }} transition-all duration-200 rounded-lg mx-2"
+                                                role="menuitem">
+                                                <img src="{{ $bisnes && $bisnes->gambar ? \App\Helpers\ImageHelper::businessImageUrl($bisnes->gambar) : asset('img/logo-01.png') }}"
+                                                    alt="Business Logo"
+                                                    class="w-8 h-8 rounded-full object-cover mr-3 border-2 border-white/50 shadow-sm">
+                                                <div class="flex-1">
+                                                    <div class="font-medium text-gray-900">
+                                                        {{ $bisnes->nama_bisnes }}
                                                     </div>
-                                                    @if ($selectedBisnes && $selectedBisnes->id == $bisnes->id)
-                                                        <i class="fas fa-check text-green-500 text-lg"></i>
-                                                    @endif
-                                                </a>
-                                            @endforeach
-
+                                                    <div class="text-xs text-gray-500">
+                                                        {{ Str::limit($bisnes->nama_syarikat, 25) }}</div>
+                                                </div>
+                                                @if ($selectedBisnes && $selectedBisnes->id == $bisnes->id)
+                                                    <i class="fas fa-check text-green-500 text-lg"></i>
+                                                @endif
+                                            </a>
+                                        @endforeach
+                                        @if ($user->role === 'admin')
                                             <div class="border-t border-gray-200 my-2 mx-2"></div>
                                             <a href="{{ route('bisnes.index') }}"
                                                 class="flex items-center px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-200 rounded-lg mx-2"
@@ -1038,58 +1047,57 @@
                                                     <i class="fas fa-check ml-auto text-green-500"></i>
                                                 @endif
                                             </a>
-                                        </div>
+                                        @endif
                                     </div>
                                 </div>
-                            @else
-                                <a href="{{ route('bisnes.create') }}"
-                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-green-500/20 to-blue-500/20 hover:from-green-500/30 hover:to-blue-500/30 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 pulse-glow hover:scale-105 shadow-lg backdrop-blur-sm">
-                                    <i class="fas fa-plus mr-1"></i>
-                                    <span class="hidden lg:inline">Tambah Bisnes</span>
-                                </a>
-                            @endif
-                        </div>
+                            </div>
+                        @else
+                            <a href="{{ route('bisnes.create') }}"
+                                class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs leading-4 font-medium rounded-lg text-white bg-gradient-to-r from-green-500/20 to-blue-500/20 hover:from-green-500/30 hover:to-blue-500/30 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 pulse-glow hover:scale-105 shadow-lg backdrop-blur-sm">
+                                <i class="fas fa-plus mr-1"></i>
+                                <span class="hidden lg:inline">Tambah Bisnes</span>
+                            </a>
                     @endif
+                </div>
 
 
-                    <!-- User Menu -->
-                    <div class="flex items-center space-x-1">
+                <!-- User Menu -->
+                <div class="flex items-center space-x-1">
 
-                        <!-- User Info -->
-                        <div
-                            class="hidden sm:flex items-center space-x-2 bg-white/10 rounded-lg px-2 py-1 backdrop-blur-sm">
-                            @if (Auth::user()->avatar)
-                                <img src="{{ Auth::user()->avatar_url }}" alt="Avatar"
-                                    class="w-6 h-6 rounded-full object-cover shadow-lg border-2 border-white/30"
-                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                <div
-                                    class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-lg border-2 border-white/30 hidden">
-                                    <span
-                                        class="text-white font-bold text-sm">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                                </div>
-                            @else
-                                <div
-                                    class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-lg border-2 border-white/30">
-                                    <span
-                                        class="text-white font-bold text-sm">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
-                                </div>
-                            @endif
-                            <span
-                                class="text-white font-medium text-sm hidden lg:inline">{{ Auth::user()->name }}</span>
-                        </div>
-
-                        <!-- Logout Button -->
-                        <form method="POST" action="{{ route('logout') }}" class="inline">
-                            @csrf
-                            <button type="submit"
-                                class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 shadow-lg backdrop-blur-sm"
-                                title="Logout">
-                                <i class="fas fa-sign-out-alt text-xs"></i>
-                            </button>
-                        </form>
+                    <!-- User Info -->
+                    <div
+                        class="hidden sm:flex items-center space-x-2 bg-white/10 rounded-lg px-2 py-1 backdrop-blur-sm">
+                        @if (Auth::user()->avatar)
+                            <img src="{{ Auth::user()->avatar_url }}" alt="Avatar"
+                                class="w-6 h-6 rounded-full object-cover shadow-lg border-2 border-white/30"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-lg border-2 border-white/30 hidden">
+                                <span
+                                    class="text-white font-bold text-sm">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+                            </div>
+                        @else
+                            <div
+                                class="w-6 h-6 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center shadow-lg border-2 border-white/30">
+                                <span
+                                    class="text-white font-bold text-sm">{{ strtoupper(substr(Auth::user()->name, 0, 1)) }}</span>
+                            </div>
+                        @endif
+                        <span class="text-white font-medium text-sm hidden lg:inline">{{ Auth::user()->name }}</span>
                     </div>
+
+                    <!-- Logout Button -->
+                    <form method="POST" action="{{ route('logout') }}" class="inline">
+                        @csrf
+                        <button type="submit"
+                            class="inline-flex items-center justify-center w-8 h-8 rounded-lg text-white hover:bg-white/10 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all duration-200 shadow-lg backdrop-blur-sm"
+                            title="Logout">
+                            <i class="fas fa-sign-out-alt text-xs"></i>
+                        </button>
+                    </form>
                 </div>
             </div>
+        </div>
         </div>
     </header>
 
@@ -1188,13 +1196,15 @@
                                 </div>
                             </h3>
                             <div class="space-y-0.5">
-                                <a href="{{ route('bisnes.index') }}"
-                                    class="nav-link flex items-center space-x-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('bisnes.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
-                                    <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
-                                        <i class="fas fa-building text-xs"></i>
-                                    </div>
-                                    <span class="font-medium text-sm">Bisnes</span>
-                                </a>
+                                @if (auth()->user()->role === 'admin')
+                                    <a href="{{ route('bisnes.index') }}"
+                                        class="nav-link flex items-center space-x-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('bisnes.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                            <i class="fas fa-building text-xs"></i>
+                                        </div>
+                                        <span class="font-medium text-sm">Bisnes</span>
+                                    </a>
+                                @endif
                                 <a href="{{ route('gambar.index') }}"
                                     class="nav-link flex items-center space-x-2 px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('gambar.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                     <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
@@ -1340,6 +1350,15 @@
                                 </div>
                             </h3>
                             <div class="space-y-0.5">
+                                @if (auth()->user()->role === 'admin')
+                                    <a href="{{ route('admin.users.index') }}"
+                                        class="nav-link flex items-center space-x-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('admin.users.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                            <i class="fas fa-users-cog text-xs"></i>
+                                        </div>
+                                        <span class="font-medium text-sm">Pengurusan Pengguna</span>
+                                    </a>
+                                @endif
                                 <a href="{{ route('settings.index') }}"
                                     class="nav-link flex items-center space-x-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('settings.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                     <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
@@ -1418,13 +1437,15 @@
                                 </div>
                             </h3>
                             <div class="space-y-0.5">
-                                <a href="{{ route('bisnes.index') }}"
-                                    class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105  {{ !$isFromAi && request()->routeIs('bisnes.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
-                                    <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
-                                        <i class="fas fa-building text-xs"></i>
-                                    </div>
-                                    <span class="font-medium text-sm">Syarikat</span>
-                                </a>
+                                @if (auth()->user()->role === 'admin')
+                                    <a href="{{ route('bisnes.index') }}"
+                                        class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105  {{ !$isFromAi && request()->routeIs('bisnes.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                            <i class="fas fa-building text-xs"></i>
+                                        </div>
+                                        <span class="font-medium text-sm">Syarikat</span>
+                                    </a>
+                                @endif
                                 @if (session('selected_bisnes_id'))
                                     <a href="{{ route('gambar.index') }}"
                                         class="nav-link flex items-center space-x-3 px-3 py-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('gambar.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
@@ -1682,6 +1703,15 @@
                             </h3>
 
                             <div class="space-y-0.5">
+                                @if (auth()->user()->role === 'admin')
+                                    <a href="{{ route('admin.users.index') }}"
+                                        class="nav-link flex items-center space-x-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('admin.users.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
+                                        <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">
+                                            <i class="fas fa-users-cog text-xs"></i>
+                                        </div>
+                                        <span class="font-medium text-sm">Pengurusan Pengguna</span>
+                                    </a>
+                                @endif
                                 <a href="{{ route('settings.index') }}"
                                     class="nav-link flex items-center space-x-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ !$isFromAi && request()->routeIs('settings.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
                                     <div class="w-6 h-6 rounded-lg bg-white/10 flex items-center justify-center">

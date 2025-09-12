@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Prospek;
+use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class ProspekPolicy
+class CustomerPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,9 +19,9 @@ class ProspekPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Prospek $prospek): bool
+    public function view(User $user, Customer $customer): bool
     {
-        return $user->id === $prospek->bisnes->user_id;
+        return $user->id === $customer->bisnes->user_id;
     }
 
     /**
@@ -35,23 +35,23 @@ class ProspekPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Prospek $prospek): bool
+    public function update(User $user, Customer $customer): bool
     {
-        return $user->id === $prospek->bisnes->user_id;
+        return $user->id === $customer->bisnes->user_id;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Prospek $prospek): bool
+    public function delete(User $user, Customer $customer): bool
     {
-        return $user->id === $prospek->bisnes->user_id;
+        return $user->id === $customer->bisnes->user_id;
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Prospek $prospek): bool
+    public function restore(User $user, Customer $customer): bool
     {
         return false;
     }
@@ -59,7 +59,7 @@ class ProspekPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Prospek $prospek): bool
+    public function forceDelete(User $user, Customer $customer): bool
     {
         return false;
     }

@@ -38,6 +38,11 @@ class Bisnes extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_bisnes');
+    }
+
     public function prospeks()
     {
         return $this->hasMany(Prospek::class, 'bisnes_id');

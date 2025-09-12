@@ -13,6 +13,11 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class BisnesController extends Controller
 {
     use AuthorizesRequests;
+
+    public function __construct()
+    {
+        $this->middleware('admin');
+    }
     public function index()
     {
         $bisnes = Bisnes::where('user_id', Auth::id())->paginate(10);
