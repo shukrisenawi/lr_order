@@ -52,7 +52,7 @@
                         <div
                             class="bg-white text-gray-800 px-3 py-2 rounded-2xl rounded-bl-md shadow-sm border border-gray-200">
                             <div class="text-sm leading-relaxed">
-                                {!! app(\Parsedown::class)->setSafeMode(true)->text(is_array($msg['content']) ? $msg['content'][0]['text'] ?? '' : $msg['content']) !!}
+                                {!! app(\Parsedown::class)->text(is_array($msg['content']) ? $msg['content'][0]['text'] ?? '' : $msg['content']) !!}
                             </div>
                         </div>
                         <div class="text-xs text-gray-500 mt-1 px-1 text-left">

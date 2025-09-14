@@ -94,6 +94,15 @@ class ChatGPTIndex extends Component
             $this->isTyping = true; // Indicate that typing has started
             $this->errorMessage = '';
 
+            // Add temporary processing message
+            $this->messages[] = [
+                'role' => 'assistant',
+                'content' => 'Sedang memproses...',
+                'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A')
+            ];
+            session(['chat_messages' => $this->messages]);
+            $this->dispatch('scroll-to-bottom');
+
             // Call webhook directly after setting sending state
             $this->callWebhook($userMessage);
         }
@@ -133,11 +142,23 @@ class ChatGPTIndex extends Component
 
     public function addAssistantMessage($message)
     {
-        $this->messages[] = [
-            'role' => 'assistant',
-            'content' => $message,
-            'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A')
-        ];
+        // Check if the last message is the temporary processing message
+        $lastMessage = end($this->messages);
+        if ($lastMessage && $lastMessage['role'] === 'assistant' && $lastMessage['content'] === 'Sedang memproses...') {
+            // Replace the temporary message with the actual response
+            $this->messages[key($this->messages)] = [
+                'role' => 'assistant',
+                'content' => $message,
+                'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A')
+            ];
+        } else {
+            // Add new message if no temporary message exists
+            $this->messages[] = [
+                'role' => 'assistant',
+                'content' => $message,
+                'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A')
+            ];
+        }
         $this->isTyping = false;
 
         // Save messages to session
@@ -151,6 +172,18 @@ class ChatGPTIndex extends Component
     {
         $this->errorMessage = $message;
         $this->isTyping = false;
+
+        // Replace the temporary processing message with error message
+        $lastMessage = end($this->messages);
+        if ($lastMessage && $lastMessage['role'] === 'assistant' && $lastMessage['content'] === 'Sedang memproses...') {
+            $this->messages[key($this->messages)] = [
+                'role' => 'assistant',
+                'content' => $message,
+                'timestamp' => now()->setTimezone('Asia/Kuala_Lumpur')->format('d/m/Y h:i A')
+            ];
+            session(['chat_messages' => $this->messages]);
+            $this->dispatch('scroll-to-bottom');
+        }
     }
 
     public function clearChat()
