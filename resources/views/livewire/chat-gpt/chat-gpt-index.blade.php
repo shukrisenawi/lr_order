@@ -81,9 +81,9 @@
             <div class="flex-1 relative">
                 <textarea wire:model="newMessage" placeholder="Tulis mesej anda..."
                     class="w-full bg-gray-50 border border-gray-300 rounded-xl px-4 py-2 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm leading-relaxed"
-                    rows="1"
-                    onkeydown="if(event.key === 'Enter' && !event.shiftKey){ event.preventDefault(); this.closest('form').dispatchEvent(new Event('submit', {cancelable: true})); }"
-                    oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';"></textarea>
+                    rows="3"
+                    style="height: 3rem; overflow-y: auto;"
+                    onkeydown="if(event.key === 'Enter' && !event.shiftKey){ event.preventDefault(); this.closest('form').dispatchEvent(new Event('submit', {cancelable: true})); }"></textarea>
             </div>
             <button type="submit"
                 class="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50"
