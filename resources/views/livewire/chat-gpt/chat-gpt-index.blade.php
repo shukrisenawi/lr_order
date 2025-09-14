@@ -13,7 +13,7 @@
                 <i class="fas fa-robot text-white text-sm"></i>
             </div>
             <div>
-                <h1 class="text-lg font-semibold text-gray-800">AI Chat</h1>
+                <h1 class="text-lg font-semibold text-gray-800">Chat</h1>
                 <div class="flex items-center gap-2">
                     <div class="w-2 h-2 bg-green-500 rounded-full"></div>
                     <span class="text-xs text-gray-600">Online</span>
@@ -21,20 +21,6 @@
             </div>
         </div>
         <div class="flex items-center gap-2">
-            <div class="flex items-center gap-1 bg-gray-100 rounded-full px-2 py-1">
-                <button wire:click="openSystemMessageModal"
-                    class="text-gray-600 hover:text-gray-800 p-1 rounded transition-colors" title="Settings">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                        </path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                </button>
-                <span
-                    class="text-xs text-gray-600 truncate max-w-150">{{ $availableModels[$selectedModel] ?? $selectedModel }}</span>
-            </div>
             <button wire:click="clearChat" wire:confirm="Adakah anda pasti mahu menghapuskan semua mesej?"
                 class="text-gray-600 hover:text-gray-800 p-1 rounded transition-colors" title="Clear Messages">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -110,53 +96,6 @@
         </form>
     </div>
 
-    <!-- System Message Modal -->
-    @if ($showSystemMessageModal)
-        <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div class="bg-white rounded-xl p-6 w-full max-w-2xl mx-4 shadow-xl border border-gray-200">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                            </path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-800">Settings</h3>
-                </div>
-
-                <!-- Model Selection -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">Model AI</label>
-                    <select wire:model.live="selectedModel"
-                        class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
-                        @foreach ($availableModels as $key => $model)
-                            <option value="{{ $key }}" {{ $selectedModel === $key ? 'selected' : '' }}>
-                                {{ $model }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <!-- System Message -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-3">System Message</label>
-                    <textarea wire:model="systemMessage" rows="6"
-                        class="w-full bg-gray-50 border border-gray-300 rounded-lg px-4 py-3 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm"
-                        placeholder="Masukkan system message..."></textarea>
-                </div>
-
-                <div class="flex justify-end gap-3">
-                    <button wire:click="closeSystemMessageModal"
-                        class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-all duration-200 text-sm font-medium">Batal</button>
-                    <button wire:click="updateSystemMessage"
-                        class="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-200 text-sm font-medium">Simpan</button>
-                </div>
-            </div>
-        </div>
-    @endif
 
     <!-- JavaScript for handling redirects -->
     <script>
@@ -230,24 +169,5 @@
             }
         }
 
-        /* Typing indicator */
-        @if ($isTyping)
-            .typing-indicator {
-                animation: typing 1.5s infinite;
-            }
-
-            @keyframes typing {
-
-                0%,
-                60%,
-                100% {
-                    opacity: 1;
-                }
-
-                30% {
-                    opacity: 0.5;
-                }
-            }
-        @endif
     </style>
 </div>
