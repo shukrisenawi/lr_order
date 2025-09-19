@@ -5,6 +5,7 @@ namespace App\Livewire\TenagaPengajar;
 use Livewire\Component;
 use App\Models\TenagaPengajar;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
 
 class TenagaPengajarForm extends Component
 {
@@ -53,8 +54,15 @@ class TenagaPengajarForm extends Component
             'status' => $this->status,
         ];
 
+        // Handle image upload
         if ($this->gambar) {
-            $data['gambar'] = $this->gambar->store('tenaga-pengajar', 'public');
+            // Delete old image if updating
+            if ($this->tenagaPengajar->exists && $this->tenagaPengajar->gambar && Storage::disk('public')->exists('tenaga-pengajar/' . $this->tenagaPengajar->gambar)) {
+                Storage::disk('public')->delete('tenaga-pengajar/' . $this->tenagaPengajar->gambar);
+            }
+
+            $path = $this->gambar->store('tenaga-pengajar', 'public');
+            $data['gambar'] = basename($path);
         }
 
         if ($this->tenagaPengajar->exists) {

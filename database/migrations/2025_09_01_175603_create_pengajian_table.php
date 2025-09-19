@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('hari')->nullable(); // Day
             $table->integer('minggu')->nullable(); // Week
             $table->string('masa')->nullable(); // Time
-            $table->foreignId('pengajar_id')->constrained('tenaga_pengajars')->onDelete('cascade');
+            $table->foreignId('pengajar_id')->nullable()->constrained('tenaga_pengajars')->onDelete('set null');
             $table->foreignId('kitab_id')->constrained('kitab_pengajian')->onDelete('cascade');
             $table->string('tempat')->nullable(); // Place
             $table->timestamps();

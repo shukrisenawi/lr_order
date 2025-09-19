@@ -1811,7 +1811,7 @@
                     timer: 3000,
                     timerProgressBar: true,
                     showConfirmButton: false,
-                    position: 'top-end',
+                    position: 'top-start',
                     toast: true,
                     background: '#d1fae5',
                     color: '#065f46'
@@ -1826,7 +1826,7 @@
                     timer: 3000,
                     timerProgressBar: true,
                     showConfirmButton: false,
-                    position: 'top-end',
+                    position: 'top-start',
                     toast: true,
                     background: '#d1fae5',
                     color: '#065f46'
@@ -1867,7 +1867,7 @@
                     timer: 3000,
                     timerProgressBar: true,
                     showConfirmButton: false,
-                    position: 'top-end',
+                    position: 'top-start',
                     toast: true,
                     background: '#dbeafe',
                     color: '#1e40af'

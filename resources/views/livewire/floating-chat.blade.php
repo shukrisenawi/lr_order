@@ -2,15 +2,16 @@
     $isChatGPTPage = request()->routeIs('chatgpt.index');
 @endphp
 
-<!-- Flash Message -->
-@if (session()->has('message'))
-    <div
-        class="fixed top-6 right-6 z-50 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative max-w-sm">
-        <span class="block sm:inline">{{ session('message') }}</span>
-    </div>
-@endif
+<div>
+    <!-- Flash Message -->
+    @if (session()->has('message'))
+        <div
+            class="fixed top-6 right-6 z-50 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative max-w-sm">
+            <span class="block sm:inline">{{ session('message') }}</span>
+        </div>
+    @endif
 
-<div class="fixed bottom-6 right-6 z-50 {{ $isChatGPTPage ? 'hidden' : '' }}">
+    <div class="fixed bottom-6 right-6 z-50 {{ $isChatGPTPage ? 'hidden' : '' }}">
     <!-- Chat Bubble Button -->
     <div x-data="{ isOpen: @entangle('isOpen') }" x-on:click.away="isOpen = false" class="relative">
 
@@ -116,9 +117,9 @@
         </button>
     </div>
 
-</div>
+    </div>
 
-<script>
+    <script>
     document.addEventListener('alpine:initialized', () => {
         // Listen for typing events
         Livewire.on('typing', (duration) => {
@@ -163,4 +164,5 @@
             }
         }, 500);
     });
-</script>
+    </script>
+</div>

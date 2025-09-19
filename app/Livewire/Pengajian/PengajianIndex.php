@@ -53,15 +53,12 @@ class PengajianIndex extends Component
 
     public function render()
     {
-        $pengajians = Pengajian::with(['tenagaPengajar', 'kitabPengajian'])
+        $pengajians = Pengajian::with(['kitabPengajian'])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('hari', 'like', '%' . $this->search . '%')
                         ->orWhere('masa', 'like', '%' . $this->search . '%')
                         ->orWhere('tempat', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('tenagaPengajar', function ($subQuery) {
-                            $subQuery->where('nama', 'like', '%' . $this->search . '%');
-                        })
                         ->orWhereHas('kitabPengajian', function ($subQuery) {
                             $subQuery->where('nama_kitab', 'like', '%' . $this->search . '%');
                         });

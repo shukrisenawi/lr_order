@@ -75,7 +75,6 @@
                             </div>
                         </th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Masa</th>
-                        <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tenaga Pengajar</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Kitab Pengajian</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tempat</th>
                         <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Tindakan</th>
@@ -90,7 +89,6 @@
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->minggu }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->masa }}</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">{{ $item->tenagaPengajar->nama ?? '-' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->kitabPengajian->nama_kitab ?? '-' }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $item->tempat }}</td>
                             <td class="px-6 py-4">
@@ -116,7 +114,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-6 py-16 text-center">
+                            <td colspan="6" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center justify-center">
                                     <div class="bg-gray-100 rounded-full p-4 mb-4">
                                         <i class="fas fa-book text-gray-400 text-2xl"></i>

@@ -30,7 +30,7 @@
             <!-- Gambar -->
             <div class="md:col-span-2 flex justify-center">
                 @if($tenagaPengajar->gambar)
-                    <img src="{{ asset('storage/' . $tenagaPengajar->gambar) }}" alt="Gambar Tenaga Pengajar" class="w-32 h-32 rounded-full object-cover shadow-lg">
+                    <img src="{{ asset('storage/tenaga-pengajar/' . $tenagaPengajar->gambar) }}" alt="Gambar Tenaga Pengajar" class="w-32 h-32 rounded-full object-cover shadow-lg">
                 @else
                     <div class="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center shadow-lg">
                         <i class="fas fa-user text-gray-400 text-4xl"></i>

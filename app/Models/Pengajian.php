@@ -17,6 +17,10 @@ class Pengajian extends Model
         'tempat',
     ];
 
+    protected $casts = [
+        'pengajar_id' => 'integer',
+    ];
+
     public function tenagaPengajar()
     {
         return $this->belongsTo(TenagaPengajar::class, 'pengajar_id');

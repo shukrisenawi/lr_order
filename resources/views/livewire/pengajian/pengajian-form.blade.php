@@ -82,7 +82,7 @@
                         <label class="block text-sm font-semibold text-gray-800 mb-2">
                             Masa
                         </label>
-                        <input type="text" wire:model="masa" placeholder="Contoh: Selepas Solat Maghrib"
+                        <input type="text" wire:model="masa" value="{{ old('masa', $masa) }}" placeholder="Contoh: Selepas Solat Maghrib"
                             class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('masa') border-red-500 bg-red-50 @enderror">
                         @error('masa')
                             <p class="mt-2 text-sm text-red-600 flex items-center">
@@ -92,25 +92,6 @@
                         @enderror
                     </div>
 
-                    <!-- Tenaga Pengajar -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-800 mb-2">
-                            Tenaga Pengajar
-                        </label>
-                        <select wire:model="pengajar_id"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('pengajar_id') border-red-500 bg-red-50 @enderror">
-                            <option value="">Pilih Tenaga Pengajar</option>
-                            @foreach($tenagaPengajars as $pengajar)
-                                <option value="{{ $pengajar->id }}">{{ $pengajar->nama }}</option>
-                            @endforeach
-                        </select>
-                        @error('pengajar_id')
-                            <p class="mt-2 text-sm text-red-600 flex items-center">
-                                <i class="fas fa-exclamation-circle mr-1"></i>
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </div>
                 </div>
 
                 <!-- Right Column -->
@@ -140,7 +121,7 @@
                         <label class="block text-sm font-semibold text-gray-800 mb-2">
                             Tempat
                         </label>
-                        <input type="text" wire:model="tempat" placeholder="Contoh: Masjid Al-Halimi Batu 5"
+                        <input type="text" wire:model="tempat" value="{{ old('tempat', $tempat) }}" placeholder="Contoh: Masjid Al-Halimi Batu 5"
                             class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all duration-300 @error('tempat') border-red-500 bg-red-50 @enderror">
                         @error('tempat')
                             <p class="mt-2 text-sm text-red-600 flex items-center">

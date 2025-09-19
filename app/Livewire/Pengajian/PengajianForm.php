@@ -13,7 +13,6 @@ class PengajianForm extends Component
     public $hari = '';
     public $minggu = '';
     public $masa = '';
-    public $pengajar_id = '';
     public $kitab_id = '';
     public $tempat = '';
     public $isEdit = false;
@@ -22,7 +21,6 @@ class PengajianForm extends Component
         'hari' => 'nullable|string|max:255',
         'minggu' => 'nullable|integer|min:1|max:5',
         'masa' => 'nullable|string|max:255',
-        'pengajar_id' => 'required|exists:tenaga_pengajars,id',
         'kitab_id' => 'required|exists:kitab_pengajian,id',
         'tempat' => 'nullable|string|max:255',
     ];
@@ -34,8 +32,6 @@ class PengajianForm extends Component
         'minggu.min' => 'Minggu minimum 1.',
         'minggu.max' => 'Minggu maksimum 5.',
         'masa.required' => 'Masa diperlukan.',
-        'pengajar_id.required' => 'Tenaga Pengajar diperlukan.',
-        'pengajar_id.exists' => 'Tenaga Pengajar tidak sah.',
         'kitab_id.required' => 'Kitab Pengajian diperlukan.',
         'kitab_id.exists' => 'Kitab Pengajian tidak sah.',
         'tempat.required' => 'Tempat diperlukan.',
@@ -53,9 +49,12 @@ class PengajianForm extends Component
             $this->hari = $pengajian->hari;
             $this->minggu = $pengajian->minggu ? (string) $pengajian->minggu : '';
             $this->masa = $pengajian->masa;
-            $this->pengajar_id = $pengajian->pengajar_id;
             $this->kitab_id = $pengajian->kitab_id;
             $this->tempat = $pengajian->tempat;
+        } else {
+            // Set default values for new records
+            $this->masa = 'Selepas Solat Maghrib';
+            $this->tempat = 'Masjid Al-Halimi Batu 5';
         }
     }
 
@@ -67,7 +66,7 @@ class PengajianForm extends Component
             'hari' => $this->hari ?: null,
             'minggu' => $this->minggu ? (int) $this->minggu : null,
             'masa' => $this->masa ?: null,
-            'pengajar_id' => $this->pengajar_id,
+            'pengajar_id' => null, // Set to null since field is removed
             'kitab_id' => $this->kitab_id,
             'tempat' => $this->tempat ?: null,
         ];
@@ -85,9 +84,8 @@ class PengajianForm extends Component
 
     public function render()
     {
-        $tenagaPengajars = TenagaPengajar::all();
         $kitabPengajians = KitabPengajian::all();
 
-        return view('livewire.pengajian.pengajian-form', compact('tenagaPengajars', 'kitabPengajians'));
+        return view('livewire.pengajian.pengajian-form', compact('kitabPengajians'));
     }
 }
