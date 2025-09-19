@@ -1162,6 +1162,10 @@
                                 class="hidden bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs rounded-full px-1.5 py-0.5 animate-pulse shadow-lg">0</span>
                         </a>
 
+                        @if(auth()->user()->role === 'admin')
+                        @if(auth()->user()->role === 'admin')
+                        @if(auth()->user()->role === 'admin')
+                        @if(auth()->user()->role === 'admin')
                         <!-- ChatGPT -->
                         <a href="{{ route('chatgpt.index') }}"
                             class="nav-link flex items-center justify-between px-2 py-2 rounded-lg transition-all duration-200 hover:bg-white/10 hover:scale-105 {{ request()->routeIs('chatgpt.*') ? 'nav-link active bg-white/20 shadow-lg' : '' }}">
@@ -1172,6 +1176,10 @@
                                 <span class="font-medium text-sm">ChatGPT</span>
                             </div>
                         </a>
+                        @endif
+                        @endif
+                        @endif
+                        @endif
 
                         <!-- File AI -->
 
@@ -1743,7 +1751,9 @@
     @livewireScripts
 
     <!-- Floating Chat Widget -->
+    @if(auth()->user()->role === 'admin')
     @livewire('floating-chat')
+    @endif
 
 
     <!-- Global form submission handler for CSRF token expired -->
