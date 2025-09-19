@@ -100,7 +100,7 @@
                             <td class="px-4 py-3 text-sm text-gray-600">{{ $item->alamat ?? '-' }}</td>
                             <td class="px-4 py-3 text-sm text-gray-600">
                                 @if($item->gambar)
-                                    <img src="{{ asset('storage/tenaga-pengajar/' . $item->gambar) }}" alt="Gambar" class="w-10 h-10 rounded-full object-cover">
+                                    <img src="{{ asset('storage/upload/tenaga-pengajar/' . $item->gambar) }}" alt="Gambar" class="w-10 h-10 rounded-full object-cover">
                                 @else
                                     <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
                                         <i class="fas fa-user text-gray-400"></i>

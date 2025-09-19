@@ -19,8 +19,8 @@ chown -R www-data:www-data bootstrap/cache/
 
 #### 3. Buat Direktori untuk Gambar Tenaga Pengajar
 ```bash
-mkdir -p storage/app/public/tenaga-pengajar
-chmod 775 storage/app/public/tenaga-pengajar
+mkdir -p storage/app/public/upload/tenaga-pengajar
+chmod 775 storage/app/public/upload/tenaga-pengajar
 ```
 
 #### 4. Periksa Konfigurasi PHP
@@ -49,7 +49,7 @@ sudo systemctl restart php8.1-fpm
 ```
 
 #### 7. Verifikasi
-- Akses URL: `https://domain.com/storage/tenaga-pengajar/`
+- Akses URL: `https://domain.com/storage/upload/tenaga-pengajar/`
 - Jika 404, symlink belum berhasil
 - Jika 403, permission belum benar
 

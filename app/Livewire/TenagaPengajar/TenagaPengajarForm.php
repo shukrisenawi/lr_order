@@ -58,14 +58,14 @@ class TenagaPengajarForm extends Component
         if ($this->gambar) {
             try {
                 // Delete old image if updating
-                if ($this->tenagaPengajar->exists && $this->tenagaPengajar->gambar && Storage::disk('public')->exists('tenaga-pengajar/' . $this->tenagaPengajar->gambar)) {
-                    Storage::disk('public')->delete('tenaga-pengajar/' . $this->tenagaPengajar->gambar);
+                if ($this->tenagaPengajar->exists && $this->tenagaPengajar->gambar && Storage::disk('public')->exists('upload/tenaga-pengajar/' . $this->tenagaPengajar->gambar)) {
+                    Storage::disk('public')->delete('upload/tenaga-pengajar/' . $this->tenagaPengajar->gambar);
                 }
 
                 // Ensure directory exists
-                Storage::disk('public')->makeDirectory('tenaga-pengajar');
+                Storage::disk('public')->makeDirectory('upload/tenaga-pengajar');
 
-                $path = $this->gambar->store('tenaga-pengajar', 'public');
+                $path = $this->gambar->store('upload/tenaga-pengajar', 'public');
                 if (!$path) {
                     throw new \Exception('Failed to store image file.');
                 }

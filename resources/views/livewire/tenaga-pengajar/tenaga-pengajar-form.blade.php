@@ -87,7 +87,7 @@
                     <div class="flex items-center space-x-4">
                         @if($tenagaPengajar->gambar)
                             <div class="flex-shrink-0">
-                                <img src="{{ asset('storage/tenaga-pengajar/' . $tenagaPengajar->gambar) }}" alt="Current Image" class="w-20 h-20 rounded-lg object-cover">
+                                <img src="{{ asset('storage/upload/tenaga-pengajar/' . $tenagaPengajar->gambar) }}" alt="Current Image" class="w-20 h-20 rounded-lg object-cover">
                             </div>
                         @endif
                         <div class="flex-1">
