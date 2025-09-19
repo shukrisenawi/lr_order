@@ -18,6 +18,27 @@
         </div>
     </div>
 
+    <!-- Flash Messages -->
+    @if (session()->has('message'))
+        <div
+            class="mb-6 p-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 text-green-700 rounded-lg shadow-sm">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                <span class="text-sm">{{ session('message') }}</span>
+            </div>
+        </div>
+    @endif
+
+    @if (session()->has('error'))
+        <div
+            class="mb-6 p-3 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-700 rounded-lg shadow-sm">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+                <span class="text-sm">{{ session('error') }}</span>
+            </div>
+        </div>
+    @endif
+
     <!-- Form -->
     <div class="bg-white rounded-lg shadow-lg p-6">
         <form wire:submit="save" enctype="multipart/form-data">

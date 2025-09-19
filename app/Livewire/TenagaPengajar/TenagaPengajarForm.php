@@ -56,24 +56,40 @@ class TenagaPengajarForm extends Component
 
         // Handle image upload
         if ($this->gambar) {
-            // Delete old image if updating
-            if ($this->tenagaPengajar->exists && $this->tenagaPengajar->gambar && Storage::disk('public')->exists('tenaga-pengajar/' . $this->tenagaPengajar->gambar)) {
-                Storage::disk('public')->delete('tenaga-pengajar/' . $this->tenagaPengajar->gambar);
+            try {
+                // Delete old image if updating
+                if ($this->tenagaPengajar->exists && $this->tenagaPengajar->gambar && Storage::disk('public')->exists('tenaga-pengajar/' . $this->tenagaPengajar->gambar)) {
+                    Storage::disk('public')->delete('tenaga-pengajar/' . $this->tenagaPengajar->gambar);
+                }
+
+                // Ensure directory exists
+                Storage::disk('public')->makeDirectory('tenaga-pengajar');
+
+                $path = $this->gambar->store('tenaga-pengajar', 'public');
+                if (!$path) {
+                    throw new \Exception('Failed to store image file.');
+                }
+                $data['gambar'] = basename($path);
+            } catch (\Exception $e) {
+                session()->flash('error', 'Gagal menyimpan gambar: ' . $e->getMessage());
+                return;
+            }
+        }
+
+        try {
+            if ($this->tenagaPengajar->exists) {
+                $this->tenagaPengajar->update($data);
+                session()->flash('message', 'Tenaga Pengajar berjaya dikemaskini.');
+            } else {
+                TenagaPengajar::create($data);
+                session()->flash('message', 'Tenaga Pengajar berjaya dicipta.');
             }
 
-            $path = $this->gambar->store('tenaga-pengajar', 'public');
-            $data['gambar'] = basename($path);
+            return redirect()->route('tenaga-pengajar.index');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Gagal menyimpan data: ' . $e->getMessage());
+            return;
         }
-
-        if ($this->tenagaPengajar->exists) {
-            $this->tenagaPengajar->update($data);
-            session()->flash('message', 'Tenaga Pengajar updated successfully.');
-        } else {
-            TenagaPengajar::create($data);
-            session()->flash('message', 'Tenaga Pengajar created successfully.');
-        }
-
-        return redirect()->route('tenaga-pengajar.index');
     }
 
     public function render()
